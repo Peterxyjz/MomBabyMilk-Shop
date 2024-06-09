@@ -8,7 +8,7 @@ export const defaultErrorHandler = (err: any, req: Request, res: Response, next:
   if (err instanceof ErrorWithStatus) {
     //nếu err là 1 instance của ErrorWithStatus
     //thì ta sẽ trả về status và message của err đó
-    return res.status(err.status).json(omit(err, ['status']))
+    return res.status(err.status).json(omit({ errors: { error: err.message } }, ['status']))
   }
   //Object.getOwnPropertyNames(err) trả về 1 mảng các key của err
   //forEach sẽ duyệt qua từng key

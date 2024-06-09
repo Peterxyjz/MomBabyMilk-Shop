@@ -198,16 +198,17 @@ class UsersService {
     //todo Send mail
     const verificationLink = `${process.env.BACKEND_URL}/verify-forgot-password?forgot_password_token=${digit}`
     const emailHtml = generateEmailVerify(email, verificationLink, digit)
-    // await sendMail({
-    //   email: email,
-    //   subject: 'Email Verification Mail',
-    //   html: emailHtml
-    // })
+    await sendMail({
+      email: email,
+      subject: 'Email Verification Mail',
+      html: emailHtml
+    })
 
     console.log('forgot_password_token: ', forgot_password_token)
     console.log('digit: ', digit)
     return {
-      message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
+      message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD,
+      user_id
     }
   }
   //vào messages.ts thêm CHECK_EMAIL_TO_RESET_PASSWORD: 'Check email to reset password'
