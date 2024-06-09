@@ -72,7 +72,10 @@ const confirmPasswordSchema: ParamSchema = {
     options: (value, { req }) => {
       console.log('mid-register confirm')
       if (value !== req.body.password) {
-        throw new Error(USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD)
+        throw new ErrorWithStatus({
+          message: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD,
+          status: HTTP_STATUS.UNAUTHORIZED
+        })
       }
       console.log('mid-register confirm: ok')
       return true
