@@ -39,7 +39,9 @@ export const loginForAdminOrStaffController = async (req: Request, res: Response
   const checkRole = await usersService.checkRole(user)
   if (checkRole === 'Member') {
     return res.status(400).json({
-      message: USERS_MESSAGES.LOGIN_FAIL
+      errors: {
+        message: USERS_MESSAGES.LOGIN_FAIL
+      }
     })
   }
   const result = await usersService.login(user_id.toString())
