@@ -29,6 +29,7 @@ const LoginPage = () => {
       })
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
+        localStorage.setItem("result", JSON.stringify(res.data.result));
         const isAdmin = res.data.isAdmin;
         isAdmin ? localStorage.setItem('isAuthenticatedAdmin', 'true') : localStorage.setItem('isAuthenticatedStaff', 'true');
         navigate("/ecommerce");
