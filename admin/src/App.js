@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
+import { Navbar, Sidebar, ThemeSettings } from './components';
 import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './pages';
 import './App.css';
 
@@ -12,7 +12,8 @@ import LoginPage from './pages/Login/LoginPage';
 import ForgotPassword from './pages/Login/ForgotPassword';
 import Otp from './pages/Login/Otp';
 import ResetPassword from './pages/Login/ResetPassword';
-import Product from './pages/Product';
+import Products from './pages/Products';
+import AddProduct from './pages/AddProduct';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
@@ -80,7 +81,8 @@ const App = () => {
 
                     {/* pages  */}
                     <Route path="/orders" element={<Orders />} />
-                    <Route path="/products" element={<Product />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/add-product" element={<AddProduct />} />
                     <Route path="/customers" element={<Customers />} />
 
                     {/* apps  */}
@@ -101,7 +103,6 @@ const App = () => {
 
                   </Routes>
                 </div>
-                <Footer />
               </div>
             </>
           ) : isAuthenticatedAdmin ? (
@@ -150,8 +151,9 @@ const App = () => {
                     <Route path="/ecommerce" element={(<Ecommerce />)} />
 
                     {/* pages  */}
-                    {/* <Route path="/orders" element={<Orders />} /> */}
-                    <Route path="/employees" element={<Employees />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/add-product" element={<AddProduct />} />
                     <Route path="/customers" element={<Customers />} />
 
                     {/* apps  */}
@@ -172,7 +174,6 @@ const App = () => {
 
                   </Routes>
                 </div>
-                <Footer />
               </div>
             </>
           ) : (
