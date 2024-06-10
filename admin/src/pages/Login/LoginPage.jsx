@@ -22,7 +22,6 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
-    console.log(email, password);
     await axios
       .post(`http://localhost:4000/users/login-admin-staff`, {
         email,
@@ -37,8 +36,6 @@ const LoginPage = () => {
       })
       .catch((error) => {
         let errorList = [];
-        console.log(error.response);
-        console.log(error.response.data.errors);
         for (let [key, value] of Object.entries(error.response.data.errors)) {
           errorList.push(value);
           setErrorList(errorList);
