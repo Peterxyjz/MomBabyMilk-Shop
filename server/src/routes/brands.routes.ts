@@ -14,7 +14,6 @@ const brandsRouter = Router()
 
 //upload:
 
-
 brandsRouter.post('/upload', accessTokenValidator, brandsValidator, wrapAsync(uploadController))
 brandsRouter.get('/all-brands', wrapAsync(getAllController)) //readAll
 brandsRouter.get('/brand/:id', getBrandValidator, wrapAsync(getController)) //readOne

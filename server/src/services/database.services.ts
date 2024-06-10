@@ -6,6 +6,9 @@ import RefreshToken from '~/model/schemas/RefreshToken.schema'
 import Category from '~/model/schemas/Category.schema'
 import Brand from '~/model/schemas/Brand.schema'
 import Product from '~/model/schemas/Product.schema'
+import InputBill from '~/model/schemas/InputBill.schema'
+import InputBillDetail from '~/model/schemas/InputBillDetail.schema'
+import WareHouse from '~/model/schemas/WareHouse.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@mombabymilk.lrg7esv.mongodb.net/?retryWrites=true&w=majority&appName=MomBabyMilk`
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -51,6 +54,18 @@ class DatabaseService {
   //products:
   get products(): Collection<Product> {
     return this.db.collection(process.env.DB_PRODUCTS_COLLECTION as string)
+  }
+  //inputBill:
+  get inputBills(): Collection<InputBill> {
+    return this.db.collection(process.env.DB_INPUTBILLS_COLLECTION as string)
+  }
+  //inputbillDetail:
+  get inputBillDetails(): Collection<InputBillDetail> {
+    return this.db.collection(process.env.DB_INPUTBILLDETAIL_COLLECTION as string)
+  }
+  //warehouse:
+  get warehouse(): Collection<WareHouse> {
+    return this.db.collection(process.env.DB_WAREHOUSE_COLLECTION as string)
   }
 }
 //từ class tạo object và export nó ra ngoài
