@@ -4,11 +4,13 @@ import { config } from 'dotenv'
 import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from './database.services'
 import Product from '~/model/schemas/Product.schema'
+import wareHouseService from './wareHouse.services'
 config()
 
 class ProductsService {
   async upload(product: Product) {
     product._id = new ObjectId()
+    await wareHouseService.upload(product._id?.toString())
     const result = await databaseService.products.insertOne(
       new Product({
         _id: product._id,

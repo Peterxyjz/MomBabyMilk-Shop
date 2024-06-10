@@ -12,8 +12,9 @@ import LoginPage from './pages/Login/LoginPage';
 import ForgotPassword from './pages/Login/ForgotPassword';
 import Otp from './pages/Login/Otp';
 import ResetPassword from './pages/Login/ResetPassword';
-import Products from './pages/Products';
-import AddProduct from './pages/AddProduct';
+import Products from './pages/Product/Products';
+import AddProduct from './pages/Product/AddProduct';
+import EditProduct from './pages/Product/EditProduct';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
@@ -83,6 +84,7 @@ const App = () => {
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/add-product" element={<AddProduct />} />
+                    <Route path="/edit-product" element={<EditProduct />} />
                     <Route path="/customers" element={<Customers />} />
 
                     {/* apps  */}
