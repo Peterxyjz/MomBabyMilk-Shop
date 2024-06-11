@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express'
 import { omit } from 'lodash'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { ErrorWithStatus } from '~/model/Errors'
+import { EntityError, ErrorWithStatus } from '~/model/Errors'
 
 export const defaultErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   //err là lỗi từ các nơi khác truyền xuống, và ta đã quy ước lỗi phải là 1 object có 2 thuộc tính: status và message
+  console.log('defaultErrorHandler: ', err)
+
   if (err instanceof ErrorWithStatus) {
+    console.log('errorWithStatus: ', err instanceof ErrorWithStatus)
+
     //nếu err là 1 instance của ErrorWithStatus
     //thì ta sẽ trả về status và message của err đó
     return res.status(err.status).json(omit({ errors: { error: err.message } }, ['status']))
