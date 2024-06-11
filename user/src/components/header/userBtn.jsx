@@ -23,9 +23,13 @@ const UserBtn = () => {
         </>
       ) : (
         <>
-          <Dropdown.Item icon={HiViewGrid} className="w-48">Đăng Nhập</Dropdown.Item>
+          <Dropdown.Item icon={HiViewGrid} className="w-48" href="/login">
+            Đăng Nhập
+          </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item icon={HiLogout} className="w-48">Đăng Ký</Dropdown.Item>
+          <Dropdown.Item icon={HiLogout} className="w-48" href="/register">
+            Đăng Ký
+          </Dropdown.Item>
         </>
       )}
     </Dropdown>
