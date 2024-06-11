@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 const Product = () => {
   const [products, setProducts] = useState([]);
 
@@ -237,7 +238,7 @@ const Product = () => {
                         />
                       </td>
                       <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Chi Tiet
+                       <Link to={`/edit-product?id=${product._id}`}>Chi Tiết</Link>
                       </td>
                     </tr>
                   ))

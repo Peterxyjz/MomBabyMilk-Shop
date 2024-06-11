@@ -69,8 +69,13 @@ export const getController = async (req: Request, res: Response) => {
 export const updateController = async (req: Request, res: Response) => {
   const id = req.body.id
   const url = req.body.url
-  console.log('url: ', url)
 
+  const product_req = req.body.product
+  console.log(product_req);
+  
+  if(product_req){
+    await productsService.update(id, product_req)
+  }
   const product = new Product(req.body)
   const result = await productsService.updateUrl(id, url)
   return res.status(200).json({
