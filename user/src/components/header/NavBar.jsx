@@ -3,7 +3,6 @@ import LogoImg from "../../assets/images/logo/Logo.png";
 import SearchBar from "./SearchBar";
 import UserBtn from "./userBtn";
 const NavBar = () => {
-  
   return (
     <>
       <header className="min-h-16">
