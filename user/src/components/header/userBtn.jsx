@@ -2,24 +2,43 @@ import React from "react";
 import { Dropdown } from "flowbite-react";
 import { HiCog, HiViewGrid, HiLogout } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
-
+import axios from 'axios'
 const UserBtn = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const verify = user === null ? 0 : user.verify
+  const handleLogout = async () => {
+    const result = JSON.parse(localStorage.getItem("result"));
+    await axios.post(
+      "http://localhost:4000/users/logout",
+      {
+        refresh_token: result.refresh_token,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${result.access_token}`,
+        },
+      }
+    );
+    localStorage.removeItem("user");
+    localStorage.removeItem("result");
+    window.location.reload();
+  };
 
   return (
     <Dropdown label={<FaUser className="w-10 h-10 p-1.5 text-black" />} inline>
-      {user ? (
+      {verify === 1 ? (
         <>
           <Dropdown.Header>
-            {/* <span className="block text-sm">{user.username}</span> */}
+            <span className="block text-sm">{user.username}</span>
             <span className="block truncate text-sm font-medium">
-              {/* {user.email} */} ashhasha
+              {user.email} 
             </span>
           </Dropdown.Header>
           <Dropdown.Item icon={HiViewGrid} className="w-48">Chỉnh Sửa</Dropdown.Item>
           <Dropdown.Item icon={HiCog} className="w-48">Tích Điểm</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item icon={HiLogout} className="w-48">Đăng Xuất</Dropdown.Item>
+          <Dropdown.Item icon={HiLogout} onClick={handleLogout} 
+          className="w-48">Đăng Xuất</Dropdown.Item>
         </>
       ) : (
         <>

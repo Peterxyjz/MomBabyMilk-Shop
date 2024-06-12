@@ -3,7 +3,7 @@ import User from '~/model/schemas/User.schema'
 import databaseService from './database.services'
 import { RegisterReqBody } from '~/model/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
-import { hashToSixDigit, signToken } from '~/utils/jwt'
+import { hashToSixDigit, signToken, verifyToken } from '~/utils/jwt'
 import { TokenType, UserAccountStatus, UserVerifyStatus } from '~/constants/enums'
 import Role from '~/model/schemas/Role.schema'
 import RefreshToken from '~/model/schemas/RefreshToken.schema'
@@ -12,6 +12,9 @@ import { config } from 'dotenv'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { generateEmailVerify } from '~/helper/emailTemplate'
 import sendMail from '~/helper/send.mail'
+import { ErrorWithStatus } from '~/model/Errors'
+import HTTP_STATUS from '~/constants/httpStatus'
+
 config()
 class UsersService {
   private signAccessAndRefreshToken(user_id: string) {
@@ -31,6 +34,7 @@ class UsersService {
       privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string //thêm
     })
   }
+
   async register(payload: RegisterReqBody) {
     const role = await databaseService.roles.findOne({ role_name: 'Member' })
     const roleId = role?._id?.toString() || ''
@@ -184,7 +188,7 @@ class UsersService {
     //todo Send mail
     const verificationLink = `${process.env.BACKEND_URL}/verify-forgot-password?forgot_password_token=${digit}`
     const emailHtml = generateEmailVerify(email, verificationLink, digit)
-    await sendMail({
+    sendMail({
       email: email,
       subject: 'Email Verification Mail',
       html: emailHtml
@@ -207,8 +211,7 @@ class UsersService {
       {
         $set: {
           password: hashPassword(password),
-          forgot_password_token: '',
-          updated_at: '$$NOW'
+          forgot_password_token: ''
         }
       }
     ])
