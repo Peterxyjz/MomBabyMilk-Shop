@@ -1,7 +1,11 @@
 import { initializeApp } from "firebase/app";
 import {getStorage} from "firebase/storage";
+
+import dotenv from 'dotenv';
+
+dotenv.config();
 const firebaseConfig = {
-  apiKey: "AIzaSyBvWvqGWEXcUu9GHDmzECWKsO4FRKxpdeM",
+  apiKey: process.env.API_KEY,
   authDomain: "mombabymilk-inventory.firebaseapp.com",
   projectId: "mombabymilk-inventory",
   storageBucket: "mombabymilk-inventory.appspot.com",
