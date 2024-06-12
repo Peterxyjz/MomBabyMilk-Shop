@@ -12,21 +12,21 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 function App() {
   return (
     <>
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-2 py-4">
         <Router>
           <Header />
-          <TapToTop/>
+          <TapToTop />
           <Routes>
             <Route path="/" element={<Home />} />
 
             {/* Auth */}
             <Route path="/login" element={<SiginIn />} />
             <Route path="/register" element={<SiginUp />} />
-            <Route path="/otp" element={<Otp/>} />
+            <Route path="/otp" element={<Otp />} />
             <Route path="/reset-password" element={<ResetPassord />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
-          <Footer/>
+          <Footer />
         </Router>
       </div>
     </>
