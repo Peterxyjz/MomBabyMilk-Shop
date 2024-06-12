@@ -1,7 +1,7 @@
 import React from "react";
-import Breadcrumbs from "../../components/elements/Breadcrumb";
-import logBg from "../../assets/images/background/log-in-bg.png";
-import loginImg from "../../assets/images/login.png";
+import Breadcrumbs from "../../../components/elements/Breadcrumb";
+import logBg from "../../../assets/images/background/log-in-bg.png";
+import loginImg from "../../../assets/images/auth/login.png";
 import LoginForm from "./LoginForm";
 
 const SignIn = () => {
@@ -10,7 +10,7 @@ const SignIn = () => {
       <Breadcrumbs headline="Đăng Nhập" link="/login" />
       <div
         className={
-          "min-h-[80vh] w-full bg-cover bg-center flex flex-col lg:flex-row gap-8 my-4"
+          "w-full bg-cover bg-center flex flex-col lg:flex-row gap-8 my-4"
         }
         style={{ backgroundImage: `url(${logBg})` }}
       >

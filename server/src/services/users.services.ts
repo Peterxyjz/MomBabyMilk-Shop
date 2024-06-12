@@ -54,27 +54,13 @@ class UsersService {
     )
     const user = await databaseService.users.findOne({ _id: user_id })
 
-    //insertOne sẽ trả về 1 object, trong đó có thuộc tính insertedId là user_Id của user vừa tạo
-    //vì vậy ta sẽ lấy user_Id đó ra để tạo token
     const user_Id = result.insertedId.toString()
-    // const accessToken = await this.signAccessToken(user_Id)
-    // const refreshToken = await this.signRefreshToken(user_Id)
-    //nên viết là thì sẽ giảm thời gian chờ 2 cái này tạo ra
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_Id)
-    //đây cũng chính là lý do mình chọn xử lý bất đồng bộ, thay vì chọn xử lý đồng bộ
-    //Promise.all giúp nó chạy bất đồng bộ, chạy song song nhau, giảm thời gian
-
-    //lưu lại refreshToken và collection refreshTokens mới tạo
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_Id), token: refresh_token })
     )
 
-    //user_id ta có là string, mà trong database thì user_id là ObjectId
-    //nên ta không truyền là user_id: user_id, mà là user_id: new ObjectId(user_id)
-    console.log('email_verify_token', email_verify_token) //mô phỏng send email, test xong xóa
     return { access_token, refresh_token, email_verify_token, user, digit }
-    //ta sẽ return 2 cái này về cho client
-    //thay vì return user_Id về cho client
   }
   async checkEmailExist(email: string) {
     //vào database tìm xem có hông
