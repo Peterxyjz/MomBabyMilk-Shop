@@ -60,22 +60,21 @@ export const registerController = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('dô register Controller')
-
   const result = await usersService.register(req.body) // thay luôn
   const verificationLink = `${process.env.BACKEND_URL}/verify-email?email_verify_token=${result.digit}`
   const emailHtml = generateEmailVerify(req.body.username, verificationLink, result.digit)
-  // await sendMail({
-  //   email: req.body.email,
-  //   subject: 'Email Verification Mail',
-  //   html: emailHtml
-  // })
+  await sendMail({
+    email: req.body.email,
+    subject: 'Email Verification Mail',
+    html: emailHtml
+  })
   console.log(result)
   console.log(verificationLink)
 
   return res.status(200).json({
     message: USERS_MESSAGES.REGISTER_SUCCESS,
-    result: result
+    result: { access_token: result.access_token, refresh_token: result.refresh_token },
+    user: result.user
   })
 }
 
