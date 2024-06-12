@@ -18,7 +18,9 @@ import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { UserVerifyStatus } from '~/constants/enums'
 import { verifyToken } from '~/utils/jwt'
-
+import { error } from 'console'
+import { ErrorWithStatus } from '~/model/Errors'
+import { verify } from 'crypto'
 //login:
 export const loginController = async (req: Request, res: Response) => {
   const user = req.user as User // lấy user từ req
@@ -63,7 +65,7 @@ export const registerController = async (
   const result = await usersService.register(req.body) // thay luôn
   const verificationLink = `${process.env.BACKEND_URL}/verify-email?email_verify_token=${result.digit}`
   const emailHtml = generateEmailVerify(req.body.username, verificationLink, result.digit)
-  await sendMail({
+  sendMail({
     email: req.body.email,
     subject: 'Email Verification Mail',
     html: emailHtml
@@ -95,7 +97,7 @@ export const emailVerifyController = async (req: Request, res: Response, next: N
   // const { user_id } = req.decoded_email_verify_token as TokenPayload
   const { user_id } = req.decoded_email_verify_token as TokenPayload
   const req_digit = req.query.digit
-  const user = await databaseService.users.findOne({
+  let user = await databaseService.users.findOne({
     _id: new ObjectId(user_id)
   }) //hiệu năng cao hơn
   //nếu k có user thì cho lỗi 404: not found
@@ -121,14 +123,13 @@ export const emailVerifyController = async (req: Request, res: Response, next: N
   const { digit } = emailtoken as TokenPayload
 
   if (req_digit !== digit) {
-    return res.json({
-      message: USERS_MESSAGES.OTP_IS_INVALID
-    })
+    throw new ErrorWithStatus({ message: USERS_MESSAGES.OTP_IS_INVALID, status: HTTP_STATUS.UNAUTHORIZED })
   }
 
   const result = await usersService.verifyEmail(user_id)
-  //để cập nhật lại email_verify_token thành rỗng và tạo ra access_token và refresh_token mới
-  //gữi cho người vừa request email verify đang nhập
+
+  user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+
   return res.status(200).json({
     message: USERS_MESSAGES.EMAIL_VERIFY_SUCCESS,
     result: result,

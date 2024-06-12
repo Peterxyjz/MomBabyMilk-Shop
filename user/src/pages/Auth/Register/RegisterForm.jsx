@@ -34,11 +34,13 @@ const RegisterForm = () => {
         confirm_password,
       })
       .then((res) => {
-        alert("Đăng ký thành công!");
+        alert(`${res.data.message}`);
         console.log(res.data);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
-        navigate("/otp", { state: { navigateTo: "/login" } });
+        navigate("/otp", {
+          state: { navigateTo: "/", email, user_id: res.data.user._id },
+        });
       })
       .catch((error) => {
         let errorList = [];

@@ -70,4 +70,5 @@ Header: không cần, vì  ngta quên mật khẩu rồi, thì sao mà đăng nh
 body: {forgot_password_token: string, password: string, confirm_password: string}
 */
 usersRouter.post('/reset-password', checkPasswordToken, resetPasswordValidator, wrapAsync(resetPasswordController))
+
 export default usersRouter
