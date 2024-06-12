@@ -5,15 +5,15 @@ import { FaUser } from "react-icons/fa";
 
 const UserBtn = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  
+
   return (
     <Dropdown label={<FaUser className="w-10 h-10 p-1.5 text-black" />} inline>
       {user ? (
         <>
           <Dropdown.Header>
-            <span className="block text-sm">{user.username}</span>
+            {/* <span className="block text-sm">{user.username}</span> */}
             <span className="block truncate text-sm font-medium">
-              {user.email}
+              {/* {user.email} */} ashhasha
             </span>
           </Dropdown.Header>
           <Dropdown.Item icon={HiViewGrid} className="w-48">Chỉnh Sửa</Dropdown.Item>
