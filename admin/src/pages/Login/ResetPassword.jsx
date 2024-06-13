@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import coverImg from "../../assets/images/cover_img.png";
+import cover_imgedit from "../../assets/images/cover_imgedit.png";
+import { Card } from 'primereact/card';
+import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Checkbox } from "@mui/material";
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -13,6 +18,10 @@ const ResetPassword = () => {
     confirm_password: "",
   });
   const [errorList, setErrorList] = useState([]);
+
+  const [show, setShow] = React.useState(false)
+  const handleClick = () => setShow(!show)
+
 
   console.log("reset: " + user_id, digit);
   const handleChange = (event) => {
@@ -28,10 +37,10 @@ const ResetPassword = () => {
     const { password, confirm_password } = formValues;
     console.log("xskaxh" + password, confirm_password);
     await axios
-      .post(`http://localhost:4000/users/reset-password`,  {
-          password,
-          confirm_password,
-        },
+      .post(`http://localhost:4000/users/reset-password`, {
+        password,
+        confirm_password,
+      },
         {
           params: {
             user_id: user_id,
@@ -52,77 +61,75 @@ const ResetPassword = () => {
   };
   return (
     <>
-      <div className="w-full h-screen flex items-start">
-        <div className="relative w-1/2 h-full flex flex-col">
-          <div className="absolute top-[25%] left-[10%] flex flex-col">
-            <h1 className="text-4xl text-black font-bold my-4">
-              Turn Your Ideas into reality
-            </h1>
-            <p className="text-xl  text-black font-normal">
-              Start for free sjdhjkasdhjkwdnushdwmhxcncxhnqwmshnuq{" "}
-            </p>
-          </div>
-          <img src={coverImg} alt="" className="w-full h-full object-cover" />
-        </div>
 
-        <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-10 px-14 justify-between">
-          <h1 className="text-xl text-[#060606] font-semibold">
-            MomBabyMilk Shop - Admin & Staff
-          </h1>
+      <div className="w-full h-screen flex">
+        <div className="relative w-full h-full flex flex-col">
+          <img src={cover_imgedit} alt="" className="absolute top-0 left-0 w-full h-full object-cover" />
 
-          <div className="w-full flex flex-col max-w-[500px]">
-            <div className="w-full flex flex-col mb-2">
-              <h3 className="text-3xl font-semibold mb-2">Đổi Mật Khẩu</h3>
-              <p className="text-sm mb-2">Vui lòng điền thông tin của bạn!</p>
-            </div>
+          <Card title="Đặt lại mật khẩu" subTitle="Staff & Admin Only" className="absolute top-[25%] left-[7%] flex flex-col bg-white p-8 rounded-lg shadow-lg w-[35rem]">
+            <div className="w-full flex flex-col max-w-[500px]">
+              <div>
+                <form className="w-full flex flex-col" onSubmit={handleSubmit}>
+                  <label htmlFor="password" className="font-bold block mb-2 mt-4">
+                    Mật khẩu mới
+                  </label>
+                  <InputGroup>
+                    <Input
+                      className="w-full h-10 border border-gray-300 rounded-md p-2"
+                      type={show ? 'text' : 'password'}
+                      id="password"
+                      name="password"
+                      value={formValues.password}
+                      onChange={handleChange}
+                    />
+                    <InputRightElement width='4.5rem'>
+                      <Button h='2.5rem'
+                        size="sm"
+                        onClick={handleClick}
+                        fontSize={'1.5rem'}
+                      >
+                        {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
 
-            <div>
-              <form className="w-full flex flex-col" onSubmit={handleSubmit}>
-                <input
-                  type="password"
-                  placeholder="Nhập mật khẩu..."
-                  id="password"
-                  name="password"
-                  value={formValues.password}
-                  onChange={handleChange}
-                  className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-                />
+                  <label htmlFor="confirm_password" className="font-bold block mb-2 mt-4">
+                    Xác nhận mật khẩu
+                  </label>
+                  <InputGroup>
+                    <Input
+                      className="w-full h-10 border border-gray-300 rounded-md p-2"
+                      type={"password"}
+                      id="confirm_password"
+                      name="confirm_password"
+                      value={formValues.confirm_password}
+                      onChange={handleChange}
+                    />
+                  </InputGroup>
 
-                <input
-                  type="password"
-                  placeholder="Nhập lại mật khẩu..."
-                  id="confirm_password"
-                  name="confirm_password"
-                  value={formValues.confirm_password}
-                  onChange={handleChange}
-                  className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-                />
-                {errorList.length > 0 && (
-                  <div className="error-list mt-3 mb-3">
-                    {errorList.map((error, index) => (
-                      <p key={index} className="text-red-600">
-                        {error}
-                      </p>
-                    ))}
+
+
+                  {errorList.length > 0 && (
+                    <div className="error-list mt-3 mb-3">
+                      {errorList.map((error, index) => (
+                        <p key={index} className="text-red-600">
+                          {error}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                  <div className="w-full flex flex-col">
+                    <button
+                      type="submit"
+                      className="w-full text-white my-4 bg-[#060606] rounded-md p-4 text-center flex items-center justify-center"
+                    >
+                      Xác Nhận
+                    </button>
                   </div>
-                )}
-                <div className="w-full flex flex-col">
-                  <button
-                    type="submit"
-                    className="w-full text-white my-4 bg-[#060606] rounded-md p-4 text-center flex items-center justify-center"
-                  >
-                    Xác Nhận
-                  </button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
-          </div>
-
-          <div className="w-full flex items-center justify-center">
-            <p className="text-sm font-normal text-[#060606]">
-              Staff & Admin Only
-            </p>
-          </div>
+          </Card>
         </div>
       </div>
     </>

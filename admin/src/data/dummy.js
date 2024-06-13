@@ -1,9 +1,9 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock, AiOutlineInbox } from 'react-icons/ai';
-import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
-import { RiContactsLine, RiStockLine } from 'react-icons/ri';
+import { RiContactsLine, RiPriceTag3Line, RiStockLine } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
@@ -13,6 +13,7 @@ import avatar from './avatar.jpg';
 import avatar2 from './avatar2.jpg';
 import avatar3 from './avatar3.png';
 import avatar4 from './avatar4.jpg';
+import { VscVerified } from 'react-icons/vsc';
 
 
 export const gridOrderImage = (props) => (
@@ -514,99 +515,218 @@ export const employeesGrid = [
   },
 ];
 
-export const links = [
-  {
-    title: 'Dashboard',
-    links: [
-      {
-        name: 'ecommerce',
-        icon: <FiShoppingBag />,
-      },
-    ],
-  },
+export const stafflinks = [
 
   {
     title: 'Pages',
     links: [
       {
-        name: 'orders',
+        name: 'Quản lý đơn hàng',
         icon: <AiOutlineShoppingCart />,
+        type: 'sub',
+        path: 'orders',
+        subLinks: [
+          { name: 'allOrder', path: 'orders', label: 'Tất cả đơn hàng' },
+        ],
       },
       {
         name: 'Quản lý sản phẩm',
         icon: <AiOutlineInbox />,
         type: 'sub',
+        path: 'products',
         subLinks: [
           { name: 'allProduct', path: 'products', label: 'Tất cả sản phẩm' },
           { name: 'addProduct', path: 'add-product', label: 'Thêm sản phẩm' },
-          { name: 'editProduct', path: 'edit-product', label: 'Cập nhật sản phẩm' },
         ],
       },
       {
-        name: 'customers',
+        name: 'Quản lý khách hàng',
         icon: <RiContactsLine />,
-      },
-    ],
-  },
-  {
-    title: 'Apps',
-    links: [
-      {
-        name: 'calendar',
-        icon: <AiOutlineCalendar />,
+        type: 'sub',
+        path: 'customers',
+        subLinks: [
+          { name: 'allCustomer', path: 'customers', label: 'Tất cả khách hàng' },
+        ],
       },
       {
-        name: 'kanban',
-        icon: <BsKanban />,
+        name: 'Quản lý phân loại',
+        icon: <RiPriceTag3Line />,
+        type: 'sub',
+        path: 'categories',
+        subLinks: [
+          { name: 'allCategory', path: 'categories', label: 'Tất cả phân loại' },
+          { name: 'addCategory', path: 'add-category', label: 'Thêm phân loại' },
+        ],
       },
       {
-        name: 'editor',
-        icon: <FiEdit />,
-      },
-      {
-        name: 'color-picker',
-        icon: <BiColorFill />,
-      },
-    ],
-  },
-  {
-    title: 'Charts',
-    links: [
-      {
-        name: 'line',
-        icon: <AiOutlineStock />,
-      },
-      {
-        name: 'area',
-        icon: <AiOutlineAreaChart />,
-      },
+        name: 'Quản lý nhãn hàng',
+        icon: <VscVerified />,
+        type: 'sub',
+        path: 'brands',
+        subLinks: [
+          { name: 'allBrand', path: 'brands', label: 'Tất cả nhãn hàng' },
+          { name: 'addBrand', path: 'add-brand', label: 'Thêm nhãn hàng' },
 
-      {
-        name: 'bar',
-        icon: <AiOutlineBarChart />,
-      },
-      {
-        name: 'pie',
-        icon: <FiPieChart />,
-      },
-      {
-        name: 'financial',
-        icon: <RiStockLine />,
-      },
-      {
-        name: 'color-mapping',
-        icon: <BsBarChart />,
-      },
-      {
-        name: 'pyramid',
-        icon: <GiLouvrePyramid />,
-      },
-      {
-        name: 'stacked',
-        icon: <AiOutlineBarChart />,
+        ],
       },
     ],
   },
+  
+  // {
+  //   title: 'Apps',
+  //   links: [
+  //     {
+  //       name: 'calendar',
+  //       icon: <AiOutlineCalendar />,
+  //     },
+  //     {
+  //       name: 'kanban',
+  //       icon: <BsKanban />,
+  //     },
+  //     {
+  //       name: 'editor',
+  //       icon: <FiEdit />,
+  //     },
+  //     {
+  //       name: 'color-picker',
+  //       icon: <BiColorFill />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: 'Charts',
+  //   links: [
+  //     {
+  //       name: 'line',
+  //       icon: <AiOutlineStock />,
+  //     },
+  //     {
+  //       name: 'area',
+  //       icon: <AiOutlineAreaChart />,
+  //     },
+
+  //     {
+  //       name: 'bar',
+  //       icon: <AiOutlineBarChart />,
+  //     },
+  //     {
+  //       name: 'pie',
+  //       icon: <FiPieChart />,
+  //     },
+  //     {
+  //       name: 'financial',
+  //       icon: <RiStockLine />,
+  //     },
+  //     {
+  //       name: 'color-mapping',
+  //       icon: <BsBarChart />,
+  //     },
+  //     {
+  //       name: 'pyramid',
+  //       icon: <GiLouvrePyramid />,
+  //     },
+  //     {
+  //       name: 'stacked',
+  //       icon: <AiOutlineBarChart />,
+  //     },
+  //   ],
+  // },
+];
+
+export const adminlinks = [
+  {
+    title: 'Dashboard',
+    links: [
+      {
+        name: 'Dashboard',
+        path:'/',
+        icon: <FiShoppingBag />,
+      },
+    ],
+  },
+  {
+    title: 'Pages',
+    links: [
+      {
+        name: 'Quản lý người dùng',
+        icon: <FiUsers  />,
+        type: 'sub',
+        path: 'users',
+        subLinks: [
+          { name: 'allUser', path: 'users', label: 'Tất cả nguời dùng' },
+          { name: 'addStaff', path: 'add-staff', label: 'Thêm nhân viên' },
+        ],
+      },
+      {
+        name: 'Quản lý kho',
+        icon: <BsBoxSeam />,
+        type: 'sub',
+        subLinks: [
+          { name: 'addBill', path: 'add-inputbill', label: 'Thêm đơn nhập hàng' },
+        ],
+      },
+    ],
+  },
+  
+  // {
+  //   title: 'Apps',
+  //   links: [
+  //     {
+  //       name: 'calendar',
+  //       icon: <AiOutlineCalendar />,
+  //     },
+  //     {
+  //       name: 'kanban',
+  //       icon: <BsKanban />,
+  //     },
+  //     {
+  //       name: 'editor',
+  //       icon: <FiEdit />,
+  //     },
+  //     {
+  //       name: 'color-picker',
+  //       icon: <BiColorFill />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: 'Charts',
+  //   links: [
+  //     {
+  //       name: 'line',
+  //       icon: <AiOutlineStock />,
+  //     },
+  //     {
+  //       name: 'area',
+  //       icon: <AiOutlineAreaChart />,
+  //     },
+
+  //     {
+  //       name: 'bar',
+  //       icon: <AiOutlineBarChart />,
+  //     },
+  //     {
+  //       name: 'pie',
+  //       icon: <FiPieChart />,
+  //     },
+  //     {
+  //       name: 'financial',
+  //       icon: <RiStockLine />,
+  //     },
+  //     {
+  //       name: 'color-mapping',
+  //       icon: <BsBarChart />,
+  //     },
+  //     {
+  //       name: 'pyramid',
+  //       icon: <GiLouvrePyramid />,
+  //     },
+  //     {
+  //       name: 'stacked',
+  //       icon: <AiOutlineBarChart />,
+  //     },
+  //   ],
+  // },
 ];
 
 export const chatData = [
@@ -834,29 +954,20 @@ export const themeColors = [
   },
 ];
 
-export const userProfileData = [
+export const staffProfileData = [
   {
     icon: <BsCurrencyDollar />,
     title: 'My Profile',
     desc: 'Account Settings',
     iconColor: '#03C9D7',
     iconBg: '#E5FAFB',
-  },
-  {
-    icon: <BsShield />,
-    title: 'My Inbox',
-    desc: 'Messages & Emails',
-    iconColor: 'rgb(0, 194, 146)',
-    iconBg: 'rgb(235, 250, 242)',
-  },
-  {
-    icon: <FiCreditCard />,
-    title: 'My Tasks',
-    desc: 'To-do and Daily Tasks',
-    iconColor: 'rgb(255, 244, 229)',
-    iconBg: 'rgb(254, 201, 15)',
-  },
+  }
 ];
+
+export const adminProfileData = [
+
+];
+
 
 export const ordersGrid = [
   {
