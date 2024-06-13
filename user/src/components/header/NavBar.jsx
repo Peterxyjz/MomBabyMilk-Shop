@@ -81,7 +81,7 @@ const NavBar = () => {
         <div className="xl:hidden sm:block my-2">
           <SearchBar />
         </div>
-        <hr />
+        <hr className="mt-4"/>
       </header>
     </>
   );

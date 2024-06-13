@@ -4,7 +4,7 @@ import { HiCog, HiViewGrid, HiLogout } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
 import axios from 'axios'
 const UserBtn = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user")) || null;
   const verify = user === null ? 0 : user.verify
   const handleLogout = async () => {
     const result = JSON.parse(localStorage.getItem("result"));

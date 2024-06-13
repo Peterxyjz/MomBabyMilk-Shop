@@ -205,3 +205,12 @@ export const resetPasswordController = async (
   const result = await usersService.resetPassword(user_id, password) //ta chưa code resetPassword
   return res.json(result)
 }
+
+export const oAuthController = async (req: Request, res: Response, next: NextFunction) => {
+  const { code } = req.query
+  const data = await usersService.oAuth(code as string)
+  const resultString = encodeURIComponent(JSON.stringify(data.result))
+  const userString = encodeURIComponent(JSON.stringify(data.user))
+  const urlRedirect = `${process.env.CLIENT_REDIRECT_CALLBACK}?result=${resultString}&user=${userString}`
+  return res.redirect(urlRedirect)
+}

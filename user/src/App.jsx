@@ -9,6 +9,7 @@ import TapToTop from "./components/elements/TapToTop";
 import Otp from "./pages/Auth/Otp";
 import ResetPassord from "./pages/Auth/ResetPassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
+import LoginGoogle from "./pages/Auth/Google/LoginGoogle";
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
 
             {/* Auth */}
             <Route path="/login" element={<SiginIn />} />
+            <Route path="/login/oauth" element={<LoginGoogle />} />
             <Route path="/register" element={<SiginUp />} />
             <Route path="/otp" element={<Otp />} />
             <Route path="/reset-password" element={<ResetPassord />} />

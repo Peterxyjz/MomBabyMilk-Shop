@@ -14,8 +14,8 @@ const Otp = () => {
         style={{ backgroundImage: `url(${logBg})` }}
       >
         <div className="lg:w-3/5 hidden lg:block">
-          <div className="flex items-center justify-center w-full h-full">
-            <img src={otpImg} className="w-[80%] h-auto" />
+          <div className="flex items-center justify-center w-full">
+            <img src={otpImg} className="w-[80%]" />
           </div>
         </div>
         <div className="lg:w-2/5 w-full flex items-center justify-center">

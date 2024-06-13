@@ -14,7 +14,8 @@ export const USERS_MESSAGES = {
   EMAIL_VERIFY_SUCCESS: 'Xác minh email thành công',
   RESEND_VERIFY_EMAIL_SUCCESS: 'Gửi lại email xác minh thành công',
   YOU_NEED_TO_VERIFY_EMAIL: 'Bạn cần xác minh email để tiếp tục đăng nhập',
-  OTP_IS_INVALID: 'OTP_IS_INVALID',
+  OTP_IS_INVALID: 'Mã xác minh không hợp lệ',
+  EMAIL_NOT_VERIFIED: 'Email chưa xác minh',
   //password
   PASSWORD_IS_REQUIRED: 'Mật khẩu là bắt buộc',
   PASSWORD_MUST_BE_A_STRING: 'Mật khẩu phải là một chuỗi',
