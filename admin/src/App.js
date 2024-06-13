@@ -90,7 +90,7 @@ const App = () => {
                   {themeSettings && (<ThemeSettings />)}
 
                   <Routes>
-                    <Route path="/" element={(<Orders />)} />
+                    <Route path="/" element={(<Dashboard isAuthenticatedStaff={isAuthenticatedStaff} />)} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/add-product" element={<AddProduct />} />
@@ -145,7 +145,7 @@ const App = () => {
                   {themeSettings && (<ThemeSettings />)}
 
                   <Routes>
-                    <Route path="/" element={(<Dashboard />)} />
+                    <Route path="/" element={(<Dashboard isAuthenticatedAdmin={isAuthenticatedAdmin} />)} />
                     <Route path="/users" element={(<Users />)} />
                     <Route path="/add-staff" element={(<AddStaff />)} />
                     <Route path="/add-inputbill" element={(<AddBill />)} />

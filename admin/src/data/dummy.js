@@ -1,10 +1,10 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock, AiOutlineInbox } from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers } from 'react-icons/fi';
-import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
+import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsNewspaper } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { RiContactsLine, RiPriceTag3Line, RiStockLine } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { MdOutlineCategory, MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
 import { GiLouvrePyramid } from 'react-icons/gi';
@@ -516,9 +516,18 @@ export const employeesGrid = [
 ];
 
 export const stafflinks = [
-
   {
-    title: 'Pages',
+    title: 'Trang chủ',
+    links: [
+      {
+        name: 'Dashboard',
+        path: '/',
+        icon: <FiShoppingBag />,
+      },
+    ],
+  },
+  {
+    title: 'Đơn hàng',
     links: [
       {
         name: 'Quản lý đơn hàng',
@@ -527,8 +536,16 @@ export const stafflinks = [
         path: 'orders',
         subLinks: [
           { name: 'allOrder', path: 'orders', label: 'Tất cả đơn hàng' },
+          { name: 'waitOrder', path: '', label: 'Đơn chờ xác nhận' },
+          { name: 'approvedOrder', path: '', label: 'Đơn đã xác nhận' },
+          { name: 'completeOrder', path: '', label: 'Đơn đã hoàn thành' },
         ],
       },
+    ],
+  },
+  {
+    title: 'Sản phẩm',
+    links: [
       {
         name: 'Quản lý sản phẩm',
         icon: <AiOutlineInbox />,
@@ -537,20 +554,22 @@ export const stafflinks = [
         subLinks: [
           { name: 'allProduct', path: 'products', label: 'Tất cả sản phẩm' },
           { name: 'addProduct', path: 'add-product', label: 'Thêm sản phẩm' },
+          { name: 'viewFeedback', path: '', label: 'Xem đánh giá' },
+          { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
         ],
       },
-      {
-        name: 'Quản lý khách hàng',
-        icon: <RiContactsLine />,
-        type: 'sub',
-        path: 'customers',
-        subLinks: [
-          { name: 'allCustomer', path: 'customers', label: 'Tất cả khách hàng' },
-        ],
-      },
+      // {
+      //   name: 'Quản lý khách hàng',
+      //   icon: <RiContactsLine />,
+      //   type: 'sub',
+      //   path: 'customers',
+      //   subLinks: [
+      //     { name: 'allCustomer', path: 'customers', label: 'Tất cả khách hàng' },
+      //   ],
+      // },
       {
         name: 'Quản lý phân loại',
-        icon: <RiPriceTag3Line />,
+        icon: <MdOutlineCategory  />,
         type: 'sub',
         path: 'categories',
         subLinks: [
@@ -569,9 +588,35 @@ export const stafflinks = [
 
         ],
       },
+      {
+        name: 'Quản lý mã giảm giá',
+        icon: <RiPriceTag3Line />,
+        type: 'sub',
+        path: '',
+        subLinks: [
+          { name: 'allVoucher', path: '', label: 'Tất cả mã giảm giá' },
+
+        ],
+      },
     ],
   },
+  {
+    title: 'Tin tức',
+    links: [
+      {
+        name: 'Quản lý bài viết',
+        icon: <BsNewspaper  />,
+        type: 'sub',
+        path: '',
+        subLinks: [
+          { name: 'allBlog', path: '', label: 'Tất cả bài viết' },
+          { name: 'addBlog', path: '', label: 'Thêm bài viết' },
   
+        ],
+      },
+    ]
+  },
+
   // {
   //   title: 'Apps',
   //   links: [
@@ -635,21 +680,21 @@ export const stafflinks = [
 
 export const adminlinks = [
   {
-    title: 'Dashboard',
+    title: 'Trang chủ',
     links: [
       {
         name: 'Dashboard',
-        path:'/',
+        path: '/',
         icon: <FiShoppingBag />,
       },
     ],
   },
   {
-    title: 'Pages',
+    title: 'Tài khoản',
     links: [
       {
         name: 'Quản lý người dùng',
-        icon: <FiUsers  />,
+        icon: <FiUsers />,
         type: 'sub',
         path: 'users',
         subLinks: [
@@ -657,17 +702,31 @@ export const adminlinks = [
           { name: 'addStaff', path: 'add-staff', label: 'Thêm nhân viên' },
         ],
       },
+      // {
+      //   name: 'Quản lý kho',
+      //   icon: <BsBoxSeam />,
+      //   type: 'sub',
+      //   subLinks: [
+      //     { name: 'addBill', path: 'add-inputbill', label: 'Thêm đơn nhập hàng' },
+      //   ],
+      // },
+    ],
+  },
+  {
+    title: 'Kho',
+    links: [
       {
         name: 'Quản lý kho',
         icon: <BsBoxSeam />,
         type: 'sub',
+        path: '',
         subLinks: [
-          { name: 'addBill', path: 'add-inputbill', label: 'Thêm đơn nhập hàng' },
+          { name: 'allBill', path: '', label: 'Tất cả đơn nhập hàng' },
         ],
       },
-    ],
+    ]
   },
-  
+
   // {
   //   title: 'Apps',
   //   links: [

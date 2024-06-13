@@ -57,25 +57,14 @@ const LoginPage = () => {
   };
   return (
     <>
-      <div className="w-full h-screen flex">
-        <div className="relative w-full h-full flex flex-col">
-          <img src={cover_imgedit} alt="" className="absolute top-0 left-0 w-full h-full object-cover" />
+      <div className="w-full min-h-screen flex items-center justify-center relative">
+        <img src={cover_imgedit} alt="" className="absolute top-0 left-0 w-full h-full object-cover" />
 
-          <Card title="Đăng nhập" subTitle="Staff & Admin Only" className="absolute top-[25%] left-[7%] flex flex-col bg-white p-8 rounded-lg shadow-lg w-[35rem]">
+        <div className="relative w-full h-full flex items-center justify-center px-4 sm:justify-start sm:px-0">
+          <Card title="Đăng nhập" subTitle="Staff & Admin Only" className="flex flex-col bg-white p-8 rounded-lg shadow-lg w-full max-w-[35rem] sm:ml-28">
             <div className="w-full flex flex-col max-w-[500px]">
               <div>
                 <form className="w-full flex flex-col" onSubmit={handleSubmit}>
-                  {/* <input
-                    type="email"
-                    placeholder="Nhập email..."
-                    id="email"
-                    name="email"
-                    value={formValues.email}
-                    onChange={handleChange}
-                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-                  /> */}
-
-
                   <label htmlFor="email" className="font-bold block mb-2">
                     Email
                   </label>
@@ -84,48 +73,32 @@ const LoginPage = () => {
                     name="email"
                     value={formValues.email}
                     onChange={handleChange}
-                    className="w-full h-10 border border-gray-300 rounded-md p-2"
+                    className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)] rounded-xl"
+                    placeholder="Nhập địa chỉ email"
+                    type="email"
                   />
-                  {/* <InputText variant="filled" keyfilter="email" className="w-full h-10 border border-gray-300 rounded-md p-2" type="email"
-                    id="email"
-                    name="email"
-                    value={formValues.email}
-                    onChange={handleChange} /> */}
-                  {/* <FloatLabel>
-                    <InputText id="username" value={value} onChange={(e) => setValue(e.target.value)} />
-                    <label htmlFor="username">Username</label>
-                  </FloatLabel> */}
-                  {/* <input
-                    type="password"
-                    placeholder="Nhập mật khẩu..."
-                    id="password"
-                    name="password"
-                    value={formValues.password}
-                    onChange={handleChange}
-                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-                  /> */}
-
                   <label htmlFor="password" className="font-bold block mb-2 mt-4">
                     Mật khẩu
                   </label>
                   <InputGroup>
                     <Input
-                      className="w-full h-10 border border-gray-300 rounded-md p-2"
+                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)] rounded-xl"
                       type={show ? 'text' : 'password'}
                       id="password"
                       name="password"
                       value={formValues.password}
                       onChange={handleChange}
+                      placeholder="Nhập mật khẩu"
                     />
-                    <InputRightElement width='4.5rem'>
-                      <Button h='2.5rem'
-                        size="sm"
-                        onClick={handleClick}
-                        fontSize={'1.5rem'}
-                      >
-                        {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                      </Button>
-                    </InputRightElement>
+                    {/* <InputRightElement width='4.5rem'>
+                  <Button h='2.5rem'
+                    size="sm"
+                    onClick={handleClick}
+                    fontSize={'1.5rem'}
+                  >
+                    {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                  </Button>
+                </InputRightElement> */}
                   </InputGroup>
                   {errorList.length > 0 && (
                     <div className="error-list mt-3 mb-3">
@@ -136,26 +109,25 @@ const LoginPage = () => {
                       ))}
                     </div>
                   )}
-                  <div className="w-full flex items-center justify-between" style={{ marginTop: "20px" }}>
+                  <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-4">
                     <div className="w-full flex items-center">
-                     <Checkbox defaultChecked />
-                      <p className="text-sm">   Ghi nhớ mật khẩu!</p>
+                      <Checkbox defaultChecked />
+                      <p className="text-sm">Ghi nhớ mật khẩu!</p>
                     </div>
                     <Link
                       to={"/forgot-password"}
-                      className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"
+                      className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2 mt-2 sm:mt-0"
                     >
                       Quên Mật Khẩu?
                     </Link>
                   </div>
-                  <div className="w-full flex flex-col">
+                  <div className="w-full flex flex-col mt-4">
                     <button
                       type="submit"
                       className="w-full text-white my-4 bg-[#060606] rounded-md p-4 text-center flex items-center justify-center"
                     >
                       Đăng Nhập
                     </button>
-
                   </div>
                 </form>
               </div>

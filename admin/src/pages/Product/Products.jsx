@@ -20,16 +20,16 @@ const Product = () => {
   }, []);
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 py-3 sm:py-5">
-      <div className="px-4 mx-auto max-w-screen-2xl lg:px-12">
-        <div className="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
+    <section className=" py-3 sm:py-5">
+      <div className="px-4 mx-auto max-w-screen-2xl lg:px-12 min-h-screen flex flex-col">
+        <div className="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg flex-grow">
           <div className="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
             <div className="flex items-center flex-1 space-x-4">
-              <h5>
+              <h5 className="text-sm sm:text-base">
                 <span className="text-gray-500">All Products:</span>
                 <span className="dark:text-white">123456</span>
               </h5>
-              <h5>
+              <h5 className="text-sm sm:text-base">
                 <span className="text-gray-500">Total sales:</span>
                 <span className="dark:text-white">$88.4k</span>
               </h5>
@@ -100,7 +100,7 @@ const Product = () => {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase  dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-4 py-3">
                     Sản Phẩm
