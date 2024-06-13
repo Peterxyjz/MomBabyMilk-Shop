@@ -4,7 +4,7 @@ import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Sidebar, ThemeSettings } from './components';
-import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './pages';
+import { Ecommerce, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './pages';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
@@ -15,6 +15,20 @@ import ResetPassword from './pages/Login/ResetPassword';
 import Products from './pages/Product/Products';
 import AddProduct from './pages/Product/AddProduct';
 import EditProduct from './pages/Product/EditProduct';
+
+import 'primeicons/primeicons.css';
+import 'primereact/resources/themes/lara-light-blue/theme.css';
+import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';
+
+import Orders from './pages/Order/Orders';
+import Categories from './pages/Category/Categories';
+import Brands from './pages/Brand/Brands';
+import AddCategory from './pages/Category/AddCategory';
+import AddBrands from './pages/Brand/AddBrands';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/User/Users';
+import AddStaff from './pages/User/AddStaff';
+import AddBill from './pages/AddBill';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
@@ -55,11 +69,11 @@ const App = () => {
               </div>
               {activeMenu ? (
                 <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-                  <Sidebar />
+                  <Sidebar  isAuthenticatedStaff={isAuthenticatedStaff} />
                 </div>
               ) : (
                 <div className="w-0 dark:bg-secondary-dark-bg">
-                  <Sidebar />
+                  <Sidebar isAuthenticatedStaff={isAuthenticatedStaff}  />
                 </div>
               )}
               <div
@@ -70,39 +84,22 @@ const App = () => {
                 }
               >
                 <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
-                  <Navbar />
+                  <Navbar isAuthenticatedStaff={isAuthenticatedStaff} />
                 </div>
                 <div>
                   {themeSettings && (<ThemeSettings />)}
 
                   <Routes>
-                    {/* dashboard  */}
-                    <Route path="/" element={(<Ecommerce />)} />
-                    <Route path="/ecommerce" element={(<Ecommerce />)} />
-
-                    {/* pages  */}
+                    <Route path="/" element={(<Orders />)} />
                     <Route path="/orders" element={<Orders />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/add-product" element={<AddProduct />} />
                     <Route path="/edit-product" element={<EditProduct />} />
                     <Route path="/customers" element={<Customers />} />
-
-                    {/* apps  */}
-                    <Route path="/kanban" element={<Kanban />} />
-                    <Route path="/editor" element={<Editor />} />
-                    <Route path="/calendar" element={<Calendar />} />
-                    <Route path="/color-picker" element={<ColorPicker />} />
-
-                    {/* charts  */}
-                    <Route path="/line" element={<Line />} />
-                    <Route path="/area" element={<Area />} />
-                    <Route path="/bar" element={<Bar />} />
-                    <Route path="/pie" element={<Pie />} />
-                    <Route path="/financial" element={<Financial />} />
-                    <Route path="/color-mapping" element={<ColorMapping />} />
-                    <Route path="/pyramid" element={<Pyramid />} />
-                    <Route path="/stacked" element={<Stacked />} />
-
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/add-categories" element={<AddCategory />} />
+                    <Route path="/brands" element={<Brands />} />
+                    <Route path="/add-brand" element={<AddBrands />} />
                   </Routes>
                 </div>
               </div>
@@ -127,11 +124,11 @@ const App = () => {
               </div>
               {activeMenu ? (
                 <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-                  <Sidebar />
+                  <Sidebar isAuthenticatedAdmin={isAuthenticatedAdmin} />
                 </div>
               ) : (
                 <div className="w-0 dark:bg-secondary-dark-bg">
-                  <Sidebar />
+                  <Sidebar isAuthenticatedAdmin={isAuthenticatedAdmin} />
                 </div>
               )}
               <div
@@ -142,37 +139,16 @@ const App = () => {
                 }
               >
                 <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
-                  <Navbar />
+                  <Navbar isAuthenticatedAdmin={isAuthenticatedAdmin} />
                 </div>
                 <div>
                   {themeSettings && (<ThemeSettings />)}
 
                   <Routes>
-                    {/* dashboard  */}
-                    <Route path="/" element={(<Ecommerce />)} />
-                    <Route path="/ecommerce" element={(<Ecommerce />)} />
-
-                    {/* pages  */}
-                    <Route path="/orders" element={<Orders />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/add-product" element={<AddProduct />} />
-                    <Route path="/customers" element={<Customers />} />
-
-                    {/* apps  */}
-                    <Route path="/kanban" element={<Kanban />} />
-                    <Route path="/editor" element={<Editor />} />
-                    <Route path="/calendar" element={<Calendar />} />
-                    <Route path="/color-picker" element={<ColorPicker />} />
-
-                    {/* charts  */}
-                    <Route path="/line" element={<Line />} />
-                    <Route path="/area" element={<Area />} />
-                    <Route path="/bar" element={<Bar />} />
-                    <Route path="/pie" element={<Pie />} />
-                    <Route path="/financial" element={<Financial />} />
-                    <Route path="/color-mapping" element={<ColorMapping />} />
-                    <Route path="/pyramid" element={<Pyramid />} />
-                    <Route path="/stacked" element={<Stacked />} />
+                    <Route path="/" element={(<Dashboard />)} />
+                    <Route path="/users" element={(<Users />)} />
+                    <Route path="/add-staff" element={(<AddStaff />)} />
+                    <Route path="/add-inputbill" element={(<AddBill />)} />
 
                   </Routes>
                 </div>
