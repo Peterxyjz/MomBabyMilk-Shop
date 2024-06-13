@@ -69,7 +69,7 @@ const Otp = () => {
                   <p>Xác Thực OTP</p>
                 </div>
                 <div className="flex flex-row text-sm font-medium text-gray-400">
-                  <p>We have sent a code to your email: {email}</p>
+                  <p> Chúng tôi đã gửi OTP tới email: {email}</p>
                 </div>
               </div>
               <div>
@@ -109,7 +109,7 @@ const Otp = () => {
                         </button>
                       </div>
                       <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                        <p>Didn't recieve code?</p>{" "}
+                        <p>Không tìm thấy mã?</p>{" "}
                         <Button onClick={resendMail}>Gửi lại mã</Button>
                       </div>
                     </div>
