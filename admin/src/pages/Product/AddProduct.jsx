@@ -163,8 +163,8 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="px-20 my-12 w-full">
-      <h2 className="mb-8 text-3xl font-bold">Thêm sản phẩm</h2>
+<div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl h-screen w-full">
+<h2 className="mb-8 text-3xl font-bold">Thêm sản phẩm</h2>
       <form
         className="flex lg:w-[1180px] flex-col flex-wrap gap-4"
         onSubmit={handleSubmit}

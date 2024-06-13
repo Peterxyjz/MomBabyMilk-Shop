@@ -3,8 +3,10 @@ import { Link, NavLink } from 'react-router-dom';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import { adminlinks, links, stafflinks } from '../data/dummy';
+import { adminlinks, stafflinks } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
+import logoImg from '../assets/images/logo/Logo.png';
+
 
 const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
@@ -34,7 +36,9 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
               onClick={handleCloseSideBar}
               className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900"
             >
-              <span>MomBabyMilk Shop</span>
+              <span className='w-full my-4'>
+                <img src={logoImg} alt="logo" />
+              </span>
             </Link>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
@@ -48,92 +52,93 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             </TooltipComponent>
           </div>
 
+
           {isAuthenticatedAdmin && (
             <div className="mt-10">
-              {adminlinks.map((item) => (
-                <div key={item.title}>
-                  {/* <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
-                    {item.title}
-                  </p> */}
-                  {item.links.map((link) => (
-                    <div key={link.name} className="relative">
-                      <NavLink
-                        to={link.path || `/${link.name}`}
-                        onClick={link.type === 'sub' ? (e) => { e.preventDefault(); toggleSubmenu(link.name); } : handleCloseSideBar}
-                        style={({ isActive }) => ({
-                          backgroundColor: isActive ? currentColor : '',
-                        })}
-                        className={({ isActive }) => (isActive ? activeLink : normalLink)}
-                      >
-                        {link.icon}
-                        <span className="capitalize">{link.name}</span>
-                      </NavLink>
-                      {link.type === 'sub' && activeSubmenu === link.name && (
-                        <div className=" rounded-lg mt-2 ml-4 pl-4">
-                          {link.subLinks.map((subLink) => (
-                            <NavLink
-                              to={`/${subLink.path || subLink.name}`}
-                              key={subLink.name}
-                              onClick={handleCloseSideBar}
-                              style={({ isActive }) => ({
-                                backgroundColor: isActive ? currentColor : '',
-                              })}
-                              className={({ isActive }) => (isActive ? activeLink : normalLink)}
-                            >
-                              {subLink.icon}
-                              <span className="capitalize">{subLink.label}</span>
-                            </NavLink>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>)}
+            {adminlinks.map((item, itemIndex) => (
+              <div key={item.title} className={`relative ${itemIndex < adminlinks.length - 1 ? 'pb-4 mb-4 border-b border-gray-300 dark:border-gray-700' : ''}`}>
+                <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
+                  {item.title}
+                </p>
+                {item.links.map((link) => (
+                  <div key={link.name} className="relative mb-2">
+                    <NavLink
+                      to={link.path || `/${link.name}`}
+                      onClick={link.type === 'sub' ? (e) => { e.preventDefault(); toggleSubmenu(link.name); } : handleCloseSideBar}
+                      style={({ isActive }) => ({
+                        backgroundColor: isActive ? currentColor : '',
+                      })}
+                      className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                    >
+                      {link.icon}
+                      <span className="capitalize">{link.name}</span>
+                    </NavLink>
+                    {link.type === 'sub' && activeSubmenu === link.name && (
+                      <div className="rounded-lg mt-2 ml-4 pl-4">
+                        {link.subLinks.map((subLink) => (
+                          <NavLink
+                            to={`/${subLink.path || subLink.name}`}
+                            key={subLink.name}
+                            onClick={handleCloseSideBar}
+                            style={({ isActive }) => ({
+                              backgroundColor: isActive ? currentColor : '',
+                            })}
+                            className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                          >
+                            {subLink.icon}
+                            <span className="capitalize">{subLink.label}</span>
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>)}
           {isAuthenticatedStaff && (
             <div className="mt-10">
-              {stafflinks.map((item) => (
-                <div key={item.title}>
-                  {/* <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
-                    {item.title}
-                  </p> */}
-                  {item.links.map((link) => (
-                    <div key={link.name} className="relative">
-                      <NavLink
-                        to={link.path || `/${link.name}`}
-                        onClick={link.type === 'sub' ? (e) => { e.preventDefault(); toggleSubmenu(link.name); } : handleCloseSideBar}
-                        style={({ isActive }) => ({
-                          backgroundColor: isActive ? currentColor : '',
-                        })}
-                        className={({ isActive }) => (isActive ? activeLink : normalLink)}
-                      >
-                        {link.icon}
-                        <span className="capitalize">{link.name}</span>
-                      </NavLink>
-                      {link.type === 'sub' && activeSubmenu === link.name && (
-                        <div className=" rounded-lg mt-2 ml-4 pl-4">
-                          {link.subLinks.map((subLink) => (
-                            <NavLink
-                              to={`/${subLink.path || subLink.name}`}
-                              key={subLink.name}
-                              onClick={handleCloseSideBar}
-                              style={({ isActive }) => ({
-                                backgroundColor: isActive ? currentColor : '',
-                              })}
-                              className={({ isActive }) => (isActive ? activeLink : normalLink)}
-                            >
-                              {subLink.icon}
-                              <span className="capitalize">{subLink.label}</span>
-                            </NavLink>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>)}
+            {stafflinks.map((item, itemIndex) => (
+              <div key={item.title} className={`relative ${itemIndex < stafflinks.length - 1 ? 'pb-4 mb-4 border-b border-gray-300 dark:border-gray-700' : ''}`}>
+                <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
+                  {item.title}
+                </p>
+                {item.links.map((link) => (
+                  <div key={link.name} className="relative mb-2">
+                    <NavLink
+                      to={link.path || `/${link.name}`}
+                      onClick={link.type === 'sub' ? (e) => { e.preventDefault(); toggleSubmenu(link.name); } : handleCloseSideBar}
+                      style={({ isActive }) => ({
+                        backgroundColor: isActive ? currentColor : '',
+                      })}
+                      className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                    >
+                      {link.icon}
+                      <span className="capitalize">{link.name}</span>
+                    </NavLink>
+                    {link.type === 'sub' && activeSubmenu === link.name && (
+                      <div className="rounded-lg mt-2 ml-4 pl-4">
+                        {link.subLinks.map((subLink) => (
+                          <NavLink
+                            to={`/${subLink.path || subLink.name}`}
+                            key={subLink.name}
+                            onClick={handleCloseSideBar}
+                            style={({ isActive }) => ({
+                              backgroundColor: isActive ? currentColor : '',
+                            })}
+                            className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                          >
+                            {subLink.icon}
+                            <span className="capitalize">{subLink.label}</span>
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>)}
         </>
       )}
     </div>
