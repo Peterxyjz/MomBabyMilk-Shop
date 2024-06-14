@@ -75,6 +75,6 @@ usersRouter.post('/reset-password', checkPasswordToken, resetPasswordValidator, 
 
 usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 
-usersRouter.get('/get-all-user',accessTokenValidator ,wrapAsync(getAllUserController))
+usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
 
 export default usersRouter

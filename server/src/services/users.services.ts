@@ -257,6 +257,9 @@ class UsersService {
     }
   }
 
+  async getRoles(){
+    return await databaseService.roles.find({}).toArray()
+  }
   async checkRole(user: User) {
     const roleAccount = await databaseService.roles.findOne({ _id: new ObjectId(user.role_id) })
     return roleAccount?.role_name
@@ -354,7 +357,7 @@ class UsersService {
       }
     }
   }
-  async getAllUser(){
+  async getAllUser() {
     return await databaseService.users.find({}).toArray()
   }
 }

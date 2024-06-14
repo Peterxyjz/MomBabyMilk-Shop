@@ -26,6 +26,8 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   </TooltipComponent>
 );
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 const Navbar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
 
@@ -62,9 +64,9 @@ const Navbar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             onClick={() => handleClick('userProfile')}
           >
             <p>
-              <span className="text-gray-400 text-14">Hi,</span>{' '}
+              <span className="text-gray-400 text-14">Xin chào,</span>{' '}
               <span className="text-gray-400 font-bold ml-1 text-14">
-                Michael
+                {user.username}
               </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />

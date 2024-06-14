@@ -21,6 +21,7 @@ import { verifyToken } from '~/utils/jwt'
 import { error } from 'console'
 import { ErrorWithStatus } from '~/model/Errors'
 import { verify } from 'crypto'
+import { forEach, forIn } from 'lodash'
 //login:
 export const loginController = async (req: Request, res: Response) => {
   const user = req.user as User // lấy user từ req
@@ -234,11 +235,16 @@ export const getAllUserController = async (
       message: 'Bạn không có quyền truy cập'
     })
   }
- const users = await usersService.getAllUser()
-
-
+  const users = await usersService.getAllUser()
+  // const result = [{}]
+  // users.forEach(async (element: User) => {
+  //   result.push({
+  //     ...element,
+  //     role_name: await usersService.checkRole(element)
+  //   })
+  // });
   return res.status(HTTP_STATUS.OK).json({
-    users
+    users //result
   })
 }
 
