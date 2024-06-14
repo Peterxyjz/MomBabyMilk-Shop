@@ -1,52 +1,46 @@
-import React from 'react';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import RenderRating from "../elements/RenderRating";
 
 const ProductDetail = () => {
+  const location = useLocation();
+  const product = location.state.product || null;
+  if (!product) {
+    return <div>Product not found</div>;
+  }
+  console.log("vnd: ");
   return (
     <section className="py-8 bg-white md:py-16 antialiased">
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto">
-            <img
-              className="w-full"
-              src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
-              alt=""
-            />
+            <img className="w-full" src={product.imgUrl} alt="" />
           </div>
 
           <div className="mt-6 sm:mt-8 lg:mt-0">
             <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
-              Apple iMac 24" All-In-One Computer, Apple M1, 8GB RAM, 256GB SSD, Mac OS, Pink
+              {product.product_name}
             </h1>
             <div className="mt-4 sm:items-center sm:gap-4 sm:flex">
               <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
-                $1,249.99
+                {Number(product.price).toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
               </p>
 
               <div className="flex items-center gap-2 mt-2 sm:mt-0">
                 <div className="flex items-center gap-1">
-                  {Array(5).fill(0).map((_, i) => (
-                    <svg
-                      key={i}
-                      className="w-4 h-4 text-yellow-300"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"
-                      />
-                    </svg>
-                  ))}
+                  <RenderRating rating={product.rating} />
                 </div>
-                <p className="text-sm font-medium leading-none text-gray-500">(5.0)</p>
+                <p className="text-sm font-medium leading-none text-gray-500">
+                  ({product.rating})
+                </p>
                 <a
                   href="#"
                   className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline"
                 >
-                  345 Reviews
+                  {product.reviewer} Reviews
                 </a>
               </div>
             </div>
@@ -107,13 +101,11 @@ const ProductDetail = () => {
 
             <hr className="my-6 md:my-8 border-gray-200" />
 
-            <p className="mb-6 text-gray-500">
-              Studio quality three mic array for crystal clear calls and voice recordings. Six-speaker sound system for a remarkably robust and high-quality audio experience. Up to 256GB of ultrafast SSD storage.
-            </p>
+            <p className="mb-6 text-gray-500">{product.description}</p>
 
-            <p className="text-gray-500">
+            {/* <p className="text-gray-500">
               Two Thunderbolt USB 4 ports and up to two USB 3 ports. Ultrafast Wi-Fi 6 and Bluetooth 5.0 wireless. Color matched Magic Mouse with Magic Keyboard or Magic Keyboard with Touch ID.
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
