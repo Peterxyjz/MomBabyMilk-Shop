@@ -9,6 +9,7 @@ import Product from '~/model/schemas/Product.schema'
 import InputBill from '~/model/schemas/InputBill.schema'
 import InputBillDetail from '~/model/schemas/InputBillDetail.schema'
 import WareHouse from '~/model/schemas/WareHouse.schema'
+import FeedBack from '~/model/schemas/Feeback.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@mombabymilk.lrg7esv.mongodb.net/?retryWrites=true&w=majority&appName=MomBabyMilk`
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -66,6 +67,11 @@ class DatabaseService {
   //warehouse:
   get warehouse(): Collection<WareHouse> {
     return this.db.collection(process.env.DB_WAREHOUSE_COLLECTION as string)
+  }
+
+  //feedback:
+  get feedbacks(): Collection<FeedBack> {
+    return this.db.collection(process.env.DB_FEEDBACKS_COLLECTION as string)
   }
 }
 //từ class tạo object và export nó ra ngoài

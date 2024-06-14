@@ -9,6 +9,7 @@ import productsRouter from './routes/products.routes'
 import categoriesRouter from './routes/categories.routes'
 import brandsRouter from './routes/brands.routes'
 import inputBillsRouter from './routes/inputBillsRouter.routes'
+import feedbacksRouter from './routes/feedbacks.routes'
 //https://localhost:4000/
 databaseService.connect()
 app.use(cors({ origin: true }))
@@ -23,6 +24,7 @@ app.use('/products', productsRouter)
 app.use('/categories', categoriesRouter)
 app.use('/brands', brandsRouter)
 app.use('/inputBills', inputBillsRouter)
+app.use('/feedbacks', feedbacksRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Project MomBabyMilk này đang chạy trên post ${port}`)
