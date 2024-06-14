@@ -1,11 +1,35 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { fetchProducts } from "../../data/api";
 const SearchBar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Tất Cả Sản Phẩm");
   const [categories, setCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const productData = await fetchProducts();
+        setProducts(productData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    getProducts();
+  }, []);
+
+  console.log(products);
+  const sampleProducts = [];
+  products.forEach((item) => {
+    sampleProducts.push(item.product_name);
+  });
+  console.log("sameple: ", sampleProducts);
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
@@ -26,6 +50,34 @@ const SearchBar = () => {
     }
   };
 
+  const getSuggestions = (query) => {
+    if (query.length < 0) {
+      setSuggestions([]);
+      return;
+    }
+    const filteredSuggestions = sampleProducts.filter((product) =>
+      product.toLowerCase().includes(query.toLowerCase())
+    );
+    setSuggestions(filteredSuggestions);
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    getSuggestions(value);
+  };
+
+  const handleSuggestionSelect = (suggestion) => {
+    setSearchTerm(suggestion);
+
+    setSuggestions([]);
+
+    const _product = products.find(
+      (product) => product.product_name === suggestion
+    );
+    navigate("/product", { state: { product: _product } });
+  };
+
   useEffect(() => {
     getCategory();
   }, []);
@@ -44,7 +96,7 @@ const SearchBar = () => {
             id="dropdown-button"
             onClick={toggleDropdown}
             type="button"
-            className="flex-shrink-0 z-10 inline-flex items-center justify-between h-12 py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600 w-[200px]" 
+            className="flex-shrink-0 z-10 inline-flex items-center justify-between h-12 py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600 w-[200px]"
           >
             <div>{selectedCategory}</div>
             <div>
@@ -92,6 +144,8 @@ const SearchBar = () => {
           <input
             type="search"
             id="search-dropdown"
+            value={searchTerm}
+            onChange={handleInputChange}
             className="block h-12 p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
             placeholder="Search Mockups, Logos, Design Templates..."
             required
@@ -117,6 +171,25 @@ const SearchBar = () => {
             </svg>
             <span className="sr-only">Search</span>
           </button>
+          {suggestions.length > 0 && (
+            <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg dark:bg-gray-700">
+              <ul className="py-1 text-sm text-gray-700 dark:text-gray-200">
+                {suggestions.map((suggestion, index) => (
+                  <li key={index}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleSuggestionSelect(suggestion);
+                      }}
+                      className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      {suggestion}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </form>

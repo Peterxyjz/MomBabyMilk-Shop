@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const fetchProducts = async () => {
     try {
-        const res = await axios.get("http://localhost:4000/products/all-products");
+        const res = await axios.get(`http://localhost:4000/products/all-products`);
         return res.data.result;
     } catch (error) {
         console.error("Error fetching products:", error);
