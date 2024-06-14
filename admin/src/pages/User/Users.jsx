@@ -67,7 +67,7 @@ const Users = () => {
                 <Column field="date_of_birth" header="Ngày sinh" sortable style={{ width: '10%' }}></Column>
                 <Column field="phone" header="Số điện thoại" style={{ width: '15%' }}></Column>
                 <Column field="address" header="Địa chỉ" style={{ width: '30%' }}></Column>
-                <Column field="role" header="Vai trò" sortable style={{ width: '10%' }}></Column>
+                <Column field="role_name" header="Vai trò" sortable style={{ width: '10%' }}></Column>
                 <Column field="status" header="Tình trạng" body={toggleSwitchTemplate} sortable style={{ width: '10%' }}></Column>
             </DataTable>
 
