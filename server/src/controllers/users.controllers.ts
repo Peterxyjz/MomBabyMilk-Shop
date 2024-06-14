@@ -214,3 +214,31 @@ export const oAuthController = async (req: Request, res: Response, next: NextFun
   const urlRedirect = `${process.env.CLIENT_REDIRECT_CALLBACK}?result=${resultString}&user=${userString}`
   return res.redirect(urlRedirect)
 }
+
+
+export const getAllUserController = async (
+  req: Request<ParamsDictionary, any, ResetPasswordReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload //lấy user_id từ decoded_authorization
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    return res.status(400).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Admin') {
+    return res.status(400).json({
+      message: 'Bạn không có quyền truy cập'
+    })
+  }
+ const users = await usersService.getAllUser()
+
+
+  return res.status(HTTP_STATUS.OK).json({
+    users
+  })
+}
+
