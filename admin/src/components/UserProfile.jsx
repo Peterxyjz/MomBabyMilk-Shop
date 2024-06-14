@@ -3,9 +3,12 @@ import { MdOutlineCancel } from "react-icons/md";
 import { Button } from ".";
 import { adminProfileData, staffProfileData } from "../data/dummy";
 import Buttonlogout from "@mui/material/Button";
-import avatar from "../data/avatar.jpg";
 import axios from "axios";
+import { NavLink, useNavigate } from 'react-router-dom';
 const UserProfile = ({ isAdmin }) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+
   const handleLogout = async () => {
     const result = JSON.parse(localStorage.getItem("result"));
     await axios.post(
@@ -28,15 +31,15 @@ const UserProfile = ({ isAdmin }) => {
         <div>
           <p className="font-semibold text-xl dark:text-gray-200">
             {" "}
-            Michael Roberts{" "}
+            {user.full_name}{" "}
           </p>
-          <p className="text-gray-500 text-sm dark:text-gray-400">
+          <p className="text-gray-500 text-lg font-semibold dark:text-gray-400">
             {" "}
-            Administrator{" "}
+            {isAdmin ? "Quản trị viên" : "Nhân viên"}
           </p>
           <p className="text-gray-500 text-sm font-semibold dark:text-gray-400">
             {" "}
-            info@shop.com{" "}
+            {user.email}{" "}
           </p>
         </div>
         <Button
@@ -92,21 +95,17 @@ const UserProfile = ({ isAdmin }) => {
                   key={index}
                   className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]"
                 >
-                  <button
-                    type="button"
+                  <NavLink
                     style={{ color: item.iconColor, backgroundColor: item.iconBg }}
-                    className=" text-xl rounded-lg p-3 hover:bg-light-gray"
+                    className="text-xl rounded-lg p-3 hover:bg-light-gray"
+                    to={`/${item.path}`}
                   >
                     {item.icon}
-                  </button>
-
-                  <div>
-                    <p className="font-semibold dark:text-gray-200 ">{item.title}</p>
-                    <p className="text-gray-500 text-sm dark:text-gray-400">
-                      {" "}
-                      {item.desc}{" "}
-                    </p>
-                  </div>
+                    <div>
+                      <p className="font-semibold dark:text-gray-200">{item.title}</p>
+                      <p className="text-gray-500 text-sm dark:text-gray-400">{item.desc}</p>
+                    </div>
+                  </NavLink>
                 </div>
               ))}
             </div>

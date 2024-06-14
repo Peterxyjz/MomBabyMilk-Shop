@@ -1,6 +1,6 @@
 import React from 'react';
 import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock, AiOutlineInbox } from 'react-icons/ai';
-import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers } from 'react-icons/fi';
+import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers, FiUser } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsNewspaper } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { RiContactsLine, RiPriceTag3Line, RiStockLine } from 'react-icons/ri';
@@ -1015,9 +1015,10 @@ export const themeColors = [
 
 export const staffProfileData = [
   {
-    icon: <BsCurrencyDollar />,
-    title: 'My Profile',
-    desc: 'Account Settings',
+    icon: <FiUser />,
+    path: 'profile',
+    title: 'Hồ sơ',
+    desc: 'Cài đặt tài khoản',
     iconColor: '#03C9D7',
     iconBg: '#E5FAFB',
   }

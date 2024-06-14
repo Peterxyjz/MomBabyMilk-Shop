@@ -1,34 +1,20 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Sidebar, ThemeSettings } from './components';
-import { Ecommerce, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './pages';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
-import LoginPage from './pages/Login/LoginPage';
-import ForgotPassword from './pages/Login/ForgotPassword';
-import Otp from './pages/Login/Otp';
-import ResetPassword from './pages/Login/ResetPassword';
-import Products from './pages/Product/Products';
-import AddProduct from './pages/Product/AddProduct';
-import EditProduct from './pages/Product/EditProduct';
 
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';
 
-import Orders from './pages/Order/Orders';
-import Categories from './pages/Category/Categories';
-import Brands from './pages/Brand/Brands';
-import AddCategory from './pages/Category/AddCategory';
-import AddBrands from './pages/Brand/AddBrands';
-import Dashboard from './pages/Dashboard';
-import Users from './pages/User/Users';
-import AddStaff from './pages/User/AddStaff';
-import AddBill from './pages/AddBill';
+import StaffRouter from './router/StaffRouter';
+import AdminRouter from './router/AdminRouter';
+import AuthRouter from './router/AuthRouter';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
@@ -88,19 +74,7 @@ const App = () => {
                 </div>
                 <div>
                   {themeSettings && (<ThemeSettings />)}
-
-                  <Routes>
-                    <Route path="/" element={(<Dashboard isAuthenticatedStaff={isAuthenticatedStaff} />)} />
-                    <Route path="/orders" element={<Orders />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/add-product" element={<AddProduct />} />
-                    <Route path="/edit-product" element={<EditProduct />} />
-                    <Route path="/customers" element={<Customers />} />
-                    <Route path="/categories" element={<Categories />} />
-                    <Route path="/add-categories" element={<AddCategory />} />
-                    <Route path="/brands" element={<Brands />} />
-                    <Route path="/add-brand" element={<AddBrands />} />
-                  </Routes>
+                  <StaffRouter/>
                 </div>
               </div>
             </>
@@ -143,25 +117,12 @@ const App = () => {
                 </div>
                 <div>
                   {themeSettings && (<ThemeSettings />)}
-
-                  <Routes>
-                    <Route path="/" element={(<Dashboard isAuthenticatedAdmin={isAuthenticatedAdmin} />)} />
-                    <Route path="/users" element={(<Users />)} />
-                    <Route path="/add-staff" element={(<AddStaff />)} />
-                    <Route path="/add-inputbill" element={(<AddBill />)} />
-
-                  </Routes>
+                  <AdminRouter/>
                 </div>
               </div>
             </>
           ) : (
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/otp" element={<Otp />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
+            <AuthRouter/>
           )
 
           }
