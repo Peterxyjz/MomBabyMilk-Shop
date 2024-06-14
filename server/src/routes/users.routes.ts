@@ -14,6 +14,7 @@ import {
 import {
   emailVerifyController,
   forgotPasswordController,
+  getAllUserController,
   loginController,
   loginForAdminOrStaffController,
   logoutController,
@@ -73,4 +74,7 @@ body: {forgot_password_token: string, password: string, confirm_password: string
 usersRouter.post('/reset-password', checkPasswordToken, resetPasswordValidator, wrapAsync(resetPasswordController))
 
 usersRouter.get('/oauth/google', wrapAsync(oAuthController))
+
+usersRouter.get('/get-all-user',accessTokenValidator ,wrapAsync(getAllUserController))
+
 export default usersRouter

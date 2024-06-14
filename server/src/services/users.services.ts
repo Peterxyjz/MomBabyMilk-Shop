@@ -354,6 +354,9 @@ class UsersService {
       }
     }
   }
+  async getAllUser(){
+    return await databaseService.users.find({}).toArray()
+  }
 }
 
 const usersService = new UsersService()
