@@ -37,7 +37,7 @@ export const uploadController = async (req: Request, res: Response) => {
 export const getAllController = async (req: Request, res: Response) => {
   const products = await productsService.getAll()
 
-  const result = [{}]
+  const result = []
   for (const element of products) {
     const brand_name = ((await brandsService.getById(element.brand_id)) as Brand).brand_name
     const category_name = ((await categoriesService.getById(element.category_id)) as Category).category_name
@@ -71,9 +71,9 @@ export const updateController = async (req: Request, res: Response) => {
   const url = req.body.url
 
   const product_req = req.body.product
-  console.log(product_req);
-  
-  if(product_req){
+  console.log(product_req)
+
+  if (product_req) {
     await productsService.update(id, product_req)
   }
   const product = new Product(req.body)

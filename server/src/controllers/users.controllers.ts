@@ -216,7 +216,6 @@ export const oAuthController = async (req: Request, res: Response, next: NextFun
   return res.redirect(urlRedirect)
 }
 
-
 export const getAllUserController = async (
   req: Request<ParamsDictionary, any, ResetPasswordReqBody>,
   res: Response,
@@ -236,15 +235,15 @@ export const getAllUserController = async (
     })
   }
   const users = await usersService.getAllUser()
-  // const result = [{}]
-  // users.forEach(async (element: User) => {
-  //   result.push({
-  //     ...element,
-  //     role_name: await usersService.checkRole(element)
-  //   })
-  // });
+  const result: Array<User & { role_name: string }> = []
+  for (const element of users) {
+    const roleName = (await usersService.checkRole(element)) || 'Unknown'
+    result.push({
+      ...element,
+      role_name: roleName
+    })
+  }
   return res.status(HTTP_STATUS.OK).json({
-    users //result
+    users: result
   })
 }
-
