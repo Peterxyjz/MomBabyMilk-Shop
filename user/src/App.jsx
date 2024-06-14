@@ -10,6 +10,7 @@ import Otp from "./pages/Auth/Otp";
 import ResetPassord from "./pages/Auth/ResetPassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import LoginGoogle from "./pages/Auth/Google/LoginGoogle";
+import Product from "./pages/Product";
 function App() {
   return (
     <>
@@ -27,6 +28,9 @@ function App() {
             <Route path="/otp" element={<Otp />} />
             <Route path="/reset-password" element={<ResetPassord />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+
+            {/* Product */}
+            <Route path="/product" element={<Product />} />
           </Routes>
           <Footer />
         </Router>
