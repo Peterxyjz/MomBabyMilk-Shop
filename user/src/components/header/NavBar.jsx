@@ -3,7 +3,9 @@ import LogoImg from "../../assets/images/logo/Logo.png";
 import SearchBar from "./SearchBar";
 import UserBtn from "./userBtn";
 import { Link } from "react-router-dom";
+import { useCartContext } from "../../context/CartContext";
 const NavBar = () => {
+  const {cartAmount} = useCartContext();
   return (
     <>
       <header className="min-h-16">
@@ -55,7 +57,7 @@ const NavBar = () => {
               <li className="ml-2 lg:ml-4 relative inline-block">
                 <a className="" href="/cart">
                   <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
-                    12
+                    {cartAmount}
                   </div>
                   <svg
                     className="h-9 lg:h-10 p-2 text-gray-500"

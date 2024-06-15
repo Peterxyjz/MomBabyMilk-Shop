@@ -145,8 +145,6 @@ const AddProduct = () => {
       age,
       discount,
     };
-    console.log(product);
-    console.log(JSON.stringify({ ...product }));
     // send data to db:
     await axios
       .post(
@@ -165,9 +163,7 @@ const AddProduct = () => {
         await uploadImage(product);
       })
       .then((data) => {
-        <Alert color="success" onDismiss={() => alert("Alert dismissed!")}>
-          Thêm Sản Phẩm <span className="font-medium"> Thành Công!</span>
-        </Alert>;
+        alert("Tạo sản phẩm thành công");
         form.reset();
       })
       .catch((error) => {

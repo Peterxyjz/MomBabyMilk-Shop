@@ -11,34 +11,28 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import LoginGoogle from "./pages/Auth/Google/LoginGoogle";
 import Product from "./pages/Product";
 import MainFooter from "./pages/Footer";
-import ShoppingCart from "./pages/Cart/Cart";
+import Cart from "./pages/Cart";
+
 function App() {
   return (
-    <>
-      <div className="container mx-auto px-2 py-4">
-        <Router>
-          <Header />
-          <TapToTop />
-          <Routes>
-            <Route path="/" element={<Home />} />
-
-            {/* Auth */}
-            <Route path="/login" element={<SiginIn />} />
-            <Route path="/login/oauth" element={<LoginGoogle />} />
-            <Route path="/register" element={<SiginUp />} />
-            <Route path="/otp" element={<Otp />} />
-            <Route path="/reset-password" element={<ResetPassord />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-
-            {/* Product */}
-            <Route path="/product" element={<Product />} />
-            <Route path="/cart" element={<ShoppingCart />} />
-
-          </Routes>
-          <MainFooter />
-        </Router>
-      </div>
-    </>
+    <div className="container mx-auto px-2 py-4">
+      <Router>
+        <Header />
+        <TapToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<SiginIn />} />
+          <Route path="/login/oauth" element={<LoginGoogle />} />
+          <Route path="/register" element={<SiginUp />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/reset-password" element={<ResetPassord />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+        <MainFooter />
+      </Router>
+    </div>
   );
 }
 
