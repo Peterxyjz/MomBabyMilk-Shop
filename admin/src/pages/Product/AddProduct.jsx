@@ -95,21 +95,33 @@ const AddProduct = () => {
     setDescription(event.target.value);
   };
 
-  async function uploadImage(id) {
+  async function uploadImage(product) {
     if (img !== null) {
       const imgRef = ref(imageDb, `product_img/${v4()}`);
       const snapshot = await uploadBytes(imgRef, img);
       const url = await getDownloadURL(snapshot.ref);
 
-      await sendURL(id, url);
+      product.imgUrl = url;
+      console.log("product: ", product);
+      await sendURL(product);
     } else {
       console.log("null");
     }
   }
-  const sendURL = async (id, url) => {
-    return await axios.post(
-      "http://localhost:4000/products/update",
-      { id, url },
+  const sendURL = async (product) => {
+    return await axios.patch(
+      `http://localhost:4000/products/product/${product._id.toString()}`,
+      {
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        product_name: product.product_name,
+        price: product.price,
+        description: product.description,
+        age: product.age,
+        discount: product.discount,
+        imgUrl: product.imgUrl,
+        isActive: product.isActive,
+      },
       {
         headers: {
           Authorization: `Bearer ${token.access_token}`,
@@ -147,13 +159,14 @@ const AddProduct = () => {
         }
       )
       .then(async (res) => {
-        const id = res.data.result.insertedId;
-
-        await uploadImage(id);
+        console.log(res.data);
+        const product = res.data.product;
+        console.log("product: ", product);
+        await uploadImage(product);
       })
       .then((data) => {
         <Alert color="success" onDismiss={() => alert("Alert dismissed!")}>
-          Thêm Sản Phẩm <span className="font-medium"> Thành Công!</span> 
+          Thêm Sản Phẩm <span className="font-medium"> Thành Công!</span>
         </Alert>;
         form.reset();
       })
@@ -163,8 +176,8 @@ const AddProduct = () => {
   };
 
   return (
-<div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl h-screen w-full">
-<h2 className="mb-8 text-3xl font-bold">Thêm sản phẩm</h2>
+    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl h-screen w-full">
+      <h2 className="mb-8 text-3xl font-bold">Thêm sản phẩm</h2>
       <form
         className="flex lg:w-[1180px] flex-col flex-wrap gap-4"
         onSubmit={handleSubmit}

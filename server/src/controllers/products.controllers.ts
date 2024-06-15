@@ -27,10 +27,13 @@ export const uploadController = async (req: Request, res: Response) => {
     })
   }
   const product = new Product(req.body)
+  console.log('üpload: ', product)
+
   const result = await productsService.upload(product)
   return res.status(200).json({
     message: USERS_MESSAGES.UPLOAD_SUCCESS,
-    result: result
+    result: result,
+    product:{...product, imgUrl: '' }
   })
 }
 
@@ -77,17 +80,15 @@ export const getController = async (req: Request, res: Response) => {
 
 //update:
 export const updateController = async (req: Request, res: Response) => {
-  const id = req.body.id
-  const url = req.body.url
+  const id = req.params.id
 
-  const product_req = req.body.product
-  console.log(product_req)
+  const product = new Product({
+    _id: new ObjectId(id),
+    ...req.body
+  })
+  console.log(product)
 
-  if (product_req) {
-    await productsService.update(id, product_req)
-  }
-  const product = new Product(req.body)
-  const result = await productsService.updateUrl(id, url)
+  const result = await productsService.update(id, product)
   return res.status(200).json({
     message: USERS_MESSAGES.UPDATE_SUCCESS,
     result: result

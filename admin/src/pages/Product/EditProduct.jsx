@@ -9,11 +9,18 @@ import {
   Textarea,
 } from "flowbite-react";
 import { imageDb } from "../../data/firebase.config";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { v4 } from "uuid";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const EditProduct = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id").toString();
@@ -82,7 +89,7 @@ const EditProduct = () => {
       });
     });
   }, []);
- 
+
   const handleChangeSelectedCategory = (event) => {
     const selectedCategoryName = event.target.value;
     const selectedCategory = categories.find(
@@ -120,19 +127,24 @@ const EditProduct = () => {
     setDescription(event.target.value);
   };
 
-  async function uploadImage(id) {
+  async function uploadImage(product) {
     if (img !== null) {
       const imgRef = ref(imageDb, `product_img/${v4()}`);
+      const imgRefOld = ref(imageDb, product_img_url);
+      deleteObject(imgRefOld);
       const snapshot = await uploadBytes(imgRef, img);
       const url = await getDownloadURL(snapshot.ref);
-
-      await sendURL(id, url);
-    } 
+      console.log("url: ", url);
+      product.imgUrl = url;
+      await sendURL(product);
+    } else {
+      console.log("nulllll");
+    }
   }
-  const sendURL = async (id, url) => {
-    return await axios.post(
-      "http://localhost:4000/products/update",
-      { id, url },
+  const sendURL = async (product) => {
+    return await axios.patch(
+      `http://localhost:4000/products/product/${id}`,
+      { ...product },
       {
         headers: {
           Authorization: `Bearer ${token.access_token}`,
@@ -155,15 +167,19 @@ const EditProduct = () => {
       description,
       age,
       discount,
-
+      imgUrl: product_img_url,
+      isActive: true,
     };
     console.log(product);
     console.log(JSON.stringify({ ...product }));
     // send data to db:
     await axios
-      .post(
-        "http://localhost:4000/products/update",
-        { product, id: id, url: product_img_url },
+      .patch(
+        `http://localhost:4000/products/product/${id}`,
+
+        {
+          ...product,
+        },
         {
           headers: {
             Authorization: `Bearer ${token.access_token}`,
@@ -171,24 +187,23 @@ const EditProduct = () => {
         }
       )
       .then(async (res) => {
-       
+        console.log("xongproduct -infor");
+        await uploadImage({ ...product, imgUrl: "" });
 
-       
-          await uploadImage(id);
-       
+
+
       })
       .then((data) => {
-        <Alert color="success" onDismiss={() => alert("Alert dismissed!")}>
-          Chỉnh sửa thông tin <span className="font-medium"> Thành Công!</span>
-        </Alert>;
-        console.log("xong");
-        form.reset();
+       alert("Đã cập nhật sản phẩm thành công");
+        
+
+
+        navigate("/products");
       })
       .catch((error) => {
-        console.log(error.response);
+        console.log(error);
       });
   };
-
   return (
     <div className="px-20 my-12 w-full">
       <h2 className="mb-8 text-3xl font-bold">Cập nhật sản phẩm</h2>
@@ -196,10 +211,8 @@ const EditProduct = () => {
         className="flex lg:w-[1180px] flex-col flex-wrap gap-4"
         onSubmit={handleSubmit}
       >
-     
-
         <div className="lg:w-1/5">
-          {product_img_url && (
+          {!img && (
             <img
               className="h-auto max-w-full"
               src={product_img_url}
@@ -215,7 +228,6 @@ const EditProduct = () => {
             id="file-upload"
             onChange={(event) => {
               setImg(event.target.files[0]);
-              setProduct_img_url("");
             }}
           />
         </div>
@@ -367,7 +379,7 @@ const EditProduct = () => {
         </div>
 
         <Button type="submit" className="mt-5">
-          Lưu sản phẩm 
+          Lưu sản phẩm
         </Button>
       </form>
     </div>

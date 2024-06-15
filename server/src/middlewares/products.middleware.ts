@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { checkSchema } from 'express-validator'
+import { checkSchema, param } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { PRODUCTS_MESSAGES } from '~/constants/messages'
@@ -170,160 +170,317 @@ export const productValidator = validate(
     ['body']
   )
 )
-export const updateProductValidator = validate(
-  checkSchema(
-    {
-      brand_id: {
-        optional: true,
-        notEmpty: {
-          errorMessage: 'Mã hãng không được bỏ trống'
-        },
-        isString: {
-          errorMessage: 'Mã hãng phải là chữ'
-        },
+// export const updateProductValidator = validate(
+//   checkSchema(
+//     {
+//       brand_id: {
+//         optional: true,
+//         notEmpty: {
+//           errorMessage: 'Mã hãng không được bỏ trống'
+//         },
+//         isString: {
+//           errorMessage: 'Mã hãng phải là chữ'
+//         },
 
-        isLength: {
-          options: {
-            min: 3
+//         isLength: {
+//           options: {
+//             min: 3
+//           },
+//           errorMessage: 'Ten san pham phai lon hon 3 ky tu'
+//         },
+//         custom: {
+//           options: async (value, { req }) => {
+//             const brand = await databaseService.brands.findOne({
+//               _id: new ObjectId(value)
+//             })
+//             if (!brand) {
+//               throw new Error('Mã hãng không tìm thấy')
+//             }
+//             return true
+//           }
+//         },
+//         trim: true
+//       },
+//       category_id: {
+//         optional: true,
+//         notEmpty: {
+//           errorMessage: 'Mã loại không được bỏ trống'
+//         },
+//         isString: {
+//           errorMessage: 'Mã loại phải là chữ'
+//         },
+//         trim: true,
+
+//         isLength: {
+//           options: {
+//             min: 3
+//           },
+//           errorMessage: 'Ten san pham phai lon hon 3 ky tu'
+//         },
+//         custom: {
+//           options: async (value, { req }) => {
+//             const category = await databaseService.categories.findOne({
+//               _id: new ObjectId(value)
+//             })
+//             if (!category) {
+//               throw new Error('Mã loại không tìm thấy')
+//             }
+//             return true
+//           }
+//         }
+//       },
+//       product_name: {
+//         optional: true,
+//         notEmpty: {
+//           errorMessage: 'Tên sản phẩm không được bỏ trống'
+//         },
+//         isString: {
+//           errorMessage: 'Tên sản phẩm phải là chữ'
+//         },
+//         trim: true,
+//         isLength: {
+//           options: {
+//             min: 3
+//           },
+//           errorMessage: 'Ten san pham phai lon hon 3 ky tu'
+//         }
+//       },
+//       price: {
+//         optional: true,
+//         notEmpty: {
+//           errorMessage: 'Giá tiền không được để trống '
+//         },
+//         isNumeric: {
+//           errorMessage: 'Giá tiền phải là số'
+//         },
+//         trim: true,
+//         custom: {
+//           options: async (value, { req }) => {
+//             if (value < 0) {
+//               throw new Error('Giá tiền không được âm')
+//             }
+//             return true
+//           }
+//         }
+//       },
+//       description: {
+//         optional: true,
+//         notEmpty: {
+//           errorMessage: 'Mô tả không được bỏ trống'
+//         },
+//         isString: {
+//           errorMessage: 'Mô tả phải là chữ'
+//         },
+//         trim: true,
+
+//         isLength: {
+//           options: {
+//             min: 3
+//           },
+//           errorMessage: 'Mô tả ít nhất 3 ký tự'
+//         }
+//       },
+//       age: {
+//         optional: true,
+//         notEmpty: {
+//           errorMessage: 'Độ tuổi không được bỏ trống'
+//         },
+//         isString: {
+//           errorMessage: 'Dộ tuổi phải là chữ'
+//         },
+//         trim: true,
+
+//         isLength: {
+//           options: {
+//             min: 3
+//           },
+//           errorMessage: 'Dộ tuổi ít nhất 3 ký tự'
+//         }
+//       },
+//       discount: {
+//         optional: true,
+//         notEmpty: false,
+//         isNumeric: {
+//           errorMessage: 'Giảm giá  phải là số'
+//         },
+//         trim: true,
+//         custom: {
+//           options: async (value, { req }) => {
+//             if (value < 0) {
+//               throw new Error('Giảm giá không được âm')
+//             }
+//             return true
+//           }
+//         }
+//       },
+//       imgUrl: {
+//         optional: true
+//       },
+//       isActive: {
+//         optional: true
+//       }
+//     },
+//     ['body']
+//   )
+// )
+// export const isParamsIdValidator = param('id')
+//   .notEmpty()
+//   .withMessage('ID không được bỏ trống')
+//   .isMongoId()
+//   .withMessage('ID không hợp lệ')
+export const updateProductValidator =
+  // Validator for the body
+  validate(
+    checkSchema(
+      {
+        brand_id: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Mã hãng không được bỏ trống'
           },
-          errorMessage: 'Ten san pham phai lon hon 3 ky tu'
-        },
-        custom: {
-          options: async (value, { req }) => {
-            const brand = await databaseService.brands.findOne({
-              _id: new ObjectId(value)
-            })
-            if (!brand) {
-              throw new Error('Mã hãng không tìm thấy')
+          isString: {
+            errorMessage: 'Mã hãng phải là chữ'
+          },
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Tên sản phẩm phải lớn hơn 3 ký tự'
+          },
+          custom: {
+            options: async (value, { req }) => {
+              const brand = await databaseService.brands.findOne({
+                _id: new ObjectId(value)
+              })
+              if (!brand) {
+                throw new Error('Mã hãng không tìm thấy')
+              }
+              return true
             }
-            return true
+          },
+          trim: true
+        },
+        category_id: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Mã loại không được bỏ trống'
+          },
+          isString: {
+            errorMessage: 'Mã loại phải là chữ'
+          },
+          trim: true,
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Tên sản phẩm phải lớn hơn 3 ký tự'
+          },
+          custom: {
+            options: async (value, { req }) => {
+              const category = await databaseService.categories.findOne({
+                _id: new ObjectId(value)
+              })
+              if (!category) {
+                throw new Error('Mã loại không tìm thấy')
+              }
+              return true
+            }
           }
         },
-        trim: true
-      },
-      category_id: {
-        optional: true,
-        notEmpty: {
-          errorMessage: 'Mã loại không được bỏ trống'
-        },
-        isString: {
-          errorMessage: 'Mã loại phải là chữ'
-        },
-        trim: true,
-
-        isLength: {
-          options: {
-            min: 3
+        product_name: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Tên sản phẩm không được bỏ trống'
           },
-          errorMessage: 'Ten san pham phai lon hon 3 ky tu'
-        },
-        custom: {
-          options: async (value, { req }) => {
-            const category = await databaseService.categories.findOne({
-              _id: new ObjectId(value)
-            })
-            if (!category) {
-              throw new Error('Mã loại không tìm thấy')
-            }
-            return true
+          isString: {
+            errorMessage: 'Tên sản phẩm phải là chữ'
+          },
+          trim: true,
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Tên sản phẩm phải lớn hơn 3 ký tự'
           }
-        }
-      },
-      product_name: {
-        optional: true,
-        notEmpty: {
-          errorMessage: 'Tên sản phẩm không được bỏ trống'
         },
-        isString: {
-          errorMessage: 'Tên sản phẩm phải là chữ'
-        },
-        trim: true,
-        isLength: {
-          options: {
-            min: 3
+        price: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Giá tiền không được để trống'
           },
-          errorMessage: 'Ten san pham phai lon hon 3 ky tu'
-        }
-      },
-      price: {
-        optional: true,
-        notEmpty: {
-          errorMessage: 'Giá tiền không được để trống '
-        },
-        isNumeric: {
-          errorMessage: 'Giá tiền phải là số'
-        },
-        trim: true,
-        custom: {
-          options: async (value, { req }) => {
-            if (value < 0) {
-              throw new Error('Giá tiền không được âm')
+          isNumeric: {
+            errorMessage: 'Giá tiền phải là số'
+          },
+          trim: true,
+          custom: {
+            options: async (value, { req }) => {
+              if (value < 0) {
+                throw new Error('Giá tiền không được âm')
+              }
+              return true
             }
-            return true
           }
-        }
-      },
-      description: {
-        optional: true,
-        notEmpty: {
-          errorMessage: 'Mô tả không được bỏ trống'
         },
-        isString: {
-          errorMessage: 'Mô tả phải là chữ'
-        },
-        trim: true,
-
-        isLength: {
-          options: {
-            min: 3
+        description: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Mô tả không được bỏ trống'
           },
-          errorMessage: 'Mô tả ít nhất 3 ký tự'
-        }
-      },
-      age: {
-        optional: true,
-        notEmpty: {
-          errorMessage: 'Độ tuổi không được bỏ trống'
-        },
-        isString: {
-          errorMessage: 'Dộ tuổi phải là chữ'
-        },
-        trim: true,
-
-        isLength: {
-          options: {
-            min: 3
+          isString: {
+            errorMessage: 'Mô tả phải là chữ'
           },
-          errorMessage: 'Dộ tuổi ít nhất 3 ký tự'
-        }
-      },
-      discount: {
-        optional: true,
-        notEmpty: false,
-        isNumeric: {
-          errorMessage: 'Giảm giá  phải là số'
+          trim: true,
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Mô tả ít nhất 3 ký tự'
+          }
         },
-        trim: true,
-        custom: {
-          options: async (value, { req }) => {
-            if (value < 0) {
-              throw new Error('Giảm giá không được âm')
+        age: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Độ tuổi không được bỏ trống'
+          },
+          isString: {
+            errorMessage: 'Độ tuổi phải là chữ'
+          },
+          trim: true,
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Độ tuổi ít nhất 3 ký tự'
+          }
+        },
+        discount: {
+          optional: true,
+          notEmpty: false,
+          isNumeric: {
+            errorMessage: 'Giảm giá phải là số'
+          },
+          trim: true,
+          custom: {
+            options: async (value, { req }) => {
+              if (value < 0) {
+                throw new Error('Giảm giá không được âm')
+              }
+              return true
             }
-            return true
           }
+        },
+        imgUrl: {
+          optional: true
+        },
+        isActive: {
+          optional: true
         }
       },
-      imgUrl: {
-        optional: true
-      },
-      isActive: {
-        optional: true
-      }
-    },
-    ['body']
+      ['body']
+    )
   )
-)
-export const getProductValidator = validate(
+
+export const isParamsIdValidator = validate(
   checkSchema(
     {
       id: {
@@ -332,7 +489,11 @@ export const getProductValidator = validate(
         },
         isString: {
           errorMessage: 'Mã sản phẩm phải là chữ'
-        }
+        },
+        isMongoId: {
+          errorMessage: 'Mã sản phẩm không hợp lệ'
+        },
+        trim: true
       }
     },
     ['params']

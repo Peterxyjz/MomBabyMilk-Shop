@@ -25,10 +25,18 @@ const SearchBar = () => {
   }, []);
 
   console.log(products);
-  const sampleProducts = [];
-  products.forEach((item) => {
-    sampleProducts.push(item.product_name);
-  });
+  let sampleProducts = [];
+  if (selectedCategory === "Tất Cả Sản Phẩm") {
+    products.forEach((item) => {
+      if (item.isActive) sampleProducts.push(item.product_name);
+    });
+  } else {
+    products.forEach((item) => {
+      if (item.category_name === selectedCategory) {
+        if (item.isActive) sampleProducts.push(item.product_name);
+      }
+    });
+  }
   console.log("sameple: ", sampleProducts);
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -44,7 +52,11 @@ const SearchBar = () => {
       const res = await axios.get(
         "http://localhost:4000/categories/all-categories"
       );
-      setCategories(res.data.result);
+      const categories = [
+        { category_name: "Tất Cả Sản Phẩm" },
+        ...res.data.result,
+      ];
+      setCategories(categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }

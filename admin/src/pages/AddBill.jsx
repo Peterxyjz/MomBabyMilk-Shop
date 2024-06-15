@@ -70,7 +70,7 @@ const AddBill = () => {
         <div className="flex gap-8">
           <div className="lg:w-1/2">
             <div className="mb-2 block">
-              <Label htmlFor="" value="chọn nhãn hàng" />
+              <Label htmlFor="" value="Chọn nhãn hàng" />
             </div>
             <Dropdown
               value={selectedBrand}

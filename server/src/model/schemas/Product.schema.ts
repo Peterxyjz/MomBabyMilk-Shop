@@ -34,6 +34,6 @@ export default class Product {
     this.age = product.age
     this.discount = product.discount
     this.imgUrl = product.imgUrl
-    this.isActive = true
+    this.isActive = product.isActive || false
   }
 }
