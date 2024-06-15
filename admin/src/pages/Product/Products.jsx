@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RenderRating from "../../components/Element/RenderRating";
 import { Link } from "react-router-dom";
+import { fetchProducts } from "../../data/api";
 const Product = () => {
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    const fetchProducts = async () => {
+    const getProducts = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:4000/products/all-products"
-        );
-        setProducts(res.data.result);
+        const productData = await fetchProducts();
+        setProducts(productData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -19,7 +18,7 @@ const Product = () => {
       }
     };
 
-    fetchProducts();
+    getProducts();
   }, []);
 
   const updateProduct = async (product) => {
@@ -284,20 +283,3 @@ const Product = () => {
   );
 };
 export default Product;
-
-// export const ProductData = async () => {
-//   const response = await axios.get('http://localhost:4000/products/all-products');
-//   const result = response.data.result;
-
-//   const products = result.map(product => ({
-//     ProductID: product._id,
-//     ProductName: product.product_name,
-//     ProductBrand: product.brand_name,
-//     Category: product.category_name,
-//     Amount: product.amount,
-//     Status: product.isActive,
-//     ProductImage: product.imgUrl,
-//   }));
-
-//   return products;
-// }

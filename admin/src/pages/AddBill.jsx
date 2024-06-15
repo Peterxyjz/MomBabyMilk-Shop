@@ -1,109 +1,117 @@
-import { Button, Label } from 'flowbite-react'
-import { Dropdown } from 'primereact/dropdown'
-import { InputMask } from 'primereact/inputmask'
-import { InputText } from 'primereact/inputtext'
-import React, { useEffect, useState } from 'react'
-import { Calendar } from 'primereact/calendar';
+import { useEffect, useState } from "react";
+import { fetchProducts } from "../data/api";
+import { Button } from "flowbite-react";
 
 const AddBill = () => {
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [today, setToday] = useState(null);
-
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    const todayDate = new Date();
-    setToday(todayDate);
+    const getProducts = async () => {
+      try {
+        const productData = await fetchProducts();
+        setProducts(productData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      }
+    };
+
+    getProducts();
   }, []);
-
-  const milkBrands = [
-    { label: 'Vinamilk', value: 'vinamilk' },
-    { label: 'TH', value: 'th' },
-    { label: 'Dutch Lady', value: 'dutch_lady' },
-    { label: 'Nutifood', value: 'nutifood' },
-    // Add more options as needed
-  ];
-
-  const handleChange = (e) => {
-    setSelectedBrand(e.value);
-    console.log('Selected brand:', e.value); // Debugging output
-  };
-
-
+  if (loading) {
+    return <div className="text-center font-bold text-2xl">Loading...</div>;
+  }
   return (
-    <div>    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <h2 className="mb-8 text-3xl font-bold">Tạo đơn nhập hàng</h2>
-      <form
-        className="flex lg:w-[1180px] flex-col flex-wrap gap-4"
-        onSubmit={""}
-      >
-        {/* row1 */}
-        <div className="flex gap-8">
-          <div className="lg:w-1/2">
-            <div className="mb-2 block">
-              <Label htmlFor="proName" value="Tên sản phẩm" />
+    <div className="container mx-auto px-2 py-2">
+      <div className="w-full flex gap-8 min-h-screen">
+        {/* table */}
+        <div className="w-2/3 h-full">
+          <h1 className="text-2xl font-bold mx-4">Chọn Sản Phẩm</h1>
+          <section className=" py-3 sm:py-5">
+            <div className="px-4 mx-auto max-w-screen-2xl lg:px-12 min-h-screen flex flex-col">
+              <div className="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg flex-grow">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase  dark:text-gray-400">
+                      <tr>
+                        <th scope="col" className="px-4 py-3">
+                          Sản Phẩm
+                        </th>
+                        <th scope="col" className="px-4 py-3">
+                          Số Lượng
+                        </th>
+                        <th scope="col" className="px-4 py-3">
+                          Lượt Bán
+                        </th>
+                        <th scope="col" className="px-4 py-3">
+                          Giá Tiền
+                        </th>
+                        <th scope="col" className="px-4 py-3">
+                          Nhập Hàng
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {products.length > 0 ? (
+                        products.map((product) => (
+                          <tr className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <th
+                              scope="row"
+                              className="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            >
+                              <img
+                                src={product.imgUrl}
+                                alt=""
+                                className="w-auto h-8 mr-3"
+                              />
+                              {product.product_name}
+                            </th>
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {product.amount}
+                            </td>
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              Lượt Bán
+                            </td>
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {Number(product.price).toLocaleString("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              })}
+                            </td>
+                            <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              <Button>
+                                Nhập Hàng
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan={9}
+                            className="text-center font-bold text-2xl"
+                          >
+                            Không tìm thấy sản phẩm
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-            <InputText
-              id="proName"
-              type="text"
-              className=" w-full border border-gray-300 rounded-md"
-              name='proName'
-              placeholder="Nhập tên sản phẩm"
-              onChange={""}
-              required />
-          </div>
-          <div className="lg:w-1/2">
-            <div className="mb-2 block">
-              <Label htmlFor="amount" value="Số lượng" />
-            </div>
-            <InputText
-              keyfilter="int"
-              id="amount"
-              type="text"
-              className=" w-full border border-gray-300 rounded-md"
-              name="amount"
-              placeholder="Nhập số lượng sản phẩm"
-              onChange={""}
-              required />
-          </div>
+          </section>
         </div>
 
-        {/* row2 */}
-        <div className="flex gap-8">
-          <div className="lg:w-1/2">
-            <div className="mb-2 block">
-              <Label htmlFor="" value="Chọn nhãn hàng" />
-            </div>
-            <Dropdown
-              value={selectedBrand}
-              options={milkBrands}
-              onChange={handleChange}
-              placeholder="Chọn nhãn hàng"
-              className="w-full border border-gray-300 rounded-md"
-            />
-          </div>
-
-          <div className="lg:w-1/2">
-            <div className="mb-2 block">
-              <Label htmlFor="date" value="Ngày tạo đơn" />
-            </div>
-            <Calendar
-              value={today}
-              disabled 
-              showTime hourFormat="24"
-              
-              className='w-full'
-              inputClassName="w-full border border-gray-300 rounded-md"
-              style={{height: '60%'}}
-            />
-
-          </div>
+        {/* bills */}
+        {/* table */}
+        <div className="w-1/3 h-full">
+          <h1 className="text-2xl font-bold mx-4">Đơn Nhập Hàng</h1>
         </div>
+      </div>
+    </div>
+  );
+};
 
-        <Button type="submit" className="mt-5">
-          Tạo đơn
-        </Button>
-      </form >
-    </div ></div>
-  )
-}
-
-export default AddBill
+export default AddBill;
