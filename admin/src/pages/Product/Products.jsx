@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import RenderRating from "../../components/Element/RenderRating";
 import { Link } from "react-router-dom";
 const Product = () => {
   const [products, setProducts] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -11,14 +12,44 @@ const Product = () => {
           "http://localhost:4000/products/all-products"
         );
         setProducts(res.data.result);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
+  const updateProduct = async (product) => {
+    const token = JSON.parse(localStorage.getItem("result"));
+    console.log(product);
+    const id = product._id;
+    await axios.patch(
+      `http://localhost:4000/products/product/${id}`,
+      {
+        brand_id: product.brand_id,
+        category_id: product.category_id,
+        product_name: product.product_name,
+        price: product.price,
+        description: product.description,
+        age: product.age,
+        discount: product.discount,
+        imgUrl: product.imgUrl,
+        isActive: product.isActive,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.access_token}`,
+        },
+      }
+    );
+  };
+
+  if (loading) {
+    return <div className="text-center font-bold text-2xl">Loading...</div>;
+  }
   return (
     <section className=" py-3 sm:py-5">
       <div className="px-4 mx-auto max-w-screen-2xl lg:px-12 min-h-screen flex flex-col">
@@ -165,53 +196,9 @@ const Product = () => {
                       </td>
                       <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <div className="flex items-center">
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          <svg
-                            aria-hidden="true"
-                            className="w-5 h-5 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
+                          <RenderRating rating={product.rating} />
                           <span className="ml-1 text-gray-500 dark:text-gray-400">
-                            5.0
+                            {product.rating}
                           </span>
                         </div>
                       </td>
@@ -233,12 +220,35 @@ const Product = () => {
                       <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <input
                           type="checkbox"
-                          checked={product.isActive}
-                          readOnly
+                          value={product.isActive}
+                          onChange={async () => {
+                            console.log(product.isActive);
+                            if (
+                              confirm(
+                                `Bạn muốn thay đổi trạng thái sản phẩm? | Hiện đang ${
+                                  product.isActive === true ? "bật" : "tắt"
+                                }`
+                              )
+                            ) {
+                              product.isActive = !product.isActive;
+                              alert(
+                                `Thay đổi thành công | Hiện đang ${
+                                  product.isActive === true ? "bật" : "tắt"
+                                }`
+                              );
+                              setProducts([...products]);
+
+                              await updateProduct(product);
+                              console.log(product);
+                            }
+                          }}
+                          checked={product.isActive === true ? "checked" : ""}
                         />
                       </td>
                       <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                       <Link to={`/edit-product?id=${product._id}`}>Chi Tiết</Link>
+                        <Link to={`/edit-product?id=${product._id}`}>
+                          Chi Tiết
+                        </Link>
                       </td>
                     </tr>
                   ))
