@@ -2,6 +2,7 @@ import React from "react";
 import LogoImg from "../../assets/images/logo/Logo.png";
 import SearchBar from "./SearchBar";
 import UserBtn from "./userBtn";
+import { Link } from "react-router-dom";
 const NavBar = () => {
   return (
     <>
@@ -9,7 +10,9 @@ const NavBar = () => {
         <div className="flex items-center">
           {/* logo */}
           <div className="mr-auto md:w-48 flex-shrink-0">
-            <img className="h-8 md:h-10" src={LogoImg} alt="" />
+            <Link to="/">
+              <img className="h-8 md:h-10" src={LogoImg} alt="" />
+            </Link>
           </div>
           {/* search */}
           <div className="w-full h-full max-w-xs xl:max-w-lg 2xl:max-w-2xl hidden xl:flex items-center">
@@ -50,7 +53,7 @@ const NavBar = () => {
               </li>
               {/* cart */}
               <li className="ml-2 lg:ml-4 relative inline-block">
-                <a className="" href="">
+                <a className="" href="/cart">
                   <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
                     12
                   </div>
@@ -81,7 +84,7 @@ const NavBar = () => {
         <div className="xl:hidden sm:block my-2">
           <SearchBar />
         </div>
-        <hr className="mt-4"/>
+        <hr className="mt-4" />
       </header>
     </>
   );
