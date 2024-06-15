@@ -1,17 +1,23 @@
 import React from "react";
 import { Breadcrumb, BreadcrumbItem } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const Breadcrumbs = ({ headline, link }) => {
   return (
     <div className="flex justify-between items-center py-5 h-20">
       <div className="w-1/2">
-        <Breadcrumb aria-label="Default breadcrumb example" className="text-2xl">
-          <BreadcrumbItem href="/" icon={HiHome} >
-            <p className="text-lg">Trang chủ</p>
+        <Breadcrumb
+          aria-label="Default breadcrumb example"
+          className="text-2xl"
+        >
+          <BreadcrumbItem icon={HiHome}>
+            <Link to="/">
+              <p className="text-lg font-semibold text-black">Trang chủ</p>
+            </Link>
           </BreadcrumbItem>
-          <BreadcrumbItem href={link}>
-          <p className="text-lg">{headline}</p>
+          <BreadcrumbItem>
+            <p className="text-lg font-semibold text-black">{headline}</p>
           </BreadcrumbItem>
         </Breadcrumb>
       </div>

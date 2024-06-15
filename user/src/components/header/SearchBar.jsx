@@ -24,7 +24,6 @@ const SearchBar = () => {
     getProducts();
   }, []);
 
-  console.log(products);
   let sampleProducts = [];
   if (selectedCategory === "Tất Cả Sản Phẩm") {
     products.forEach((item) => {
@@ -37,7 +36,6 @@ const SearchBar = () => {
       }
     });
   }
-  console.log("sameple: ", sampleProducts);
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
