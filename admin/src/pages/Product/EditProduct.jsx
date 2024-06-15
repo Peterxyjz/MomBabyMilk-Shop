@@ -5,7 +5,6 @@ import {
   Label,
   Select,
   TextInput,
-  Alert,
   Textarea,
 } from "flowbite-react";
 import { imageDb } from "../../data/firebase.config";
@@ -157,7 +156,6 @@ const EditProduct = () => {
   // };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.target;
 
     const product = {
       brand_id: selectedBrandId,

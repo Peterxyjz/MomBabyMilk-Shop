@@ -11,7 +11,7 @@ import AddBrands from '../pages/Brand/AddBrands';
 import Dashboard from '../pages/Dashboard';
 import { Customers } from '../pages';
 import UserSetting from '../pages/UserSetting';
-
+import AddBill from '../pages/AddBill';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -27,7 +27,7 @@ const StaffRouter = () => {
             <Route path="/brands" element={<Brands />} />
             <Route path="/add-brand" element={<AddBrands />} />
             <Route path="/profile" element={<UserSetting />} />
-
+            <Route path="/add-inputbill" element={(<AddBill />)} />
         </Routes>
     )
 }
