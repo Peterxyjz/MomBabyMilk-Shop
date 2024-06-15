@@ -41,6 +41,7 @@ const Home = () => {
         <Slider title={Mom.title} slides={Mom.slides} />
       </div>
       <SecondHero />
+      <ProductCard />
       <HeroAtLast />
       <CategoryGrid />
     </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./pages/Header";
-import Footer from "./pages/Footer";
 import Home from "./pages/Home";
 import SiginIn from "./pages/Auth/Login";
 import SiginUp from "./pages/Auth/Register";
@@ -11,6 +10,8 @@ import ResetPassord from "./pages/Auth/ResetPassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import LoginGoogle from "./pages/Auth/Google/LoginGoogle";
 import Product from "./pages/Product";
+import MainFooter from "./pages/Footer";
+import ShoppingCart from "./pages/Cart/Cart";
 function App() {
   return (
     <>
@@ -31,8 +32,10 @@ function App() {
 
             {/* Product */}
             <Route path="/product" element={<Product />} />
+            <Route path="/cart" element={<ShoppingCart />} />
+
           </Routes>
-          <Footer />
+          <MainFooter />
         </Router>
       </div>
     </>
