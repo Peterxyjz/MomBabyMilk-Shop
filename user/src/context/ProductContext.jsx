@@ -14,11 +14,18 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const productData = await fetchProducts();
-        setProducts(productData);
+        const localProducts = localStorage.getItem('products');
+        if (localProducts) {
+          setProducts(JSON.parse(localProducts));
+          setLoading(false);
+        } else {
+          const productData = await fetchProducts();
+          setProducts(productData);
+          localStorage.setItem('products', JSON.stringify(productData));
+          setLoading(false);
+        }
       } catch (error) {
         console.error('Error fetching products:', error);
-      } finally {
         setLoading(false);
       }
     };
