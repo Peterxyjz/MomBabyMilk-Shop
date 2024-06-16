@@ -6,7 +6,7 @@ import OtpForm from "./OtpForm";
 const Otp = () => {
   return (
     <>
-      <Breadcrumbs headline="Mã OTP" link="/otp" />
+      <Breadcrumbs headline="Mã OTP" />
       <div
         className={
           "w-full bg-cover bg-center flex flex-col lg:flex-row gap-8 my-4"

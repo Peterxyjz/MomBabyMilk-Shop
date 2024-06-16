@@ -27,7 +27,6 @@ export const CartContextProvider = ({ children }) => {
   );
 
   const removeCartItem = (id) => {
-    console.log("removeCartItem", id);
     const currentItemIndex = cartItems.findIndex((item) => item.id === id);
     const newCartItems = [...cartItems];
     newCartItems.splice(currentItemIndex, 1);
@@ -35,7 +34,6 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const addCartItem = (item) => {
-    console.log("addCartItem", item);
     const currentCart = cartItems.find((cartItem) => cartItem.id === item.id);
     if (currentCart) {
       setCartItems(
@@ -48,7 +46,6 @@ export const CartContextProvider = ({ children }) => {
     } else {
       setCartItems([...cartItems, { ...item, amount: 1 }]);
     }
-    console.log("Updated cartItems", cartItems); // Check the state of cartItems
   };
   
 
@@ -57,7 +54,6 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const increaseAmount = (id) => {
-    console.log("increaseAmount", id);
     setCartItems(prevItems =>
       prevItems.map(item =>
         item.id === id
@@ -68,7 +64,6 @@ export const CartContextProvider = ({ children }) => {
   };
   
   const decreaseAmount = (id) => {
-    console.log("decreaseAmount", id);
     setCartItems(prevItems => {
       const currentCart = prevItems.find(item => item.id === id);
       if (currentCart) {

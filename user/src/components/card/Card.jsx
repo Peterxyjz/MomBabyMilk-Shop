@@ -60,7 +60,7 @@ const ProductCard = () => {
       <Slider {...settings}>
         {products.map((product) => {
           if (product.isActive) {
-            const productWithId = { ...product, id: product._id }; // Ensure id is set correctly
+            const productWithId = { ...product, id: product._id }; 
             return (
               <div key={product._id} className="p-2">
                 <Card className="max-w-xs m-2 product-card">
