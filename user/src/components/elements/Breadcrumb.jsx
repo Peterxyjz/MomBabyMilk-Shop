@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
-const Breadcrumbs = ({ headline, link }) => {
+const Breadcrumbs = ({ headline }) => {
   return (
     <div className="flex justify-between items-center py-5 h-20">
       <div className="w-1/2">

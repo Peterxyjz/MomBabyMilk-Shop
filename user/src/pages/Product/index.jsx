@@ -5,7 +5,7 @@ import ProductDetail from '../../components/product/ProductDetail'
 const Product = () => {
   return (
     <>
-        <Breadcrumbs headline="Thông Tin Chi Tiết" link="/product" />
+        <Breadcrumbs headline="Thông Tin Chi Tiết" />
 
         {/* product */}
         <ProductDetail/>

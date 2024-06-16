@@ -6,7 +6,7 @@ import ForgotPasswordForm from "./ForgotPasswordForm";
 const ForgotPassword = () => {
   return (
     <>
-      <Breadcrumbs headline="Quên Mật Khẩu" link="/reset-password" />
+      <Breadcrumbs headline="Quên Mật Khẩu" />
       <div
         className={
           "w-full bg-cover bg-center flex flex-col lg:flex-row gap-8 my-4"

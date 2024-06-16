@@ -1,5 +1,6 @@
 import React from "react";
 import cartEmptyImg from "../../assets/images/background/cart_empty.png";
+import { MdDeleteForever } from "react-icons/md";
 import { useCartContext } from "../../context/CartContext";
 
 const ShoppingCart = () => {
@@ -135,31 +136,15 @@ const ShoppingCart = () => {
                                     d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
                                   />
                                 </svg>
-                                Add to Favorites
+                                Yêu Thích
                               </button>
                               <button
                                 type="button"
                                 onClick={() => removeCartItem(product._id)}
                                 className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
                               >
-                                <svg
-                                  className="me-1.5 h-5 w-5"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M6 18 17.94 6M18 18 6.06 6"
-                                  />
-                                </svg>
-                                Remove
+                                <MdDeleteForever className="me-1.5 h-5 w-5" />
+                                Xóa Khỏi Giỏ Hàng
                               </button>
                             </div>
                           </div>

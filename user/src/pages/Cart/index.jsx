@@ -5,7 +5,7 @@ import ShoppingCart from '../../components/cart/ShoppingCart'
 const Cart = () => {
   return (
     <>
-        <Breadcrumbs headline="Giỏ hàng" link="/cart" />
+        <Breadcrumbs headline="Giỏ hàng" />
 
         <ShoppingCart />
     </>

@@ -7,7 +7,7 @@ import ResetPasswordForm from "./ResetPasswordForm";
 const ResetPassord = () => {
   return (
     <>
-      <Breadcrumbs headline="Thay Đổi Mật Khẩu" link="/reset-password" />
+      <Breadcrumbs headline="Thay Đổi Mật Khẩu" />
       <div
         className={
           "w-full bg-cover bg-center flex flex-col lg:flex-row gap-8 my-4"
