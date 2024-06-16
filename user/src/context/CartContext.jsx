@@ -27,18 +27,18 @@ export const CartContextProvider = ({ children }) => {
   );
 
   const removeCartItem = (id) => {
-    const currentItemIndex = cartItems.findIndex((item) => item.id === id);
+    const currentItemIndex = cartItems.findIndex((item) => item._id === id);
     const newCartItems = [...cartItems];
     newCartItems.splice(currentItemIndex, 1);
     setCartItems(newCartItems);
   };
 
   const addCartItem = (item) => {
-    const currentCart = cartItems.find((cartItem) => cartItem.id === item.id);
+    const currentCart = cartItems.find((cartItem) => cartItem._id === item._id);
     if (currentCart) {
       setCartItems(
         cartItems.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem._id === item._id
             ? { ...currentCart, amount: currentCart.amount + 1 }
             : cartItem
         )
@@ -56,7 +56,7 @@ export const CartContextProvider = ({ children }) => {
   const increaseAmount = (id) => {
     setCartItems(prevItems =>
       prevItems.map(item =>
-        item.id === id
+        item._id === id
           ? { ...item, amount: item.amount + 1 }
           : item
       )
@@ -65,16 +65,16 @@ export const CartContextProvider = ({ children }) => {
   
   const decreaseAmount = (id) => {
     setCartItems(prevItems => {
-      const currentCart = prevItems.find(item => item.id === id);
+      const currentCart = prevItems.find(item => item._id === id);
       if (currentCart) {
         if (currentCart.amount > 1) {
           return prevItems.map(item =>
-            item.id === id
+            item._id === id
               ? { ...item, amount: item.amount - 1 }
               : item
           );
         } else {
-          return prevItems.filter(item => item.id !== id);
+          return prevItems.filter(item => item._id !== id);
         }
       }
       return prevItems;

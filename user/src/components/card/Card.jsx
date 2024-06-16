@@ -60,7 +60,7 @@ const ProductCard = () => {
       <Slider {...settings}>
         {products.map((product) => {
           if (product.isActive) {
-            const productWithId = { ...product, id: product._id }; 
+            // const productWithId = { ...product, id: product._id }; 
             return (
               <div key={product._id} className="p-2">
                 <Card className="max-w-xs m-2 product-card">
@@ -88,7 +88,7 @@ const ProductCard = () => {
                       })}
                     </span>
                     <button
-                      onClick={() => addCartItem(productWithId)}
+                      onClick={() => addCartItem(product)}
                       className="rounded-lg bg-cyan-700 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
                     >
                       Thêm vào giỏ hàng
