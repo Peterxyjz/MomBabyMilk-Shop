@@ -1,14 +1,26 @@
 import { Card } from "flowbite-react";
 import Slider from "react-slick";
+import Loader from "../../assets/loading.gif";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import "./Swiper.css"; 
+import "./Swiper.css";
 import RenderRating from "../elements/RenderRating";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
+import { useProductContext } from "../../context/ProductContext";
 
-const ProductCard = ({ products }) => {
+const ProductCard = () => {
+  const { products, loading } = useProductContext();
+  if (loading)
+    return (
+      <div
+        className="fixed w-full h-full z-[10000] flex items-center justify-center bg-white"
+        style={{ left: 0, top: 0 }}
+      >
+        <img src={Loader} alt="Loading..." />
+      </div>
+    );
   const { addCartItem } = useCartContext();
   const settings = {
     dots: true,
@@ -46,9 +58,10 @@ const ProductCard = ({ products }) => {
   return (
     <div className="h-full">
       <Slider {...settings}>
-        {products.map(
-          (product) =>
-            product.isActive && (
+        {products.map((product) => {
+          if (product.isActive) {
+            const productWithId = { ...product, id: product._id }; // Ensure id is set correctly
+            return (
               <div key={product._id} className="p-2">
                 <Card className="max-w-xs m-2 product-card">
                   <Link to="/product" state={{ product: product }}>
@@ -75,7 +88,7 @@ const ProductCard = ({ products }) => {
                       })}
                     </span>
                     <button
-                      onClick={() => addCartItem(product)}
+                      onClick={() => addCartItem(productWithId)}
                       className="rounded-lg bg-cyan-700 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
                     >
                       Thêm vào giỏ hàng
@@ -83,8 +96,9 @@ const ProductCard = ({ products }) => {
                   </div>
                 </Card>
               </div>
-            )
-        )}
+            );
+          }
+        })}
       </Slider>
     </div>
   );

@@ -1,12 +1,10 @@
 import React from "react";
-import Loader from "../../assets/loading.gif";
 import Hero from "../../components/hero/Hero";
 import Slider from "../../components/slider/index";
 import SecondHero from "../../components/hero/SecondHero";
 import CategoryGrid from "../../components/card/CategorGrid";
 import HeroAtLast from "../../components/hero/HeroAtLast";
 import ProductCard from "../../components/card/Card";
-import { useProductContext } from "../../context/ProductContext";
 
 const MomNBaby = {
   title: "Sản phẩm hỗ trợ cho mẹ và bé",
@@ -93,27 +91,17 @@ const Mom = {
 };
 
 const Home = () => {
-  const { products, loading } = useProductContext();
-  if (loading)
-    return (
-      <div
-        className="fixed w-full h-full z-[10000] flex items-center justify-center bg-white"
-        style={{ left: 0, top: 0 }}
-      >
-        <img src={Loader} alt="Loading..." />
-      </div>
-    );
   return (
     <div className="min-h-screen">
       <Hero />
 
-      <ProductCard products={products} />
+      <ProductCard />
       <div>
         <Slider title={MomNBaby.title} slides={MomNBaby.slides} />
         <Slider title={Mom.title} slides={Mom.slides} />
       </div>
       <SecondHero />
-      <ProductCard products={products} />
+      <ProductCard />
       <HeroAtLast />
       <CategoryGrid />
     </div>

@@ -48,7 +48,9 @@ export const CartContextProvider = ({ children }) => {
     } else {
       setCartItems([...cartItems, { ...item, amount: 1 }]);
     }
+    console.log("Updated cartItems", cartItems); // Check the state of cartItems
   };
+  
 
   const clearCart = () => {
     setCartItems([]);
@@ -56,35 +58,33 @@ export const CartContextProvider = ({ children }) => {
 
   const increaseAmount = (id) => {
     console.log("increaseAmount", id);
-    const currentCart = cartItems.find((item) => item.id === id);
-    if (currentCart) {
-      setCartItems(
-        cartItems.map((item) =>
-          item.id === id
-            ? { ...currentCart, amount: currentCart.amount + 1 }
-            : item
-        )
-      );
-    }
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id
+          ? { ...item, amount: item.amount + 1 }
+          : item
+      )
+    );
   };
-
+  
   const decreaseAmount = (id) => {
     console.log("decreaseAmount", id);
-    const currentCart = cartItems.find((item) => item.id === id);
-    if (currentCart) {
-      if (currentCart.amount > 1) {
-        setCartItems(
-          cartItems.map((item) =>
+    setCartItems(prevItems => {
+      const currentCart = prevItems.find(item => item.id === id);
+      if (currentCart) {
+        if (currentCart.amount > 1) {
+          return prevItems.map(item =>
             item.id === id
-              ? { ...currentCart, amount: currentCart.amount - 1 }
+              ? { ...item, amount: item.amount - 1 }
               : item
-          )
-        );
-      } else {
-        removeCartItem(id);
+          );
+        } else {
+          return prevItems.filter(item => item.id !== id);
+        }
       }
-    }
-  };
+      return prevItems;
+    });
+  };  
 
   return (
     <CartContext.Provider
