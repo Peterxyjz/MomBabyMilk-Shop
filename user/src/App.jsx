@@ -12,6 +12,8 @@ import LoginGoogle from "./pages/Auth/Google/LoginGoogle";
 import Product from "./pages/Product";
 import MainFooter from "./pages/Footer";
 import Cart from "./pages/Cart";
+import Order from "./pages/Order";
+import Payment from "./components/order/Payment";
 
 function App() {
   return (
@@ -21,7 +23,7 @@ function App() {
         <TapToTop />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<SiginIn />} />
+          <Route path="/login" element={<SiginIn />} /> 
           <Route path="/login/oauth" element={<LoginGoogle />} />
           <Route path="/register" element={<SiginUp />} />
           <Route path="/otp" element={<Otp />} />
@@ -29,6 +31,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/product" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
         <MainFooter />
       </Router>
