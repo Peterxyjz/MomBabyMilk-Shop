@@ -3,13 +3,15 @@ import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, Context
 
 import { ordersData, contextMenuItems, ordersGrid } from '../data/dummy';
 import { Header } from '../components';
+import { Card } from 'primereact/card';
+
 
 const Orders = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
       <Header category="Page" title="Orders" />
-      
+
       {/* <GridComponent
         id="gridcomp"
         // dataSource={ordersData}
@@ -25,6 +27,11 @@ const Orders = () => {
         </ColumnsDirective>
         <Inject services={[Resize, Sort, ContextMenu, Filter, Page, ExcelExport, Edit, PdfExport]} />
       </GridComponent> */}
+      <div style={{ display: 'flex', justifyContent: 'center', height: '85vh' }}>
+        <Card title="Tất cả đơn hàng" subTitle="" footer="" header="" className="" style={{ width: '90%', marginTop: '50px' }}>
+          Order ở đây nè
+        </Card>
+      </div>
     </div>
   );
 };

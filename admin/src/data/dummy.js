@@ -533,7 +533,7 @@ export const stafflinks = [
         name: 'Quản lý đơn hàng',
         icon: <AiOutlineShoppingCart />,
         type: 'sub',
-        path: 'orders',
+        // path: 'orders',
         subLinks: [
           { name: 'allOrder', path: 'orders', label: 'Tất cả đơn hàng' },
           { name: 'waitOrder', path: '', label: 'Đơn chờ xác nhận' },
@@ -550,14 +550,20 @@ export const stafflinks = [
         name: 'Quản lý sản phẩm',
         icon: <AiOutlineInbox />,
         type: 'sub',
-        path: 'products',
+        // path: 'products',
         subLinks: [
           { name: 'allProduct', path: 'products', label: 'Tất cả sản phẩm' },
           { name: 'addProduct', path: 'add-product', label: 'Thêm sản phẩm' },
           { name: 'viewFeedback', path: '', label: 'Xem đánh giá' },
-          { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
         ],
       },
+      {name: 'Quản lý kho',
+        icon: <BsBoxSeam />,
+        type: 'sub',
+        // path: '',
+        subLinks: [
+          { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
+        ]},
       // {
       //   name: 'Quản lý khách hàng',
       //   icon: <RiContactsLine />,
@@ -571,7 +577,7 @@ export const stafflinks = [
         name: 'Quản lý phân loại',
         icon: <MdOutlineCategory  />,
         type: 'sub',
-        path: 'categories',
+        // path: 'categories',
         subLinks: [
           { name: 'allCategory', path: 'categories', label: 'Tất cả phân loại' },
           { name: 'addCategory', path: 'add-category', label: 'Thêm phân loại' },
@@ -581,7 +587,7 @@ export const stafflinks = [
         name: 'Quản lý nhãn hàng',
         icon: <VscVerified />,
         type: 'sub',
-        path: 'brands',
+        // path: 'brands',
         subLinks: [
           { name: 'allBrand', path: 'brands', label: 'Tất cả nhãn hàng' },
           { name: 'addBrand', path: 'add-brand', label: 'Thêm nhãn hàng' },
@@ -592,7 +598,7 @@ export const stafflinks = [
         name: 'Quản lý mã giảm giá',
         icon: <RiPriceTag3Line />,
         type: 'sub',
-        path: '',
+        // path: '',
         subLinks: [
           { name: 'allVoucher', path: '', label: 'Tất cả mã giảm giá' },
 
@@ -607,7 +613,7 @@ export const stafflinks = [
         name: 'Quản lý bài viết',
         icon: <BsNewspaper  />,
         type: 'sub',
-        path: '',
+        // path: '',
         subLinks: [
           { name: 'allBlog', path: '', label: 'Tất cả bài viết' },
           { name: 'addBlog', path: '', label: 'Thêm bài viết' },
@@ -696,7 +702,7 @@ export const adminlinks = [
         name: 'Quản lý người dùng',
         icon: <FiUsers />,
         type: 'sub',
-        path: 'users',
+        // path: 'users',
         subLinks: [
           { name: 'allUser', path: 'users', label: 'Tất cả nguời dùng' },
           { name: 'addStaff', path: 'add-staff', label: 'Thêm nhân viên' },
@@ -719,9 +725,9 @@ export const adminlinks = [
         name: 'Quản lý kho',
         icon: <BsBoxSeam />,
         type: 'sub',
-        path: '',
+        // path: '',
         subLinks: [
-          { name: 'allBill', path: '', label: 'Tất cả đơn nhập hàng' },
+          { name: 'allBill', path: 'input-bills', label: 'Tất cả đơn nhập hàng' },
         ],
       },
     ]

@@ -11,7 +11,7 @@ import AddBrands from '../pages/Brand/AddBrands';
 import Dashboard from '../pages/Dashboard';
 import { Customers } from '../pages';
 import UserSetting from '../pages/UserSetting';
-import AddBill from '../pages/AddBill';
+import AddBill from '../pages/Warehouse/AddBill';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
