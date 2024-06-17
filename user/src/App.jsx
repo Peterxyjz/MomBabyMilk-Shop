@@ -15,6 +15,7 @@ import Cart from "./pages/Cart";
 import Order from "./pages/Order";
 import Payment from "./components/order/Payment";
 import Filter from "./pages/Filter/Filter";
+import Thanks from "./components/order/Thanks";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<Order />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/thanks" element={<Thanks />} />
           <Route path="/filter" element={<Filter />} />
         </Routes>
         <MainFooter />

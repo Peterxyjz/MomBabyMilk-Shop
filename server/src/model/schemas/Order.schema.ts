@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb'
 import { OrderStatus } from '~/constants/enums'
 interface OrderType {
   _id?: ObjectId
-  member_id: string
-  staff_id: string
+  member_id?: string
+  staff_id?: string
   voucher_code?: string
   ship_id: string
   full_name: string
@@ -18,8 +18,8 @@ interface OrderType {
 
 export default class Order {
   _id?: ObjectId
-  member_id: string
-  staff_id: string
+  member_id?: string
+  staff_id?: string
   voucher_code?: string
   ship_id: string
   full_name: string
@@ -33,8 +33,8 @@ export default class Order {
   constructor(order: OrderType) {
     const date = new Date()
     this._id = order._id || new ObjectId() // tự tạo id
-    this.member_id = order.member_id
-    this.staff_id = order.staff_id
+    this.member_id = order.member_id || ''
+    this.staff_id = order.staff_id || ''
     this.voucher_code = order.voucher_code || ''
     this.ship_id = order.ship_id
     this.full_name = order.full_name
