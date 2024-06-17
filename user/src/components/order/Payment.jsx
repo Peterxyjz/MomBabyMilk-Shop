@@ -1,11 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
+import axios from "axios";
+import { checkQRPaymet } from "../../data/api";
 const Payment = () => {
+  const token = JSON.parse(localStorage.getItem("result"));
+  const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
+  const navigate = useNavigate();
   const customer_infor = location.state?.customer_infor;
   const { cartItems, totalPrice, cartAmount, clearCart } = useCartContext();
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showQR, setShowQR] = useState(false);
+  const [QR, setQR] = useState(``);
+  const ship = 0;
+  const handlePaymentChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
+  const handleTermsChange = (e) => {
+    setTermsAccepted(e.target.checked);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!paymentMethod) {
+      setErrorMessage("Vui lòng chọn một phương thức thanh toán.");
+    } else if (!termsAccepted) {
+      setErrorMessage("Vui lòng đồng ý với các điều khoản và điều kiện.");
+    } else {
+      console.log("xong");
+      console.log(totalPrice);
+    }
+
+    const order_infor = {
+      customer_infor: customer_infor,
+      cart_list: cartItems,
+      user: user,
+      total_price: totalPrice + ship - 0,
+      payment_method: paymentMethod,
+    };
+    await axios
+      .post("http://localhost:4000/orders/upload", order_infor)
+      .then((res) => {
+        if (paymentMethod === "Online") {
+          const content = res.data.order.insertedId;
+          const price = totalPrice + ship - 0;
+          setShowQR(true);
+          setQR(
+            `https://img.vietqr.io/image/970422-0834564869-compact2.png?amount=${price}&addInfo=${content}&accountName=LE QUANG HUY`
+          );
+          let ischeck = false;
+          const checkPaymetSucc = setInterval(async () => {
+            const result = await checkQRPaymet("ZP6QQS1EDLM5", 10000);
+            if (result && !ischeck) {
+              clearInterval(checkPaymetSucc);
+              ischeck = true;
+              clearCart();
+              navigate("/thanks", {
+                state: { order_infor: order_infor, isCheck: true },
+              });
+            }
+          }, 1000);
+          setTimeout(() => {
+            clearInterval(checkPaymetSucc);
+            if (!ischeck) {
+              alert("Thanh Toán Thất Bại");
+              navigate("/thanks", {
+                state: { order_infor: order_infor, isCheck: false },
+              });
+            }
+          }, 35000);
+        } else {
+          clearCart();
+          navigate("/thanks", {
+            state: { order_infor: order_infor, isCheck: true },
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // Dữ liệu người dùng
+
   return (
     <>
       <Breadcrumbs headline="Thanh toán" />
@@ -99,7 +181,7 @@ const Payment = () => {
           </li>
         </ol>
         <section className="bg-white antialiased dark:bg-gray-900">
-          <form action="#" className="w-full mx-auto">
+          <form action="#" className="w-full mx-auto" onSubmit={handleSubmit}>
             <div className="w-full flex gap-8">
               <div className="w-2/3">
                 <div className="border-b py-4 border-[rgba(0,0,0,0.2)] sm:mt-4">
@@ -129,7 +211,9 @@ const Payment = () => {
                 </div>
                 <div className="mt-6 sm:mt-8">
                   <div className="relative overflow-x-auto ">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">Sản Phẩm Đơn Hàng</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">
+                      Sản Phẩm Đơn Hàng
+                    </h4>
                     <table className="w-full text-left font-medium text-gray-900 dark:text-white md:table-fixed">
                       <tbody className="divide-y divide-gray-200">
                         {cartItems.map((product) => (
@@ -165,7 +249,7 @@ const Payment = () => {
                                     {product.product_name}
                                   </a>
                                   <div className="flex items-center gap-4">
-                                    x{product.amount} sản phẩm
+                                    x{product.quantity} sản phẩm
                                   </div>
                                 </div>
                               </div>
@@ -188,7 +272,10 @@ const Payment = () => {
                         Giá gốc
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $6,592.00
+                        {Number(totalPrice).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
                       </dd>
                     </dl>
                     <dl className="flex items-center justify-between gap-4">
@@ -196,7 +283,10 @@ const Payment = () => {
                         Phí ship
                       </dt>
                       <dd className="text-base font-medium text-green-500">
-                        -$299.00
+                        {Number(ship).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
                       </dd>
                     </dl>
                     <dl className="flex items-center justify-between gap-4">
@@ -204,7 +294,10 @@ const Payment = () => {
                         Mã giảm giá
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        $99
+                        {Number(0).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
                       </dd>
                     </dl>
                   </div>
@@ -213,7 +306,10 @@ const Payment = () => {
                       Tổng Giá Trị
                     </dt>
                     <dd className="text-lg font-bold text-gray-900 dark:text-white">
-                      $7,191.00
+                      {Number(totalPrice + ship - 0).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
                     </dd>
                   </dl>
                 </div>
@@ -227,6 +323,8 @@ const Payment = () => {
                       type="radio"
                       name="payment-method"
                       defaultValue=""
+                      value="COD"
+                      onChange={handlePaymentChange}
                       className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                     />
                     <label
@@ -242,6 +340,8 @@ const Payment = () => {
                       type="radio"
                       name="payment-method"
                       defaultValue=""
+                      value="Online"
+                      onChange={handlePaymentChange}
                       className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                     />
                     <label
@@ -258,6 +358,8 @@ const Payment = () => {
                     id="terms-checkbox-2"
                     type="checkbox"
                     defaultValue=""
+                    name="terms-checkbox"
+                    onChange={handleTermsChange}
                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                   />
                   <label
@@ -276,6 +378,9 @@ const Payment = () => {
                     việc mua và đổi trả của MomBabyMilk{" "}
                   </label>
                 </div>
+                {errorMessage && (
+                  <div className="error text-red-500 mb-4">*{errorMessage}</div>
+                )}
                 <div className="gap-4 sm:flex sm:items-center">
                   <button
                     type="button"
@@ -290,6 +395,15 @@ const Payment = () => {
                     Thanh Toán
                   </button>
                 </div>
+
+                {showQR && (
+                  <div className="mt-4">
+                    <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                      Quét Mã QR Để Thanh Toán
+                    </h4>
+                    <img src={QR} alt="QR Code" className="mx-auto" />
+                  </div>
+                )}
               </div>
             </div>
           </form>
