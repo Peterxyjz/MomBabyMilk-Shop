@@ -11,6 +11,8 @@ import { useStateContext } from './contexts/ContextProvider';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';
+import 'antd/dist/reset.css'; 
+
 
 import StaffRouter from './router/StaffRouter';
 import AdminRouter from './router/AdminRouter';
