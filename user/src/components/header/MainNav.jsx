@@ -11,7 +11,7 @@ export function MainNav() {
           <Link to="/">Trang chủ</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
-          <Link>Tất Cả Sản Phẩm</Link>
+          <Link to="/filter">Tất Cả Sản Phẩm</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
           <Link>Bán Chạy Sản Phẩm</Link>

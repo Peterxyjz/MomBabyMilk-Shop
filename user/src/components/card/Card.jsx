@@ -1,6 +1,5 @@
 import { Card } from "flowbite-react";
 import Slider from "react-slick";
-import Loader from "../../assets/loading.gif";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -8,19 +7,8 @@ import "./Swiper.css";
 import RenderRating from "../elements/RenderRating";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import { useProductContext } from "../../context/ProductContext";
 
-const ProductCard = () => {
-  const { products, loading } = useProductContext();
-  if (loading)
-    return (
-      <div
-        className="fixed w-full h-full z-[10000] flex items-center justify-center bg-white"
-        style={{ left: 0, top: 0 }}
-      >
-        <img src={Loader} alt="Loading..." />
-      </div>
-    );
+const ProductCard = ({ products, headline, viewAllLink }) => {
   const { addCartItem } = useCartContext();
   const settings = {
     dots: true,
@@ -57,13 +45,18 @@ const ProductCard = () => {
 
   return (
     <div className="h-full">
+      <div className="flex justify-between items-center mb-2 mt-12"> {/* Adjust margin bottom here */}
+        <h1 className="text-2xl font-bold">{headline}</h1>
+        <Link to={viewAllLink} className="text-blue-500 hover:underline">
+          Xem tất cả
+        </Link>
+      </div>
       <Slider {...settings}>
         {products.map((product) => {
           if (product.isActive) {
-            // const productWithId = { ...product, id: product._id }; 
             return (
-              <div key={product._id} className="p-2">
-                <Card className="max-w-xs m-2 product-card">
+              <div key={product._id} className="p-1"> {/* Adjust padding here */}
+                <Card className="max-w-xs m-1 product-card"> {/* Adjust margin here */}
                   <Link to="/product" state={{ product: product }}>
                     <img
                       className="product-image"
@@ -74,7 +67,7 @@ const ProductCard = () => {
                       {product.product_name}
                     </h5>
                   </Link>
-                  <div className="mb-3 mt-1.5 flex items-center">
+                  <div className="mb-2 mt-1 flex items-center"> {/* Adjust margins here */}
                     <RenderRating rating={product.rating} />
                     <span className="ml-2 mr-1 rounded bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-cyan-200 dark:text-cyan-800">
                       {product.rating}
