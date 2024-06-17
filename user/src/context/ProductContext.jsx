@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { fetchProducts } from '../data/api';
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { fetchProducts } from "../data/api";
 
 const ProductContext = createContext();
 
@@ -14,18 +14,23 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const localProducts = localStorage.getItem('products');
+        const localProducts = localStorage.getItem("products");
         if (localProducts) {
           setProducts(JSON.parse(localProducts));
           setLoading(false);
+          setTimeout(async () => {
+            const productData = await fetchProducts();
+            setProducts(productData);
+            localStorage.setItem("products", JSON.stringify(productData));
+          }, 3000);
         } else {
           const productData = await fetchProducts();
           setProducts(productData);
-          localStorage.setItem('products', JSON.stringify(productData));
+          localStorage.setItem("products", JSON.stringify(productData));
           setLoading(false);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
         setLoading(false);
       }
     };

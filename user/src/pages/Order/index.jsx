@@ -1,15 +1,15 @@
-import React from 'react'
-import Breadcrumbs from '../../components/elements/Breadcrumb'
-import OrderInfor from '../../components/order/OrderInfor'
+import React from "react";
+import Breadcrumbs from "../../components/elements/Breadcrumb";
+import OrderInfor from "../../components/order/OrderInfor";
 
 const Order = () => {
   return (
     <>
-    <Breadcrumbs headline="Thông tin đơn hàng" />
+      <Breadcrumbs headline="Thông tin đơn hàng" />
 
-    <OrderInfor/>
-</>
-  )
-}
+      <OrderInfor />
+    </>
+  );
+};
 
-export default Order
+export default Order;
