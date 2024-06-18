@@ -536,7 +536,7 @@ export const stafflinks = [
         // path: 'orders',
         subLinks: [
           { name: 'allOrder', path: 'orders', label: 'Tất cả đơn hàng' },
-          { name: 'waitOrder', path: '', label: 'Đơn chờ xác nhận' },
+          { name: 'await-order', path: '', label: 'Đơn chờ xác nhận' },
           { name: 'approvedOrder', path: '', label: 'Đơn đã xác nhận' },
           { name: 'completeOrder', path: '', label: 'Đơn đã hoàn thành' },
         ],
