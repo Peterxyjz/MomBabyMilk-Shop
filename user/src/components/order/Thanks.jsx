@@ -7,7 +7,8 @@ import Breadcrumbs from "../elements/Breadcrumb";
 const Thanks = () => {
   const location = useLocation();
   const isCheck = location.state?.isCheck || false;
-  console.log(isCheck);
+  // const order_infor = location.state?.order_infor || null;
+  const order_id = location.state?.order_id || null;
 
   return (
     <div>
@@ -111,11 +112,38 @@ const Thanks = () => {
       </ol>
       {isCheck ? (
         <div>
-          <SuccessPage />
+          <div className="w-full min-h-[60vh] bg-gray-200">
+            <div className="flex items-center justify-center h-72">
+              <img src={successImg} alt="" />
+            </div>
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Cảm Ơn Đã Đặt Hàng</h1>
+              <p className="text-gray-600 text-lg">
+                Đơn hàng của bạn sẽ sớm được xác nhận
+                <br />
+                Hóa đơn sẽ được gửi đến mail của bạn
+                <br />
+                Mã Hóa đơn: {order_id}
+                <br />
+                Liên hệ: 083 456 4869 - pass10diemswp391@gmail.com
+              </p>
+            </div>
+          </div>
         </div>
       ) : (
         <div>
-          <FailPage />
+          <div className="w-full min-h-[60vh] bg-gray-200">
+            <div className="flex items-center justify-center h-72">
+              <img src={successImg} alt="" />
+            </div>
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Thanh Toán Thất Bại</h1>
+              <p className="text-gray-600 text-lg">
+                Liên hệ: 083 456 4869 - pass10diemswp391@gmail.com để được hỗ
+                trợ
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -123,45 +151,3 @@ const Thanks = () => {
 };
 
 export default Thanks;
-
-export const SuccessPage = () => {
-  return (
-    <>
-      <div className="w-full min-h-[60vh] bg-gray-200">
-        <div className="flex items-center justify-center h-72">
-          <img src={successImg} alt="" />
-        </div>
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Cảm Ơn Đã Đặt Hàng</h1>
-          <p className="text-gray-600 text-lg">
-            Đơn hàng của bạn sẽ sớm được xác nhận
-            <br />
-            Hóa đơn sẽ được gửi đến mail của bạn
-            <br />
-            Mã Hóa đơn: 2831873687423y
-            <br />
-            Liên hệ: 083 456 4869 - pass10diemswp391@gmail.com
-          </p>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export const FailPage = () => {
-  return (
-    <>
-      <div className="w-full min-h-[60vh] bg-gray-200">
-        <div className="flex items-center justify-center h-72">
-          <img src={successImg} alt="" />
-        </div>
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Thanh Toán Thất Bại</h1>
-          <p className="text-gray-600 text-lg">
-            Liên hệ: 083 456 4869 - pass10diemswp391@gmail.com để được hỗ trợ
-          </p>
-        </div>
-      </div>
-    </>
-  );
-};
