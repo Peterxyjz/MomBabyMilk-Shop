@@ -12,6 +12,8 @@ import Dashboard from '../pages/Dashboard';
 import { Customers } from '../pages';
 import UserSetting from '../pages/UserSetting';
 import AddBill from '../pages/Warehouse/AddBill';
+import AwaitOrder from '../pages/Order/AwaitOrder';
+import AwaitOrderDetail from '../pages/Order/AwaitOrderDetail';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -28,6 +30,9 @@ const StaffRouter = () => {
             <Route path="/add-brand" element={<AddBrands />} />
             <Route path="/profile" element={<UserSetting />} />
             <Route path="/add-inputbill" element={(<AddBill />)} />
+            {/* order */}
+            <Route path="/await-order" element={(<AwaitOrder />)} />
+            <Route path="/await-orderDetail" element={(<AwaitOrderDetail />)} />
         </Routes>
     )
 }

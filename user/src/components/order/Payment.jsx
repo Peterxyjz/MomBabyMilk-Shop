@@ -10,7 +10,7 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const customer_infor = location.state?.customer_infor;
-  const { cartItems, totalPrice, cartAmount, clearCart } = useCartContext();
+  const { cartItems, totalPrice, clearCart } = useCartContext();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -33,7 +33,6 @@ const Payment = () => {
     } else if (!termsAccepted) {
       setErrorMessage("Vui lòng đồng ý với các điều khoản và điều kiện.");
     } else {
-      console.log("xong");
       console.log(totalPrice);
     }
 
@@ -56,7 +55,7 @@ const Payment = () => {
           );
           let ischeck = false;
           const checkPaymetSucc = setInterval(async () => {
-            const result = await checkQRPaymet("ZP6QQS1EDLM5", 10000);
+            const result = await checkQRPaymet(content, price);
             if (result && !ischeck) {
               clearInterval(checkPaymetSucc);
               ischeck = true;
@@ -74,7 +73,7 @@ const Payment = () => {
                 state: { order_infor: order_infor, isCheck: false },
               });
             }
-          }, 35000);
+          }, 300000);
         } else {
           clearCart();
           navigate("/thanks", {

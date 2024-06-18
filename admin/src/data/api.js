@@ -9,3 +9,13 @@ export const fetchProducts = async () => {
         throw error;
     }
 };
+
+export const fetchOrder = async () => {
+    try {
+        const res = await axios.get(`http://localhost:4000/orders/all-orders`);
+        return res.data.result
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+    }
+}

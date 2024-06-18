@@ -40,6 +40,7 @@ export const uploadController = async (req: Request, res: Response) => {
     address: customer_infor.address,
     phone: customer_infor.phone,
     email: customer_infor.email,
+    payment_method: req.body.payment_method,
     status: OrderStatus.Required,
     required_date: new Date(),
     total_price: req.body.total_price
