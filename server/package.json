@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "npm install typescript -D && mkdir dist",
-    "dev": "npx nodemon src/index.ts",
+    "dev": "npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",
     "start": "node dist/index.js",
     "lint": "eslint .",
@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "cores": "^0.8.5",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
