@@ -99,3 +99,16 @@ export const checkQRPaymet = async (content, price) => {
     return false;
   }
 }
+
+export const deleteOrder = async(id) =>{
+  try {
+    const res = await axios.post(`http://localhost:4000/orders/delete`,
+      {
+        order_id: id
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -3,7 +3,7 @@ import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import axios from "axios";
-import { checkQRPaymet } from "../../data/api";
+import { checkQRPaymet, deleteOrder } from "../../data/api";
 const Payment = () => {
   const token = JSON.parse(localStorage.getItem("result"));
   const user = JSON.parse(localStorage.getItem("user"));
@@ -17,6 +17,7 @@ const Payment = () => {
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
   const ship = 0;
+  const callTime = 300000;
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);
   };
@@ -35,7 +36,6 @@ const Payment = () => {
     } else {
       console.log(totalPrice);
     }
-
     const order_infor = {
       customer_infor: customer_infor,
       cart_list: cartItems,
@@ -46,8 +46,8 @@ const Payment = () => {
     await axios
       .post("http://localhost:4000/orders/upload", order_infor)
       .then((res) => {
+        const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
-          const content = res.data.order.insertedId;
           const price = totalPrice + ship - 0;
           setShowQR(true);
           setQR(
@@ -69,15 +69,16 @@ const Payment = () => {
             clearInterval(checkPaymetSucc);
             if (!ischeck) {
               alert("Thanh Toán Thất Bại");
+              deleteOrder(content)
               navigate("/thanks", {
-                state: { order_infor: order_infor, isCheck: false },
+                state: { order_infor: order_infor, isCheck: false, order_id: content },
               });
             }
-          }, 300000);
+          }, callTime);
         } else {
           clearCart();
           navigate("/thanks", {
-            state: { order_infor: order_infor, isCheck: true },
+            state: { order_infor: order_infor, isCheck: true, order_id: content},
           });
         }
       })
