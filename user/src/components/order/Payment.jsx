@@ -17,11 +17,13 @@ const Payment = () => {
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
   let ship = 0;
-  if( cartAmount<10){
+  if (cartAmount <10){
     ship = 50000
-  }else if(cartAmount>=10 && cartAmount<20){
+  } 
+  if(cartAmount >= 10 && cartAmount <20 ){
     ship = 30000
-  } else (cartAmount>=20){
+  } if
+   (cartAmount >= 20){
     ship = 0
   }
   const callTime = 300000;
@@ -424,7 +426,7 @@ const Payment = () => {
           </form>
         </section>
       </>
-    </10>
+    </>
   );
 };
 

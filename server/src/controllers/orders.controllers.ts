@@ -6,6 +6,8 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import Order from '~/model/schemas/Order.schema'
 import databaseService from '~/services/database.services'
 import orderServices from '~/services/orders.services'
+import { TokenPayload } from '~/model/requests/User.requests'
+import usersService from '~/services/users.services'
 
 export const getAllController = async (req: Request, res: Response) => {
   const orders = await orderServices.getAll()
@@ -53,4 +55,30 @@ export const uploadController = async (req: Request, res: Response) => {
     message: USERS_MESSAGES.GET_SUCCESS,
     order
   })
+}
+
+export const updateStatusController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  const status = req.body.status
+  if (!user) {
+    return res.status(400).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Staff') {
+    return res.status(400).json({
+      message: 'Bạn không có quyền thay đổi'
+    })
+  }
+  const order_id = req.body.order_id
+
+
+  const result = await orderServices.cancel(order_id, status, user_id)
+  return res.status(200).json({
+    message: 'success',
+    result
+  })
+
 }
