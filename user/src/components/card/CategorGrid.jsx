@@ -12,7 +12,7 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import './Swiper.css'; // Đảm bảo bạn import file CSS mới vào đây
 
 const categories = [
@@ -31,7 +31,7 @@ function NextArrow(props) {
     return (
         <div className="slick-arrow slick-next" onClick={onClick}>
             <button className="slick-arrow-button">
-                <FontAwesomeIcon icon={faArrowRight} />
+                <IoIosArrowForward className='icon' />
             </button>
         </div>
     );
@@ -42,7 +42,7 @@ function PrevArrow(props) {
     return (
         <div className="slick-arrow slick-prev" onClick={onClick}>
             <button className="slick-arrow-button">
-                <FontAwesomeIcon icon={faArrowLeft} />
+                <IoIosArrowBack className='icon' />
             </button>
         </div>
     );
@@ -53,15 +53,17 @@ export default function CategoryGrid() {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 5, // Hiển thị 4 sản phẩm cùng lúc
+        slidesToShow: 5,
         slidesToScroll: 1,
         arrows: true,
         nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />
+        prevArrow: <PrevArrow />,
+        centerMode: true, // Center mode to ensure the slides are centered
+        centerPadding: "60px", // Adjust the padding to center the slides
     };
 
     return (
-        <div>
+        <div className="category-slider relative">
             <Typography variant="h5" component="div" align="center" sx={{ my: 4 }}>
                 See More
             </Typography>

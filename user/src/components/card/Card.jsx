@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { FaShoppingCart } from "react-icons/fa";
 import "./Swiper.css";
 import RenderRating from "../elements/RenderRating";
 import { Link } from "react-router-dom";
@@ -14,11 +15,14 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Hiển thị 4 sản phẩm cùng lúc
+    slidesToShow: 4,
     slidesToScroll: 1,
     arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    className: "center",
+    centerMode: true,
+    centerPadding: "40px",
   };
 
   function NextArrow(props) {
@@ -45,7 +49,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
 
   return (
     <div className="h-full">
-      <div className="flex justify-between items-center mb-2 mt-12"> {/* Adjust margin bottom here */}
+      <div className="flex justify-between items-center mb-2 mt-12">
         <h1 className="text-2xl font-bold">{headline}</h1>
         <Link to={viewAllLink} className="text-blue-500 hover:underline">
           Xem tất cả
@@ -55,19 +59,24 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
         {products.map((product) => {
           if (product.isActive) {
             return (
-              <div key={product._id} className="p-1"> {/* Adjust padding here */}
-                <Card className="max-w-xs m-1 product-card"> {/* Adjust margin here */}
+              <div key={product._id} className="p-1">
+                <Card className="max-w-xs m-1 product-card flex flex-col justify-between h-full relative">
                   <Link to="/product" state={{ product: product }}>
                     <img
-                      className="product-image"
+                      className="product-image mx-auto"
                       src={product.imgUrl}
                       alt={product.product_name}
                     />
-                    <h5 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
+                    {product.amount === 0 && (
+                      <div className="absolute inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center">
+                        <span className="text-white text-xl font-bold">Hết hàng</span>
+                      </div>
+                    )}
+                    <h5 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white h-16 overflow-hidden overflow-ellipsis" style={{ WebkitLineClamp: 3, display: '-webkit-box', WebkitBoxOrient: 'vertical' }}>
                       {product.product_name}
                     </h5>
                   </Link>
-                  <div className="mb-2 mt-1 flex items-center"> {/* Adjust margins here */}
+                  <div className="mb-2 mt-1 flex items-center">
                     <RenderRating rating={product.rating} />
                     <span className="ml-2 mr-1 rounded bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-cyan-200 dark:text-cyan-800">
                       {product.rating}
@@ -80,12 +89,14 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
                         currency: "VND",
                       })}
                     </span>
-                    <button
-                      onClick={() => addCartItem(product)}
-                      className="rounded-lg bg-cyan-700 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
-                    >
-                      Thêm vào giỏ hàng
-                    </button>
+                    {product.amount > 0 && (
+                      <button
+                        onClick={() => addCartItem(product)}
+                        className="rounded-lg bg-cyan-700 p-2 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 flex items-center justify-center"
+                      >
+                        <FaShoppingCart />
+                      </button>
+                    )}
                   </div>
                 </Card>
               </div>
