@@ -14,6 +14,10 @@ import UserSetting from '../pages/UserSetting';
 import AddBill from '../pages/Warehouse/AddBill';
 import AwaitOrder from '../pages/Order/AwaitOrder';
 import AwaitOrderDetail from '../pages/Order/AwaitOrderDetail';
+import ApprovedOrder from '../pages/Order/ApprovedOrder';
+import CancelOrder from '../pages/Order/CancelOrder';
+import CompleteOrder from '../pages/Order/CompleteOrder';
+import OrderDetail from '../pages/Order/OrderDetail';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -33,6 +37,10 @@ const StaffRouter = () => {
             {/* order */}
             <Route path="/await-order" element={(<AwaitOrder />)} />
             <Route path="/await-orderDetail" element={(<AwaitOrderDetail />)} />
+            <Route path="/approved-order" element={(<ApprovedOrder />)} />
+            <Route path="/cancel-order" element={(<CancelOrder />)} />
+            <Route path="/complete-order" element={(<CompleteOrder />)} />
+            <Route path="/order-detail" element={(<OrderDetail />)} />
         </Routes>
     )
 }
