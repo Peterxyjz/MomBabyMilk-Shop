@@ -6,6 +6,7 @@ import { Button, Col, Divider, Row, notification } from 'antd';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 import axios from 'axios';
+import { fetchAddBrand } from '../../data/api';
 
 
 
@@ -30,16 +31,7 @@ const AddBrands = () => {
       phone: phone,
     };
 
-    await axios
-      .post(
-        "http://localhost:4000/brands/upload",
-        { ...brand },
-        {
-          headers: {
-            Authorization: `Bearer ${token.access_token}`,
-          },
-        }
-      )
+    fetchAddBrand(brand, token)
       .then(async (res) => {
         console.log(res.data);
         const brand = res.data.product;

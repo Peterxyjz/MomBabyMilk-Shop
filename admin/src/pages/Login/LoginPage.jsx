@@ -6,6 +6,7 @@ import { Card } from 'primereact/card';
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Checkbox } from "@mui/material";
+import { fetchLogin } from "../../data/api";
 
 
 
@@ -34,11 +35,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
-    await axios
-      .post(`http://localhost:4000/users/login-admin-staff`, {
-        email,
-        password,
-      })
+   fetchLogin( email, password )
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));

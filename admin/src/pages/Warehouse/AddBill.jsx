@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../../data/api";
+import { fetchProducts, fetchUploadBill } from "../../data/api";
 import { Button } from "flowbite-react";
 import { Card } from "primereact/card";
 import { Col, Divider, InputNumber, Row, Table, notification } from 'antd';
@@ -176,15 +176,7 @@ const AddBill = () => {
     };
 
     try {
-      const res = await axios.post(
-        "http://localhost:4000/inputBills/upload",
-        inputBill,
-        {
-          headers: {
-            Authorization: `Bearer ${token.access_token}`,
-          },
-        }
-      );
+      const res = fetchUploadBill(inputBill, token);
       console.log(res.data);
       notification.success({
         message: 'Tạo đơn nhập hàng thành công',

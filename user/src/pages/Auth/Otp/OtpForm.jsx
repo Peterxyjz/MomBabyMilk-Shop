@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { fetchOtp } from "../../../data/api";
 
 const OtpForm = () => {
   const location = useLocation();
@@ -16,57 +17,16 @@ const OtpForm = () => {
   const [errorList, setErrorList] = useState([]);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
-  const apiList = [
-    {
-      navigateTo: "/",
-      methodHander: "get",
-      handlerOtp: `http://localhost:4000/users/verify-email`,
-      methodResend: "post",
-      handlerResendOtp: `http://localhost:4000/users/resend-verify-email`,
-      data: {
-        headers: {
-          Authorization: `Bearer ${result === null ? "" : result.access_token}`,
-        },
-      },
-    },
-    {
-      navigateTo: "/reset-password",
-      methodHander: "get",
-      handlerOtp: `http://localhost:4000/users/verify-forgot-password`,
-      methodResend: "post",
-      handlerResendOtp: `http://localhost:4000/users/forgot-password`,
-      data: {
-        headers: {
-          Authorization: `Bearer ${result === null ? "" : result.access_token}`,
-        },
-      },
-    },
-  ];
+  
 
-  const [apiFormValue, setApiFormValue] = useState({
-    methodHander: "",
-    handlerOtp: "",
-    methodResend: "",
-    handlerResendOtp: "",
-    data: {},
-  });
+ 
 
-  useEffect(() => {
-    const foundItem = apiList.find((item) => item.navigateTo === navigateTo);
-    if (foundItem) {
-      setApiFormValue(foundItem);
-    }
-  }, [navigateTo]);
+
 
   const resendMail = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios({
-        method: apiFormValue.methodResend,
-        url: apiFormValue.handlerResendOtp,
-        body: { email },
-        ...apiFormValue.data,
-      });
+      const response = fetchOtp({ user_id,digit:"" ,email,key:"resend",navigateTo,result });
       alert(`${response.data.message}`);
       console.log(response.data);
     } catch (error) {
@@ -77,11 +37,13 @@ const OtpForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const otpValue = otp.join("");
-    console.log("url: ", apiFormValue.handlerOtp);
-    await axios({
-      method: apiFormValue.methodHander,
-      url: apiFormValue.handlerOtp,
-      params: { user_id, digit: otpValue },
+    fetchOtp({
+      user_id,
+      digit: otpValue,
+      email,
+      key: "send",
+      navigateTo,
+      result,
     })
       .then((res) => {
         console.log(res.data);

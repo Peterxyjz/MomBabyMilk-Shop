@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card } from 'primereact/card'
 import React, { useEffect, useState } from 'react'
 import { useNavigate  } from 'react-router-dom';
+import { fetchBrands } from '../../data/api';
 
 const Brands = () => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const Brands = () => {
   useEffect(() => {
     const getBrands = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/brands/all-brands');
+        const res = fetchBrands();
         setBrands(res.data.result);
       } catch (error) {
         console.error("Error fetching brands:", error);

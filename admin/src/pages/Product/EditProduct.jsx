@@ -18,6 +18,7 @@ import {
 import { v4 } from "uuid";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { fetchBrandStaff, fetchBrands, fetchCategories,fetchProductById, fetchUpdateProduct } from "../../data/api.js";
 const EditProduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +34,7 @@ const EditProduct = () => {
   const [discount, setDiscount] = useState(0);
   const [description, setDescription] = useState("123");
   const [product_img_url, setProduct_img_url] = useState("");
-
+  const [isActive , setIsActive] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [selectedBrandId, setSelectedBrandId] = useState("");
   const [img, setImg] = useState(null);
@@ -43,7 +44,7 @@ const EditProduct = () => {
 
   useEffect(() => {
     // Gọi API để lấy dữ liệu category
-    fetch("http://localhost:4000/categories/all-categories")
+    fetchCategories()
       .then((response) => response.json())
       .then((data) => {
         if (data && data.result) {
@@ -53,7 +54,7 @@ const EditProduct = () => {
       .catch((error) => console.error("Error fetching categories:", error));
 
     // Gọi API để lấy dữ liệu brand
-    fetch("http://localhost:4000/brands/all-brands")
+    fetchBrandStaff()
       .then((response) => response.json())
       .then((data) => {
         if (data && data.result) {
@@ -62,7 +63,7 @@ const EditProduct = () => {
       })
       .catch((error) => console.error("Error fetching brands:", error));
 
-    fetch(`http://localhost:4000/products/product/${id}`)
+    fetchProductById(id)
       .then((response) => response.json())
       .then((data) => {
         if (data && data.result) {
@@ -76,6 +77,7 @@ const EditProduct = () => {
           setSelectedCategoryId(data.result.category_id);
           setSelectedBrandId(data.result.brand_id);
           setProduct_img_url(data.result.imgUrl);
+          setIsActive(data.result.isActive);
         }
       })
       .catch((error) => console.error("Error fetching brands:", error));
@@ -141,15 +143,7 @@ const EditProduct = () => {
     }
   }
   const sendURL = async (product) => {
-    return await axios.patch(
-      `http://localhost:4000/products/product/${id}`,
-      { ...product },
-      {
-        headers: {
-          Authorization: `Bearer ${token.access_token}`,
-        },
-      }
-    );
+    return fetchUpdateProduct(product, token, id);  
   };
   // const handleSaveImg = (url) => {
 
@@ -166,24 +160,12 @@ const EditProduct = () => {
       age,
       discount,
       imgUrl: product_img_url,
-      isActive: true,
+      isActive: isActive,
     };
     console.log(product);
     console.log(JSON.stringify({ ...product }));
     // send data to db:
-    await axios
-      .patch(
-        `http://localhost:4000/products/product/${id}`,
-
-        {
-          ...product,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token.access_token}`,
-          },
-        }
-      )
+   fetchUpdateProduct(product, token, id)
       .then(async (res) => {
         console.log("xongproduct -infor");
         await uploadImage({ ...product, imgUrl: "" });

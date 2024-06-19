@@ -1,8 +1,177 @@
+
+
+
 import axios from "axios";
+
+const SCHEMA_HOSTNAME = "http://localhost:4000";
+
+//reset-pssword:
+export const fetchResetPassword = async (user_id, digit, password, confirm_password)=>{
+  return await axios
+  .post(
+    `http://localhost:4000/users/reset-password`,
+    {
+      password,
+      confirm_password,
+    },
+    {
+      params: {
+        user_id: user_id,
+        digit: digit,
+      },
+    }
+  )
+}
+
+//registter
+export const fetchRegister = async ({
+  username,
+  email,
+  password,
+  confirm_password,
+}) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/users/register`, {
+    username,
+    email,
+    password,
+    confirm_password,
+  });
+};
+
+//login
+
+export const fetchLogin = async ({ email, password }) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/users/login`, {
+    email,
+    password,
+  });
+};
+
+//OTP:
+export const fetchOtp = async ({
+  user_id,
+  digit,
+  email,
+  key,
+  navigateTo,
+  result,
+}) => {
+  const apiList = [
+    {
+      navigateTo: "/",
+      methodHander: "get",
+      handlerOtp: `http://localhost:4000/users/verify-email`,
+      methodResend: "post",
+      handlerResendOtp: `http://localhost:4000/users/resend-verify-email`,
+      data: {
+        headers: {
+          Authorization: `Bearer ${result === null ? "" : result.access_token}`,
+        },
+      },
+    },
+    {
+      navigateTo: "/reset-password",
+      methodHander: "get",
+      handlerOtp: `http://localhost:4000/users/verify-forgot-password`,
+      methodResend: "post",
+      handlerResendOtp: `http://localhost:4000/users/forgot-password`,
+      data: {
+        headers: {
+          Authorization: `Bearer ${result === null ? "" : result.access_token}`,
+        },
+      },
+    },
+  ];
+
+  const apiFormValue = {
+    methodHander: "",
+    handlerOtp: "",
+    methodResend: "",
+    handlerResendOtp: "",
+    data: {},
+  };
+
+  apiList.find((item) => {
+    if (item.navigateTo === navigateTo) {
+      apiFormValue.methodHander = item.methodHander;
+      apiFormValue.handlerOtp = item.handlerOtp;
+      apiFormValue.methodResend = item.methodResend;
+      apiFormValue.handlerResendOtp = item.handlerResendOtp;
+      apiFormValue.data = item.data;
+    }
+  });
+
+  if (key === "resend") {
+    return await axios({
+      method: apiFormValue.methodResend,
+      url: apiFormValue.handlerResendOtp,
+      body: { email },
+      ...apiFormValue.data,
+    });
+  } else {
+    return await axios({
+      method: apiFormValue.methodHander,
+      url: apiFormValue.handlerOtp,
+      params: { user_id, digit: digit },
+    });
+  }
+};
+
+//fortgot password
+
+export const fetchForgotPassword = async ({ email }) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/users/forgot-password`, {
+    email,
+  });
+};
+
+//logout
+export const fetchLogout = async (result) => {
+  await axios.post(
+    "${SCHEMA_HOSTNAME}/users/logout",
+    {
+      refresh_token: result.refresh_token,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${result.access_token}`,
+      },
+    }
+  );
+};
+
+//order
+export const fetchOrder = async (order_infor) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/orders/upload`, order_infor);
+};
 
 export const fetchProducts = async () => {
   try {
-    const res = await axios.get(`http://localhost:4000/products/all-products`);
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/products/all-products`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
+
+//categori
+
+export const fetchCategories = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/categories/all-categories`);
+};
+
+export const displayProducts = async (page, limit) => {
+  try {
+    const res = await axios.get(
+      `${SCHEMA_HOSTNAME}/products/all-products-page`,
+      {
+        params: {
+          page: page,
+          limit: limit,
+        },
+      }
+    );
     return res.data.result;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -84,13 +253,15 @@ export const getWards = async (id) => {
 
 export const checkQRPaymet = async (content, price) => {
   try {
-    const response = await axios.get("https://script.google.com/macros/s/AKfycbz-C6H0trt5-1XR9RkmneIztfnP4raYUD_0Os-Qjwjyblx1xVCrzwCkuSJqj_LkUtVf/exec")
-    
+    const response = await axios.get(
+      "https://script.google.com/macros/s/AKfycbz-C6H0trt5-1XR9RkmneIztfnP4raYUD_0Os-Qjwjyblx1xVCrzwCkuSJqj_LkUtVf/exec"
+    );
+
     const data = response.data.data;
     const lastPaid = data[data.length - 1];
     const lastContent = lastPaid["Mô tả"];
-    const lastPrice = lastPaid["Giá trị"]; 
-    if(lastPrice === price && lastContent.includes(content)){
+    const lastPrice = lastPaid["Giá trị"];
+    if (lastPrice === price && lastContent.includes(content)) {
       return true;
     }
     return false;
@@ -98,17 +269,15 @@ export const checkQRPaymet = async (content, price) => {
     console.log(error);
     return false;
   }
-}
+};
 
-export const deleteOrder = async(id) =>{
+export const deleteOrder = async (id) => {
   try {
-    const res = await axios.post(`http://localhost:4000/orders/delete`,
-      {
-        order_id: id
-      }
-    );
+    const res = await axios.post(`${SCHEMA_HOSTNAME}/orders/delete`, {
+      order_id: id,
+    });
     return res.data;
   } catch (error) {
     console.log(error);
   }
-}
+};

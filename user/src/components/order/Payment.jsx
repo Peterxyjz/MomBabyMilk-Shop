@@ -3,7 +3,7 @@ import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import axios from "axios";
-import { checkQRPaymet, deleteOrder } from "../../data/api";
+import { checkQRPaymet, deleteOrder, fetchOrder } from "../../data/api";
 const Payment = () => {
   const token = JSON.parse(localStorage.getItem("result"));
   const user = JSON.parse(localStorage.getItem("user"));
@@ -43,8 +43,7 @@ const Payment = () => {
       total_price: totalPrice + ship - 0,
       payment_method: paymentMethod,
     };
-    await axios
-      .post("http://localhost:4000/orders/upload", order_infor)
+    fetchOrder(order_infor)
       .then((res) => {
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
@@ -69,16 +68,24 @@ const Payment = () => {
             clearInterval(checkPaymetSucc);
             if (!ischeck) {
               alert("Thanh Toán Thất Bại");
-              deleteOrder(content)
+              deleteOrder(content);
               navigate("/thanks", {
-                state: { order_infor: order_infor, isCheck: false, order_id: content },
+                state: {
+                  order_infor: order_infor,
+                  isCheck: false,
+                  order_id: content,
+                },
               });
             }
           }, callTime);
         } else {
           clearCart();
           navigate("/thanks", {
-            state: { order_infor: order_infor, isCheck: true, order_id: content},
+            state: {
+              order_infor: order_infor,
+              isCheck: true,
+              order_id: content,
+            },
           });
         }
       })

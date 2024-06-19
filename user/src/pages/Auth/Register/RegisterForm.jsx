@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LinkToGoogle from "../Google/LinkToGoogle";
+import { fetchRegister } from "../../../data/api";
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -26,14 +27,12 @@ const RegisterForm = () => {
 
     const { username, email, password, confirm_password } = formValues;
     console.log(username, email, password, confirm_password);
-
-    await axios
-      .post(`http://localhost:4000/users/register`, {
-        username,
-        email,
-        password,
-        confirm_password,
-      })
+    fetchRegister({
+      username,
+      email,
+      password,
+      confirm_password,
+    })
       .then((res) => {
         alert(`${res.data.message}`);
         console.log(res.data);
@@ -126,7 +125,7 @@ const RegisterForm = () => {
             Đăng Ký
           </button>
           <div>
-            <LinkToGoogle headline="Đăng Ký Bằng Google"/>
+            <LinkToGoogle headline="Đăng Ký Bằng Google" />
           </div>
         </div>
         <div className="mt-8 flex justify-center items-center">

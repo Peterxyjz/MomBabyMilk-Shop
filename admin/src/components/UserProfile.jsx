@@ -6,6 +6,7 @@ import Buttonlogout from "@mui/material/Button";
 import axios from "axios";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Modal } from "antd";
+import { fetchLogout } from "../data/api";
 const UserProfile = ({ isAdmin }) => {
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -16,17 +17,7 @@ const UserProfile = ({ isAdmin }) => {
       title: 'Xác nhận đăng xuất',
       content: `Bạn có chắc chắn muốn đăng xuất?`,
       onOk: async () => {
-        await axios.post(
-          "http://localhost:4000/users/logout",
-          {
-            refresh_token: result.refresh_token,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${result.access_token}`,
-            },
-          }
-        );
+        fetchLogout(result);
         localStorage.clear();
         window.location.reload();
       },

@@ -4,6 +4,7 @@ import axios from "axios";
 import cover_imgedit from "../../assets/images/cover_imgedit.png";
 import { Card } from 'primereact/card';
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { fetchForgotPassword } from "../../data/api";
 
 
 const ForgotPassword = () => {
@@ -25,10 +26,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     const { email } = formValues;
     console.log(email);
-    await axios
-      .post(`http://localhost:4000/users/forgot-password`, {
-        email
-      })
+    fetchForgotPassword( email)
       .then((res) => {
         const user_id = res.data.user_id;
         navigate("/otp", { state: { email, user_id } });
