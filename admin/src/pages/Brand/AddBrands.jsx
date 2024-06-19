@@ -31,7 +31,7 @@ const AddBrands = () => {
       phone: phone,
     };
 
-    fetchAddBrand(brand, token)
+    await fetchAddBrand(brand, token)
       .then(async (res) => {
         console.log(res.data);
         const brand = res.data.product;

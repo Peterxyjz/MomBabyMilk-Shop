@@ -27,7 +27,7 @@ const Users = () => {
 
             try {
                 const result =JSON.parse(localStorage.getItem("result"))
-                const res = fetchAllUsers(result);
+                const res = await  fetchAllUsers(result);
                 const formattedUsers = res.data.users.map(user => ({
                     ...user,
                     date_of_birth: formatDate(user.date_of_birth)
@@ -39,7 +39,7 @@ const Users = () => {
             }
         };
         console.log(Users);
-        fetchUsers();
+         fetchUsers();
     }, []);
 
     // const onToggleChange = (user) => {

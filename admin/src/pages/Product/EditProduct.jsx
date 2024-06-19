@@ -143,7 +143,7 @@ const EditProduct = () => {
     }
   }
   const sendURL = async (product) => {
-    return fetchUpdateProduct(product, token, id);  
+    return await  fetchUpdateProduct(product, token, id);  
   };
   // const handleSaveImg = (url) => {
 
@@ -165,7 +165,7 @@ const EditProduct = () => {
     console.log(product);
     console.log(JSON.stringify({ ...product }));
     // send data to db:
-   fetchUpdateProduct(product, token, id)
+    await  fetchUpdateProduct(product, token, id)
       .then(async (res) => {
         console.log("xongproduct -infor");
         await uploadImage({ ...product, imgUrl: "" });

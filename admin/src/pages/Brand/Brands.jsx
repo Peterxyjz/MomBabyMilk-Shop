@@ -16,7 +16,7 @@ const Brands = () => {
   useEffect(() => {
     const getBrands = async () => {
       try {
-        const res = fetchBrands();
+        const res =  await fetchBrands();
         setBrands(res.data.result);
       } catch (error) {
         console.error("Error fetching brands:", error);

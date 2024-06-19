@@ -26,7 +26,7 @@ const ForgotPassword = () => {
     event.preventDefault();
     const { email } = formValues;
     console.log(email);
-    fetchForgotPassword( email)
+    await fetchForgotPassword( email)
       .then((res) => {
         const user_id = res.data.user_id;
         navigate("/otp", { state: { email, user_id } });

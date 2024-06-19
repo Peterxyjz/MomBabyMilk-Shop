@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { fetchProducts } from "../data/api";
+import { fetchProducts } from "../data/api.jsx";
 
 const ProductContext = createContext();
 
@@ -19,17 +19,17 @@ export const ProductProvider = ({ children }) => {
           setProducts(JSON.parse(localProducts));
           setLoading(false);
           setTimeout(async () => {
-            console.log("có - run : ", performance.now());
-            const productData = await fetchProducts(1,9);
-            console.log("có - finish: ", performance.now());
+        
+            const productData = await fetchProducts();
+          
             setProducts(productData);
             localStorage.setItem("products", JSON.stringify(productData));
           }, 1000);
         } else {
       
-          console.log("ko - run : ", performance.now());
-          const productData = await fetchProducts(1,9);
-          console.log("ko - finish : ", performance.now());
+      
+          const productData = await fetchProducts();
+       
           setProducts(productData);
           localStorage.setItem("products", JSON.stringify(productData));
           setLoading(false);

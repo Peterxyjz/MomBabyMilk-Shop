@@ -3,7 +3,7 @@ import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import axios from "axios";
-import { checkQRPaymet, deleteOrder, fetchOrder } from "../../data/api";
+import { checkQRPaymet, deleteOrder, fetchOrder } from "../../data/api.jsx";
 const Payment = () => {
   const token = JSON.parse(localStorage.getItem("result"));
   const user = JSON.parse(localStorage.getItem("user"));
@@ -43,7 +43,7 @@ const Payment = () => {
       total_price: totalPrice + ship - 0,
       payment_method: paymentMethod,
     };
-    fetchOrder(order_infor)
+    await  fetchOrder(order_infor)
       .then((res) => {
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {

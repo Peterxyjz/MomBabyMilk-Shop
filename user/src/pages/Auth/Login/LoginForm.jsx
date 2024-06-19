@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LinkToGoogle from "../Google/LinkToGoogle";
-import { fetchLogin } from "../../../data/api";
+import { fetchLogin } from "../../../data/api.jsx";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const LoginForm = () => {
     event.preventDefault();
     const { email, password } = formValues;
     
-      fetchLogin({
+    await  fetchLogin({
         email,
         password,
       })

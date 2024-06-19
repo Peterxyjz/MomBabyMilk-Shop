@@ -37,7 +37,7 @@ const ResetPassword = () => {
     event.preventDefault();
     const { password, confirm_password } = formValues;
     console.log("xskaxh" + password, confirm_password);
-    fetchResetPassword({ user_id, digit, password, confirm_password })
+    await fetchResetPassword({ user_id, digit, password, confirm_password })
       .then((res) => {
         navigate("/login");
       })

@@ -15,7 +15,7 @@ const Otp = () => {
   const resendMail = async (event) => {
     event.preventDefault();
     
-    fetchOtp({ user_id,digit:"" ,email, key: 'resend' })
+    await fetchOtp({ user_id,digit:"" ,email, key: 'resend' })
       .then((res) => {
         console.log(res.data);
       })
@@ -25,7 +25,7 @@ const Otp = () => {
     event.preventDefault();
     const otpValue = otp.join(''); 
 
-     fetchOtp({ user_id, digit: otpValue, email,key: "send" }).then((res) => { 
+     await fetchOtp({ user_id, digit: otpValue, email,key: "send" }).then((res) => { 
         console.log(res.data);
         navigate("/reset-password", { state: { digit: otpValue, user_id } });
       })
