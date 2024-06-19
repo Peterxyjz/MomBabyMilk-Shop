@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchProducts } from "../../data/api";
 import { Button } from "flowbite-react";
 import axios from "axios";
@@ -7,7 +7,7 @@ import axios from "axios";
 const AwaitOrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order;
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);

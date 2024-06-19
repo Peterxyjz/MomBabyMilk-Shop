@@ -50,13 +50,7 @@ class OrderServinces {
 
     return await databaseService.orders.updateOne(filter, update)
   }
-  async updateAmount(id: string) {
-    // const filter = { _id: new ObjectId(id) }
-    // const order_details = await databaseService.orderDetails.find({ order_id: id }).toArray()
-
-
-    // return await databaseService.orders.updateOne(filter, update)
-  }
+  
 }
 const orderServices = new OrderServinces()
 export default orderServices

@@ -8,6 +8,7 @@ import databaseService from '~/services/database.services'
 import orderServices from '~/services/orders.services'
 import { TokenPayload } from '~/model/requests/User.requests'
 import usersService from '~/services/users.services'
+import wareHouseService from '~/services/wareHouse.services'
 
 export const getAllController = async (req: Request, res: Response) => {
   const orders = await orderServices.getAll()
@@ -73,12 +74,13 @@ export const updateStatusController = async (req: Request, res: Response) => {
     })
   }
   const order_id = req.body.order_id
-
+  if (status === 'Processing') {
+    await wareHouseService.decreaseAmount(order_id)
+  }
 
   const result = await orderServices.cancel(order_id, status, user_id)
   return res.status(200).json({
     message: 'success',
     result
   })
-
 }

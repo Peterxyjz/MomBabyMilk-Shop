@@ -44,13 +44,13 @@ export const uploadController = async (req: Request, res: Response) => {
 
     for (const detail of inputBillDetails) {
       const { product_id, amount } = detail
-      const existingProduct = await databaseService.warehouse.findOne({ product_id })
+      const existingProduct = await databaseService.warehouse.findOne({_id: new ObjectId(product_id)})
 
       if (existingProduct) {
-        await databaseService.warehouse.updateOne({ product_id }, { $inc: { amount: amount } })
+        await databaseService.warehouse.updateOne({_id: new ObjectId(product_id) }, { $inc: { amount: amount } })
       } else {
         const newWarehouseEntry = new WareHouse({
-          product_id,
+          _id: new ObjectId(product_id),
           amount
         })
         await databaseService.warehouse.insertOne(newWarehouseEntry)
