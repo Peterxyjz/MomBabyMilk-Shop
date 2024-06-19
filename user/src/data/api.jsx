@@ -11,7 +11,7 @@ export const fetchResetPassword = async (
   confirm_password
 ) => {
   return await axios.post(
-    `http://localhost:4000/users/reset-password`,
+    `${SCHEMA_HOSTNAME}/users/reset-password`,
     {
       password,
       confirm_password,
@@ -151,7 +151,6 @@ export const fetchProducts = async () => {
   try {
     console.log("dang lay products");
     const res = await axios.get(`${SCHEMA_HOSTNAME}/products/all-products`);
-    console.log(res.data.result);
     return res.data.result;
   } catch (error) {
     console.error("Error fetching products:", error);
