@@ -137,10 +137,12 @@ const Home = () => {
         <img src={Loader} alt="Loading..." />
       </div>
     );
+  const newProducts = products.slice(-10).reverse();
+
   return (
     <div className="min-h-screen">
       <Hero />
-      <ProductCard products={products} headline={"Sản phẩm mới"} />
+      <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
       <ProductCard products={products} headline={"Sản phẩm bán chạy"} />
       <SecondHero />
       <ProductCard products={products} headline={"Sữa dành cho mẹ bầu"} />
