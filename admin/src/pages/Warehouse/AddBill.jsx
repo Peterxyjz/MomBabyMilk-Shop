@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchProducts, fetchUploadBill } from "../../data/api";
 import { Button } from "flowbite-react";
 import { Card } from "primereact/card";
-import { Col, Divider, InputNumber, Row, Table, notification } from 'antd';
+import { Col, InputNumber, Row, Table, notification } from 'antd';
 import moment from 'moment';
-import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 
@@ -18,7 +17,6 @@ const AddBill = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
   const [formState, setFormState] = useState({}); // Thêm state để quản lý form
-
 
   //ham phan chia trang
   const handleTableChange = (pagination) => {

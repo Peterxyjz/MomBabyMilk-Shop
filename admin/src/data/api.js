@@ -1,19 +1,15 @@
 import axios from "axios";
 
-
-
-const SCHEMA_HOSTNAME = "http://localhost:4000";
-
-
+const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
 //get-prodduct
 export const fetchProductById = async (id) => {
-    return fetch(`${SCHEMA_HOSTNAME}/products/product/${id}`)
+  return fetch(`${SCHEMA_HOSTNAME}/products/product/${id}`)
 }
 
 //get-all-brand
 export const fetchBrandStaff = async () => {
-    return     fetch(`${SCHEMA_HOSTNAME}/brands/all-brands`)
+  return fetch(`${SCHEMA_HOSTNAME}/brands/all-brands`)
 }
 
 //get-categories
@@ -23,8 +19,10 @@ export const fetchCategories = async () => {
 
 //upload -bill
 export const fetchUploadBill = async (inputBill, token) => {
+  console.log(inputBill);
+  console.log(token);
   return await axios.post(
-    `${SCHEMA_HOSTNAME}/inputBills/uploads`,
+    `${SCHEMA_HOSTNAME}/inputBills/upload`,
     inputBill,
     {
       headers: {

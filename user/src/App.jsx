@@ -16,6 +16,7 @@ import Order from "./pages/Order";
 import Payment from "./components/order/Payment";
 import Filter from "./pages/Filter/Filter";
 import Thanks from "./components/order/Thanks";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/thanks" element={<Thanks />} />
           <Route path="/filter" element={<Filter />} />
+          <Route path="/edit_profile" element={<EditProfile />} />
         </Routes>
         <MainFooter />
       </Router>

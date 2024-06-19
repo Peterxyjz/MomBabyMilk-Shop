@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { fetchProducts } from "../../data/api";
-import { Button } from "flowbite-react";
-import axios from "axios";
 
-const AwaitOrderDetail = () => {
+const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order;
-
+console.log(order);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")) || null;
-  const token = JSON.parse(localStorage.getItem("result"));
-
 
   useEffect(() => {
     const getProducts = async () => {
@@ -50,49 +45,6 @@ const AwaitOrderDetail = () => {
   }, [products, order]);
 
   if (loading) return <div className="w-full h-full mx-6 py-6">Loading...</div>;
-
-  const handleCancelOrder = async () => {
-    const order_id = order.order._id
-    await axios.post(`http://localhost:4000/orders/status-order`, {
-      order_id: order_id,
-      status: "Cancel"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token.access_token}`
-      }
-    }).then((res) => {
-      alert("Đơn hàng đã được huỷ!")
-      console.log(res.data);
-      navigate("/await-order")
-      window.location.reload()
-    }).catch((error) => {
-      console.log(error.response);
-      alert("Đơn hàng không thể huỷ!")
-      console.log(error)
-    })
-  };
-
-  const handleConfirmOrder = async () => {
-    const order_id = order.order._id
-    await axios.post(`http://localhost:4000/orders/status-order`, {
-      order_id: order_id,
-      status: "Processing"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token.access_token}`
-      }
-    }).then((res) => {
-      alert("Đơn hàng đã được xác nhận!")
-      console.log(res.data);
-      navigate("/await-order")
-      window.location.reload()
-    }).catch((error) => {
-      console.log(error.response);
-      alert("Đơn hàng không thể huỷ!")
-      console.log(error)
-    })
-  };
-
   return (
     <div className="w-full h-full mx-10 my-4">
       <h1 className="text-3xl font-bold">
@@ -103,10 +55,7 @@ const AwaitOrderDetail = () => {
         <div className="w-full md:w-1/2">
           <h3 className="text-2xl">Sản phẩm</h3>
           {orderDetails.map((item) => (
-            <div
-              key={item.product_id}
-              className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6"
-            >
+            <div key={item.product_id} className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6">
               <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
                 <img
                   className="h-20 w-20 dark:hidden"
@@ -157,23 +106,10 @@ const AwaitOrderDetail = () => {
               <p>Địa Chỉ: {order.order.address}</p>
             </div>
           </div>
-          <button
-            type="button"
-            data-modal-target="billingInformationModal"
-            data-modal-toggle="billingInformationModal"
-            className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
-          >
-            Chỉnh Sửa
-          </button>
-          <hr className="my-4" />
-          <div className="w-full flex items-center justify-between">
-            <Button onClick={handleCancelOrder}>Hủy Đơn Hàng</Button>
-            <Button onClick={handleConfirmOrder}>Xác Nhận Đơn Hàng</Button>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default AwaitOrderDetail;
+export default OrderDetail;
