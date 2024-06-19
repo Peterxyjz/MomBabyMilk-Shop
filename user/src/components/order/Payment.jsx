@@ -16,16 +16,7 @@ const Payment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
-  let ship = 0;
-  if( cartAmount<10){
-    ship = 50000
-  } 
-  if(cartAmount>=10 && cartAmount<20){
-    ship = 30000
-  } 
-  if (cartAmount>=20) {
-    ship = 0
-  }
+  let ship = 30000;
   const callTime = 300000;
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);
