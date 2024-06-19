@@ -1,13 +1,11 @@
 import React from 'react';
-import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock, AiOutlineInbox } from 'react-icons/ai';
-import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers, FiUser } from 'react-icons/fi';
-import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsNewspaper } from 'react-icons/bs';
-import { BiColorFill } from 'react-icons/bi';
-import { RiContactsLine, RiPriceTag3Line, RiStockLine } from 'react-icons/ri';
+import { AiOutlineShoppingCart, AiOutlineInbox } from 'react-icons/ai';
+import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers, FiUser } from 'react-icons/fi';
+import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsNewspaper } from 'react-icons/bs';
+import {  RiPriceTag3Line } from 'react-icons/ri';
 import { MdOutlineCategory, MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
-import { GiLouvrePyramid } from 'react-icons/gi';
 import { GrLocation } from 'react-icons/gr';
 import avatar from './avatar.jpg';
 import avatar2 from './avatar2.jpg';
@@ -535,10 +533,10 @@ export const stafflinks = [
         type: 'sub',
         // path: 'orders',
         subLinks: [
-          { name: 'allOrder', path: 'orders', label: 'Tất cả đơn hàng' },
           { name: 'await-order', path: '', label: 'Đơn chờ xác nhận' },
-          { name: 'approvedOrder', path: '', label: 'Đơn đã xác nhận' },
-          { name: 'completeOrder', path: '', label: 'Đơn đã hoàn thành' },
+          { name: 'approved-order', path: '', label: 'Đơn đã xác nhận' },
+          { name: 'cancel-order', path: '', label: 'Đơn đã hủy' },
+          { name: 'complete-order', path: '', label: 'Đơn đã hoàn thành' },
         ],
       },
     ],

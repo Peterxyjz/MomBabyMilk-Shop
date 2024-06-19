@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { fetchProducts } from "../../data/api";
-import { Button } from "flowbite-react";
 
-const AwaitOrderDetail = () => {
+const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order;
-
+console.log(order);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
@@ -107,23 +106,10 @@ const AwaitOrderDetail = () => {
               <p>Địa Chỉ: {order.order.address}</p>
             </div>
           </div>
-          <button
-            type="button"
-            data-modal-target="billingInformationModal"
-            data-modal-toggle="billingInformationModal"
-            className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
-          >
-            Chỉnh Sửa
-          </button>
-          <hr className="my-4" />
-          <div className="w-full flex items-center justify-between">
-            <Button>Hủy Đơn Hàng</Button>
-            <Button>Xác Nhận Đơn Hàng</Button>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default AwaitOrderDetail;
+export default OrderDetail;
