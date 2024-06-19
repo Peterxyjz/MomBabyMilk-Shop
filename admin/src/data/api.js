@@ -1,10 +1,6 @@
 import axios from "axios";
 
-
-
-const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
-
-
+const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
 //get-prodduct
 export const fetchProductById = async (id) => {
