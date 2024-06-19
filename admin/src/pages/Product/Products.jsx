@@ -33,7 +33,7 @@ const Product = () => {
     const token = JSON.parse(localStorage.getItem("result"));
     console.log(product);
     const id = product._id;
-    fetchUpdateProduct(product, token, id);
+    await   fetchUpdateProduct(product, token, id);
   };
 
   const handleSwitchChange = (checked, product) => {

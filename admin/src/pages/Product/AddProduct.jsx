@@ -114,7 +114,7 @@ const AddProduct = () => {
     }
   }
   const sendURL = async (product) => {
-    return fetchUploadProduct(product, token);
+    return await fetchUploadProduct(product, token);
   };
   // const handleSaveImg = (url) => {
 
@@ -133,7 +133,7 @@ const AddProduct = () => {
       discount,
     };
     // send data to db:
-    fetchUploadProduct(product, token)
+    await fetchUploadProduct(product, token)
       .then(async (res) => {
         console.log(res.data);
         const product = res.data.product;

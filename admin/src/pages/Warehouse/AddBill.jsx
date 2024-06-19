@@ -176,7 +176,7 @@ const AddBill = () => {
     };
 
     try {
-      const res = fetchUploadBill(inputBill, token);
+      const res = await fetchUploadBill(inputBill, token);
       console.log(res.data);
       notification.success({
         message: 'Tạo đơn nhập hàng thành công',

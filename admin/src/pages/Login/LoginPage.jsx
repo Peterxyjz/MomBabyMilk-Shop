@@ -35,7 +35,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
-   fetchLogin( email, password )
+    await fetchLogin( email, password )
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));

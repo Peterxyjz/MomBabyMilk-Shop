@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProvinces, getDistricts, getWards } from "../../data/api";
+import { getProvinces, getDistricts, getWards } from "../../data/api.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
 const OrderInfor = () => {

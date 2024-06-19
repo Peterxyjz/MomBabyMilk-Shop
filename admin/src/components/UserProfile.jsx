@@ -17,7 +17,7 @@ const UserProfile = ({ isAdmin }) => {
       title: 'Xác nhận đăng xuất',
       content: `Bạn có chắc chắn muốn đăng xuất?`,
       onOk: async () => {
-        fetchLogout(result);
+        await fetchLogout(result);
         localStorage.clear();
         window.location.reload();
       },

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import { fetchOtp } from "../../../data/api";
+import { fetchOtp } from "../../../data/api.jsx";
 
 const OtpForm = () => {
   const location = useLocation();
@@ -26,7 +26,7 @@ const OtpForm = () => {
   const resendMail = async (event) => {
     event.preventDefault();
     try {
-      const response = fetchOtp({ user_id,digit:"" ,email,key:"resend",navigateTo,result });
+      const response =await  fetchOtp({ user_id,digit:"" ,email,key:"resend",navigateTo,result });
       alert(`${response.data.message}`);
       console.log(response.data);
     } catch (error) {

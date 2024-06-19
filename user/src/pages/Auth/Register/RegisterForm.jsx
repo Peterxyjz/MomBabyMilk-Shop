@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LinkToGoogle from "../Google/LinkToGoogle";
-import { fetchRegister } from "../../../data/api";
+import { fetchRegister } from "../../../data/api.jsx";
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -27,7 +27,7 @@ const RegisterForm = () => {
 
     const { username, email, password, confirm_password } = formValues;
     console.log(username, email, password, confirm_password);
-    fetchRegister({
+    await  fetchRegister({
       username,
       email,
       password,
