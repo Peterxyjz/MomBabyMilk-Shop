@@ -35,7 +35,7 @@ export const uploadController = async (req: Request, res: Response) => {
   const order_infor = new Order({
     _id: new ObjectId(),
     member_id: user ? user._id : '',
-    ship_id: new ObjectId().toString(),
+    ship_fee: req.body.ship_fee,
     full_name: customer_infor.full_name,
     address: customer_infor.address,
     phone: customer_infor.phone,
