@@ -22,14 +22,14 @@ const UserBtn = () => {
           <Dropdown.Header>
             <span className="block text-sm">{user.username}</span>
             <span className="block truncate text-sm font-medium">
-              {user.email} 
+              {user.email}
             </span>
           </Dropdown.Header>
-          <Dropdown.Item icon={HiViewGrid} className="w-48">Chỉnh Sửa</Dropdown.Item>
+          <Dropdown.Item icon={HiViewGrid} className="w-48" href="/edit_profile">Chỉnh Sửa</Dropdown.Item>
           <Dropdown.Item icon={HiCog} className="w-48">Tích Điểm</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item icon={HiLogout} onClick={handleLogout} 
-          className="w-48">Đăng Xuất</Dropdown.Item>
+          <Dropdown.Item icon={HiLogout} onClick={handleLogout}
+            className="w-48">Đăng Xuất</Dropdown.Item>
         </>
       ) : (
         <>
