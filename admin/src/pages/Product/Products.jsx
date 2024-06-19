@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RenderRating from "../../components/Element/RenderRating";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { fetchProducts } from "../../data/api";
+import { fetchProducts, fetchUpdateProduct } from "../../data/api";
 import { Card } from "primereact/card";
 import { Button, Image, Modal, Switch, Table, notification } from "antd";
 import confirm from "antd/es/modal/confirm";
@@ -33,25 +33,7 @@ const Product = () => {
     const token = JSON.parse(localStorage.getItem("result"));
     console.log(product);
     const id = product._id;
-    await axios.patch(
-      `http://localhost:4000/products/product/${id}`,
-      {
-        brand_id: product.brand_id,
-        category_id: product.category_id,
-        product_name: product.product_name,
-        price: product.price,
-        description: product.description,
-        age: product.age,
-        discount: product.discount,
-        imgUrl: product.imgUrl,
-        isActive: product.isActive,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token.access_token}`,
-        },
-      }
-    );
+    fetchUpdateProduct(product, token, id);
   };
 
   const handleSwitchChange = (checked, product) => {

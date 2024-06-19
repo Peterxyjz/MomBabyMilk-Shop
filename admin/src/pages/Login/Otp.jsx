@@ -2,6 +2,7 @@ import React, {useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import axios from "axios";
+import { fetchOtp } from "../../data/api";
 
 const Otp = () => {
   const location = useLocation();
@@ -14,10 +15,7 @@ const Otp = () => {
   const resendMail = async (event) => {
     event.preventDefault();
     
-    await axios
-      .post(`http://localhost:4000/users/forgot-password`, {
-        email,
-      })
+    fetchOtp({ user_id,digit:"" ,email, key: 'resend' })
       .then((res) => {
         console.log(res.data);
       })
@@ -27,13 +25,7 @@ const Otp = () => {
     event.preventDefault();
     const otpValue = otp.join(''); 
 
-      await axios
-        .get(`http://localhost:4000/users/verify-forgot-password`, {
-          params: {
-            user_id,
-            digit: otpValue 
-          }
-      }).then((res) => { 
+     fetchOtp({ user_id, digit: otpValue, email,key: "send" }).then((res) => { 
         console.log(res.data);
         navigate("/reset-password", { state: { digit: otpValue, user_id } });
       })

@@ -10,24 +10,7 @@ const InputBills = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(7);
 
-    // useEffect(() => {
-    //     const getBrands = async () => {
-    //       try {
-    //         const res = await axios.get('http://localhost:4000/inputBills/all-brands');
-    //         setBrands(res.data.result);
-    //       } catch (error) {
-    //         console.error("Error fetching brands:", error);
-    //         notification.error({
-    //           message: 'Error',
-    //           description: 'Failed to fetch brands',
-    //         });
-    //       } finally {
-    //         setLoading(false);
-    //       }
-    //     };
-    
-    //     getBrands();
-    //   }, []);
+  
 
 
 

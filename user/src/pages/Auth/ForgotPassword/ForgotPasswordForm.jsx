@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {  useNavigate } from "react-router-dom";
+import { fetchForgotPassword } from "../../../data/api";
 const ForgotPasswordForm = () => {
   const [formValues, setFormValues] = useState({
     email: "",
@@ -19,10 +20,7 @@ const ForgotPasswordForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const {email }  = formValues;
-    await axios
-      .post(`http://localhost:4000/users/forgot-password`, {
-        email,
-      })
+    fetchForgotPassword({ email })
       .then((res) => {
         console.log(res.data);
         alert(`${res.data.message}`);

@@ -9,6 +9,7 @@ import { Card } from 'primereact/card';
 import { format } from 'date-fns';
 
 import { Table, Switch, Pagination } from 'antd';
+import { fetchAllUsers } from '../../data/api';
 
 
 
@@ -23,15 +24,10 @@ const Users = () => {
     };
     useEffect(() => {
         const fetchUsers = async () => {
+
             try {
-                const res = await axios.get(
-                    "http://localhost:4000/users/get-all-user", 
-                    {
-                        headers: {
-                            Authorization: `Bearer ${JSON.parse(localStorage.getItem("result")).access_token}`
-                        },             
-                    }
-                );
+                const result =JSON.parse(localStorage.getItem("result"))
+                const res = fetchAllUsers(result);
                 const formattedUsers = res.data.users.map(user => ({
                     ...user,
                     date_of_birth: formatDate(user.date_of_birth)

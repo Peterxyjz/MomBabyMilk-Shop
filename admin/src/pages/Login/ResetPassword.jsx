@@ -7,6 +7,7 @@ import { Card } from 'primereact/card';
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Checkbox } from "@mui/material";
+import { fetchResetPassword } from "../../data/api";
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -36,18 +37,7 @@ const ResetPassword = () => {
     event.preventDefault();
     const { password, confirm_password } = formValues;
     console.log("xskaxh" + password, confirm_password);
-    await axios
-      .post(`http://localhost:4000/users/reset-password`, {
-        password,
-        confirm_password,
-      },
-        {
-          params: {
-            user_id: user_id,
-            digit: digit,
-          },
-        }
-      )
+    fetchResetPassword({ user_id, digit, password, confirm_password })
       .then((res) => {
         navigate("/login");
       })

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { fetchResetPassword } from "../../../data/api";
 
 const ResetPasswordForm = () => {
   const location = useLocation();
@@ -25,20 +26,7 @@ const ResetPasswordForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { password, confirm_password } = formValues;
-    await axios
-      .post(
-        `http://localhost:4000/users/reset-password`,
-        {
-          password,
-          confirm_password,
-        },
-        {
-          params: {
-            user_id: user_id,
-            digit: digit,
-          },
-        }
-      )
+    fetchResetPassword(user_id, digit, password, confirm_password)
       .then((res) => {
         alert(`${res.data.message}`);
         navigate("/login");

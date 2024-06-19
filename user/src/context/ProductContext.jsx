@@ -19,12 +19,17 @@ export const ProductProvider = ({ children }) => {
           setProducts(JSON.parse(localProducts));
           setLoading(false);
           setTimeout(async () => {
-            const productData = await fetchProducts();
+            console.log("có - run : ", performance.now());
+            const productData = await fetchProducts(1,9);
+            console.log("có - finish: ", performance.now());
             setProducts(productData);
             localStorage.setItem("products", JSON.stringify(productData));
-          }, 3000);
+          }, 1000);
         } else {
-          const productData = await fetchProducts();
+      
+          console.log("ko - run : ", performance.now());
+          const productData = await fetchProducts(1,9);
+          console.log("ko - finish : ", performance.now());
           setProducts(productData);
           localStorage.setItem("products", JSON.stringify(productData));
           setLoading(false);

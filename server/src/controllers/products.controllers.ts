@@ -33,7 +33,7 @@ export const uploadController = async (req: Request, res: Response) => {
   return res.status(200).json({
     message: USERS_MESSAGES.UPLOAD_SUCCESS,
     result: result,
-    product:{...product, imgUrl: '' }
+    product: { ...product, imgUrl: '' }
   })
 }
 
@@ -65,10 +65,52 @@ export const getAllController = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
-    result: result
+    result: result,
+  
   })
 }
+export const getProductPageController = async (req: Request, res: Response) => {
+  const page = parseInt(req.query.page as string) || 1
+  const limit = parseInt(req.query.limit as string) || 9
+  const skip = (page - 1) * limit
+  
+  console.log(page, limit, skip)
 
+  const products = await productsService.getProductSize(skip, limit)
+  const feedbacks = await databaseService.feedbacks.find({}).toArray()
+  const result = []
+
+  for (const element of products) {
+    const brand = (await brandsService.getById(element.brand_id)) as Brand
+    const category = (await categoriesService.getById(element.category_id)) as Category
+    const warehouse = (await wareHouseService.getById(element._id?.toString())) as WareHouse
+
+    const productFeedbacks = feedbacks.filter((feedback) => feedback.product_id === element._id?.toString())
+    const rating =
+      productFeedbacks.length > 0
+        ? Math.min(productFeedbacks.reduce((sum, feedback) => sum + feedback.rating, 0) / productFeedbacks.length, 5)
+        : 0
+
+    result.push({
+      ...element,
+      brand_name: brand.brand_name,
+      category_name: category.category_name,
+      amount: warehouse.amount,
+      reviewer: productFeedbacks.length,
+      rating: rating,
+      page: page,
+      next_page: products.length > limit ? page + 1 : page
+    })
+  }
+
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: result,
+    page: page,
+    limit: limit,
+    total: result.length
+  })
+}
 export const getController = async (req: Request, res: Response) => {
   const id = req.params.id
   const result = await productsService.getById(id)
@@ -86,7 +128,7 @@ export const updateController = async (req: Request, res: Response) => {
     _id: new ObjectId(id),
     ...req.body
   })
-  console.log(product)
+  console.log('upload: ', product)
 
   const result = await productsService.update(id, product)
   return res.status(200).json({

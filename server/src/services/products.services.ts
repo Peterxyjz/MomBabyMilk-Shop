@@ -25,6 +25,9 @@ class ProductsService {
   async getAll() {
     return await databaseService.products.find({}).toArray()
   }
+  async getProductSize(skip: number, limit: number) {
+    return await databaseService.products.find({}).skip(skip).limit(limit).toArray()
+  }
   // getById:
   async getById(id: string) {
     const filter = { _id: new ObjectId(id) }

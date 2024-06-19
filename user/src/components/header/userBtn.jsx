@@ -3,22 +3,13 @@ import { Dropdown } from "flowbite-react";
 import { HiCog, HiViewGrid, HiLogout } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
 import axios from 'axios'
+import { fetchLogout } from "../../data/api";
 const UserBtn = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const verify = user === null ? 0 : user.verify
   const handleLogout = async () => {
     const result = JSON.parse(localStorage.getItem("result"));
-    await axios.post(
-      "http://localhost:4000/users/logout",
-      {
-        refresh_token: result.refresh_token,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${result.access_token}`,
-        },
-      }
-    );
+    fetchLogout(result)
     localStorage.removeItem("user");
     localStorage.removeItem("result");
     window.location.reload();

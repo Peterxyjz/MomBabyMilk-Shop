@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { fetchProducts } from "../../data/api";
+import { fetchCategories, fetchProducts } from "../../data/api";
 const SearchBar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Tất Cả Sản Phẩm");
@@ -47,9 +47,7 @@ const SearchBar = () => {
 
   const getCategory = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:4000/categories/all-categories"
-      );
+      const res = fetchCategories();
       const categories = [
         { category_name: "Tất Cả Sản Phẩm" },
         ...res.data.result,

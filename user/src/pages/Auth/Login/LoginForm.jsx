@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LinkToGoogle from "../Google/LinkToGoogle";
+import { fetchLogin } from "../../../data/api";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -22,8 +23,8 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
-    await axios
-      .post(`http://localhost:4000/users/login`, {
+    
+      fetchLogin({
         email,
         password,
       })

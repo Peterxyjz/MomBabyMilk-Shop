@@ -12,6 +12,11 @@ import { imageDb } from "../../data/firebase.config";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import axios from "axios";
+import {
+  fetchBrands,
+  fetchCategories,
+  fetchUploadProduct,
+} from "../../data/api";
 const AddProduct = () => {
   const [product_name, setProduct_name] = useState("");
   const [age, setAge] = useState("");
@@ -30,7 +35,7 @@ const AddProduct = () => {
 
   useEffect(() => {
     // Gọi API để lấy dữ liệu category
-    fetch("http://localhost:4000/categories/all-categories")
+    fetchCategories()
       .then((response) => response.json())
       .then((data) => {
         if (data && data.result) {
@@ -40,7 +45,7 @@ const AddProduct = () => {
       .catch((error) => console.error("Error fetching categories:", error));
 
     // Gọi API để lấy dữ liệu brand
-    fetch("http://localhost:4000/brands/all-brands")
+    fetchBrands()
       .then((response) => response.json())
       .then((data) => {
         if (data && data.result) {
@@ -109,25 +114,7 @@ const AddProduct = () => {
     }
   }
   const sendURL = async (product) => {
-    return await axios.patch(
-      `http://localhost:4000/products/product/${product._id.toString()}`,
-      {
-        brand_id: product.brand_id,
-        category_id: product.category_id,
-        product_name: product.product_name,
-        price: product.price,
-        description: product.description,
-        age: product.age,
-        discount: product.discount,
-        imgUrl: product.imgUrl,
-        isActive: product.isActive,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token.access_token}`,
-        },
-      }
-    );
+    return fetchUploadProduct(product, token);
   };
   // const handleSaveImg = (url) => {
 
@@ -146,16 +133,7 @@ const AddProduct = () => {
       discount,
     };
     // send data to db:
-    await axios
-      .post(
-        "http://localhost:4000/products/upload",
-        { ...product },
-        {
-          headers: {
-            Authorization: `Bearer ${token.access_token}`,
-          },
-        }
-      )
+    fetchUploadProduct(product, token)
       .then(async (res) => {
         console.log(res.data);
         const product = res.data.product;
