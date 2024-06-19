@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { useProductContext } from '../../context/ProductContext';
+import { FaShoppingCart } from 'react-icons/fa';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import Loader from '../../assets/loading.gif';
+import Breadcrumbs from '../../components/elements/Breadcrumb';
+import { Link } from 'react-router-dom';
 
 const Filter = () => {
     const { products, loading } = useProductContext();
+    const [priceRange, setPriceRange] = useState([0, 1000000]);
     const [sortOpen, setSortOpen] = useState(false);
-    const [price, setPrice] = useState(500000);
-    const [quantities, setQuantities] = useState(Array(8).fill(1)); // Assuming 8 products for example
-    const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 9; // Adjust this number as needed
+
+    const handleSliderChange = (value) => {
+        setPriceRange(value);
+    };
 
     if (loading)
         return (
@@ -20,130 +26,95 @@ const Filter = () => {
             </div>
         );
 
-    const handleQuantityChange = (index, delta) => {
-        setQuantities(prev => {
-            const newQuantities = [...prev];
-            newQuantities[index] = Math.max(1, newQuantities[index] + delta);
-            return newQuantities;
-        });
-    };
-
-    const totalPages = Math.ceil(products.length / productsPerPage);
-    const displayedProducts = products.slice(
-        (currentPage - 1) * productsPerPage,
-        currentPage * productsPerPage
-    );
-
     return (
-        <div className="container mx-auto p-4">
-            <div className="flex">
+        <>
+            <Breadcrumbs headline="Tất cả sản phẩm" />
+            <div className="container mx-auto p-4 min-h-screen flex">
                 {/* Sidebar */}
-                <div className="w-1/4 p-4">
-                    <div>
-                        <h2 className="font-bold text-lg mb-2">Categories</h2>
-                        <ul>
-                            <li><input type="checkbox" /> Fruits & Vegetables (15)</li>
-                            <li><input type="checkbox" /> Bakery, Cake & Dairy (12)</li>
-                            <li><input type="checkbox" /> Beverages (20)</li>
-                            <li><input type="checkbox" /> Snacks & Branded Foods (5)</li>
-                            <li><input type="checkbox" /> Beauty & Household (30)</li>
+                <div className="w-1/5 p-4 flex-shrink-0">
+                    <div className="mb-4">
+                        <h2 className="font-bold text-lg mb-2">Bộ lọc sản phẩm</h2>
+                        <ul className="text-gray-500">
+                            <li><input type="checkbox" /> Sữa chua</li>
+                            <li><input type="checkbox" /> Sữa chua</li>
+                            <li><input type="checkbox" /> Sữa cho mẹ bầu</li>
+                            <li><input type="checkbox" /> Sữa bột</li>
+                            <li><input type="checkbox" /> Sữa tươi</li>
+                            <li><input type="checkbox" /> Sữa pha sẵn</li>
+                        </ul>
+                    </div>
+                    <div className="mt-4 mb-4">
+                        <h2 className="font-bold text-lg mb-2">Loại</h2>
+                        <ul className="text-gray-500">
+                            <li><input type="checkbox" /> Sữa bột</li>
+                            <li><input type="checkbox" /> Sữa pha sẵn</li>
                         </ul>
                     </div>
                     <div className="mt-4">
-                        <h2 className="font-bold text-lg mb-2">Price</h2>
-                        <input type="range" min="0" max="1000000" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full" />
-                        <div>₫{new Intl.NumberFormat().format(price)}</div>
-                    </div>
-                    <div className="mt-4">
-                        <h2 className="font-bold text-lg mb-2">Discount</h2>
-                        <ul>
-                            <li><input type="checkbox" /> Upto 5% (6)</li>
-                            <li><input type="checkbox" /> 5% - 10% (8)</li>
-                            <li><input type="checkbox" /> 10% - 15% (10)</li>
-                            <li><input type="checkbox" /> 15% - 25% (14)</li>
-                            <li><input type="checkbox" /> More than 25% (13)</li>
-                        </ul>
+                        <h2 className="font-bold text-lg mb-2">Lọc giá</h2>
+                        <Slider
+                            range
+                            min={0}
+                            max={2000000}
+                            step={1000}
+                            defaultValue={[0, 2000000]}
+                            onChange={handleSliderChange}
+                            value={priceRange}
+                        />
+                        <div className="flex justify-between mt-2">
+                            <span>{priceRange[0].toLocaleString()}₫</span>
+                            <span>{priceRange[1].toLocaleString()}₫</span>
+                        </div>
                     </div>
                 </div>
                 {/* Main Content */}
-                <div className="w-3/4 p-4">
+                <div className="w-4/5 p-4 flex-grow">
                     <div className="flex justify-between mb-4">
-                        <h2 className="text-2xl font-bold">Products</h2>
                         <div className="relative">
                             <button onClick={() => setSortOpen(!sortOpen)} className="bg-gray-200 px-4 py-2 rounded-lg">
                                 Sort By: Most Popular
                             </button>
                             {sortOpen && (
                                 <div className="absolute right-0 bg-white border mt-2 rounded-lg shadow-lg">
-                                    <a href="#" className="block px-4 py-2">Popularity</a>
-                                    <a href="#" className="block px-4 py-2">Low - High Price</a>
-                                    <a href="#" className="block px-4 py-2">High - Low Price</a>
+                                    <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <Link to="/">Popularity</Link>
+                                    </div>
+                                    <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <Link to="/">Low - High Price</Link>
+                                    </div>
+                                    <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <Link to="/">High - Low Price</Link>
+                                    </div>
                                 </div>
                             )}
                         </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-4">
-                        {displayedProducts.map((product, index) => (
-                            <div key={product.id} className="border p-4 rounded-lg">
-                                <img src={product.imgUrl} alt={product.product_name} className="w-full h-40 object-cover mb-2" />
-                                <h3 className="font-bold text-lg">{product.product_name}</h3>
-                                <div className="flex justify-between items-center mt-2">
-                                    <div>
-                                        {product.discount > 0 ? (
-                                            <>
-                                                <span className="text-red-500">{Number(product.price - (product.price * (product.discount / 100))).toLocaleString("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                })}</span>
-                                                <span className="line-through">{Number(product.price).toLocaleString("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                })}</span>
-                                            </>
-                                        ) : (<span>{Number(product.price).toLocaleString("vi-VN", {
-                                            style: "currency",
-                                            currency: "VND",
-                                        })}</span>)
-                                        }
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> {/* Change to 3 columns */}
+                        {products.map((product) => (
+                            <div key={product._id} className="border p-4 rounded-lg flex flex-col items-center"> {/* Center items */}
+                                <Link to="/product" state={{ product: product }} className="w-full">
+                                    <div className="flex justify-center mb-2">
+                                        <img src={product.imgUrl} alt={product.product_name} className="w-44 h-44 object-cover" /> {/* Larger image */}
                                     </div>
-                                    <div className="flex items-center">
-                                        <button onClick={() => handleQuantityChange(index, -1)} className="bg-gray-200 px-2 rounded-l-lg">-</button>
-                                        <input type="text" value={quantities[index]} readOnly className="w-12 text-center border-t border-b" />
-                                        <button onClick={() => handleQuantityChange(index, 1)} className="bg-gray-200 px-2 rounded-r-lg">+</button>
+                                    <div className="h-20 mb-2 text-center w-full"> {/* Center text */}
+                                        <h3 className="font-bold text-base overflow-hidden overflow-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{product.product_name}</h3>
                                     </div>
+                                </Link>
+                                <div className="flex justify-between items-center w-full">
+                                    <span>{Number(product.price).toLocaleString("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                    })}</span>
+                                    <button className="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center">
+                                        Add <FaShoppingCart className="ml-2" />
+                                    </button>
                                 </div>
-                                <button className="bg-green-500 text-white w-full mt-2 py-2 rounded-lg">Add</button>
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-center mt-4">
-                        <button
-                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                            className="bg-gray-200 px-4 py-2 mx-1 rounded-lg"
-                            disabled={currentPage === 1}
-                        >
-                            Previous
-                        </button>
-                        {[...Array(totalPages)].map((_, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setCurrentPage(index + 1)}
-                                className={`bg-gray-200 px-4 py-2 mx-1 rounded-lg ${currentPage === index + 1 ? 'bg-gray-400' : ''}`}
-                            >
-                                {index + 1}
-                            </button>
-                        ))}
-                        <button
-                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                            className="bg-gray-200 px-4 py-2 mx-1 rounded-lg"
-                            disabled={currentPage === totalPages}
-                        >
-                            Next
-                        </button>
-                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
