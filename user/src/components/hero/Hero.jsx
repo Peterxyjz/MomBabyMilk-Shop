@@ -16,7 +16,7 @@ function Hero() {
                         </p>
                         <div className="flex gap-2">
                             <a
-                                href="#"
+                                href="/filter"
                                 className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-md"
                             >
                                 Mua hàng
