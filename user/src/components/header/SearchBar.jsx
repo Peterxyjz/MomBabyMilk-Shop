@@ -47,9 +47,7 @@ const SearchBar = () => {
 
   const getCategory = async () => {
     try {
-      console.log("dang lay categories");
       const res =await fetchCategories();
-      console.log("lay xong cate: ",res.data.result);
       const categories = [
         { category_name: "Tất Cả Sản Phẩm" },
         ...res.data.result,
