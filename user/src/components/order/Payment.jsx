@@ -17,6 +17,7 @@ const Payment = () => {
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
   let ship = 30000;
+ 
   const callTime = 300000;
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);

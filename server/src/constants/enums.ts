@@ -15,9 +15,9 @@ export enum UserAccountStatus {
 }
 export enum OrderStatus {
   Required,
-  Process,
-  Ship,
-  Completed
+  Processing,
+  Completed,
+  Cancel
 }
 export enum ProductStatus {
   Available,

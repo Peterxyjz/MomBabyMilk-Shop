@@ -4,11 +4,13 @@ import { config } from 'dotenv'
 import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from './database.services'
 import WareHouse from '~/model/schemas/WareHouse.schema'
+import { ErrorWithStatus } from '~/model/Errors'
+import HTTP_STATUS from '~/constants/httpStatus'
 config()
 
 class WareHouseSerices {
   async upload(id: string) {
-    const wareHouse = new WareHouse({ product_id: id })
+    const wareHouse = new WareHouse({ _id: new ObjectId(id) })
     return await databaseService.warehouse.insertOne(wareHouse)
   }
   async getAll() {
@@ -16,8 +18,27 @@ class WareHouseSerices {
   }
 
   async getById(id: string) {
-    const filter = { product_id: id }
+    const filter = { _id: new ObjectId(id) }
     return await databaseService.warehouse.findOne(filter)
+  }
+  async decreaseAmount(id: string) {
+    const order_details = await databaseService.orderDetails.find({ order_id: id }).toArray()
+    for (const item of order_details) {
+      const productAmount = (await databaseService.warehouse.findOne({
+        _id: new ObjectId(item.product_id)
+      })) as WareHouse
+      const stock = Number(productAmount.amount) - item.amount
+      if (stock < 0) {
+        throw new ErrorWithStatus({
+          message: 'Sản phẩm không đủ',
+          status: HTTP_STATUS.UNPROCESSABLE_ENTITY
+        })
+      }
+      return await databaseService.warehouse.updateOne(
+        { _id: new ObjectId(item.product_id) },
+        { $set: { amount: stock } }
+      )
+    }
   }
 }
 const wareHouseService = new WareHouseSerices()

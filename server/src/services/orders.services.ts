@@ -6,6 +6,7 @@ import databaseService from './database.services'
 import WareHouse from '~/model/schemas/WareHouse.schema'
 import Order from '~/model/schemas/Order.schema'
 import OrderDetail from '~/model/schemas/OrderDetail.schema'
+import { OrderStatus } from '~/constants/enums'
 config()
 
 class OrderServinces {
@@ -43,6 +44,13 @@ class OrderServinces {
     await databaseService.orderDetails.deleteMany({ order_id: id })
     return await databaseService.orders.deleteOne(filter)
   }
+  async cancel(id: string, status: string, user_id: string) {
+    const filter = { _id: new ObjectId(id) }
+    const update = { $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id } }
+
+    return await databaseService.orders.updateOne(filter, update)
+  }
+  
 }
 const orderServices = new OrderServinces()
 export default orderServices
