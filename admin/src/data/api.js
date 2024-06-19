@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 
-const SCHEMA_HOSTNAME = "http://localhost:4000";
+const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
 
 

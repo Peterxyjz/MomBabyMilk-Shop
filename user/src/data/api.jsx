@@ -1,6 +1,5 @@
 import axios from "axios";
 
-console.log("SCHEMA_HOSTNAME: ", import.meta.env.VITE_SCHEMA_HOSTNAME);
 
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 //reset-pssword:
