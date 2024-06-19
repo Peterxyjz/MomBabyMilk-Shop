@@ -10,13 +10,20 @@ const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const customer_infor = location.state?.customer_infor;
-  const { cartItems, totalPrice, clearCart } = useCartContext();
+  const { cartItems, totalPrice, clearCart, cartAmount } = useCartContext();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
-  const ship = 0;
+  let ship = 0;
+  if( cartAmount<10){
+    ship = 50000
+  }else if(cartAmount>=10 && cartAmount<20){
+    ship = 30000
+  } else (cartAmount>=20){
+    ship = 0
+  }
   const callTime = 300000;
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);
@@ -42,6 +49,7 @@ const Payment = () => {
       user: user,
       total_price: totalPrice + ship - 0,
       payment_method: paymentMethod,
+      ship_fee: ship,
     };
     await  fetchOrder(order_infor)
       .then((res) => {
@@ -416,7 +424,7 @@ const Payment = () => {
           </form>
         </section>
       </>
-    </>
+    </10>
   );
 };
 

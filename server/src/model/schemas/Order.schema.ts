@@ -5,7 +5,7 @@ interface OrderType {
   member_id?: string
   staff_id?: string
   voucher_code?: string
-  ship_id: string
+  ship_fee: number
   full_name: string
   address: string
   phone: string
@@ -22,7 +22,7 @@ export default class Order {
   member_id?: string
   staff_id?: string
   voucher_code?: string
-  ship_id: string
+  ship_fee: number
   full_name: string
   address: string
   phone: string
@@ -38,7 +38,7 @@ export default class Order {
     this.member_id = order.member_id || ''
     this.staff_id = order.staff_id || ''
     this.voucher_code = order.voucher_code || ''
-    this.ship_id = order.ship_id
+    this.ship_fee = order.ship_fee
     this.full_name = order.full_name
     this.address = order.address
     this.phone = order.phone
