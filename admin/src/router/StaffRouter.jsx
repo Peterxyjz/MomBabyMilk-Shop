@@ -41,6 +41,7 @@ const StaffRouter = () => {
             <Route path="/cancel-order" element={(<CancelOrder />)} />
             <Route path="/complete-order" element={(<CompleteOrder />)} />
             <Route path="/order-detail" element={(<OrderDetail />)} />
+            <Route path="/orders" element={(<Orders />)} />
         </Routes>
     )
 }

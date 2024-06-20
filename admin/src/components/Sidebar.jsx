@@ -6,11 +6,14 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { adminlinks, stafflinks } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import logoImg from '../assets/images/logo/Logo.png';
+import { fetchOrder } from '../data/api';
+import { Badge } from 'antd';
 
 
 const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
   const [activeSubmenu, setActiveSubmenu] = useState(null);
+  const [orders, setOrders] = useState([]);
 
 
   const handleCloseSideBar = () => {
@@ -43,6 +46,22 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const orderData = await fetchOrder();
+        setOrders(orderData);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    getOrders();
+  }, []);
+
+  const awaitOrderCount = orders.filter(order => order.order.status === 0).length;
+
 
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white  text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
@@ -124,6 +143,7 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                               })}
                               className={({ isActive }) => (isActive ? activeLink : normalLink)}
                             >
+
                               {subLink.icon}
                               <span className="capitalize">{subLink.label}</span>
                             </NavLink>
@@ -152,10 +172,12 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                         })}
                         className={({ isActive }) => (isActive ? activeLink : normalLink)}
                       >
-                        {/* <div className="flex items-center"> */}
-                        {link.icon}
+                        {(link.name === 'Quản lý đơn hàng' && awaitOrderCount > 0)?(
+                          <Badge dot>
+                            {link.icon}
+                          </Badge>
+                        ): link.icon}
                         <span className="capitalize">{link.name}</span>
-                        {/* </div> */}
                         {link.type === 'sub' && (
                           activeSubmenu === link.name ? <MdKeyboardArrowDown className="ml-auto" style={{ fontSize: '24px' }} /> :
                             <MdKeyboardArrowRight className="ml-auto" style={{ fontSize: '24px' }} />
@@ -173,8 +195,17 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                               })}
                               className={({ isActive }) => (isActive ? activeLink : normalLink)}
                             >
-                              {subLink.icon}
-                              <span className="capitalize">{subLink.label}</span>
+                              {subLink.name === 'await-order' ? (
+                                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center'  }}>
+                                  <span className="capitalize" >{subLink.label}</span>
+                                  <Badge style={{ marginLeft: '30px' }} count={awaitOrderCount} />
+                                </div>
+                              ) : (
+                                <>
+                                  {subLink.icon}
+                                  <span className="capitalize">{subLink.label}</span>
+                                </>
+                              )}
                             </NavLink>
                           ))}
                         </div>
