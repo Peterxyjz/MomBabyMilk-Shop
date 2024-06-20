@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { fetchProducts } from "../../data/api";
 import { Button } from "flowbite-react";
 import axios from "axios";
+import { Card, Col, Divider, Row, Typography, notification } from "antd";
 
 const AwaitOrderDetail = () => {
   const location = useLocation();
@@ -52,28 +53,60 @@ const AwaitOrderDetail = () => {
   if (loading) return <div className="w-full h-full mx-6 py-6">Loading...</div>;
 
   const handleCancelOrder = async () => {
-    const order_id = order.order._id
-    await axios.post(`http://localhost:4000/orders/status-order`, {
-      order_id: order_id,
-      status: "Cancel"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token.access_token}`
-      }
-    }).then((res) => {
-      alert("Đơn hàng đã được huỷ!")
-      console.log(res.data);
-      navigate("/await-order")
-      window.location.reload()
-    }).catch((error) => {
+    const order_id = order.order._id;
+    try {
+      const res = await axios.post(`http://localhost:4000/orders/status-order`, {
+        order_id: order_id,
+        status: "Cancel"
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token.access_token}`
+        }
+      });
+
+      // Lưu trạng thái vào sessionStorage
+      sessionStorage.setItem('orderCancelled', 'true');
+
+      // Tải lại trang
+      window.location.reload();
+    } catch (error) {
       console.log(error.response);
-      alert("Đơn hàng không thể huỷ!")
-      console.log(error)
-    })
+      notification.error({
+        message: 'Lỗi',
+        description: 'Đơn hàng không thể huỷ!',
+        placement: 'top',
+      });
+      console.log(error);
+    }
+  };
+
+  if (sessionStorage.getItem('orderCancelled') === 'true') {
+    // Hiển thị thông báo
+    notification.success({
+      message: 'Thành công',
+      description: 'Đơn hàng đã được huỷ!',
+      placement: 'top',
+    });
+
+    // Xóa trạng thái khỏi sessionStorage
+    sessionStorage.removeItem('orderCancelled');
+    // Điều hướng đến trang khác nếu cần thiết
+    navigate("/await-order");
+  }
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   };
 
   const handleConfirmOrder = async () => {
-    const order_id = order.order._id
+    const order_id = order.order._id;
     await axios.post(`http://localhost:4000/orders/status-order`, {
       order_id: order_id,
       status: "Processing"
@@ -82,97 +115,176 @@ const AwaitOrderDetail = () => {
         'Authorization': `Bearer ${token.access_token}`
       }
     }).then((res) => {
-      alert("Đơn hàng đã được xác nhận!")
+      // Lưu trạng thái vào sessionStorage
+      sessionStorage.setItem('orderConfirmed', 'true');
       console.log(res.data);
-      navigate("/await-order")
-      window.location.reload()
+      // Tải lại trang
+      window.location.reload();
     }).catch((error) => {
       console.log(error.response);
-      alert("Đơn hàng không thể huỷ!")
-      console.log(error)
-    })
+      notification.error({
+        message: 'Lỗi',
+        description: 'Đơn hàng không thể xác nhận!',
+        placement: 'top',
+      });
+      console.log(error);
+    });
   };
 
-  return (
-    <div className="w-full h-full mx-10 my-4">
-      <h1 className="text-3xl font-bold">
-        Chi tiết đơn hàng: #{order.order._id}
-      </h1>
+  // Kiểm tra trạng thái sau khi trang tải lại
+  if (sessionStorage.getItem('orderConfirmed') === 'true') {
+    // Hiển thị thông báo
+    notification.success({
+      message: 'Thành công',
+      description: 'Đơn hàng đã được xác nhận!',
+      placement: 'top',
+    });
 
-      <div className="w-full flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/2">
-          <h3 className="text-2xl">Sản phẩm</h3>
-          {orderDetails.map((item) => (
-            <div
-              key={item.product_id}
-              className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6"
+    // Xóa trạng thái khỏi sessionStorage
+    sessionStorage.removeItem('orderConfirmed');
+    // Điều hướng đến trang khác nếu cần thiết
+    navigate("/await-order");
+  }
+
+  const { Text } = Typography;
+
+
+  return (
+
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Row justify="space-between" style={{ flexGrow: 1 }}>
+        <Col span={15}>
+          <div style={{ display: 'flex', justifyContent: 'center', height: '90vh' }}>
+            <Card
+              title={<h1 className="text-2xl font-bold">Chi tiết đơn hàng: #{order.order._id}</h1>}
+              style={{
+                width: '90%',
+                marginTop: '50px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
             >
-              <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                <img
-                  className="h-20 w-20 dark:hidden"
-                  src={item.product.imgUrl}
-                  alt={item.product.product_name}
-                />
-                <img
-                  className="hidden h-20 w-20 dark:block"
-                  src={item.product.imgUrl}
-                  alt={item.product.product_name}
-                />
-                <div className="flex items-center justify-between md:order-3 md:justify-end">
-                  <div className="text-end md:order-4 md:w-32">
-                    <p className="text-base font-bold text-gray-900 dark:text-white">
-                      {Number(item.price).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </p>
-                  </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Button outline onClick={() => navigate(-1)} style={{ fontSize: '15px', marginBottom: '20px', }}>
+                  Về trang danh sách
+                </Button>
+              </div>
+              <div style={{ overflowY: 'auto', maxHeight: '60vh', flexGrow: 1, justifyContent: 'space-between', }}>
+                {orderDetails.map((item) => (
+                  <Card
+                    type="inner"
+                    key={item.product_id}
+                    className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white shadow-sm"
+                    style={{ marginBottom: '10px', padding: '10px' }}
+                  >
+                    <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
+                      <img
+                        className="h-20 w-20 dark:hidden"
+                        src={item.product.imgUrl}
+                        alt={item.product.product_name}
+                      />
+                      <img
+                        className="hidden h-20 w-20 dark:block"
+                        src={item.product.imgUrl}
+                        alt={item.product.product_name}
+                      />
+                      <div className="flex items-center justify-between md:order-3 md:justify-end">
+                        <div className="text-end md:order-4 md:w-32">
+                          <p className="text-base font-bold text-gray-900 dark:text-white">
+                            {Number(item.price).toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
+                        <p className="text-base font-medium text-gray-900 hover:underline dark:text-white">
+                          {item.product.product_name}
+                        </p>
+                        <div className="flex items-start gap-4">
+                          x{item.amount} sản phẩm
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </Card>
+                ))}
+
+              </div>
+
+            </Card>
+          </div>
+        </Col>
+        <Col span={9}>
+          <div style={{ display: 'flex', justifyContent: 'center', height: '75vh' }}>
+            <Card title={<h1 className="text-2xl font-bold">Thông tin đơn hàng:</h1>}
+              style={{ width: '90%', marginTop: '50px' }}>
+              <div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Ngày Đặt:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{formatDate(order.order.required_date)}</Text>
                 </div>
-                <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                  <p className="text-base font-medium text-gray-900 hover:underline dark:text-white">
-                    {item.product.product_name}
-                  </p>
-                  <div className="flex items-center gap-4">
-                    x{item.amount} sản phẩm
-                  </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between'}}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Tên khách hàng:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.full_name}</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Email:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.email}</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Số Điện Thoại:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.phone}</Text>
+                </div>
+                <div style={{ marginBottom: '10px'}}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Địa chỉ:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block', textAlign: 'justify' }}>{order.order.address}</Text>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+              <Divider />
+              <div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Giá gốc:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}> {Number(order.order.total_price - order.order.ship_fee).toLocaleString("vi-VN", {style: "currency",currency: "VND",})}</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Giảm giá:</Text>
+                  {/* <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.voucher_code}</Text> */}
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>0đ</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Phí vận chuyển:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{Number(order.order.ship_fee).toLocaleString("vi-VN", {style: "currency",currency: "VND",})}</Text>
+                </div>
+              </div>
+              <Divider />
+              <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                <Text strong style={{ fontSize: '17px', display: 'inline-block', marginRight: '10px' }}>Tổng giá trị:</Text>
+                <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{Number(order.order.total_price).toLocaleString("vi-VN", {style: "currency",currency: "VND",})}</Text>
+              </div>
 
-        <div className="w-full md:w-1/2 border-b border-[rgba(0,0,0,0.2)] sm:mt-4">
-          <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Thông Tin Đơn Hàng
-          </h4>
-          <div>
-            <p className="text-base font-medium text-gray-900 dark:text-white">
-              Họ và Tên: {order.order.full_name}
-            </p>
-            <div className="text-base font-medium text-gray-900 dark:text-white flex items-center justify-between">
-              <p>Địa chỉ email: {order.order.email}</p>
-              <p>Số Điện Thoại: {order.order.phone} </p>
-            </div>
-            <div className="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-              <p>Địa Chỉ: {order.order.address}</p>
-            </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: '5vh' }}>
+                <Button type="default" onClick={handleCancelOrder} style={{
+                  backgroundColor: '#ff4d4f',
+                  fontSize: '15px',
+                }}>
+                  Hủy đơn hàng
+                </Button>
+                <Button type="default" onClick={handleConfirmOrder} style={{
+                  backgroundColor: '#55B6C3',
+                  fontSize: '15px',
+                }}>
+                  Xác nhận đơn hàng
+                </Button>
+
+              </div>
+            </Card>
           </div>
-          <button
-            type="button"
-            data-modal-target="billingInformationModal"
-            data-modal-toggle="billingInformationModal"
-            className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
-          >
-            Chỉnh Sửa
-          </button>
-          <hr className="my-4" />
-          <div className="w-full flex items-center justify-between">
-            <Button onClick={handleCancelOrder}>Hủy Đơn Hàng</Button>
-            <Button onClick={handleConfirmOrder}>Xác Nhận Đơn Hàng</Button>
-          </div>
-        </div>
-      </div>
-    </div>
+        </Col >
+      </Row >
+    </div >
   );
 };
 

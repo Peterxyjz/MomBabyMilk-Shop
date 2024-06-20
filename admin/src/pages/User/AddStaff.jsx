@@ -4,9 +4,7 @@ import { Button, Datepicker, Label, Select, TextInput, Textarea } from 'flowbite
 import { InputMask } from 'primereact/inputmask';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
-import Province from '../../components/Address/Province';
-import District from '../../components/Address/District';
-import Ward from '../../components/Address/Ward';
+
 
 const AddStaff = () => {
   const [selectedProvince, setSelectedProvince] = useState(null);

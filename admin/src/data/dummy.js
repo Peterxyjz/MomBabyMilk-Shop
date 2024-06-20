@@ -533,6 +533,7 @@ export const stafflinks = [
         type: 'sub',
         // path: 'orders',
         subLinks: [
+          { name: 'orders', path: '', label: 'Tất cả đơn hàng' },
           { name: 'await-order', path: '', label: 'Đơn chờ xác nhận' },
           { name: 'approved-order', path: '', label: 'Đơn đã xác nhận' },
           { name: 'cancel-order', path: '', label: 'Đơn đã hủy' },
