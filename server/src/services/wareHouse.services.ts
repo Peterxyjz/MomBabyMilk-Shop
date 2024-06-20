@@ -21,24 +21,32 @@ class WareHouseSerices {
     const filter = { _id: new ObjectId(id) }
     return await databaseService.warehouse.findOne(filter)
   }
-  async decreaseAmount(id: string) {
-    const order_details = await databaseService.orderDetails.find({ order_id: id }).toArray()
-    for (const item of order_details) {
-      const productAmount = (await databaseService.warehouse.findOne({
-        _id: new ObjectId(item.product_id)
-      })) as WareHouse
-      const stock = Number(productAmount.amount) - item.amount
-      if (stock < 0) {
-        throw new ErrorWithStatus({
-          message: 'Sản phẩm không đủ',
-          status: HTTP_STATUS.UNPROCESSABLE_ENTITY
-        })
-      }
-      return await databaseService.warehouse.updateOne(
-        { _id: new ObjectId(item.product_id) },
-        { $set: { amount: stock } }
-      )
+  async decreaseAmount(item: any) {
+    const productAmount = (await databaseService.warehouse.findOne({
+      _id: new ObjectId(item.product_id)
+    })) as WareHouse
+    const stock = Number(productAmount.amount) - item.amount
+    if (stock < 0) {
+      throw new ErrorWithStatus({
+        message: 'Sản phẩm không đủ',
+        status: HTTP_STATUS.UNPROCESSABLE_ENTITY
+      })
     }
+    return await databaseService.warehouse.updateOne(
+      { _id: new ObjectId(item.product_id) },
+      { $set: { amount: stock } }
+    )
+  }
+
+  async increaseAmount(item: any) {
+    const productAmount = (await databaseService.warehouse.findOne({
+      _id: new ObjectId(item.product_id)
+    })) as WareHouse
+    const stock = Number(productAmount.amount) + item.amount
+    return await databaseService.warehouse.updateOne(
+      { _id: new ObjectId(item.product_id) },
+      { $set: { amount: stock } }
+    )
   }
 }
 const wareHouseService = new WareHouseSerices()

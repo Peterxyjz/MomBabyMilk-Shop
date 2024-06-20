@@ -23,3 +23,7 @@ export enum ProductStatus {
   Available,
   Unavailable
 }
+export enum RevenueStatus {
+  InputBill,
+  Order
+}

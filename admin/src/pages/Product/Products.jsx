@@ -9,8 +9,6 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(7);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [totalRevenue, setTotalRevenue] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,18 +17,6 @@ const Product = () => {
         const productData = await fetchProducts();
         setProducts(productData);
         setLoading(false);
-
-        const totalAmount = productData.reduce(
-          (sum, product) => sum + product.amount,
-          0
-        );
-        setTotalAmount(totalAmount);
-
-        const totalRevenue = productData.reduce(
-          (sum, product) => sum + product.sales * product.price,
-          0
-        );
-        setTotalRevenue(totalRevenue);
       } catch (error) {
         console.error("Error fetching products:", error);
         setLoading(false);
@@ -209,7 +195,7 @@ const Product = () => {
             <div>
               <h5 className="text-sm sm:text-base flex justify-between">
                 <span className="text-gray-500">Tổng sản phẩm: </span>
-                <span className="dark:text-white">{totalAmount}</span>
+                <span className="dark:text-white">{products.length}</span>
               </h5>
               <h5 className="text-sm sm:text-base flex justify-between">
                 <span className="text-gray-500">Tổng doanh thu: </span>
@@ -217,7 +203,12 @@ const Product = () => {
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(totalRevenue)}
+                  }).format(
+                    products.reduce(
+                      (sum, product) => sum + product.sales * product.price,
+                      0
+                    )
+                  )}
                 </span>
               </h5>
             </div>

@@ -71,9 +71,6 @@ export const registerController = async (
     subject: 'Email Verification Mail',
     html: emailHtml
   })
-  console.log(result)
-  console.log(verificationLink)
-
   return res.status(200).json({
     message: USERS_MESSAGES.REGISTER_SUCCESS,
     result: { access_token: result.access_token, refresh_token: result.refresh_token },
