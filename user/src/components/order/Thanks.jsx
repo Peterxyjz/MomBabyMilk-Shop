@@ -7,7 +7,6 @@ import Breadcrumbs from "../elements/Breadcrumb";
 const Thanks = () => {
   const location = useLocation();
   const isCheck = location.state?.isCheck || false;
-  // const order_infor = location.state?.order_infor || null;
   const order_id = location.state?.order_id || null;
 
   return (

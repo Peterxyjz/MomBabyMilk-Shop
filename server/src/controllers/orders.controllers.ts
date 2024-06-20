@@ -48,7 +48,6 @@ export const uploadController = async (req: Request, res: Response) => {
     required_date: new Date(),
     total_price: req.body.total_price
   })
-  console.log(orderDetails, user, customer_infor)
 
   const order = await orderServices.upload(order_infor, orderDetails)
 
