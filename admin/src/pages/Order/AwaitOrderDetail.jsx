@@ -12,7 +12,7 @@ const AwaitOrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")) || null;
+  // const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = JSON.parse(localStorage.getItem("result"));
 
 
@@ -55,7 +55,7 @@ const AwaitOrderDetail = () => {
   const handleCancelOrder = async () => {
     const order_id = order.order._id;
     try {
-      const res = await axios.post(`http://localhost:4000/orders/status-order`, {
+      await axios.post(`http://localhost:4000/orders/status-order`, {
         order_id: order_id,
         status: "Cancel"
       }, {

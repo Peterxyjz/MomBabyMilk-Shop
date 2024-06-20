@@ -139,11 +139,12 @@ const Home = () => {
     );
   const newProducts = products.slice(-10).reverse();
 
+  const bestSellers = products.slice().sort((a, b) => a.sales - b.sales).slice(0, 10);
   return (
     <div className="min-h-screen">
       <Hero />
       <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
-      <ProductCard products={products} headline={"Sản phẩm bán chạy"} />
+      <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} />
       <SecondHero />
       <ProductCard products={products} headline={"Sữa dành cho mẹ bầu"} />
       <ProductCard products={products} headline={"Sữa dành cho trẻ sơ sinh"} />

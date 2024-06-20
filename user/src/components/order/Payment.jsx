@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import axios from "axios";
 import { checkQRPaymet, deleteOrder, fetchOrder } from "../../data/api.jsx";
 const Payment = () => {
-  const token = JSON.parse(localStorage.getItem("result"));
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
   const navigate = useNavigate();
   const customer_infor = location.state?.customer_infor;
-  const { cartItems, totalPrice, clearCart, cartAmount } = useCartContext();
+  const { cartItems, totalPrice, clearCart } = useCartContext();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");

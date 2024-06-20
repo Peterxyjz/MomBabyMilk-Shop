@@ -12,6 +12,7 @@ import wareHouseService from '~/services/wareHouse.services'
 import Brand from '~/model/schemas/Brand.schema'
 import Category from '~/model/schemas/Category.schema'
 import WareHouse from '~/model/schemas/WareHouse.schema'
+import orderServices from '~/services/orders.services'
 export const uploadController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload //lấy user_id từ decoded_authorization
   const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
@@ -53,27 +54,28 @@ export const getAllController = async (req: Request, res: Response) => {
         ? Math.min(productFeedbacks.reduce((sum, feedback) => sum + feedback.rating, 0) / productFeedbacks.length, 5)
         : 0
 
+    const sales = await orderServices.getSalesByProductId(element._id?.toString())
     result.push({
       ...element,
       brand_name: brand.brand_name,
       category_name: category.category_name,
       amount: warehouse.amount,
       reviewer: productFeedbacks.length,
-      rating: rating
+      rating: rating,
+      sales: sales
     })
   }
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
-    result: result,
-  
+    result: result
   })
 }
 export const getProductPageController = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1
   const limit = parseInt(req.query.limit as string) || 9
   const skip = (page - 1) * limit
-  
+
   console.log(page, limit, skip)
 
   const products = await productsService.getProductSize(skip, limit)

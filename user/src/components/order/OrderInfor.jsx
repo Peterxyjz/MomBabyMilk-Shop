@@ -6,7 +6,6 @@ const OrderInfor = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
-
     email: "",
     phone: "",
     address: "",
