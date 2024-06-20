@@ -2,7 +2,6 @@ import { Router } from 'express'
 import {
   getAllController,
   getController,
-  getProductPageController,
   notActiveController,
   updateController,
   uploadController
@@ -27,7 +26,6 @@ path:/all-products
 method: GET
 */
 productsRouter.get('/all-products', wrapAsync(getAllController))
-productsRouter.get('/all-products-page', wrapAsync(getProductPageController))
 /*
 des: cung cấp id sản phẩm
 path: /product/:id

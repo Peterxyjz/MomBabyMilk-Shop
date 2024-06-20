@@ -12,7 +12,6 @@ const AwaitOrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  // const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = JSON.parse(localStorage.getItem("result"));
 
 

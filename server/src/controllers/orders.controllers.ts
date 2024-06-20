@@ -27,14 +27,16 @@ export const getAllController = async (req: Request, res: Response) => {
 
 export const deleteController = async (req: Request, res: Response) => {
   const order_id = req.body.order_id
-
+  const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
+  order_details.forEach(async (item) => {
+    await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
+  })
   const order = await orderServices.delete(order_id)
 }
 export const uploadController = async (req: Request, res: Response) => {
   const orderDetails = req.body.cart_list
   const user = req.body.user
   const customer_infor = req.body.customer_infor
-
   const order_infor = new Order({
     _id: new ObjectId(),
     member_id: user ? user._id : '',
@@ -73,11 +75,13 @@ export const updateStatusController = async (req: Request, res: Response) => {
     })
   }
   const order_id = req.body.order_id
-  if (status === 'Processing') {
-    await wareHouseService.decreaseAmount(order_id)
+  if (OrderStatus[status as keyof typeof OrderStatus] === OrderStatus.Cancel) {
+    const result = await orderServices.cancel(order_id, status, user_id)
+    const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
+    order_details.forEach(async (item) => {
+      await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
+    })
   }
-
-  const result = await orderServices.cancel(order_id, status, user_id)
   return res.status(200).json({
     message: 'success',
     result

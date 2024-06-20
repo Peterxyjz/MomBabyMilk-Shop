@@ -7,6 +7,7 @@ import WareHouse from '~/model/schemas/WareHouse.schema'
 import Order from '~/model/schemas/Order.schema'
 import OrderDetail from '~/model/schemas/OrderDetail.schema'
 import { OrderStatus } from '~/constants/enums'
+import wareHouseService from './wareHouse.services'
 config()
 
 class OrderServinces {
@@ -16,7 +17,7 @@ class OrderServinces {
       ...order_infor
     })
 
-    orderDetails.forEach((item: any) => {
+    orderDetails.forEach(async (item: any) => {
       const order_detail = new OrderDetail({
         _id: new ObjectId(),
         order_id: order_infor._id?.toString() || '',
@@ -25,6 +26,7 @@ class OrderServinces {
         price: item.price
       })
 
+      await wareHouseService.decreaseAmount({ product_id: item._id, amount: item.quantity })
       databaseService.orderDetails.insertOne(order_detail)
     })
 
@@ -58,10 +60,27 @@ class OrderServinces {
     const orderDetails = await databaseService.orderDetails.find(filter).toArray()
 
     for (const element of orderDetails) {
-      sales += element.amount
+      const order = await databaseService.orders.findOne({ _id: new ObjectId(element.order_id) })
+      if (order?.status !== OrderStatus.Cancel) sales += element.amount
     }
 
     return sales
+  }
+  async updateOrderStatus() {
+    const twelveHoursAgo = new Date()
+    twelveHoursAgo.setDate(twelveHoursAgo.getDate() - 3) // Lấy thời gian 3 Ngày trước
+
+    const result = await databaseService.orders.updateMany(
+      {
+        status: OrderStatus.Processing, // Tìm các đơn hàng có trạng thái Processing
+        required_date: { $lte: twelveHoursAgo } // Và có shipped_date nhỏ hơn hoặc bằng 3 ngày trước
+      },
+      {
+        $set: { status: OrderStatus.Completed } // Cập nhật trạng thái thành Completed
+      }
+    )
+
+    return result
   }
 }
 const orderServices = new OrderServinces()

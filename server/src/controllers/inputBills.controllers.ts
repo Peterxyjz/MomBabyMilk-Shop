@@ -9,21 +9,6 @@ import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 
 export const uploadController = async (req: Request, res: Response) => {
-  // const { user_id } = req.decoded_authorization as TokenPayload; // Lấy user_id từ decoded_authorization
-  // const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) });
-  // if (!user) {
-  //   return res.status(400).json({
-  //     message: USERS_MESSAGES.USER_NOT_FOUND,
-  //   });
-  // }
-  // const role_name = await usersService.checkRole(user);
-
-  // if (role_name !== 'Staff') {
-  //   return res.status(400).json({
-  //     message: 'Bạn không có quyền thêm sản phẩm',
-  //   });
-  // }
-
   const inputBill = new InputBill()
   const inputBillDetailList = req.body.inputBillDetailList
 
@@ -44,10 +29,10 @@ export const uploadController = async (req: Request, res: Response) => {
 
     for (const detail of inputBillDetails) {
       const { product_id, amount } = detail
-      const existingProduct = await databaseService.warehouse.findOne({_id: new ObjectId(product_id)})
+      const existingProduct = await databaseService.warehouse.findOne({ _id: new ObjectId(product_id) })
 
       if (existingProduct) {
-        await databaseService.warehouse.updateOne({_id: new ObjectId(product_id) }, { $inc: { amount: amount } })
+        await databaseService.warehouse.updateOne({ _id: new ObjectId(product_id) }, { $inc: { amount: amount } })
       } else {
         const newWarehouseEntry = new WareHouse({
           _id: new ObjectId(product_id),

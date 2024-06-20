@@ -5,15 +5,13 @@ import {
   Label,
   Select,
   TextInput,
-  Alert,
   Textarea,
 } from "flowbite-react";
 import { imageDb } from "../../data/firebase.config";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
-import axios from "axios";
 import {
-  fetchBrands,
+  fetchBrandStaff,
   fetchCategories,
   fetchUploadProduct,
 } from "../../data/api";
@@ -45,7 +43,7 @@ const AddProduct = () => {
       .catch((error) => console.error("Error fetching categories:", error));
 
     // Gọi API để lấy dữ liệu brand
-    fetchBrands()
+    fetchBrandStaff()
       .then((response) => response.json())
       .then((data) => {
         if (data && data.result) {
