@@ -13,6 +13,7 @@ import feedbacksRouter from './routes/feedbacks.routes'
 import ordersRouter from './routes/orders.routes'
 import revenueRouter from './routes/revenue.routes'
 import './utils/automatic'
+import voucherRouter from './routes/vouchers.routes'
 //https://localhost:4000/
 databaseService.connect()
 app.use(cors({ origin: true }))
@@ -30,6 +31,7 @@ app.use('/inputBills', inputBillsRouter)
 app.use('/feedbacks', feedbacksRouter)
 app.use('/orders', ordersRouter)
 app.use('/revenue', revenueRouter)
+app.use('/vouchers', voucherRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Project MomBabyMilk này đang chạy trên post ${port}`)

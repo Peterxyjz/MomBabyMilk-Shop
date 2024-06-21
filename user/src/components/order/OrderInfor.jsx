@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getProvinces, getDistricts, getWards } from "../../data/api.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
-const OrderInfor = () => {
+const OrderInfor = ({ discount, ship, voucherCode }) => {
+  console.log(discount, ship);
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
@@ -111,11 +112,11 @@ const OrderInfor = () => {
         selectedProvince.name,
     };
 
-    navigate("/payment", { state: { customer_infor } });
+    navigate("/payment", { state: { customer_infor, discount, ship, voucherCode } });
   };
   return (
     <>
-<ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
+      <ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
         <li className="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280] dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
           <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
             <svg
@@ -173,7 +174,7 @@ const OrderInfor = () => {
             >
               <path
                 stroke="currentColor"
-strokeLinecap="round"
+                strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
                 d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
@@ -243,7 +244,7 @@ strokeLinecap="round"
                         {" "}
                         Địa Chỉ Email{" "}
                       </label>
-<input
+                      <input
                         type="email"
                         id="email"
                         name="email"
@@ -291,7 +292,7 @@ strokeLinecap="round"
                           </div>
                           <select
                             id="select-city-input-3"
-className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                             onChange={handleDistrictSelect}
                             required
                           >
@@ -343,7 +344,7 @@ className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-
                         name="address"
                         value={formValues.address}
                         onChange={handleChange}
-className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                         placeholder="Địa chỉ nhà..."
                         required
                       />
