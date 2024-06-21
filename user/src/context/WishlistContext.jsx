@@ -16,6 +16,7 @@ export const WishlistContextProvider = ({ children }) => {
     localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
   }, [wishlistItems]);
 
+  const wishlistAmount = wishlistItems.length;
   const addWishlistItem = (product) => {
     const currentWishlist = wishlistItems.find(item => item._id === product._id);
     if (!currentWishlist) {
@@ -35,6 +36,7 @@ export const WishlistContextProvider = ({ children }) => {
         wishlistItems,
         addWishlistItem,
         removeWishlistItem,
+        wishlistAmount,
       }}
     >
       {children}
