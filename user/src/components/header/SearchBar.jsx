@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchCategories, fetchProducts } from "../../data/api.jsx";
 const SearchBar = () => {
@@ -47,7 +46,7 @@ const SearchBar = () => {
 
   const getCategory = async () => {
     try {
-      const res =await fetchCategories();
+      const res = await fetchCategories();
       const categories = [
         { category_name: "Tất Cả Sản Phẩm" },
         ...res.data.result,
