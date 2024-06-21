@@ -32,7 +32,7 @@ const NavBar = () => {
             <ul className="ml-4 xl:w-48 flex items-center justify-end">
               {/* wishlist */}
               <li className="ml-2 lg:ml-4 relative inline-block">
-                <a className="" href="">
+                <a className="" href="/wishlist">
                   <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
                     3
                   </div>

@@ -2,7 +2,6 @@ import React from "react";
 import { Dropdown } from "flowbite-react";
 import { HiCog, HiViewGrid, HiLogout } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
-import axios from 'axios'
 import { fetchLogout } from "../../data/api.jsx";
 const UserBtn = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
