@@ -15,6 +15,7 @@ import {
   fetchCategories,
   fetchUploadProduct,
 } from "../../data/api";
+import { notification } from "antd";
 const AddProduct = () => {
   const [product_name, setProduct_name] = useState("");
   const [age, setAge] = useState("");
@@ -139,7 +140,7 @@ const AddProduct = () => {
         await uploadImage(product);
       })
       .then((data) => {
-        alert("Tạo sản phẩm thành công");
+        alert("Thêm sản phẩm thành công");
         form.reset();
       })
       .catch((error) => {

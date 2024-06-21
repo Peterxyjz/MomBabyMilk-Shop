@@ -62,6 +62,7 @@ const AddBill = () => {
       title: 'Số Lượng',
       dataIndex: 'amount',
       key: 'amount',
+      sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: 'Lượt Bán',
@@ -76,6 +77,7 @@ const AddBill = () => {
         style: "currency",
         currency: "VND",
       }),
+      sorter: (a, b) => a.price - b.price,
     },
   ]
 
