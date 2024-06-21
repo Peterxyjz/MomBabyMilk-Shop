@@ -137,7 +137,7 @@ export const fetchForgotPassword = async ({ email }) => {
 //logout
 export const fetchLogout = async (result) => {
   await axios.post(
-    "${SCHEMA_HOSTNAME}/users/logout",
+    `${SCHEMA_HOSTNAME}/users/logout`,
     {
       refresh_token: result.refresh_token,
     },
