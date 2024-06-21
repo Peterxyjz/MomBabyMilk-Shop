@@ -1,8 +1,10 @@
 import React from 'react'
-
+import CartWL from './CardWL'
 const ShoppingWishlist = () => {
   return (
-    <div>ShoppingWishlist</div>
+    <div className='w-full min-h-screen'>
+        <CartWL />
+    </div>
   )
 }
 
