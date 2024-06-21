@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaUser, FaHistory, FaCreditCard, FaLock, FaCommentDots, FaHeart, FaShareAlt } from 'react-icons/fa';
 import Breadcrumbs from '../../components/elements/Breadcrumb';
 
 const EditProfile = () => {
@@ -54,31 +55,26 @@ const EditProfile = () => {
             <Breadcrumbs headline={"Thay đổi thông tin"} />
             <div className="flex flex-col md:flex-row p-4 md:p-8 bg-white rounded-lg shadow-md mb-12">
                 {/* Sidebar */}
-                <div className="md:w-1/4 flex flex-col p-4 border-r border-gray-200">
-                    <div className="flex flex-col items-center mb-6">
-                        <img
-                            className="w-24 h-24 rounded-full object-cover"
-                            src={selectedImage || "https://via.placeholder.com/100"}
-                            alt="Profile"
-                        />
-                        <label className="mt-2 px-4 py-1 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 cursor-pointer">
-                            Chọn Ảnh
-                            <input
-                                type="file"
-                                className="hidden"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                            />
-                        </label>
-                        <p className="mt-2 text-xs text-gray-500">Dung lượng file tối đa 1 MB Định dạng: .JPEG, .PNG</p>
-                    </div>
-                    <nav className="flex flex-col space-y-4">
-                        <a href="#" className="text-gray-600 hover:text-blue-500">Tài Khoản Của Tôi</a>
-                        <a href="#" className="text-blue-500 font-medium">Hồ Sơ</a>
-                        <a href="#" className="text-gray-600 hover:text-blue-500">Ngân Hàng</a>
-                        <a href="#" className="text-gray-600 hover:text-blue-500">Địa Chỉ</a>
-                        <a href="#" className="text-gray-600 hover:text-blue-500">Đổi Mật Khẩu</a>
-                        <a href="#" className="text-gray-600 hover:text-blue-500">Cài Đặt Thông Báo</a>
+                <div className="md:w-1/4 flex flex-col p-4 border-r border-gray-200" style={{ minHeight: '100vh' }}>
+                    <nav className="flex flex-col divide-y divide-gray-200">
+                        <a href="#" className="flex items-center py-3 text-blue-500 font-medium">
+                            <FaUser className="mr-2" /> Hồ Sơ
+                        </a>
+                        <a href="#" className="flex items-center py-3 text-gray-600 hover:text-blue-500">
+                            <FaLock className="mr-2" /> Đổi Mật Khẩu
+                        </a>
+                        <a href="#" className="flex items-center py-3 text-gray-600 hover:text-blue-500">
+                            <FaHistory className="mr-2" /> Lịch Sử Đơn Hàng
+                        </a>
+                        <a href="#" className="flex items-center py-3 text-gray-600 hover:text-blue-500">
+                            <FaCommentDots className="mr-2" /> Bình Luận Của Tôi
+                        </a>
+                        <a href="#" className="flex items-center py-3 text-gray-600 hover:text-blue-500">
+                            <FaHeart className="mr-2" /> Sản Phẩm Yêu Thích
+                        </a>
+                        <a href="#" className="flex items-center py-3 text-gray-600 hover:text-blue-500">
+                            <FaShareAlt className="mr-2" /> Tích điểm
+                        </a>
                     </nav>
                 </div>
 
