@@ -91,18 +91,18 @@ const Filter = () => {
                     <div className="flex justify-between mb-4">
                         <div className="relative">
                             <button onClick={() => setSortOpen(!sortOpen)} className="bg-gray-200 px-4 py-2 rounded-lg">
-                                Sort By: Most Popular
+                                Sắp xếp theo:
                             </button>
                             {sortOpen && (
                                 <div className="absolute right-0 bg-white border mt-2 rounded-lg shadow-lg">
                                     <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                        <Link to="/">Popularity</Link>
+                                        <Link to="/">Phổ biến</Link>
                                     </div>
                                     <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                        <Link to="/">Low - High Price</Link>
+                                        <Link to="/">Giá thấp - cao</Link>
                                     </div>
                                     <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                        <Link to="/">High - Low Price</Link>
+                                        <Link to="/">Giá cao - thấp</Link>
                                     </div>
                                 </div>
                             )}
@@ -125,7 +125,7 @@ const Filter = () => {
                                         currency: "VND",
                                     })}</span>
                                     <button className="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center">
-                                        Add <FaShoppingCart className="ml-2" />
+                                        Thêm <FaShoppingCart className="ml-2" />
                                     </button>
                                 </div>
                             </div>
