@@ -5,6 +5,7 @@ import { useCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { fetchGetVoucher } from "../../data/api";
 const ShoppingCart = () => {
   const {
     cartItems,
@@ -26,8 +27,7 @@ const ShoppingCart = () => {
   };
   const handClickVoucher = async (event) => {
     event.preventDefault();
-    await axios
-      .get(`http://localhost:4000/vouchers/voucher/${voucherCode}`)
+    await fetchGetVoucher(voucherCode)
       .then((res) => {
         console.log(res.data);
        setDiscount(Number(res.data.discount))

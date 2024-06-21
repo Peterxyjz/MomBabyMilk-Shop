@@ -83,7 +83,12 @@ export const updateStatusController = async (req: Request, res: Response) => {
     order_details.forEach(async (item) => {
       await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
     })
+    return res.status(200).json({
+      message: 'success',
+      result
+    })
   }
+  const result = await orderServices.updateStatus(order_id, status, user_id)
   return res.status(200).json({
     message: 'success',
     result
