@@ -14,8 +14,9 @@ const Payment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
-  let ship = 30000;
- 
+  const ship = location.state?.ship
+  const discount = location.state?.discount
+  const voucher_code = location.state?.voucherCode
   const callTime = 300000;
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);
@@ -42,6 +43,8 @@ const Payment = () => {
       total_price: totalPrice + ship - 0,
       payment_method: paymentMethod,
       ship_fee: ship,
+      voucher_code: voucher_code,
+      voucher_fee: discount
     };
     await  fetchOrder(order_infor)
       .then((res) => {
@@ -301,7 +304,7 @@ const Payment = () => {
                         Mã giảm giá
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        {Number(0).toLocaleString("vi-VN", {
+                        -{Number(discount).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
                         })}

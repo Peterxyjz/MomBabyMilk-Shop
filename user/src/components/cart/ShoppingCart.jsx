@@ -1,9 +1,10 @@
 import React from "react";
 import cartEmptyImg from "../../assets/images/background/cart_empty.png";
-import { MdDeleteForever } from "react-icons/md";
+import { MdDeleteForever, MdLineAxis } from "react-icons/md";
 import { useCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
+import axios from "axios";
 const ShoppingCart = () => {
   const {
     cartItems,
@@ -13,13 +14,33 @@ const ShoppingCart = () => {
     decreaseAmount,
     cartAmount,
   } = useCartContext();
-  let ship = 0;
-  let discount = 0;
-  if (cartAmount > 1) {
-    ship = 50000;
-    discount = 30000;
-  }
+  let ship = 50000;
 
+ 
+  const [voucherCode, setVoucherCode] = useState(null);
+  const [discount, setDiscount] = useState(0)
+  const [errorList, setErrorList] = useState([]);
+  const handChangeVoucherCode = (e) => {
+    setVoucherCode(e.target.value);
+    console.log(e.target.value);
+  };
+  const handClickVoucher = async (event) => {
+    event.preventDefault();
+    await axios
+      .get(`http://localhost:4000/vouchers/voucher/${voucherCode}`)
+      .then((res) => {
+        console.log(res.data);
+       setDiscount(Number(res.data.discount))
+      })
+      .catch((error) => {
+        let errorList = [];
+        for (let [key, value] of Object.entries(error.response.data.errors)) {
+          errorList.push(value);
+          setErrorList(errorList);
+        }
+        console.log(error);
+      });
+  };
   const total = totalPrice + ship - discount;
   return (
     <>
@@ -303,6 +324,7 @@ const ShoppingCart = () => {
                   </div>
                   <Link
                     to={"/order"}
+                    state={{discount: discount, ship: ship,voucherCode: voucherCode}}
                     className="flex w-full items-center justify-center rounded-lg bg-[#1d4ed8] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1e40af] focus:outline-none focus:ring-4 focus:ring-[#93c5fd] dark:bg-[#2563eb] dark:hover:bg-[#1d4ed8] dark:focus:ring-[#1e40af]"
                   >
                     Thanh Toán Ngay
@@ -337,7 +359,7 @@ const ShoppingCart = () => {
                   </div>
                 </div>
                 <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
-                  <form className="space-y-4">
+                  <form className="space-y-4" onSubmit={handClickVoucher}>
                     <div>
                       <label
                         htmlFor="voucher"
@@ -348,7 +370,10 @@ const ShoppingCart = () => {
                       </label>
                       <input
                         type="text"
-                        id="voucher"
+                        id="voucherCode"
+                        name="voucherCode"
+                        value={voucherCode}
+                        onChange={handChangeVoucherCode}
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                         placeholder=""
                         required
@@ -360,6 +385,15 @@ const ShoppingCart = () => {
                     >
                       Áp Dụng Mã
                     </button>
+                    {errorList.length > 0 && (
+                      <div className="error-list mt-3 mb-3">
+                        {errorList.map((error, index) => (
+                          <p key={index} className="text-red-600">
+                            {error}
+                          </p>
+                        ))}
+                      </div>
+                    )}
                   </form>
                 </div>
               </div>

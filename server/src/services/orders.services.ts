@@ -29,7 +29,6 @@ class OrderServinces {
       await wareHouseService.decreaseAmount({ product_id: item._id, amount: item.quantity })
       databaseService.orderDetails.insertOne(order_detail)
     })
-
     return await databaseService.orders.insertOne(order)
   }
   async getAll() {

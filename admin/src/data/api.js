@@ -2,15 +2,47 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
+//fetchConfirmOrder
+export const fetchConfirmOrder = async (order_id, token) => {
+  return await axios.post(
+    `http://localhost:4000/orders/status-order`,
+    {
+      order_id: order_id,
+      status: "Processing",
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
+//fetchCancelOrder
+export const fetchCancelOrder = async (order_id, token) => {
+  return await axios.post(
+    `http://localhost:4000/orders/status-order`,
+    {
+      order_id: order_id,
+      status: "Cancel",
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //get-prodduct
 export const fetchProductById = async (id) => {
-  return fetch(`${SCHEMA_HOSTNAME}/products/product/${id}`)
-}
+  return fetch(`${SCHEMA_HOSTNAME}/products/product/${id}`);
+};
 
 //get-all-brand
 export const fetchBrandStaff = async () => {
-  return fetch(`${SCHEMA_HOSTNAME}/brands/all-brands`)
-}
+  return fetch(`${SCHEMA_HOSTNAME}/brands/all-brands`);
+};
 
 //get-categories
 export const fetchCategories = async () => {
@@ -21,15 +53,11 @@ export const fetchCategories = async () => {
 export const fetchUploadBill = async (inputBill, token) => {
   console.log(inputBill);
   console.log(token);
-  return await axios.post(
-    `${SCHEMA_HOSTNAME}/inputBills/upload`,
-    inputBill,
-    {
-      headers: {
-        Authorization: `Bearer ${token.access_token}`,
-      },
-    }
-  );
+  return await axios.post(`${SCHEMA_HOSTNAME}/inputBills/upload`, inputBill, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
 };
 
 //get-all-user
@@ -106,15 +134,12 @@ export const fetchOtp = async ({ user_id, digit, email, key }) => {
       email,
     });
   } else {
-    return await axios.get(
-      `${SCHEMA_HOSTNAME}/users/verify-forgot-password`,
-      {
-        params: {
-          user_id,
-          digit: digit,
-        },
-      }
-    );
+    return await axios.get(`${SCHEMA_HOSTNAME}/users/verify-forgot-password`, {
+      params: {
+        user_id,
+        digit: digit,
+      },
+    });
   }
 };
 

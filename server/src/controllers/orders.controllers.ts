@@ -48,7 +48,9 @@ export const uploadController = async (req: Request, res: Response) => {
     payment_method: req.body.payment_method,
     status: OrderStatus.Required,
     required_date: new Date(),
-    total_price: req.body.total_price
+    total_price: req.body.total_price,
+    voucher_code: req.body.voucher_code,
+    voucher_fee: req.body.voucher_fee
   })
 
   const order = await orderServices.upload(order_infor, orderDetails)
