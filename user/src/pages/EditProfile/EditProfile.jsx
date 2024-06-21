@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaUser, FaHistory, FaCreditCard, FaLock, FaCommentDots, FaHeart, FaShareAlt } from 'react-icons/fa';
+import { FaUser, FaHistory, FaCreditCard, FaLock, FaCommentDots, FaHeart, FaShareAlt, FaShoppingCart } from 'react-icons/fa';
 import Breadcrumbs from '../../components/elements/Breadcrumb';
 
 const EditProfile = () => {
@@ -74,7 +74,7 @@ const EditProfile = () => {
                             <FaHeart className="mr-2" /> Sản Phẩm Yêu Thích
                         </a>
                         <a href="#" className={`flex items-center py-3 ${view === 'referrals' ? 'text-blue-500 font-medium' : 'text-gray-600 hover:text-blue-500'}`} onClick={() => setView('referrals')}>
-                            <FaShareAlt className="mr-2" /> Tích Điểm
+                            <FaShareAlt className="mr-2" /> Tích điểm
                         </a>
                     </nav>
                 </div>
@@ -251,7 +251,7 @@ const EditProfile = () => {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full py-2 px-4 bg-red-500 text-white font-bold rounded-md hover:bg-red-600"
+                                    className="w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600"
                                 >
                                     Lưu
                                 </button>
@@ -316,6 +316,65 @@ const EditProfile = () => {
                                         Tiếp tục
                                     </button>
                                 </form>
+                            </div>
+                        </>
+                    )}
+                    {view === 'orders' && (
+                        <>
+                            <h2 className="text-xl font-bold mb-4">Lịch Sử Đơn Hàng</h2>
+                            <div className="space-y-4">
+                                <div className="flex space-x-4">
+                                    <input
+                                        type="text"
+                                        placeholder="Mã đơn hàng"
+                                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Số tiền từ"
+                                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Số tiền đến"
+                                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <input
+                                        type="date"
+                                        placeholder="Từ ngày"
+                                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <input
+                                        type="date"
+                                        placeholder="Đến ngày"
+                                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                                        Lọc
+                                    </button>
+                                </div>
+                                <table className="min-w-full bg-white border border-gray-300">
+                                    <thead>
+                                        <tr>
+                                            <th className="py-2 px-4 border-b">Thời gian</th>
+                                            <th className="py-2 px-4 border-b">Mã đơn hàng</th>
+                                            <th className="py-2 px-4 border-b">Sản phẩm</th>
+                                            <th className="py-2 px-4 border-b">Tổng tiền</th>
+                                            <th className="py-2 px-4 border-b">Trạng thái</th>
+                                            <th className="py-2 px-4 border-b">Chi tiết</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="py-2 px-4 border-b">2024-05-14 19:38:04</td>
+                                            <td className="py-2 px-4 border-b">7052800</td>
+                                            <td className="py-2 px-4 border-b">Gói gia hạn Duolingo 2 tháng x1</td>
+                                            <td className="py-2 px-4 border-b">49.000đ</td>
+                                            <td className="py-2 px-4 border-b text-green-500">Đã xử lý</td>
+                                            <td className="py-2 px-4 border-b text-blue-500 hover:underline cursor-pointer">Chi tiết</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </>
                     )}
