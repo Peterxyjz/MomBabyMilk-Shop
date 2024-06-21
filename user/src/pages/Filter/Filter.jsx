@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useProductContext } from '../../context/ProductContext';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import Loader from '../../assets/loading.gif';
@@ -11,9 +11,28 @@ const Filter = () => {
     const { products, loading } = useProductContext();
     const [priceRange, setPriceRange] = useState([0, 1000000]);
     const [sortOpen, setSortOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 9;
 
     const handleSliderChange = (value) => {
         setPriceRange(value);
+    };
+
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+    const totalPages = Math.ceil(products.length / productsPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
     };
 
     if (loading)
@@ -90,7 +109,7 @@ const Filter = () => {
                         </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> {/* Change to 3 columns */}
-                        {products.map((product) => (
+                        {currentProducts.map((product) => (
                             <div key={product._id} className="border p-4 rounded-lg flex flex-col items-center"> {/* Center items */}
                                 <Link to="/product" state={{ product: product }} className="w-full">
                                     <div className="flex justify-center mb-2">
@@ -111,6 +130,15 @@ const Filter = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    <div className="flex justify-center items-center mt-6">
+                        <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
+                            <FaArrowLeft />
+                        </button>
+                        <span className="px-4 py-2">{currentPage}</span>
+                        <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
+                            <FaArrowRight />
+                        </button>
                     </div>
                 </div>
             </div>
