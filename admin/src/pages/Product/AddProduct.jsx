@@ -13,6 +13,7 @@ import { v4 } from "uuid";
 import {
   fetchBrandStaff,
   fetchCategories,
+  fetchUpdateProduct,
   fetchUploadProduct,
 } from "../../data/api";
 const AddProduct = () => {
@@ -98,7 +99,7 @@ const AddProduct = () => {
     setDescription(event.target.value);
   };
 
-  async function uploadImage(product) {
+  async function uploadImage(product, id) {
     if (img !== null) {
       const imgRef = ref(imageDb, `product_img/${v4()}`);
       const snapshot = await uploadBytes(imgRef, img);
@@ -106,13 +107,13 @@ const AddProduct = () => {
 
       product.imgUrl = url;
       console.log("product: ", product);
-      await sendURL(product);
+      await sendURL(product,id);
     } else {
       console.log("null");
     }
   }
-  const sendURL = async (product) => {
-    return await fetchUploadProduct(product, token);
+  const sendURL = async (product,id ) => {
+    return await fetchUpdateProduct(product, token, id);
   };
   // const handleSaveImg = (url) => {
 
@@ -134,9 +135,9 @@ const AddProduct = () => {
     await fetchUploadProduct(product, token)
       .then(async (res) => {
         console.log(res.data);
-        const product = res.data.product;
-        console.log("product: ", product);
-        await uploadImage(product);
+        const id = res.data.result.insertedId
+        
+        await uploadImage(product,id);
       })
       .then((data) => {
         alert("Tạo sản phẩm thành công");
