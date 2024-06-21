@@ -28,7 +28,6 @@ export const uploadController = async (req: Request, res: Response) => {
     })
   }
   const product = new Product(req.body)
-  console.log('üpload: ', product)
 
   const result = await productsService.upload(product)
   return res.status(200).json({
@@ -39,32 +38,50 @@ export const uploadController = async (req: Request, res: Response) => {
 }
 
 export const getAllController = async (req: Request, res: Response) => {
-  const products = await productsService.getAll()
-  const feedbacks = await databaseService.feedbacks.find({}).toArray()
-  const result = []
+  // Fetch products and feedbacks concurrently
+  const [products, feedbacks] = await Promise.all([
+    productsService.getAll(),
+    databaseService.feedbacks.find({}).toArray()
+  ])
 
-  for (const element of products) {
-    const brand = (await brandsService.getById(element.brand_id)) as Brand
-    const category = (await categoriesService.getById(element.category_id)) as Category
-    const warehouse = (await wareHouseService.getById(element._id?.toString())) as WareHouse
+  // Fetch brands, categories, and warehouses concurrently
+  const [brands, categories, warehouses] = await Promise.all([
+    brandsService.getAll(),
+    categoriesService.getAll(),
+    wareHouseService.getAll()
+  ])
 
-    const productFeedbacks = feedbacks.filter((feedback) => feedback.product_id === element._id?.toString())
-    const rating =
-      productFeedbacks.length > 0
-        ? Math.min(productFeedbacks.reduce((sum, feedback) => sum + feedback.rating, 0) / productFeedbacks.length, 5)
-        : 0
+  // Convert to Maps for quick lookup
+  const brandMap = new Map(brands.map((brand) => [brand._id.toString(), brand]))
+  const categoryMap = new Map(categories.map((category) => [category._id.toString(), category]))
+  const warehouseMap = new Map(warehouses.map((warehouse) => [warehouse._id.toString(), warehouse]))
 
-    const sales = await orderServices.getSalesByProductId(element._id?.toString())
-    result.push({
-      ...element,
-      brand_name: brand.brand_name,
-      category_name: category.category_name,
-      amount: warehouse.amount,
-      reviewer: productFeedbacks.length,
-      rating: rating,
-      sales: sales
+  // Process products
+  const result = await Promise.all(
+    products.map(async (product) => {
+      const brand = brandMap.get(product.brand_id)
+      const category = categoryMap.get(product.category_id)
+      const warehouse = warehouseMap.get(product._id?.toString())
+
+      const productFeedbacks = feedbacks.filter((feedback) => feedback.product_id === product._id?.toString())
+      const rating =
+        productFeedbacks.length > 0
+          ? Math.min(productFeedbacks.reduce((sum, feedback) => sum + feedback.rating, 0) / productFeedbacks.length, 5)
+          : 0
+
+      const sales = await orderServices.getSalesByProductId(product._id?.toString())
+
+      return {
+        ...product,
+        brand_name: brand?.brand_name || '',
+        category_name: category?.category_name || '',
+        amount: warehouse?.amount || 0,
+        reviewer: productFeedbacks.length,
+        rating: rating,
+        sales: sales
+      }
     })
-  }
+  )
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,

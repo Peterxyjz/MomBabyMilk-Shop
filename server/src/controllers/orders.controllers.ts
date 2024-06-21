@@ -9,6 +9,8 @@ import orderServices from '~/services/orders.services'
 import { TokenPayload } from '~/model/requests/User.requests'
 import usersService from '~/services/users.services'
 import wareHouseService from '~/services/wareHouse.services'
+import { generateInvoiceHTML } from '~/helper/emailTemplate'
+import sendMail from '~/helper/send.mail'
 
 export const getAllController = async (req: Request, res: Response) => {
   const orders = await orderServices.getAll()
@@ -54,7 +56,12 @@ export const uploadController = async (req: Request, res: Response) => {
   })
 
   const order = await orderServices.upload(order_infor, orderDetails)
-
+  const emailHtml = generateInvoiceHTML(order_infor, orderDetails)
+  sendMail({
+    email: req.body.email,
+    subject: 'Email Invoice Mail',
+    html: emailHtml
+  })
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     order

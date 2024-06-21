@@ -6,8 +6,8 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/model/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 
-import databaseService from '../../../../../ShopMilk/MomBabyMilk-Shop/server/src/services/database.services'
 import Voucher from '~/model/schemas/Voucher.schema'
+import databaseService from './database.services'
 config()
 
 class VoucherServices {

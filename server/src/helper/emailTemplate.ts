@@ -198,3 +198,121 @@ export function generateEmailPassword(username: string, verificationLink: string
   </html>
   `
 }
+
+export function generateInvoiceHTML(order: any, orderDetail: any) {
+  const shippedDate = new Date(order.shipped_date)
+  shippedDate.setDate(shippedDate.getDate() + 3)
+  return `
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #f4f4f4;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            h2 {
+                text-align: center;
+                color: #333;
+            }
+            .details {
+                margin-bottom: 20px;
+            }
+            .details p {
+                margin: 5px 0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            table, th, td {
+                border: 1px solid #ddd;
+            }
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #f4f4f4;
+            }
+            .total {
+                text-align: right;
+            }
+            .total td {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Hóa Đơn Mua Hàng</h2>
+            <div class="details">
+                <p><strong>Tên khách hàng:</strong> ${order.full_name}</p>
+                <p><strong>Địa chỉ:</strong> ${order.address}</p>
+                <p><strong>Số điện thoại:</strong> ${order.phone}</p>
+                <p><strong>Email:</strong> ${order.email}</p>
+                <p><strong>Phương thức thanh toán:</strong> ${order.payment_method}</p>
+                <p><strong>Ngày yêu cầu:</strong> ${new Date(order.required_date).toLocaleDateString()}</p>
+                <p><strong>Ngày giao hàng:</strong> ${shippedDate.toLocaleDateString()}</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tổng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orderDetail
+                      .map(
+                        (item: any) => `
+                    <tr>
+                        <td>${item.product_name}</td>
+                        <td>${item.amount}</td>
+                        <td>${Number(item.price).toLocaleString()} VND</td>
+                        <td>${(Number(item.price) * item.amount).toLocaleString()} VND</td>
+                    </tr>
+                    `
+                      )
+                      .join('')}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="total">Phí vận chuyển: </td>
+                        <td>${Number(order.total_price - order.ship_fee + order.voucher_fee).toLocaleString()} VND</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="total">Phí vận chuyển: </td>
+                        <td>${Number(order.ship_fee).toLocaleString()} VND</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="total">Mã giảm giá: </td>
+                        <td>${Number(order.voucher_fee).toLocaleString()} VND</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="total">Tổng cộng</td>
+                        <td>${Number(order.total_price).toLocaleString()} VND</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </body>
+    </html>
+    `
+}
