@@ -17,6 +17,7 @@ import Payment from "./components/order/Payment";
 import Filter from "./pages/Filter/Filter";
 import Thanks from "./components/order/Thanks";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import WishList from "./pages/Wishlist";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/thanks" element={<Thanks />} />
           <Route path="/filter" element={<Filter />} />
           <Route path="/edit_profile" element={<EditProfile />} />
+          <Route path="/wishlist" element={<WishList />} />
         </Routes>
         <MainFooter />
       </Router>
