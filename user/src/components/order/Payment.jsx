@@ -50,7 +50,7 @@ const Payment = () => {
       .then((res) => {
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
-          const price = totalPrice + ship - 0;
+          const price = totalPrice + ship - discount;
           setShowQR(true);
           setQR(
             `https://img.vietqr.io/image/970422-0834564869-compact2.png?amount=${price}&addInfo=${content}&accountName=LE QUANG HUY`
@@ -316,7 +316,7 @@ const Payment = () => {
                       Tổng Giá Trị
                     </dt>
                     <dd className="text-lg font-bold text-gray-900 dark:text-white">
-                      {Number(totalPrice + ship - 0).toLocaleString("vi-VN", {
+                      {Number(totalPrice + ship - discount).toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}

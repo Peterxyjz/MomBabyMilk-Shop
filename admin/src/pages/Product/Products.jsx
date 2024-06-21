@@ -177,10 +177,10 @@ const Product = () => {
     return <div className="text-center font-bold text-2xl">Loading...</div>;
   }
   return (
-    <div style={{ display: "flex", justifyContent: "center", height: "120vh" }}>
+    <div style={{ display: "flex", justifyContent: "center", height: "auto" }}>
       <Card
         title="Tất cả sản phẩm"
-        style={{ width: "90%", marginTop: "50px", height: "110vh" }}
+        style={{ width: "90%", marginTop: "50px", height: "auto" }}
       >
         <div>
           <div className="flex justify-between items-center mb-4">

@@ -17,7 +17,7 @@ const ShoppingCart = () => {
   let ship = 50000;
 
  
-  const [voucherCode, setVoucherCode] = useState(null);
+  const [voucherCode, setVoucherCode] = useState("");
   const [discount, setDiscount] = useState(0)
   const [errorList, setErrorList] = useState([]);
   const handChangeVoucherCode = (e) => {
