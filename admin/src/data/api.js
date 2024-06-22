@@ -49,6 +49,40 @@ export const fetchCategories = async () => {
   return fetch(`${SCHEMA_HOSTNAME}/categories/all-categories`);
 };
 
+//get-category-by-id
+export const fetchCategoryById = async (id) => {
+  return fetch(`${SCHEMA_HOSTNAME}/categories/category/${id}`);
+};
+
+//add-category
+export const fetchAddCategory = async (category, token) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/categories/upload`,
+    { ...category },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
+//upload-category
+export const fetchUpdateCategory = async (category, token, id) => {
+  return await axios.patch(
+    `${SCHEMA_HOSTNAME}/categories/category/${id}`,
+    {
+      category_name: category.category_name,
+      description: category.description,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //upload -bill
 export const fetchUploadBill = async (inputBill, token) => {
   console.log(inputBill);
@@ -209,3 +243,5 @@ export const fetchOrder = async () => {
     throw error;
   }
 };
+
+
