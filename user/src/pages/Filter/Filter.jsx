@@ -6,12 +6,13 @@ import 'rc-slider/assets/index.css';
 import Loader from '../../assets/loading.gif';
 import Breadcrumbs from '../../components/elements/Breadcrumb';
 import { Link } from 'react-router-dom';
+import { useCartContext } from '../../context/CartContext';
 
 const Filter = () => {
     const { products, loading } = useProductContext();
     const [priceRange, setPriceRange] = useState([0, 1000000]);
     const [sortOpen, setSortOpen] = useState(false);
-
+    const {addCartItem} = useCartContext();
     const handleSliderChange = (value) => {
         setPriceRange(value);
     };
@@ -71,19 +72,19 @@ const Filter = () => {
                 <div className="w-4/5 p-4 flex-grow">
                     <div className="flex justify-between mb-4">
                         <div className="relative">
-                            <button onClick={() => setSortOpen(!sortOpen)} className="bg-gray-200 px-4 py-2 rounded-lg">
-                                Sort By: Most Popular
+                            <button onClick={() => setSortOpen(!sortOpen)} className="bg-gray-200 px-10 py-2 rounded-lg">
+                                Sắp xếp theo:
                             </button>
                             {sortOpen && (
                                 <div className="absolute right-0 bg-white border mt-2 rounded-lg shadow-lg">
                                     <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                        <Link to="/">Popularity</Link>
+                                        <Link to="/">Sản phẩm phổ biến</Link>
                                     </div>
                                     <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                        <Link to="/">Low - High Price</Link>
+                                        <Link to="/">Giá thấp - cao</Link>
                                     </div>
                                     <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                        <Link to="/">High - Low Price</Link>
+                                        <Link to="/">Giá cao - thấp</Link>
                                     </div>
                                 </div>
                             )}
@@ -105,8 +106,10 @@ const Filter = () => {
                                         style: "currency",
                                         currency: "VND",
                                     })}</span>
-                                    <button className="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center">
-                                        Add <FaShoppingCart className="ml-2" />
+                                    <button 
+                                    onClick={() => addCartItem(product)}
+                                    className="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center">
+                                        Thêm <FaShoppingCart className="ml-2" />
                                     </button>
                                 </div>
                             </div>

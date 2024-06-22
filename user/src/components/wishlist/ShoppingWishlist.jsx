@@ -1,8 +1,10 @@
 import { useWishlistContext } from "../../context/WishlistContext";
 import { Link } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaTimes } from "react-icons/fa";
+import { useCartContext } from "../../context/CartContext";
 const ShoppingWishlist = () => {
-  const { wishlistItems } = useWishlistContext();
+  const { wishlistItems, removeWishlistItem } = useWishlistContext();
+  const { addCartItem } = useCartContext();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 my-6">
       {wishlistItems.length === 0 ? (
@@ -13,22 +15,23 @@ const ShoppingWishlist = () => {
         wishlistItems.map((product) => (
           <div
             key={product._id}
-            className="border p-4 rounded-lg flex flex-col items-center"
+            className="border p-4 rounded-lg flex flex-col items-center relative"
           >
-            {" "}
-            {/* Center items */}
+            <button
+              onClick={() => removeWishlistItem(product._id)}
+              className="absolute top-2 right-2 text-white bg-[#dc3545] p-0.5 rounded-sm"
+            >
+              <FaTimes />
+            </button>
             <Link to="/product" state={{ product: product }} className="w-full">
               <div className="flex justify-center mb-2">
                 <img
                   src={product.imgUrl}
                   alt={product.product_name}
                   className="w-44 h-44 object-cover"
-                />{" "}
-                {/* Larger image */}
+                />
               </div>
               <div className="h-20 mb-2 text-center w-full">
-                {" "}
-                {/* Center text */}
                 <h3
                   className="font-bold text-base overflow-hidden overflow-ellipsis"
                   style={{
@@ -48,7 +51,10 @@ const ShoppingWishlist = () => {
                   currency: "VND",
                 })}
               </span>
-              <button className="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center">
+              <button
+                onClick={() => addCartItem(product)}
+                className="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center"
+              >
                 Thêm <FaShoppingCart className="ml-2" />
               </button>
             </div>
