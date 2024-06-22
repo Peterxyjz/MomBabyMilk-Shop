@@ -27,3 +27,7 @@ export enum RevenueStatus {
   InputBill,
   Order
 }
+export enum VoucherMode {
+  User,
+  Member
+}
