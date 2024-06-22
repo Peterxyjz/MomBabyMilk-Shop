@@ -47,7 +47,7 @@ const Categories = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "auto" }}>
       <Card
-        title="Tất cả sản phẩm"
+        title="Tất cả phân loại"
         style={{ width: "90%", marginTop: "50px", height: "auto" }}
       >
         <div>
@@ -60,7 +60,6 @@ const Categories = () => {
             >
               Thêm phân loại mới
             </Button>
-            
             </div>
           <Table
             dataSource={categories}
