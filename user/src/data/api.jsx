@@ -1,20 +1,25 @@
 import axios from "axios";
 
-
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
+//fetchGetMe
+export const fetchGetMe = async (token) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/users/me`,{
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+};
 
 //fetchGetAllVoucher
 export const fetchGetAllVoucher = async () => {
   return await axios.get(`${SCHEMA_HOSTNAME}/vouchers/all-vouchers`);
-}
+};
 
-//fetchGetVoucher 
+//fetchGetVoucher
 export const fetchGetVoucher = async (voucherCode) => {
-  return await axios
-  .get(`${SCHEMA_HOSTNAME}/vouchers/voucher/${voucherCode}`)
-}
-
+  return await axios.get(`${SCHEMA_HOSTNAME}/vouchers/voucher/${voucherCode}`);
+};
 
 //reset-pssword:
 export const fetchResetPassword = async (

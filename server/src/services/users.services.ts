@@ -360,6 +360,22 @@ class UsersService {
   async getAllUser() {
     return await databaseService.users.find({}).toArray()
   }
+
+  async getMe(user_id: string) {
+    // projection để loại bỏ các thuộc tính mà mình ko lấy 
+    const user = await databaseService.users.findOne(
+      { _id: new ObjectId(user_id) },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return user
+  }
+
 }
 
 const usersService = new UsersService()

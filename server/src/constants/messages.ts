@@ -65,7 +65,8 @@ export const USERS_MESSAGES = {
   UPDATE_FAIL: 'Cập nhật thất bại',
   //delete:
   DELETE_SUCCESS: 'Xóa thành công',
-  DELETE_FAIL: 'Xóa thất bại'
+  DELETE_FAIL: 'Xóa thất bại',
+  GET_ME_SUCCESS: 'Lấy thông tin thành công',
 } as const
 
 

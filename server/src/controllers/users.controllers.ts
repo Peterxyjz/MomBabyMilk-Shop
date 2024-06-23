@@ -244,3 +244,13 @@ export const getAllUserController = async (
     users: result
   })
 }
+
+export const getMeController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  // vào database tìm userr có user_d đó và đưa cho client
+  const result = await usersService.getMe(user_id)
+  return res.json({
+    message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result
+  })
+}
