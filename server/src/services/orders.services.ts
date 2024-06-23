@@ -53,17 +53,19 @@ class OrderServinces {
     return await databaseService.orders.updateOne(filter, update)
   }
 
-async updateStatus(id: string, status: string, user_id: string) {
-  const filter = { _id: new ObjectId(id) }	
-  const order = await databaseService.orders.findOne(filter)
-  if(!order){
-    throw new ErrorWithStatus({
-      message: "Không tìm thấy đơn hàng",
-      status: 400
+  async updateStatus(id: string, status: string, user_id: string) {
+    const filter = { _id: new ObjectId(id) }
+    const order = await databaseService.orders.findOne(filter)
+    if (!order) {
+      throw new ErrorWithStatus({
+        message: 'Không tìm thấy đơn hàng',
+        status: 400
+      })
+    }
+    return await databaseService.orders.updateOne(filter, {
+      $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id }
     })
   }
-  return await databaseService.orders.updateOne(filter, { $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id } })
-}
 
   async getSalesByProductId(id: string) {
     const filter = { product_id: id }
@@ -91,7 +93,6 @@ async updateStatus(id: string, status: string, user_id: string) {
         $set: { status: OrderStatus.Completed } // Cập nhật trạng thái thành Completed
       }
     )
-
     return result
   }
 }

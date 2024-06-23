@@ -31,7 +31,6 @@ class VoucherOrderServices {
 
     return voucher_order
   }
-  
 }
 const voucherOrderServices = new VoucherOrderServices()
 export default voucherOrderServices
