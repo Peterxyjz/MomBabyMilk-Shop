@@ -19,6 +19,7 @@ import CancelOrder from '../pages/Order/CancelOrder';
 import CompleteOrder from '../pages/Order/CompleteOrder';
 import OrderDetail from '../pages/Order/OrderDetail';
 import EditCategory from '../pages/Category/EditCategory';
+import InputBills from '../pages/Warehouse/InputBills';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -26,7 +27,6 @@ const StaffRouter = () => {
             <Route path="/" element={(<Dashboard isAuthenticatedStaff={isAuthenticatedStaff} />)} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/profile" element={<UserSetting />} />
-            <Route path="/add-inputbill" element={(<AddBill />)} />
             {/* order */}
             <Route path="/await-order" element={(<AwaitOrder />)} />
             <Route path="/await-orderDetail" element={(<AwaitOrderDetail />)} />
@@ -46,6 +46,9 @@ const StaffRouter = () => {
             <Route path="/categories" element={<Categories />} />
             <Route path="/add-category" element={<AddCategory />} />
             <Route path="/edit-category" element={<EditCategory />} />
+            {/* warehouse */}
+            <Route path="/add-inputbill" element={(<AddBill />)} />
+            <Route path="/input-bills" element={<InputBills/>} />
         </Routes>
     )
 }

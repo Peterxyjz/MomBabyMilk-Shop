@@ -40,7 +40,7 @@ const Categories = () => {
       dataIndex: "_id",
       key: "_id",
       width: 100,
-      render: (text) => <a href={`/edit-category?id=${text}`}>Chi Tiết</a>,
+      render: (text) => <a href={`/edit-category?id=${text}`} className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Chi Tiết</a>,
     },
   ];
 
