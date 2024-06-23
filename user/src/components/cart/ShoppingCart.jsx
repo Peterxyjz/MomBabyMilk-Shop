@@ -3,7 +3,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { useCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchGetVoucher } from "../../data/api";
+import { fetchGetAllVoucher, fetchGetVoucher } from "../../data/api";
 import { Button, Dropdown } from "flowbite-react";
 const ShoppingCart = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
@@ -22,17 +22,39 @@ const ShoppingCart = () => {
   const [ship, setShip] = useState(0);
   const [errorList, setErrorList] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [voucherList, setVoucherList] = useState([]);
+  useEffect(() => {
+      const getAllVoucger = async () => {
+        await fetchGetAllVoucher()
+          .then((res) => {
+            setVoucherList(res.data.result);
+            console.log(res.data.result);
+          })
+          .catch((error) => {
+            let errorList = [];
+            for (let [key, value] of Object.entries(error.response.data.errors)) {
+              errorList.push(value);
+              setErrorList(errorList);
+            }
+          });
+      }
+      getAllVoucger()
+  },[])
   const handleRadioChange = (event) => {
+    console.log(event.target.value);
     const selectedValue = event.target.value;
     document.getElementById("voucherCode").value = selectedValue;
+    setVoucherCode((selectedValue));
   };
   const handChangeVoucherCode = (e) => {
     setVoucherCode(e.target.value);
   };
   const handClickVoucher = async (event) => {
     event.preventDefault();
+    console.log(voucherCode);
     await fetchGetVoucher(voucherCode)
       .then((res) => {
+        console.log(res.data.discount);
         setDiscount(Number(res.data.discount));
       })
       .catch((error) => {
@@ -399,7 +421,7 @@ const ShoppingCart = () => {
                         />
                       </div>
                       <div className="w-1/4">
-                        <Button color="blue" size="xs">
+                        <Button color="blue" size="xs" type="submit">
                           Áp Dụng
                         </Button>
                       </div>
@@ -427,64 +449,37 @@ const ShoppingCart = () => {
                                 className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="dropdownRadioHelperButton"
                               >
-                                <li>
-                                  <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <div className="flex items-center h-5">
-                                      <input
-                                        id="helper-radio-4"
-                                        name="helper-radio"
-                                        type="radio"
-                                        value="Individual"
-                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                        onChange={handleRadioChange}
-                                      />
-                                    </div>
-                                    <div className="ms-2 text-sm">
-                                      <label
-                                        htmlFor="helper-radio-4"
-                                        className="font-medium text-gray-900 dark:text-gray-300"
-                                      >
-                                        <div>Individual</div>
-                                        <p
-                                          id="helper-radio-text-4"
-                                          className="text-xs font-normal text-gray-500 dark:text-gray-300"
-                                        >
-                                          Some helpful instruction goes over
-                                          here.
-                                        </p>
-                                      </label>
-                                    </div>
+                               {voucherList.map((voucher) =>(
+                                <li key={voucher._id}>
+                                <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                  <div className="flex items-center h-5">
+                                    <input
+                                      id="helper-radio-4"
+                                      name="helper-radio"
+                                      type="radio"
+                                      value={voucher._id}
+                                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                      onChange={handleRadioChange}
+                                    />
                                   </div>
-                                </li>
-                                <li>
-                                  <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <div className="flex items-center h-5">
-                                      <input
-                                        id="helper-radio-5"
-                                        name="helper-radio"
-                                        type="radio"
-                                        value="Company"
-                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                        onChange={handleRadioChange}
-                                      />
-                                    </div>
-                                    <div className="ms-2 text-sm">
-                                      <label
-                                        htmlFor="helper-radio-5"
-                                        className="font-medium text-gray-900 dark:text-gray-300"
+                                  <div className="ms-2 text-sm">
+                                    <label
+                                      htmlFor="helper-radio-4"
+                                      className="font-medium text-gray-900 dark:text-gray-300"
+                                    >
+                                      <div>Voucher giảm {voucher.discount}</div>
+                                      <p
+                                        id="helper-radio-text-4"
+                                        className="text-xs font-normal text-gray-500 dark:text-gray-300"
                                       >
-                                        <div>Company</div>
-                                        <p
-                                          id="helper-radio-text-5"
-                                          className="text-xs font-normal text-gray-500 dark:text-gray-300"
-                                        >
-                                          Some helpful instruction goes over
-                                          here.
-                                        </p>
-                                      </label>
-                                    </div>
+                                        Voucher chỉ còn {voucher.amount} lượt
+                                      </p>
+                                    </label>
                                   </div>
-                                </li>
+                                </div>
+                              </li>
+                               ))}
+                              
                               </ul>
                             </div>
                           )}

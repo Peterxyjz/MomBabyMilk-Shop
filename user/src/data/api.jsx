@@ -3,6 +3,12 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
+
+//fetchGetAllVoucher
+export const fetchGetAllVoucher = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/vouchers/all-vouchers`);
+}
+
 //fetchGetVoucher 
 export const fetchGetVoucher = async (voucherCode) => {
   return await axios

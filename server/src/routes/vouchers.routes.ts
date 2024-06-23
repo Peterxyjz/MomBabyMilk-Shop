@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getVoucherController, uploadController } from '~/controllers/vouchers.controllers'
+import { getAllVoucherController, getVoucherController, uploadController } from '~/controllers/vouchers.controllers'
 
 
 import { wrapAsync } from '~/utils/handlers'
@@ -11,5 +11,6 @@ voucherRouter.post('/upload', wrapAsync(uploadController)) //readAll
 
 voucherRouter.get('/voucher/:id', wrapAsync(getVoucherController))
 
+voucherRouter.get('/all-vouchers', wrapAsync(getAllVoucherController))
 
 export default voucherRouter

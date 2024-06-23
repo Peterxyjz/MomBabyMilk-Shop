@@ -14,6 +14,7 @@ import Order from '~/model/schemas/Order.schema'
 import OrderDetail from '~/model/schemas/OrderDetail.schema'
 import Revenue from '~/model/schemas/Revenue.schema'
 import Voucher from '~/model/schemas/Voucher.schema'
+import VoucherOrder from '~/model/schemas/VoucherOrders.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@mombabymilk.lrg7esv.mongodb.net/?retryWrites=true&w=majority&appName=MomBabyMilk`
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -91,6 +92,9 @@ class DatabaseService {
   }
   get vouchers(): Collection<Voucher> {
     return this.db.collection(process.env.DB_VOUCHER_COLLECTION as string)
+  }
+  get voucherOrders(): Collection<VoucherOrder> {
+    return this.db.collection(process.env.DB_VOUCHER_ORDER_COLLECTION as string)
   }
 }
 //từ class tạo object và export nó ra ngoài
