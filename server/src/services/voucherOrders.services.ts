@@ -16,7 +16,7 @@ class VoucherOrderServices {
     return await databaseService.voucherOrders.insertOne(voucher_order)
   }
   async getAll() {
-    return await databaseService.vouchers.find({}).toArray()
+    return await databaseService.voucherOrders.find({}).toArray()
   }
 
   async getByOrderId(id: string) {
