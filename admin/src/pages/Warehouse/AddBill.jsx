@@ -136,9 +136,34 @@ const AddBill = () => {
     setBillProducts(newData);
   };
 
-  //tinh tong tien trong bill
-  const calculateTotal = () => {
+  //tinh tong tien goc
+  const calculatePrice = () => {
     return billProducts.reduce((total, product) => total + product.price * product.amount, 0);
+  };
+
+  //tinh gia chiet khau
+  const calculateDiscountedPrice = (amount, price) => {
+    if (amount > 20) return price * 0.6;
+    if (amount >= 10) return price * 0.4;
+    if (amount >= 1) return price * 0.2;
+    return price;
+  };
+  const getDiscountPercentage = (amount) => {
+    if (amount > 20) return 60;
+    if (amount >= 10) return 40;
+    if (amount >= 1) return 20;
+    return 0;
+  };
+  const calculateTotalDiscount = () => {
+    const totalAmount = billProducts.reduce((total, product) => total + product.amount, 0);
+    const discountPercentage = getDiscountPercentage(totalAmount);
+    const originalTotal = calculatePrice();
+    return originalTotal * (discountPercentage / 100);
+  };
+
+  //tinh tong tien
+  const calculateTotal = () => {
+    return calculatePrice() - calculateTotalDiscount();
   };
 
   //them vao bill
@@ -195,10 +220,10 @@ const AddBill = () => {
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Row justify="space-between" style={{ flexGrow: 1 }}>
         <Col span={13}>
-          <div style={{ display: 'flex', justifyContent: 'center', height: '90vh' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', height: '100vh' }}>
             <Card
               title="Chọn sản phẩm"
-              style={{ width: '90%', marginTop: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+              style={{ width: '90%', marginTop: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '90vh' }}
             >
               <div style={{ marginBottom: 16, textAlign: 'right' }} onClick={() => Navigate('/add-brand')}>
                 <Button type="primary" style={{ backgroundColor: '#46B5C1' }} disabled={selectedRowKeys.length === 0} onClick={handleAddToBill}>Nhập Hàng</Button>
@@ -225,7 +250,7 @@ const AddBill = () => {
         </Col>
         <Col span={11}>
           <div style={{ display: 'flex', justifyContent: 'center', height: '90vh' }}>
-            <Card title="Đơn nhập hàng" style={{ width: '90%', marginTop: '50px' }}>
+            <Card title="Đơn nhập hàng" style={{ width: '90%', marginTop: '50px', height: '90vh' }}>
               <div style={{ marginBottom: 16, textAlign: 'right' }}>
                 <Button type="primary" style={{ backgroundColor: '#46B5C1' }} disabled={billProducts.length === 0} onClick={handleSubmit}>Tạo đơn</Button>
               </div>
@@ -240,6 +265,27 @@ const AddBill = () => {
                 />
               </div>
               <div style={{ marginTop: 16, textAlign: 'right' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p>Tổng giá theo giá sản phẩm: </p>
+                  <strong>
+                    {Number(calculatePrice()).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })},
+                  </strong>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p>Giá chiết khấu ({getDiscountPercentage(billProducts.reduce((total, product) => total + product.amount, 0))}%): </p>
+                  <strong>
+                    {Number(calculateTotalDiscount()).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })},
+                  </strong>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <strong>Tổng Tiền: </strong>
                 <strong>
                   {Number(calculateTotal()).toLocaleString("vi-VN", {
@@ -247,6 +293,7 @@ const AddBill = () => {
                     currency: "VND",
                   })}
                 </strong>
+                </div>
               </div>
             </Card>
           </div>
