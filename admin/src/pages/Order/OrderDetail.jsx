@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchProducts } from "../../data/api";
+import { fetchCancelOrder, fetchConfirmOrder, fetchProducts } from "../../data/api";
 import { Button } from "flowbite-react";
 import axios from "axios";
 import { Card, Col, Divider, Row, Typography, notification } from "antd";
@@ -54,14 +54,7 @@ const AwaitOrderDetail = () => {
 
   const handleCancelOrder = async () => {
     const order_id = order.order._id
-    await axios.post(`http://localhost:4000/orders/status-order`, {
-      order_id: order_id,
-      status: "Cancel"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token.access_token}`
-      }
-    }).then((res) => {
+   await fetchCancelOrder(order_id, token).then((res) => {
       notification.success({
         message: 'Thành công',
         description: 'Đơn hàng đã được huỷ!',
@@ -93,14 +86,7 @@ const AwaitOrderDetail = () => {
 
   const handleConfirmOrder = async () => {
     const order_id = order.order._id
-    await axios.post(`http://localhost:4000/orders/status-order`, {
-      order_id: order_id,
-      status: "Processing"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token.access_token}`
-      }
-    }).then((res) => {
+    await fetchConfirmOrder(order_id, token).then((res) => {
       notification.success({
         message: 'Thành công',
         description: 'Đơn hàng đã được xác nhận!',

@@ -2,6 +2,20 @@ import axios from "axios";
 
 
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
+
+
+//fetchGetAllVoucher
+export const fetchGetAllVoucher = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/vouchers/all-vouchers`);
+}
+
+//fetchGetVoucher 
+export const fetchGetVoucher = async (voucherCode) => {
+  return await axios
+  .get(`${SCHEMA_HOSTNAME}/vouchers/voucher/${voucherCode}`)
+}
+
+
 //reset-pssword:
 export const fetchResetPassword = async (
   user_id,
@@ -61,9 +75,9 @@ export const fetchOtp = async ({
     {
       navigateTo: "/",
       methodHander: "get",
-      handlerOtp: `http://localhost:4000/users/verify-email`,
+      handlerOtp: `${SCHEMA_HOSTNAME}/users/verify-email`,
       methodResend: "post",
-      handlerResendOtp: `http://localhost:4000/users/resend-verify-email`,
+      handlerResendOtp: `${SCHEMA_HOSTNAME}/users/resend-verify-email`,
       data: {
         headers: {
           Authorization: `Bearer ${result === null ? "" : result.access_token}`,
@@ -73,9 +87,9 @@ export const fetchOtp = async ({
     {
       navigateTo: "/reset-password",
       methodHander: "get",
-      handlerOtp: `http://localhost:4000/users/verify-forgot-password`,
+      handlerOtp: `${SCHEMA_HOSTNAME}/users/verify-forgot-password`,
       methodResend: "post",
-      handlerResendOtp: `http://localhost:4000/users/forgot-password`,
+      handlerResendOtp: `${SCHEMA_HOSTNAME}/users/forgot-password`,
       data: {
         headers: {
           Authorization: `Bearer ${result === null ? "" : result.access_token}`,
@@ -129,7 +143,7 @@ export const fetchForgotPassword = async ({ email }) => {
 //logout
 export const fetchLogout = async (result) => {
   await axios.post(
-    "${SCHEMA_HOSTNAME}/users/logout",
+    `${SCHEMA_HOSTNAME}/users/logout`,
     {
       refresh_token: result.refresh_token,
     },

@@ -91,6 +91,8 @@ export const productValidator = validate(
               product_name: value
             })
             if (product) {
+              console.log(product);
+              
               throw new ErrorWithStatus({
                 message: PRODUCTS_MESSAGES.PRODUCT_HAS_BEEN_EXISTED,
                 status: HTTP_STATUS.UNPROCESSABLE_ENTITY

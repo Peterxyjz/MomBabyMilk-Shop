@@ -2,12 +2,13 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
+import { useWishlistContext } from "../../context/WishlistContext";
 
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state.product || null;
   const { addCartItem } = useCartContext();
-
+  const { addWishlistItem } = useWishlistContext();
   if (!product) {
     return <div>Product not found</div>;
   }
@@ -83,11 +84,9 @@ const ProductDetail = () => {
             </div>
 
             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
-              <a
-                href="#"
-                title=""
+              <button
                 className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                role="button"
+                onClick={() => addWishlistItem(product)}
               >
                 <svg
                   className="w-5 h-5 -ms-2 me-2"
@@ -107,7 +106,7 @@ const ProductDetail = () => {
                   />
                 </svg>
                 Yêu Thích
-              </a>
+              </button>
 
               {product.amount > 0 ? (
                 <button

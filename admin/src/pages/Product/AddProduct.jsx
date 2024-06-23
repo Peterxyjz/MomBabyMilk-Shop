@@ -13,6 +13,7 @@ import { v4 } from "uuid";
 import {
   fetchBrandStaff,
   fetchCategories,
+  fetchUpdateProduct,
   fetchUploadProduct,
 } from "../../data/api";
 import { notification } from "antd";
@@ -99,7 +100,7 @@ const AddProduct = () => {
     setDescription(event.target.value);
   };
 
-  async function uploadImage(product) {
+  async function uploadImage(product, id) {
     if (img !== null) {
       const imgRef = ref(imageDb, `product_img/${v4()}`);
       const snapshot = await uploadBytes(imgRef, img);
@@ -107,13 +108,13 @@ const AddProduct = () => {
 
       product.imgUrl = url;
       console.log("product: ", product);
-      await sendURL(product);
+      await sendURL(product,id);
     } else {
       console.log("null");
     }
   }
-  const sendURL = async (product) => {
-    return await fetchUploadProduct(product, token);
+  const sendURL = async (product,id ) => {
+    return await fetchUpdateProduct(product, token, id);
   };
   // const handleSaveImg = (url) => {
 

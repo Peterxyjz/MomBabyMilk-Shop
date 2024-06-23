@@ -57,7 +57,7 @@ const AwaitOrderDetail = () => {
   const handleCancelOrder = async () => {
     const order_id = order.order._id;
     try {
-      fetchCancelOrder(order_id, token);
+      await fetchCancelOrder(order_id, token);
       // Lưu trạng thái vào sessionStorage
       sessionStorage.setItem("orderCancelled", "true");
 
@@ -101,7 +101,7 @@ const AwaitOrderDetail = () => {
 
   const handleConfirmOrder = async () => {
     const order_id = order.order._id;
-    fetchConfirmOrder(order_id, token)
+   await fetchConfirmOrder(order_id, token)
       .then((res) => {
         // Lưu trạng thái vào sessionStorage
         sessionStorage.setItem("orderConfirmed", "true");

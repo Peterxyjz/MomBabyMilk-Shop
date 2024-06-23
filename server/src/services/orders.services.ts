@@ -8,6 +8,7 @@ import Order from '~/model/schemas/Order.schema'
 import OrderDetail from '~/model/schemas/OrderDetail.schema'
 import { OrderStatus } from '~/constants/enums'
 import wareHouseService from './wareHouse.services'
+import { ErrorWithStatus } from '~/model/Errors'
 config()
 
 class OrderServinces {
@@ -51,6 +52,18 @@ class OrderServinces {
 
     return await databaseService.orders.updateOne(filter, update)
   }
+
+async updateStatus(id: string, status: string, user_id: string) {
+  const filter = { _id: new ObjectId(id) }	
+  const order = await databaseService.orders.findOne(filter)
+  if(!order){
+    throw new ErrorWithStatus({
+      message: "Không tìm thấy đơn hàng",
+      status: 400
+    })
+  }
+  return await databaseService.orders.updateOne(filter, { $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id } })
+}
 
   async getSalesByProductId(id: string) {
     const filter = { product_id: id }
