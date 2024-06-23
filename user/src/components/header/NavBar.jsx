@@ -1,4 +1,3 @@
-import React from "react";
 import LogoImg from "../../assets/images/logo/Logo.png";
 import SearchBar from "./SearchBar";
 import UserBtn from "./userBtn";

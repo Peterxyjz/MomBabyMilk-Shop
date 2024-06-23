@@ -1,12 +1,13 @@
-import React from "react";
 import cartEmptyImg from "../../assets/images/background/cart_empty.png";
-import { MdDeleteForever, MdLineAxis } from "react-icons/md";
+import { MdDeleteForever } from "react-icons/md";
 import { useCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { fetchGetVoucher } from "../../data/api";
+import { Button, Dropdown } from "flowbite-react";
 const ShoppingCart = () => {
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const verify = user === null ? 0 : user.verify;
   const {
     cartItems,
     totalPrice,
@@ -15,22 +16,24 @@ const ShoppingCart = () => {
     decreaseAmount,
     cartAmount,
   } = useCartContext();
-  let ship = 50000;
 
- 
   const [voucherCode, setVoucherCode] = useState("");
-  const [discount, setDiscount] = useState(0)
+  const [discount, setDiscount] = useState(0);
+  const [ship, setShip] = useState(0);
   const [errorList, setErrorList] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const handleRadioChange = (event) => {
+    const selectedValue = event.target.value;
+    document.getElementById("voucherCode").value = selectedValue;
+  };
   const handChangeVoucherCode = (e) => {
     setVoucherCode(e.target.value);
-    console.log(e.target.value);
   };
   const handClickVoucher = async (event) => {
     event.preventDefault();
     await fetchGetVoucher(voucherCode)
       .then((res) => {
-        console.log(res.data);
-       setDiscount(Number(res.data.discount))
+        setDiscount(Number(res.data.discount));
       })
       .catch((error) => {
         let errorList = [];
@@ -38,9 +41,22 @@ const ShoppingCart = () => {
           errorList.push(value);
           setErrorList(errorList);
         }
-        console.log(error);
       });
   };
+
+  const calculateShip = (cartAmount) => {
+    if (cartAmount > 20) {
+      return 0;
+    } else if (cartAmount > 10) {
+      return 30000;
+    } else {
+      return 50000;
+    }
+  };
+
+  useEffect(() => {
+    setShip(calculateShip(cartAmount));
+  }, [cartAmount]);
   const total = totalPrice + ship - discount;
   return (
     <>
@@ -324,7 +340,11 @@ const ShoppingCart = () => {
                   </div>
                   <Link
                     to={"/order"}
-                    state={{discount: discount, ship: ship,voucherCode: voucherCode}}
+                    state={{
+                      discount: discount,
+                      ship: ship,
+                      voucherCode: voucherCode,
+                    }}
                     className="flex w-full items-center justify-center rounded-lg bg-[#1d4ed8] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1e40af] focus:outline-none focus:ring-4 focus:ring-[#93c5fd] dark:bg-[#2563eb] dark:hover:bg-[#1d4ed8] dark:focus:ring-[#1e40af]"
                   >
                     Thanh Toán Ngay
@@ -335,8 +355,7 @@ const ShoppingCart = () => {
                       Hoặc{" "}
                     </span>
                     <a
-                      href="/"
-                      title=""
+                      href="/filter"
                       className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500"
                     >
                       Tiếp Tục Mua Hàng
@@ -360,31 +379,118 @@ const ShoppingCart = () => {
                 </div>
                 <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
                   <form className="space-y-4" onSubmit={handClickVoucher}>
-                    <div>
-                      <label
-                        htmlFor="voucher"
-                        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        {" "}
-                        Bạn có voucher hoặc thẻ quà tặng không?{" "}
-                      </label>
-                      <input
-                        type="text"
-                        id="voucherCode"
-                        name="voucherCode"
-                        value={voucherCode}
-                        onChange={handChangeVoucherCode}
-                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                        placeholder=""
-                        required
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="flex w-full items-center justify-center rounded-lg bg-[#1d4ed8] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1e40af] focus:outline-none focus:ring-4 focus:ring-[#93c5fd] dark:bg-[#2563eb] dark:hover:bg-[#1d4ed8] dark:focus:ring-[#1e40af]"
+                    <label
+                      htmlFor="voucher"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Áp Dụng Mã
-                    </button>
+                      Bạn có voucher hoặc thẻ quà tặng không?
+                    </label>
+                    <div className="w-full flex justify-between items-center gap-2">
+                      <div className="w-3/4">
+                        <input
+                          type="text"
+                          id="voucherCode"
+                          name="voucherCode"
+                          value={voucherCode}
+                          onChange={handChangeVoucherCode}
+                          className="block w-full h-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                          placeholder=""
+                          required
+                        />
+                      </div>
+                      <div className="w-1/4">
+                        <Button color="blue" size="xs">
+                          Áp Dụng
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="w-full">
+                      {verify === 1 && (
+                        <div>
+                          <button
+                            id="dropdownRadioHelperButton"
+                            data-dropdown-toggle="dropdownRadioHelper"
+                            className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 w-full inline-flex justify-center items-center"
+                            type="button"
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                          >
+                            Kho Voucher
+                          </button>
+
+                          {/* Dropdown menu */}
+                          {dropdownOpen && (
+                            <div
+                              id="dropdownRadioHelper"
+                              className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700 dark:divide-gray-600"
+                            >
+                              <ul
+                                className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                                aria-labelledby="dropdownRadioHelperButton"
+                              >
+                                <li>
+                                  <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <div className="flex items-center h-5">
+                                      <input
+                                        id="helper-radio-4"
+                                        name="helper-radio"
+                                        type="radio"
+                                        value="Individual"
+                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                        onChange={handleRadioChange}
+                                      />
+                                    </div>
+                                    <div className="ms-2 text-sm">
+                                      <label
+                                        htmlFor="helper-radio-4"
+                                        className="font-medium text-gray-900 dark:text-gray-300"
+                                      >
+                                        <div>Individual</div>
+                                        <p
+                                          id="helper-radio-text-4"
+                                          className="text-xs font-normal text-gray-500 dark:text-gray-300"
+                                        >
+                                          Some helpful instruction goes over
+                                          here.
+                                        </p>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <div className="flex items-center h-5">
+                                      <input
+                                        id="helper-radio-5"
+                                        name="helper-radio"
+                                        type="radio"
+                                        value="Company"
+                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                        onChange={handleRadioChange}
+                                      />
+                                    </div>
+                                    <div className="ms-2 text-sm">
+                                      <label
+                                        htmlFor="helper-radio-5"
+                                        className="font-medium text-gray-900 dark:text-gray-300"
+                                      >
+                                        <div>Company</div>
+                                        <p
+                                          id="helper-radio-text-5"
+                                          className="text-xs font-normal text-gray-500 dark:text-gray-300"
+                                        >
+                                          Some helpful instruction goes over
+                                          here.
+                                        </p>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     {errorList.length > 0 && (
                       <div className="error-list mt-3 mb-3">
                         {errorList.map((error, index) => (
