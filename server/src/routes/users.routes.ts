@@ -9,6 +9,7 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  updateMeValidator,
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
 import {
@@ -23,6 +24,7 @@ import {
   registerController,
   resendEmailVerifyController,
   resetPasswordController,
+  updateMeController,
   verifyForgotPasswordTokenController
 } from '~/controllers/users.controllers'
 import { wrapAsync } from '~/utils/handlers'
@@ -79,5 +81,6 @@ usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
 
 usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
+usersRouter.patch('/me', accessTokenValidator, updateMeValidator, wrapAsync(updateMeController))
 
 export default usersRouter

@@ -1,4 +1,5 @@
 export const USERS_MESSAGES = {
+  UPDATE_ME_SUCCESS: 'Cap nhatt thanh cong',
   VALIDATION_ERROR: 'Lỗi xác thực',
   //name
   NAME_IS_REQUIRED: 'Tên là bắt buộc',
@@ -67,6 +68,8 @@ export const USERS_MESSAGES = {
   DELETE_SUCCESS: 'Xóa thành công',
   DELETE_FAIL: 'Xóa thất bại',
   GET_ME_SUCCESS: 'Lấy thông tin thành công',
+  PHONE_IS_REQUIRED: 'Số điện thoại là bắt buộc',
+  ADDRESS_IS_REQUIRED: 'Đị̣a chỉ là bắt buộc',
 } as const
 
 

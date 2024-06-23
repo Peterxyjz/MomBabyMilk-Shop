@@ -257,7 +257,7 @@ class UsersService {
     }
   }
 
-  async getRoles(){
+  async getRoles() {
     return await databaseService.roles.find({}).toArray()
   }
   async checkRole(user: User) {
@@ -362,7 +362,7 @@ class UsersService {
   }
 
   async getMe(user_id: string) {
-    // projection để loại bỏ các thuộc tính mà mình ko lấy 
+    // projection để loại bỏ các thuộc tính mà mình ko lấy
     const user = await databaseService.users.findOne(
       { _id: new ObjectId(user_id) },
       {
@@ -376,6 +376,10 @@ class UsersService {
     return user
   }
 
+  async updateMe(user_id: string, payload: any) {
+    const result = await databaseService.users.findOneAndUpdate({ _id: new ObjectId(user_id) }, { $set: payload })
+    return result
+  }
 }
 
 const usersService = new UsersService()
