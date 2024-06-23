@@ -15,6 +15,16 @@ import { hashPassword } from '~/utils/crypto'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
 
+const dateOfBirthSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: USERS_MESSAGES.DATE_OF_BIRTH_BE_ISO8601
+  }
+}
+
 const passwordSchema: ParamSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.PASSWORD_IS_REQUIRED
@@ -484,3 +494,66 @@ export const checkPasswordToken = async (req: Request, res: Response, next: Next
   req.body.digit = req.query.digit
   next()
 }
+
+export const updateMeValidator = validate(
+  checkSchema(
+    {
+      full_name: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 100
+          },
+          errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+        }
+      },
+      phone:{
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.PHONE_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 100
+          },
+          errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+        }
+      },
+      address:{
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.ADDRESS_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 500
+          },
+          errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+        }
+      },
+      date_of_birth: {
+        optional: true, //đc phép có hoặc k
+        ...dateOfBirthSchema, //phân rã nameSchema ra
+        notEmpty: undefined //ghi đè lên notEmpty của nameSchema
+      },
+     
+
+    },
+    ['body']
+  )
+)

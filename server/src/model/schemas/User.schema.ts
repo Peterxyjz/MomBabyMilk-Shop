@@ -28,7 +28,7 @@ export default class User {
   role_id: string
   full_name: string //optinal là ?
   email: string
-  date_of_birth: Date
+  date_of_birth?: Date
   password: string
   country: string
   province: string
@@ -48,7 +48,7 @@ export default class User {
     this.role_id = user.role_id
     this.full_name = user.full_name || ''
     this.email = user.email
-    this.date_of_birth = user.date_of_birth || date
+    this.date_of_birth = user.date_of_birth || undefined
     this.password = user.password
     this.country = user.country || ''
     this.province = user.province || ''
