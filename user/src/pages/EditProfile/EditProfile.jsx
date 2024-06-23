@@ -32,6 +32,8 @@ const EditProfile = () => {
       year: "",
     },
   });
+
+  const [errorList, setErrorList] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
   useEffect(() => {
     console.log("getme");
@@ -108,9 +110,9 @@ const EditProfile = () => {
 
   const [addressInput, setAddressInput] = useState("");
 
-const handlerChangeAddressInput = (event) => {
-  setAddressInput(event.target.value);
-};
+  const handlerChangeAddressInput = (event) => {
+    setAddressInput(event.target.value);
+  };
 
   const [selectedProvince, setSelectedProvince] = useState({
     id: "",
@@ -174,25 +176,31 @@ const handlerChangeAddressInput = (event) => {
     }
   };
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const date = new Date()
-    date.setDate(profile.birthDate.day)
-    date.setMonth(profile.birthDate.month - 1)
-    date.setFullYear(profile.birthDate.year)
+    const date = new Date();
+    date.setDate(profile.birthDate.day);
+    date.setMonth(profile.birthDate.month - 1);
+    date.setFullYear(profile.birthDate.year);
     const data = {
       full_name: profile.name,
       phone: profile.phone,
       address: profile.address,
       date_of_birth: date,
-    }
-    await fetchUpdateMe(token, data).then((res) => {
-      console.log(res.data);
-      console.log("Profile updated:", profile);
-    }).catch((error) => {
-      console.log(error);
-    });
-   
+    };
+    await fetchUpdateMe(token, data)
+      .then((res) => {
+        console.log(res.data);
+        console.log("Profile updated:", profile);
+      })
+      .catch((error) => {
+        console.log(error);
+        let errorList = [];
+        for (let [key, value] of Object.entries(error.response.data.errors)) {
+          errorList.push(value);
+          setErrorList(errorList);
+        }
+      });
   };
   console.log("profile: ", profile);
   return (
@@ -464,6 +472,7 @@ const handlerChangeAddressInput = (event) => {
                         value={profile.address}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
                         readOnly
                       />
                       <button
@@ -484,7 +493,9 @@ const handlerChangeAddressInput = (event) => {
                       value={profile.birthDate.day}
                       onChange={handleDateChange}
                       className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
                     >
+                      <option value="">Chọn Ngày</option>
                       {[...Array(31).keys()].map((day) => (
                         <option key={day + 1} value={day + 1}>
                           {day + 1}
@@ -496,7 +507,9 @@ const handlerChangeAddressInput = (event) => {
                       value={profile.birthDate.month}
                       onChange={handleDateChange}
                       className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
                     >
+                      <option value="">Chọn Tháng</option>
                       {[...Array(12).keys()].map((month) => (
                         <option key={month + 1} value={month + 1}>
                           Tháng {month + 1}
@@ -508,8 +521,10 @@ const handlerChangeAddressInput = (event) => {
                       value={profile.birthDate.year}
                       onChange={handleDateChange}
                       className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
                     >
-                      {[...Array(100).keys()].map((year) => (
+                      <option value="">Chọn Năm</option>
+                      {[...Array(120).keys()].map((year) => (
                         <option key={year + 1920} value={year + 1920}>
                           {year + 1920}
                         </option>
@@ -524,6 +539,15 @@ const handlerChangeAddressInput = (event) => {
                   Lưu
                 </button>
               </form>
+              {errorList.length > 0 && (
+                <div className="error-list mt-3 mb-3">
+                  {errorList.map((error, index) => (
+                    <p key={index} className="text-red-600">
+                      {error}
+                    </p>
+                  ))}
+                </div>
+              )}
             </>
           )}
           {view === "password" && (
@@ -555,6 +579,8 @@ const handlerChangeAddressInput = (event) => {
                   Lưu thay đổi
                 </button>
               </form>
+             
+              
               <div className="mt-6">
                 <h3 className="text-lg font-semibold mb-2">Bảo mật hai lớp</h3>
                 <p className="text-gray-600 mb-4">
