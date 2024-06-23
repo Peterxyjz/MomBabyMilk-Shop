@@ -134,10 +134,8 @@ const AddProduct = () => {
     // send data to db:
     await fetchUploadProduct(product, token)
       .then(async (res) => {
-        console.log(res.data);
-        const product = res.data.product;
-        console.log("product: ", product);
-        await uploadImage(product);
+        const id = res.data.result.insertedId
+        await uploadImage(product,id);
       })
       .then((data) => {
         notification.success({

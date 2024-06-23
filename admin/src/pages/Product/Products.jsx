@@ -91,12 +91,14 @@ const Product = () => {
       dataIndex: "category_name",
       key: "category_name",
       width: 150,
+      sorter: (a, b) => a.category_name.localeCompare(b.category_name),
     },
     {
       title: "Thương Hiệu",
       dataIndex: "brand_name",
       key: "brand_name",
       width: 150,
+      sorter: (a, b) => a.brand_name.localeCompare(b.brand_name),
     },
     {
       title: "Số Lượng",
@@ -136,6 +138,7 @@ const Product = () => {
           {text}
         </div>
       ),
+      sorter: (a, b) => a.sales - b.sales,
     },
     {
       title: "Doanh Thu",
