@@ -2,6 +2,18 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
+//fetchUpdateMe
+export const fetchUpdateMe = async (token,data) => {
+  return await axios.patch(`${SCHEMA_HOSTNAME}/users/me`,{
+    ...data
+  },{
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+};
+
+
 //fetchGetMe
 export const fetchGetMe = async (token) => {
   return await axios.get(`${SCHEMA_HOSTNAME}/users/me`,{

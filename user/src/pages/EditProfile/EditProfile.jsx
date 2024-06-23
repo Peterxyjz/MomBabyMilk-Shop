@@ -15,6 +15,7 @@ import {
   getProvinces,
   getDistricts,
   getWards,
+  fetchUpdateMe,
 } from "../../data/api";
 
 const EditProfile = () => {
@@ -173,9 +174,25 @@ const handlerChangeAddressInput = (event) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    console.log("Profile updated:", profile);
+    const date = new Date()
+    date.setDate(profile.birthDate.day)
+    date.setMonth(profile.birthDate.month - 1)
+    date.setFullYear(profile.birthDate.year)
+    const data = {
+      full_name: profile.name,
+      phone: profile.phone,
+      address: profile.address,
+      date_of_birth: date,
+    }
+    await fetchUpdateMe(token, data).then((res) => {
+      console.log(res.data);
+      console.log("Profile updated:", profile);
+    }).catch((error) => {
+      console.log(error);
+    });
+   
   };
   console.log("profile: ", profile);
   return (

@@ -377,7 +377,11 @@ class UsersService {
   }
 
   async updateMe(user_id: string, payload: any) {
-    const result = await databaseService.users.findOneAndUpdate({ _id: new ObjectId(user_id) }, { $set: payload })
+    const result = await databaseService.users.findOneAndUpdate(
+      { _id: new ObjectId(user_id) },
+      { $set: payload },
+      { returnDocument: 'after' }
+    )
     return result
   }
 }
