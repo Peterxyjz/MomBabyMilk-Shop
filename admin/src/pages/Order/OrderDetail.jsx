@@ -99,7 +99,7 @@ const AwaitOrderDetail = () => {
       notification.error({
         message: 'Lỗi',
         description: 'Đơn hàng không thể xác nhận!',
-        placement : 'top',
+        placement: 'top',
       });
       console.log(error);
     });
@@ -257,48 +257,57 @@ const AwaitOrderDetail = () => {
           </div>
         </Col>
         <Col span={9}>
-          <div style={{ display: 'flex', justifyContent: 'center', height: '60vh' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', height: '70vh' }}>
             <Card title={<h1 className="text-2xl font-bold">Thông tin đơn hàng:</h1>}
               style={{ width: '90%', marginTop: '50px' }}>
               <div>
-                <div style={{ marginBottom: '10px' }}>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Ngày Đặt:</Text>
                   <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{formatDate(order.order.required_date)}</Text>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Tên khách hàng:</Text>
                   <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.full_name}</Text>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Email:</Text>
                   <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.email}</Text>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Số Điện Thoại:</Text>
                   <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.phone}</Text>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
-                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Địa chỉ:</Text>
-                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.address}</Text>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', marginRight: '10px', whiteSpace: 'nowrap' }}>Địa chỉ:</Text>
+                  <Text strong style={{ fontSize: '17px', textAlign: 'right' }}>{order.order.address}</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Phương thức thanh toán:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.payment_method}</Text>
                 </div>
               </div>
               <Divider />
               <div>
-                <div style={{ marginBottom: '10px' }}>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Giá gốc:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}> {Number(order.order.total_price - order.order.ship_fee).toLocaleString("vi-VN", { style: "currency", currency: "VND", })}</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Giảm giá:</Text>
-                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.voucher_code}</Text>
+                  {/* <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.voucher_code}</Text> */}
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{Number(0).toLocaleString("vi-VN", { style: "currency", currency: "VND", })}</Text>
                 </div>
-                <div style={{ marginBottom: '10px' }}>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Phí vận chuyển:</Text>
-                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.ship_fee}</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{Number(order.order.ship_fee).toLocaleString("vi-VN", { style: "currency", currency: "VND", })}</Text>
                 </div>
               </div>
               <Divider />
-              <div>
-              <Text strong style={{ fontSize: '17px', display: 'inline-block', marginRight: '10px' }}>Tổng:</Text>
-              <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.total_price}</Text>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Text strong style={{ fontSize: '17px', display: 'inline-block', marginRight: '10px' }}>Tổng giá trị:</Text>
+                <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{Number(order.order.total_price).toLocaleString("vi-VN", { style: "currency", currency: "VND", })}</Text>
               </div>
-            
+
             </Card>
           </div>
         </Col >

@@ -16,6 +16,7 @@ import {
   fetchUpdateProduct,
   fetchUploadProduct,
 } from "../../data/api";
+import { notification } from "antd";
 const AddProduct = () => {
   const [product_name, setProduct_name] = useState("");
   const [age, setAge] = useState("");
@@ -134,19 +135,22 @@ const AddProduct = () => {
     // send data to db:
     await fetchUploadProduct(product, token)
       .then(async (res) => {
-        console.log(res.data);
         const id = res.data.result.insertedId
-        
         await uploadImage(product,id);
       })
       .then((data) => {
-        alert("Tạo sản phẩm thành công");
+        notification.success({
+          message: "Thêm sản phẩm thành công!",
+          placement: "top",
+        })
         form.reset();
       })
       .catch((error) => {
         console.log(error.response);
       });
   };
+
+
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl h-screen w-full">

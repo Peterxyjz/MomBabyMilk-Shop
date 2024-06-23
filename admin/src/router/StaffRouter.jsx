@@ -18,20 +18,13 @@ import ApprovedOrder from '../pages/Order/ApprovedOrder';
 import CancelOrder from '../pages/Order/CancelOrder';
 import CompleteOrder from '../pages/Order/CompleteOrder';
 import OrderDetail from '../pages/Order/OrderDetail';
+import EditCategory from '../pages/Category/EditCategory';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
         <Routes>
             <Route path="/" element={(<Dashboard isAuthenticatedStaff={isAuthenticatedStaff} />)} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/add-product" element={<AddProduct />} />
-            <Route path="/edit-product" element={<EditProduct />} />
             <Route path="/customers" element={<Customers />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/add-categories" element={<AddCategory />} />
-            <Route path="/brands" element={<Brands />} />
-            <Route path="/add-brand" element={<AddBrands />} />
             <Route path="/profile" element={<UserSetting />} />
             <Route path="/add-inputbill" element={(<AddBill />)} />
             {/* order */}
@@ -42,6 +35,17 @@ const StaffRouter = () => {
             <Route path="/complete-order" element={(<CompleteOrder />)} />
             <Route path="/order-detail" element={(<OrderDetail />)} />
             <Route path="/orders" element={(<Orders />)} />
+            {/* product */}
+            <Route path="/products" element={<Products />} />
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/edit-product" element={<EditProduct />} />
+            {/* brand */}
+            <Route path="/brands" element={<Brands />} />
+            <Route path="/add-brand" element={<AddBrands />} />
+            {/* category */}
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/add-category" element={<AddCategory />} />
+            <Route path="/edit-category" element={<EditCategory />} />
         </Routes>
     )
 }

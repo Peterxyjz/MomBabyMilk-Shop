@@ -49,6 +49,40 @@ export const fetchCategories = async () => {
   return fetch(`${SCHEMA_HOSTNAME}/categories/all-categories`);
 };
 
+//get-category-by-id
+export const fetchCategoryById = async (id) => {
+  return fetch(`${SCHEMA_HOSTNAME}/categories/category/${id}`);
+};
+
+//add-category
+export const fetchAddCategory = async (category, token) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/categories/upload`,
+    { ...category },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
+//upload-category
+export const fetchUpdateCategory = async (category, token, id) => {
+  return await axios.patch(
+    `${SCHEMA_HOSTNAME}/categories/category/${id}`,
+    {
+      category_name: category.category_name,
+      description: category.description,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //upload -bill
 export const fetchUploadBill = async (inputBill, token) => {
   console.log(inputBill);
@@ -209,3 +243,74 @@ export const fetchOrder = async () => {
     throw error;
   }
 };
+
+//API province, district, ward
+const baseUrl = "https://open.oapi.vn/location";
+class Http {
+  // get:
+  async get(url) {
+    console.log(url);
+    const response = await fetch(url);
+    if (response.ok) {
+      console.log(url);
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
+    }
+  }
+}
+class Store {
+  constructor() {
+    this.http = new Http();
+  }
+  //getProvince() : lấy  nhiều tp theo code
+  async getProvince() {
+    try {
+      const provinces = await this.http.get(`${baseUrl}/provinces?&size=64`);
+
+      return provinces.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //lấy danh sách các quận dựa vào provinceCode
+  async getDistrictByProvinceCode(provinceCode = 1) {
+    try {
+      const districts = await this.http.get(
+        `${baseUrl}/districts?provinceId=${provinceCode}&size=705 `
+      );
+      return districts.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //lấy danh sách các huyện phường dựa vào districtCode
+  async getWardByDistrictCode(districtCode = 271) {
+    try {
+      const wards = await this.http.get(
+        `${baseUrl}/wards?districtId=${districtCode}&size=10603`
+      );
+
+      return wards.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+const store = new Store();
+export const getProvinces = async () => {
+  const provinces = await store.getProvince();
+  return provinces;
+};
+
+export const getDistricts = async (id) => {
+  const districts = await store.getDistrictByProvinceCode(id);
+  return districts;
+};
+export const getWards = async (id) => {
+  const wards = await store.getWardByDistrictCode(id);
+  return wards;
+};
+
+

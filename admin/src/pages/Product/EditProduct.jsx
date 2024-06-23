@@ -19,6 +19,7 @@ import { v4 } from "uuid";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBrandStaff, fetchBrands, fetchCategories,fetchProductById, fetchUpdateProduct } from "../../data/api.js";
+import { notification } from "antd";
 const EditProduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -174,10 +175,10 @@ const EditProduct = () => {
 
       })
       .then((data) => {
-       alert("Đã cập nhật sản phẩm thành công");
-        
-
-
+       notification.success({
+         message: "Thay đổi sản phẩm thành công!",
+         placement: "top",
+       })
         navigate("/products");
       })
       .catch((error) => {

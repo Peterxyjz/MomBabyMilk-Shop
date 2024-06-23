@@ -332,27 +332,13 @@ const AwaitOrderDetail = () => {
                     {order.order.phone}
                   </Text>
                 </div>
-                <div style={{ marginBottom: "10px" }}>
-                  <Text
-                    type="secondary"
-                    style={{
-                      fontSize: "15px",
-                      display: "inline-block",
-                      marginRight: "10px",
-                    }}
-                  >
-                    Địa chỉ:
-                  </Text>
-                  <Text
-                    strong
-                    style={{
-                      fontSize: "17px",
-                      display: "inline-block",
-                      textAlign: "justify",
-                    }}
-                  >
-                    {order.order.address}
-                  </Text>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', marginRight: '10px',  whiteSpace: 'nowrap' }}>Địa chỉ:</Text>
+                  <Text strong style={{ fontSize: '17px', textAlign: 'right' }}>{order.order.address}</Text>
+                </div>
+                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Phương thức thanh toán:</Text>
+                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.payment_method}</Text>
                 </div>
               </div>
               <Divider />

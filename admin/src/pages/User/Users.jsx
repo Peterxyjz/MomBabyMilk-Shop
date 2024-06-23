@@ -3,12 +3,12 @@ import { Header } from '../../components'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useNavigate } from 'react-router-dom';
-import { Button, ToggleSwitch } from 'flowbite-react';
+import { ToggleSwitch } from 'flowbite-react';
 import axios from 'axios';
 import { Card } from 'primereact/card';
 import { format } from 'date-fns';
 
-import { Table, Switch, Pagination } from 'antd';
+import { Button, Table, Switch, Pagination, Modal, notification } from 'antd';
 import { fetchAllUsers } from '../../data/api';
 
 
@@ -26,8 +26,8 @@ const Users = () => {
         const fetchUsers = async () => {
 
             try {
-                const result =JSON.parse(localStorage.getItem("result"))
-                const res = await  fetchAllUsers(result);
+                const result = JSON.parse(localStorage.getItem("result"))
+                const res = await fetchAllUsers(result);
                 const formattedUsers = res.data.users.map(user => ({
                     ...user,
                     date_of_birth: formatDate(user.date_of_birth)
@@ -39,7 +39,7 @@ const Users = () => {
             }
         };
         console.log(Users);
-         fetchUsers();
+        fetchUsers();
     }, []);
 
     // const onToggleChange = (user) => {
@@ -60,12 +60,52 @@ const Users = () => {
     // };
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
 
     const handleTableChange = (pagination) => {
         setCurrentPage(pagination.current);
         setPageSize(pagination.pageSize);
     };
+
+    // const handleSwitchChange = (checked, Users) => {
+    //     Modal.confirm({
+    //       title: "Xác nhận thay đổi tình trạng người dùng",
+    //       content: `Bạn có muốn thay đổi tình trạng người dùng? Hiện đang ${
+    //         checked ? "tắt" : "bật"
+    //       }`,
+    //       onOk: async () => {
+    //         Users.isActive = checked;
+    //         await updateUser(Users);
+    //         setUsers([...Users]);
+    //         notification.success({
+    //           message: "Thành công",
+    //           description: `Thay đổi thành công! Sản phẩm hiện đang ${
+    //             checked ? "bật" : "tắt"
+    //           }`,
+    //           placement: "top",
+    //         });
+    //       },
+    //       onCancel() {
+    //         console.log("Cancel");
+    //       },
+    //       okButtonProps: {
+    //         style: {
+    //           backgroundColor: "#46B5C1",
+    //           borderColor: "#46B5C1",
+    //         },
+    //       },
+    //       cancelButtonProps: {
+    //         style: {
+    //           backgroundColor: "#FF4D4F",
+    //           borderColor: "#FF4D4F",
+    //           color: "#FFFFFF",
+    //         },
+    //       },
+    //       cancelText: "Đóng",
+    //       okText: "Đồng ý",
+    //     });
+    //   };
+
 
     const columns = [
         {
@@ -116,10 +156,13 @@ const Users = () => {
         },
         {
             title: 'Tình trạng',
-            dataIndex: 'status',
-            key: 'status',
+            dataIndex: 'isActive',
+            key: 'isActive',
             render: (text, record) => (
-                <Switch checked={record.status} />
+                <Switch checked={record.isActive}
+                    style={{ backgroundColor: record.isActive ? "#4A99FF" : "#898989" }}
+                />
+
             ),
             width: '10%',
             sorter: (a, b) => a.status - b.status,
@@ -128,8 +171,18 @@ const Users = () => {
     ];
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', height: '85vh' }}>
-            <Card title="Tất cả người dùng" subTitle="" footer="" header="" className="" style={{ width: '90%', marginTop: '50px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>
+            <Card title="Tất cả người dùng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: '90vh', marginTop: '50px' }}>
+                <div className="flex justify-between items-center mb-4">
+                    <Button
+                        type="primary"
+                        size="large"
+                        style={{ backgroundColor: "#46B5C1", height: "100%" }}
+                        onClick={() => navigate("/add-staff")}
+                    >
+                        Thêm nhân viên
+                    </Button>
+                </div>
                 <Table
                     columns={columns}
                     dataSource={Users}
