@@ -43,9 +43,10 @@ export const uploadController = async (req: Request, res: Response) => {
         await databaseService.warehouse.insertOne(newWarehouseEntry)
       }
     }
-
+    console.log(inputBillId);
+    
     await databaseService.revenue.insertOne({
-      _id: new ObjectId(inputBillId),
+      _id: inputBillId,
       type: RevenueStatus.InputBill,
       total: Number(req.body.total)
     })
