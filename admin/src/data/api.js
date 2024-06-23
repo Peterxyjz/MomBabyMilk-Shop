@@ -85,8 +85,6 @@ export const fetchUpdateCategory = async (category, token, id) => {
 
 //upload -bill
 export const fetchUploadBill = async (inputBill, token) => {
-  console.log(inputBill);
-  console.log(token);
   return await axios.post(`${SCHEMA_HOSTNAME}/inputBills/upload`, inputBill, {
     headers: {
       Authorization: `Bearer ${token.access_token}`,

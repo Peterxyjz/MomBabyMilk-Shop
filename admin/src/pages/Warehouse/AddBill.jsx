@@ -16,7 +16,6 @@ const AddBill = () => {
   const [billProducts, setBillProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
-  const [amout, setAmout] = useState(0);
   const [formState, setFormState] = useState({}); // Thêm state để quản lý form
 
   //ham phan chia trang
@@ -140,14 +139,6 @@ const AddBill = () => {
   const calculatePrice = () => {
     return billProducts.reduce((total, product) => total + product.price * product.amount, 0);
   };
-
-  //tinh gia chiet khau
-  const calculateDiscountedPrice = (amount, price) => {
-    if (amount > 20) return price * 0.6;
-    if (amount >= 10) return price * 0.4;
-    if (amount >= 1) return price * 0.2;
-    return price;
-  };
   const getDiscountPercentage = (amount) => {
     if (amount > 20) return 60;
     if (amount >= 10) return 40;
@@ -198,12 +189,13 @@ const AddBill = () => {
       inputBillDetailList: billProducts.map(product => ({
         product_id: product._id,
         amount: product.amount
-      })),
+      })
+    ),
+    total: calculateTotal()
     };
 
     try {
-      const res = await fetchUploadBill(inputBill, token);
-      console.log(res.data);
+      await fetchUploadBill(inputBill, token);
       notification.success({
         message: 'Tạo đơn nhập hàng thành công',
         placement: 'top'
@@ -244,7 +236,6 @@ const AddBill = () => {
                   rowSelection={rowSelection}
                 />
               </div>
-
             </Card>
           </div>
         </Col>

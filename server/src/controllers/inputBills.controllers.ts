@@ -1,3 +1,4 @@
+import { result } from 'lodash'
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
@@ -7,6 +8,7 @@ import InputBillDetail from '~/model/schemas/InputBillDetail.schema' // Ensure y
 import WareHouse from '~/model/schemas/WareHouse.schema'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
+import { RevenueStatus } from '~/constants/enums'
 
 export const uploadController = async (req: Request, res: Response) => {
   const inputBill = new InputBill()
@@ -42,6 +44,11 @@ export const uploadController = async (req: Request, res: Response) => {
       }
     }
 
+    await databaseService.revenue.insertOne({
+      _id: new ObjectId(inputBillId),
+      type: RevenueStatus.InputBill,
+      total: Number(req.body.total)
+    })
     return res.status(200).json({
       message: USERS_MESSAGES.UPLOAD_SUCCESS,
       inputBillId: inputBillId,
@@ -53,4 +60,22 @@ export const uploadController = async (req: Request, res: Response) => {
       message: 'Internal Server Error'
     })
   }
+}
+
+export const getAllController = async (req: Request, res: Response) => {
+  const inputBills = await databaseService.inputBills.find({}).toArray()
+
+  const result = []
+
+  for (const inputBill of inputBills) {
+    const inputBillDetails = await databaseService.inputBillDetails
+      .find({ input_bill_id: inputBill._id?.toString() })
+      .toArray()
+    result.push({ inputBill: inputBill, inputBillDetails: inputBillDetails })
+  }
+
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result
+  })
 }

@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaUser,
   FaHistory,
-  FaCreditCard,
   FaLock,
   FaCommentDots,
   FaHeart,
   FaShareAlt,
-  FaShoppingCart,
 } from "react-icons/fa";
 import Breadcrumbs from "../../components/elements/Breadcrumb";
 import {
