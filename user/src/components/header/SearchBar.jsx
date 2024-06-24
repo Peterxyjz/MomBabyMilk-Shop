@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchCategories, fetchProducts } from "../../data/api.jsx";
 
@@ -11,6 +11,7 @@ const SearchBar = () => {
 
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const searchBarRef = useRef(null);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -86,12 +87,25 @@ const SearchBar = () => {
     navigate("/product", { state: { product: _product } });
   };
 
+  const handleClickOutside = (event) => {
+    if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+      setSuggestions([]);
+    }
+  };
+
   useEffect(() => {
     getCategory();
   }, []);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <form className="w-full mx-auto">
+    <form className="w-full mx-auto" ref={searchBarRef}>
       <div className="flex">
         <label
           htmlFor="search-dropdown"
