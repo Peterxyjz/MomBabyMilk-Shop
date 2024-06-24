@@ -84,7 +84,7 @@ class OrderServinces {
   }
   async updateOrderStatus() {
     const twelveHoursAgo = new Date()
-    twelveHoursAgo.setMinutes(twelveHoursAgo.getMinutes() - 1) // Lấy thời gian 3 Ngày trước
+    twelveHoursAgo.setDate(twelveHoursAgo.getDate() - 3) // Lấy thời gian 3 Ngày trước
 
     const orders = await databaseService.orders
       .find({
@@ -103,13 +103,13 @@ class OrderServinces {
           new Revenue({
             _id: order._id,
             type: RevenueStatus.Order,
-            total: Number(order.total_price)
+            total: Number(order.total_price),
+            completed_date: twelveHoursAgo
           })
         )
       ])
     })
 
-  
     return true
   }
 }
