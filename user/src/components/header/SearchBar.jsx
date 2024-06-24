@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchCategories, fetchProducts } from "../../data/api.jsx";
+
 const SearchBar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Tất Cả Sản Phẩm");
@@ -10,6 +11,7 @@ const SearchBar = () => {
 
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -35,6 +37,7 @@ const SearchBar = () => {
       }
     });
   }
+
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
@@ -76,9 +79,7 @@ const SearchBar = () => {
 
   const handleSuggestionSelect = (suggestion) => {
     setSearchTerm(suggestion);
-
     setSuggestions([]);
-
     const _product = products.find(
       (product) => product.product_name === suggestion
     );
@@ -179,7 +180,7 @@ const SearchBar = () => {
             <span className="sr-only">Search</span>
           </button>
           {suggestions.length > 0 && (
-            <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg dark:bg-gray-700">
+            <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg dark:bg-gray-700 max-h-64 overflow-y-auto">
               <ul className="py-1 text-sm text-gray-700 dark:text-gray-200">
                 {suggestions.map((suggestion, index) => (
                   <li key={index}>
