@@ -17,11 +17,14 @@ const AddBill = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
   const [formState, setFormState] = useState({}); // Thêm state để quản lý form
+  const [sorter, setSorter] = useState({});
+
 
   //ham phan chia trang
-  const handleTableChange = (pagination) => {
+  const handleTableChange = (pagination, filters, sorter) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
+    setSorter(sorter);
   };
 
   useEffect(() => {
@@ -62,6 +65,7 @@ const AddBill = () => {
       dataIndex: 'amount',
       key: 'amount',
       sorter: (a, b) => a.amount - b.amount,
+      sortOrder: sorter.columnKey === 'amount' && sorter.order,
     },
     {
       title: 'Lượt Bán',
@@ -77,8 +81,9 @@ const AddBill = () => {
         currency: "VND",
       }),
       sorter: (a, b) => a.price - b.price,
+      sortOrder: sorter.columnKey === 'price' && sorter.order,
     },
-  ]
+  ];
 
   //chon san pham
   const onSelectChange = (newSelectedRowKeys, selectedRows) => {
@@ -221,7 +226,7 @@ const AddBill = () => {
                 <Button type="primary" style={{ backgroundColor: '#46B5C1' }} disabled={selectedRowKeys.length === 0} onClick={handleAddToBill}>Nhập Hàng</Button>
               </div>
               <div style={{ flexGrow: 1 }}>
-                <Table
+              <Table
                   columns={productTable}
                   dataSource={products}
                   pagination={{

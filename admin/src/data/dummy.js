@@ -562,6 +562,7 @@ export const stafflinks = [
         // path: '',
         subLinks: [
           { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
+          { name: 'allBill', path: 'input-bills', label: 'Tất cả đơn nhập hàng' },
         ]},
       // {
       //   name: 'Quản lý khách hàng',

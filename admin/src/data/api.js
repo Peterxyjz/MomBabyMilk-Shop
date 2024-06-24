@@ -92,6 +92,17 @@ export const fetchUploadBill = async (inputBill, token) => {
   });
 };
 
+//get-all-bill
+export const fetchAllBills = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/inputBills/all-inputbills`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
+
 //get-all-user
 export const fetchAllUsers = async (result) => {
   return await axios.get(`${SCHEMA_HOSTNAME}/users/get-all-user`, {
