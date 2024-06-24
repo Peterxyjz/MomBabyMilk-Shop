@@ -18,6 +18,7 @@ const ApprovedOrder = () => {
         const orderData = await fetchOrder();
         setOrders(orderData);
         setLoading(false);
+        console.log(orderData);
       } catch (error) {
         console.error("Error fetching orders:", error);
         setLoading(false);
@@ -45,7 +46,7 @@ const ApprovedOrder = () => {
   if (loading) {
     return <div className="w-full h-full mx-6 py-6">Loading...</div>;
   }
-
+ 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');

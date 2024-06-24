@@ -20,6 +20,7 @@ import CompleteOrder from '../pages/Order/CompleteOrder';
 import OrderDetail from '../pages/Order/OrderDetail';
 import EditCategory from '../pages/Category/EditCategory';
 import InputBills from '../pages/Warehouse/InputBills';
+import BillDetail from '../pages/Warehouse/BillDetail';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -49,6 +50,7 @@ const StaffRouter = () => {
             {/* warehouse */}
             <Route path="/add-inputbill" element={(<AddBill />)} />
             <Route path="/input-bills" element={<InputBills/>} />
+            <Route path="/bill-detail" element={<BillDetail/>} />
         </Routes>
     )
 }
