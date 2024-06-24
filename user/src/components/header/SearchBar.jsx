@@ -104,8 +104,15 @@ const SearchBar = () => {
     };
   }, []);
 
+  const searchSubmit = (event) => {
+    event.preventDefault();
+    navigate("/filter", {
+      state: { product_name: searchTerm },
+    });
+  };
+
   return (
-    <form className="w-full mx-auto" ref={searchBarRef}>
+    <form className="w-full mx-auto" ref={searchBarRef} onSubmit={searchSubmit}>
       <div className="flex">
         <label
           htmlFor="search-dropdown"
