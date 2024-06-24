@@ -1,27 +1,71 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProductContext } from "../../context/ProductContext";
 import { FaShoppingCart, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Loader from "../../assets/loading.gif";
 import Breadcrumbs from "../../components/elements/Breadcrumb";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
+import { fetchCategories } from "../../data/api";
 
 const Filter = () => {
+  const location = useLocation();
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const { products, loading } = useProductContext();
+  const { addCartItem } = useCartContext();
+  const search_name = location.state?.product_name || "";
+
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const res = await fetchCategories();
+        const categories = [
+          ...res.data.result,
+        ];
+        setCategories(categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    const filterProducts = () => {
+      let updatedProducts = products.filter((product) =>
+        product.product_name.toLowerCase().includes(search_name.toLowerCase())
+      );
+
+      if (selectedCategory) {
+        updatedProducts = updatedProducts.filter((product) =>
+          product.category_name === selectedCategory
+        );
+      }
+
+      setFilteredProducts(updatedProducts);
+    };
+
+    filterProducts();
+  }, [products, search_name, selectedCategory]);
+
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { addCartItem } = useCartContext();
   const productsPerPage = 9;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
+  const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handleCategorySelect = (event) => {
+    setSelectedCategory(event.target.value);
+  };
 
   const handleSliderChange = (value) => {
     setPriceRange(value);
@@ -57,24 +101,17 @@ const Filter = () => {
           <div className="mb-4">
             <h2 className="font-bold text-lg mb-2">Bộ lọc sản phẩm</h2>
             <ul className="text-gray-500">
-              <li>
-                <input type="checkbox" /> Sữa chua
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa chua
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa cho mẹ bầu
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa bột
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa tươi
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa pha sẵn
-              </li>
+              {categories.map((category) => (
+                <li key={category._id}>
+                  <input
+                    type="radio"
+                    name="category"
+                    value={category.category_name}
+                    onClick={handleCategorySelect}
+                  />{" "}
+                  {category.category_name}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="mt-4 mb-4">
