@@ -20,7 +20,7 @@ export function MainNav() {
           <Link>Ưu Đãi</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
-          <Link>Tin Tức</Link>
+          <Link to="/news">Tin Tức</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
