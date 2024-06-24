@@ -9,5 +9,6 @@ const automatic = async () => {
   }
 }
 
-setInterval(automatic, 12 * 60 * 60 * 1000)
+setInterval(automatic, 5* 1000)
+// 12 * 60 * 60 * 1000
 automatic()

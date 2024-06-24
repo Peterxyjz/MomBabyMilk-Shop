@@ -43,11 +43,13 @@ export const uploadController = async (req: Request, res: Response) => {
         await databaseService.warehouse.insertOne(newWarehouseEntry)
       }
     }
-
+    console.log(inputBillId)
+    const date = new Date()
     await databaseService.revenue.insertOne({
-      _id: new ObjectId(inputBillId),
+      _id: inputBillId,
       type: RevenueStatus.InputBill,
-      total: Number(req.body.total)
+      total: Number(req.body.total),
+      completed_date: date
     })
     return res.status(200).json({
       message: USERS_MESSAGES.UPLOAD_SUCCESS,
