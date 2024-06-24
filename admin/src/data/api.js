@@ -241,6 +241,17 @@ export const fetchOrder = async () => {
     throw error;
   }
 };
+//revenue:
+export const fetchRevenue = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/revenue/all-revenue`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
+
 
 //API province, district, ward
 const baseUrl = "https://open.oapi.vn/location";

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { IoIosMore } from 'react-icons/io';
@@ -8,6 +8,7 @@ import { Stacked, Pie, Button, LineChart, SparkLine } from '../components';
 import { earningData, medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import product9 from '../data/product9.jpg';
+import { fetchRevenue } from '../data/api';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -17,7 +18,40 @@ const DropDown = ({ currentMode }) => (
 
 const Dashboard = ( {isAuthenticatedAdmin, isAuthenticatedStaff}) => {
   const { currentColor, currentMode } = useStateContext();
+  const [loading, setLoading] = useState(true);
+  const [revenues, setRevenues] = useState([]);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  useEffect(() => {
+    const getRevenue = async () => {
+      try {
+        const data = await fetchRevenue();
+        setRevenues(data);
+        calculateTotalRevenue(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setLoading(false);
+      }
+    };
 
+    getRevenue();
+  }, []);
+  
+  const calculateTotalRevenue = (data) => {
+    let total = 0;
+    data.forEach((item) => {
+      if(item.type === 1){
+        total += item.total;
+      }else {
+        total -= item.total;
+      }
+    });
+    setTotalRevenue(total);
+  };
+
+  if(loading) {
+    return <div className="w-full h-full mx-6 py-6">Loading...</div>;
+  }
   return (
     <div className="mt-24">
       {isAuthenticatedAdmin && (
@@ -26,8 +60,13 @@ const Dashboard = ( {isAuthenticatedAdmin, isAuthenticatedStaff}) => {
           <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
             <div className="flex justify-between items-center">
               <div>
-                <p className="font-bold text-gray-400">Earnings</p>
-                <p className="text-2xl">$63,448.78</p>
+                <p className="font-bold text-gray-400">Doanh Thu</p>
+                <p className="text-2xl">{
+                    new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(totalRevenue)
+                  }</p>
               </div>
               <button
                 type="button"
