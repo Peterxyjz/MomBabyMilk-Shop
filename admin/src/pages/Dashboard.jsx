@@ -16,6 +16,7 @@ import { Col, Row } from 'antd';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import RevenueMixCost from '../components/Chart/RevenueMixCost';
+import MonthlyProfit from '../components/Chart/MonthlyProfit';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -48,7 +49,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         calculateTotalProfit(data);
         setLoading(false);
       } catch (error) {
-        console.log("Error fetching orders:", error);
+        console.log("Error fetching revenue:", error);
         setLoading(false);
       }
     };
@@ -298,7 +299,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 </div>
               </div> */}
               <div>
-                <RevenueMixCost/> 
+                <RevenueMixCost />
               </div>
             </div>
             <div>
@@ -307,16 +308,16 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 style={{ backgroundColor: currentColor }}
               >
                 <div className="flex justify-between items-center ">
-                  <p className="font-semibold text-white text-2xl">Earnings</p>
+                  <p className="font-semibold text-white text-xl">Lợi nhuận theo tháng</p>
 
-                  <div>
-                    <p className="text-2xl text-white font-semibold mt-8">$63,448.78</p>
-                    <p className="text-gray-200">Monthly revenue</p>
-                  </div>
+                  {/* <div>
+                    <p className="text-xl text-white font-semibold mt-8">$63,448.78</p>
+                    <p className="text-gray-200">Trung bình doanh thu môi</p>
+                  </div> */}
                 </div>
 
                 <div className="mt-4">
-                  <SparkLine currentColor={currentColor} id="column-sparkLine" height="100px" type="Column" data={SparklineAreaData} width="320" color="rgb(242, 252, 253)" />
+                  <MonthlyProfit />
                 </div>
               </div>
 

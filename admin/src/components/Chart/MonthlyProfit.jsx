@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { fetchRevenue } from '../../data/api';
 import { Bar } from 'react-chartjs-2';
 
-const RevenueMixCost = () => {
+const MonthlyProfit = () => {
     const [revenues, setRevenues] = useState([]);
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         const getRevenue = async () => {
@@ -40,12 +39,13 @@ const RevenueMixCost = () => {
             } else { // Cost
                 result[monthYear].cost += item.total;
             }
+
+            result[monthYear].profit = result[monthYear].revenue - result[monthYear].cost;
         });
 
         return Object.keys(result).map(monthYear => ({
             monthYear,
-            revenue: result[monthYear].revenue,
-            cost: result[monthYear].cost,
+            profit: result[monthYear].profit,
         })).sort((a, b) => new Date(`01-${a.monthYear}`) - new Date(`01-${b.monthYear}`));
     };
 
@@ -55,24 +55,20 @@ const RevenueMixCost = () => {
         labels: processedData.map(item => item.monthYear),
         datasets: [
             {
-                type: 'bar',
-                label: 'Doanh thu',
-                data: processedData.map(item => item.revenue),
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            },
-            {
-                type: 'line',
-                label: 'Vốn',
-                data: processedData.map(item => item.cost),
-                borderColor: 'rgba(153, 102, 255, 0.6)',
-                backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                fill: false,
-                tension: 0.1,
+                label: 'Lợi nhuận',
+                data: processedData.map(item => item.profit),
+                backgroundColor: 'white',
             },
         ],
     };
+
     const chartOptions = {
         responsive: true,
+        plugins: {
+            legend: {
+                display: false, // Ẩn chú thích (legend)
+            },
+        },
         scales: {
             x: {
                 stacked: false,
@@ -82,12 +78,16 @@ const RevenueMixCost = () => {
             },
         },
     };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div>
             <Bar data={chartData} options={chartOptions} />
-
         </div>
     )
 }
 
-export default RevenueMixCost
+export default MonthlyProfit
