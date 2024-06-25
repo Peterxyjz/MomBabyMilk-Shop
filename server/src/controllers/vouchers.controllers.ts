@@ -20,6 +20,8 @@ export const uploadController = async (req: Request, res: Response) => {
     discount: discount,
     amount: amount
   })
+  console.log(voucher);
+  
 
   const result = await voucherServices.upload(voucher)
   return res.status(200).json({
@@ -39,5 +41,21 @@ export const getAllVoucherController = async (req: Request, res: Response) => {
   return res.status(200).json({
     message: 'Sucess',
     result: result
+  })
+}
+export const getVoucherTypeController = async (req: Request, res: Response) => {
+  const enumEntries: { id: number; name: string }[] = []
+
+  for (const [key, value] of Object.entries(VoucherMode)) {
+    if (typeof value === 'number') {
+      enumEntries.push({ id: value, name: key })
+    }
+  }
+
+
+
+  return res.status(200).json({
+    message: 'Sucess',
+    result: enumEntries
   })
 }

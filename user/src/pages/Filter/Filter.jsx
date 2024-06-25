@@ -13,6 +13,7 @@ const Filter = () => {
   const location = useLocation();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const { products, loading } = useProductContext();
   const { addCartItem } = useCartContext();
@@ -22,9 +23,7 @@ const Filter = () => {
     const getCategory = async () => {
       try {
         const res = await fetchCategories();
-        const categories = [
-          ...res.data.result,
-        ];
+        const categories = [...res.data.result];
         setCategories(categories);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -40,18 +39,22 @@ const Filter = () => {
       );
 
       if (selectedCategory) {
-        updatedProducts = updatedProducts.filter((product) =>
-          product.category_name === selectedCategory
+        updatedProducts = updatedProducts.filter(
+          (product) => product.category_name === selectedCategory
         );
       }
+
+      updatedProducts = updatedProducts.filter(
+        (product) =>
+          product.price >= priceRange[0] && product.price <= priceRange[1]
+      );
 
       setFilteredProducts(updatedProducts);
     };
 
     filterProducts();
-  }, [products, search_name, selectedCategory]);
+  }, [products, search_name, selectedCategory, priceRange]);
 
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
@@ -70,6 +73,7 @@ const Filter = () => {
   const handleSliderChange = (value) => {
     setPriceRange(value);
   };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -267,4 +271,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default Filter

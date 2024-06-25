@@ -600,8 +600,8 @@ export const stafflinks = [
         type: 'sub',
         // path: '',
         subLinks: [
-          { name: 'allVoucher', path: '', label: 'Tất cả mã giảm giá' },
-
+          { name: 'allVoucher', path: 'all-voucher', label: 'Tất cả mã giảm giá' },
+          { name: 'addVoucher', path: 'add-voucher', label: 'Thêm mã giảm giá' },
         ],
       },
     ],
