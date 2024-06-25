@@ -1,31 +1,79 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProductContext } from "../../context/ProductContext";
 import { FaShoppingCart, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Loader from "../../assets/loading.gif";
 import Breadcrumbs from "../../components/elements/Breadcrumb";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
+import { fetchCategories } from "../../data/api";
 
 const Filter = () => {
-  const { products, loading } = useProductContext();
+  const location = useLocation();
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const { products, loading } = useProductContext();
+  const { addCartItem } = useCartContext();
+  const search_name = location.state?.product_name || "";
+
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const res = await fetchCategories();
+        const categories = [...res.data.result];
+        setCategories(categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    const filterProducts = () => {
+      let updatedProducts = products.filter((product) =>
+        product.product_name.toLowerCase().includes(search_name.toLowerCase())
+      );
+
+      if (selectedCategory) {
+        updatedProducts = updatedProducts.filter(
+          (product) => product.category_name === selectedCategory
+        );
+      }
+
+      updatedProducts = updatedProducts.filter(
+        (product) =>
+          product.price >= priceRange[0] && product.price <= priceRange[1]
+      );
+
+      setFilteredProducts(updatedProducts);
+    };
+
+    filterProducts();
+  }, [products, search_name, selectedCategory, priceRange]);
+
   const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const { addCartItem } = useCartContext();
   const productsPerPage = 9;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
+  const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handleCategorySelect = (event) => {
+    setSelectedCategory(event.target.value);
+  };
 
   const handleSliderChange = (value) => {
     setPriceRange(value);
   };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -37,6 +85,28 @@ const Filter = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageClick(i)}
+          className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
 
   if (loading)
     return (
@@ -57,24 +127,17 @@ const Filter = () => {
           <div className="mb-4">
             <h2 className="font-bold text-lg mb-2">Bộ lọc sản phẩm</h2>
             <ul className="text-gray-500">
-              <li>
-                <input type="checkbox" /> Sữa chua
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa chua
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa cho mẹ bầu
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa bột
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa tươi
-              </li>
-              <li>
-                <input type="checkbox" /> Sữa pha sẵn
-              </li>
+              {categories.map((category) => (
+                <li key={category._id}>
+                  <input
+                    type="radio"
+                    name="category"
+                    value={category.category_name}
+                    onClick={handleCategorySelect}
+                  />{" "}
+                  {category.category_name}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="mt-4 mb-4">
@@ -193,26 +256,19 @@ const Filter = () => {
             ))}
           </div>
           <div className="flex justify-center items-center mt-6">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center"
-            >
+            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
               <FaArrowLeft />
             </button>
-            <span className="px-4 py-2">{currentPage}</span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center"
-            >
+            {renderPageNumbers()}
+            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
               <FaArrowRight />
             </button>
           </div>
+
         </div>
       </div>
     </>
   );
 };
 
-export default Filter;
+export default Filter
