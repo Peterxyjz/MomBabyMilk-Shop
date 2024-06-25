@@ -1,6 +1,12 @@
 import { Router } from 'express'
-import { getAllVoucherController, getVoucherController, getVoucherTypeController, uploadController } from '~/controllers/vouchers.controllers'
-
+import {
+    deleteController,
+  getAllVoucherController,
+  getVoucherController,
+  getVoucherTypeController,
+  uploadController
+} from '~/controllers/vouchers.controllers'
+import { accessTokenValidator } from '~/middlewares/users.middlewares'
 
 import { wrapAsync } from '~/utils/handlers'
 
@@ -14,5 +20,7 @@ voucherRouter.get('/voucher/:id', wrapAsync(getVoucherController))
 voucherRouter.get('/all-vouchers', wrapAsync(getAllVoucherController))
 
 voucherRouter.get('/get-voucher-type', wrapAsync(getVoucherTypeController))
+
+voucherRouter.post('/delete', accessTokenValidator, wrapAsync(deleteController))
 
 export default voucherRouter

@@ -44,6 +44,10 @@ class VoucherServices {
       { $set: { amount: (vouchcer.amount as number) - 1 } }
     )
   }
+
+  async delete(id: string) {
+    return await databaseService.vouchers.deleteOne({ _id: new ObjectId(id) })
+  }
 }
 const voucherServices = new VoucherServices()
 export default voucherServices
