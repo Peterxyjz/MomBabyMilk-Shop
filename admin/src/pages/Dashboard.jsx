@@ -17,6 +17,7 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import RevenueMixCost from '../components/Chart/RevenueMixCost';
 import MonthlyProfit from '../components/Chart/MonthlyProfit';
+import BestCategory from '../components/Chart/BestCategory';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -63,7 +64,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         const result = JSON.parse(localStorage.getItem("result"));
         const response = await fetchAllUsers(result);
         const data = response.data.users;
-        console.log('Fetched data:', data);
         setCustomers(data);
         calculateCustomer(data);
         setLoading(false);
@@ -103,7 +103,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       }
     });
     setTotalProfit(total);
-    console.log("Total profit:", total);
   };
 
   const calculateTotalRevenue = (data) => {
@@ -114,7 +113,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       }
     });
     setTotalRevenue(total);
-    console.log("Total revenue:", total);
   };
 
   const calculateCustomer = (data) => {
@@ -124,7 +122,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         total++;
       }
     });
-    console.log("Total members counted:", total);
     setTotalCustomer(total);
   };
 
@@ -133,7 +130,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     data.forEach((item) => {
       total++;
     });
-    console.log("Total pro:", total);
     setTotalProduct(total);
   };
 
@@ -142,7 +138,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     data.forEach((item) => {
       total += item.sales;
     });
-    console.log("Total sales:", total);
     setTotalSales(total);
   };
 
@@ -323,12 +318,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
 
               <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl md:w-400 p-8 m-3 flex justify-center items-center gap-10">
                 <div>
-                  <p className="text-2xl font-semibold ">$43,246</p>
-                  <p className="text-gray-400">Yearly sales</p>
+                  <p className="text-xl font-semibold ">Thống kê phân loại sữa theo lượt mua</p>
                 </div>
 
                 <div className="w-40">
-                  <Pie id="pie-chart" data={ecomPieChartData} legendVisiblity={false} height="160px" />
+                  <BestCategory />
                 </div>
               </div>
             </div>
