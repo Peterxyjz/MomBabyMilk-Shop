@@ -8,11 +8,14 @@ import { Stacked, Pie, Button, LineChart, SparkLine } from '../components';
 import { medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import product9 from '../data/product9.jpg';
-import { fetchAllUsers, fetchProducts, fetchRevenue } from '../data/api';
+import { fetchAllUsers, fetchCategories, fetchProducts, fetchRevenue } from '../data/api';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { FiBarChart } from 'react-icons/fi';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { Col, Row } from 'antd';
+import { Bar } from 'react-chartjs-2';
+import 'chart.js/auto';
+import RevenueMixCost from '../components/Chart/RevenueMixCost';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -24,6 +27,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const { currentColor, currentMode } = useStateContext();
   const [loading, setLoading] = useState(true);
   const [revenues, setRevenues] = useState([]);
+  const [profit, setProfit] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
 
@@ -32,6 +36,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const [totalCustomer, setTotalCustomer] = useState(0);
   const [totalProduct, setTotalProduct] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
+  const [categories, setCategories] = useState([]);
 
 
   useEffect(() => {
@@ -40,10 +45,10 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         const data = await fetchRevenue();
         setRevenues(data);
         calculateTotalRevenue(data);
-        calculateProfit(data);
+        calculateTotalProfit(data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.log("Error fetching orders:", error);
         setLoading(false);
       }
     };
@@ -57,7 +62,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         const result = JSON.parse(localStorage.getItem("result"));
         const response = await fetchAllUsers(result);
         const data = response.data.users;
-        console.log('Fetched data:', data); 
+        console.log('Fetched data:', data);
         setCustomers(data);
         calculateCustomer(data);
         setLoading(false);
@@ -87,7 +92,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getProducts();
   }, []);
 
-  const calculateProfit = (data) => {
+  const calculateTotalProfit = (data) => {
     let total = 0;
     data.forEach((item) => {
       if (item.type === 1) {
@@ -97,6 +102,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       }
     });
     setTotalProfit(total);
+    console.log("Total profit:", total);
   };
 
   const calculateTotalRevenue = (data) => {
@@ -107,6 +113,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       }
     });
     setTotalRevenue(total);
+    console.log("Total revenue:", total);
   };
 
   const calculateCustomer = (data) => {
@@ -123,7 +130,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const calculateProduct = (data) => {
     let total = 0;
     data.forEach((item) => {
-        total++;
+      total++;
     });
     console.log("Total pro:", total);
     setTotalProduct(total);
@@ -132,7 +139,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const calculateSales = (data) => {
     let total = 0;
     data.forEach((item) => {
-        total+= item.sales;
+      total += item.sales;
     });
     console.log("Total sales:", total);
     setTotalSales(total);
@@ -160,7 +167,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         }).format(totalProfit)
       ,
       // percentage: '-4%',
-      title: 'Lợi nhuận',
+      title: 'Tổng lợi nhuận',
       iconColor: '#03C9D7',
       iconBg: '#E5FAFB',
       pcColor: 'red-600',
@@ -169,7 +176,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       icon: <MdOutlineSupervisorAccount />,
       amount: totalCustomer,
       // percentage: '-4%',
-      title: 'Khách hàng',
+      title: 'Tổng khách hàng',
       iconColor: '#03C9D7',
       iconBg: '#E5FAFB',
       pcColor: 'red-600',
@@ -178,7 +185,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       icon: <BsBoxSeam />,
       amount: totalProduct,
       // percentage: '+23%',
-      title: 'Sản phẩm',
+      title: 'Tổng sản phẩm',
       iconColor: 'rgb(255, 244, 229)',
       iconBg: 'rgb(254, 201, 15)',
       pcColor: 'green-600',
@@ -187,7 +194,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       icon: <FiBarChart />,
       amount: totalSales,
       // percentage: '+38%',
-      title: 'Lượt bán',
+      title: 'Tổng lượt bán',
       iconColor: 'rgb(228, 106, 118)',
       iconBg: 'rgb(255, 244, 229)',
 
@@ -241,8 +248,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
           <div className="flex gap-10 flex-wrap justify-center">
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">
               <div className="flex justify-between">
-                <p className="font-semibold text-xl">Revenue Updates</p>
-                <div className="flex items-center gap-4">
+                <p className="font-semibold text-xl">Bảng tương quan giữa doanh thu và vốn</p>
+                {/* <div className="flex items-center gap-4">
                   <p className="flex items-center gap-2 text-gray-600 hover:drop-shadow-xl">
                     <span>
                       <GoPrimitiveDot />
@@ -255,9 +262,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                     </span>
                     <span>Budget</span>
                   </p>
-                </div>
+                </div> */}
               </div>
-              <div className="mt-10 flex gap-10 flex-wrap justify-center">
+              {/* <div className="mt-10 flex gap-10 flex-wrap justify-center">
                 <div className=" border-r-1 border-color m-4 pr-10">
                   <div>
                     <p>
@@ -289,6 +296,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 <div>
                   <Stacked currentMode={currentMode} width="320px" height="360px" />
                 </div>
+              </div> */}
+              <div>
+                <RevenueMixCost/> 
               </div>
             </div>
             <div>
