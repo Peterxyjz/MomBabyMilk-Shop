@@ -2,6 +2,22 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
+//fetchUploadVoucher
+export const fetchUploadVoucher = async (data, token) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/vouchers/upload`, {...data},{
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
+
+
+
+//fetchGetVoucherType
+export const fetchGetVoucherType = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/vouchers/get-voucher-type`);
+}
+
 //fetchConfirmOrder
 export const fetchConfirmOrder = async (order_id, token) => {
   return await axios.post(
