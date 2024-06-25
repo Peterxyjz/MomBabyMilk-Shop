@@ -86,6 +86,28 @@ const Filter = () => {
     }
   };
 
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageClick(i)}
+          className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
+
   if (loading)
     return (
       <div
@@ -234,22 +256,15 @@ const Filter = () => {
             ))}
           </div>
           <div className="flex justify-center items-center mt-6">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center"
-            >
+            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
               <FaArrowLeft />
             </button>
-            <span className="px-4 py-2">{currentPage}</span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center"
-            >
+            {renderPageNumbers()}
+            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
               <FaArrowRight />
             </button>
           </div>
+
         </div>
       </div>
     </>
