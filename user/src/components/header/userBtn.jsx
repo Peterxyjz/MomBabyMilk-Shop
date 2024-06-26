@@ -23,8 +23,8 @@ const UserBtn = () => {
               {user.email}
             </span>
           </Dropdown.Header>
-          <Dropdown.Item icon={HiViewGrid} className="w-48" href="/edit_profile">Chỉnh Sửa</Dropdown.Item>
-          <Dropdown.Item icon={HiCog} className="w-48">Tích Điểm</Dropdown.Item>
+          <Dropdown.Item icon={HiViewGrid} className="w-48" href="/profile">Chỉnh Sửa</Dropdown.Item>
+          <Dropdown.Item icon={HiCog} className="w-48" href="/profile/accumulated-points">Tích Điểm</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item icon={HiLogout} onClick={handleLogout}
             className="w-48">Đăng Xuất</Dropdown.Item>
