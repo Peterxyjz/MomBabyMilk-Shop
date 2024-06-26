@@ -83,22 +83,53 @@ export const getAllController = async (req: Request, res: Response) => {
 }
 
 export const updateController = async (req: Request, res: Response) => {
-  const inputBill = await databaseService.inputBills.find({ _id: new ObjectId(req.params.id) }) as InputBill
-
-  if (!inputBill) {
+  const { user_id } = req.decoded_authorization as TokenPayload //lấy user_id từ decoded_authorization
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
     return res.status(400).json({
       message: USERS_MESSAGES.USER_NOT_FOUND
     })
   }
-  const result = []
-  
-  const inputBillDetails = await databaseService.inputBillDetails
-    .find({ input_bill_id: inputBill._id?.toString() })
-    .toArray()
-  result.push({ inputBill: inputBill, inputBillDetails: inputBillDetails })
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Staff') {
+    return res.status(400).json({
+      message: 'Bạn không có quyền chỉnh sửa voucher'
+    })
+  }
+
+  const inputBill = await databaseService.inputBills.findOne({ _id: new ObjectId(req.params.id) })
+
+  if (!inputBill) {
+    return res.status(400).json({
+      message: 'khong tim thay'
+    })
+  }
+
+  const inputBillDetailList = req.body.inputBillDetailList
+  const inputBillDetails = inputBillDetailList.map(
+    (detail: any) =>
+      new InputBillDetail({
+        _id: new ObjectId(detail._id),
+        input_bill_id: detail.input_bill_id,
+        product_id: detail.product_id,
+        amount: detail.amount
+      })
+  )
+
+  for (const detail of inputBillDetails) {
+    console.log(detail)
+
+    const input_bill_detail = await databaseService.inputBillDetails.findOne({ _id: detail._id })
+    if (!input_bill_detail) {
+      return res.status(400).json({
+        message: 'InputBillDetail _id is required'
+      })
+    }
+
+    await databaseService.inputBillDetails.updateOne({ _id: detail._id }, { $set: detail })
+  }
 
   return res.status(200).json({
-    message: USERS_MESSAGES.GET_SUCCESS,
-    result
+    message: 'Update success'
   })
 }
