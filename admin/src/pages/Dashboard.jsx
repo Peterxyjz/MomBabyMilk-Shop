@@ -15,13 +15,27 @@ import { HiOutlineRefresh } from 'react-icons/hi';
 import { Col, Row } from 'antd';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import RevenueMixCost from '../components/Chart/RevenueMixCost';
-import MonthlyProfit from '../components/Chart/MonthlyProfit';
-import BestCategory from '../components/Chart/BestCategory';
+import RevenueMixCost from '../components/Dashboard/RevenueMixCost';
+import MonthlyProfit from '../components/Dashboard/MonthlyProfit';
+import BestCategory from '../components/Dashboard/BestCategory';
+import ProductStock from '../components/Dashboard/ProductStock';
 
-const DropDown = ({ currentMode }) => (
+
+const DropDown = ({ currentMode, onSelect }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
-    <DropDownListComponent id="time" fields={{ text: 'Time', value: 'Id' }} style={{ border: 'none', color: (currentMode === 'Dark') && 'white' }} value="1" dataSource={dropdownData} popupHeight="220px" popupWidth="120px" />
+    <DropDownListComponent
+      id="time"
+      fields={{ text: 'option', value: 'Id' }}
+      style={{ border: 'none', color: currentMode === 'Dark' ? 'white' : 'black' }}
+      value="1"
+      dataSource={[
+        { Id: '1', option: 'Sắp hết' },
+        { Id: '2', option: 'Nhiều nhất' },
+      ]}
+      popupHeight="220px"
+      popupWidth="120px"
+      change={(e) => onSelect(e.itemData.option)}
+    />
   </div>
 );
 
@@ -39,6 +53,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const [totalProduct, setTotalProduct] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('Sắp hết');
+
 
 
   useEffect(() => {
@@ -141,6 +157,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     setTotalSales(total);
   };
 
+
   const earningData = [
     {
       icon: <BsCurrencyDollar />,
@@ -196,15 +213,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
 
       pcColor: 'green-600',
     },
-    // {
-    //   icon: <HiOutlineRefresh />,
-    //   amount: '39,354',
-    //   percentage: '-12%',
-    //   title: 'Refunds',
-    //   iconColor: 'rgb(0, 194, 146)',
-    //   iconBg: 'rgb(235, 250, 242)',
-    //   pcColor: 'red-600',
-    // },
   ];
 
   if (loading) {
@@ -328,14 +336,15 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             </div>
           </div>
 
+          {/* Row 3 */}
           <div className="flex gap-10 m-4 flex-wrap justify-center">
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl">
               <div className="flex justify-between items-center gap-2">
-                <p className="text-xl font-semibold">Recent Transactions</p>
-                <DropDown currentMode={currentMode} />
+                <p className="text-xl font-semibold">Số lượng hàng tồn kho</p>
+                <DropDown currentMode={currentMode} onSelect={setSelectedOption} />
               </div>
-              <div className="mt-10 w-72 md:w-400">
-                {recentTransactions.map((item) => (
+              <div className="mt-2 w-72 md:w-400">
+                {/* {recentTransactions.map((item) => (
                   <div key={item.title} className="flex justify-between mt-4">
                     <div className="flex gap-4">
                       <button
@@ -355,9 +364,10 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                     </div>
                     <p className={`text-${item.pcColor}`}>{item.amount}</p>
                   </div>
-                ))}
+                ))} */}
+                <ProductStock selectedOption={selectedOption} />
               </div>
-              <div className="flex justify-between items-center mt-5 border-t-1 border-color">
+              {/* <div className="flex justify-between items-center mt-5 border-t-1 border-color">
                 <div className="mt-3">
                   <Button
                     color="white"
@@ -368,7 +378,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 </div>
 
                 <p className="text-gray-400 text-sm">36 Recent Transactions</p>
-              </div>
+              </div> */}
             </div>
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
               <div className="flex justify-between items-center gap-2 mb-10">
