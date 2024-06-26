@@ -128,6 +128,19 @@ export const fetchAllUsers = async (result) => {
   });
 };
 
+//add-staff
+export const fetchUploadStaff = async (user, token) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/users/add-user`,
+    { ...user },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //updateProduct
 export const fetchUpdateProduct = async (product, token, id) => {
   return await axios.patch(
