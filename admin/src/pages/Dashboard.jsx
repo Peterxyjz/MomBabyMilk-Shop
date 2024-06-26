@@ -19,6 +19,7 @@ import RevenueMixCost from '../components/Dashboard/RevenueMixCost';
 import MonthlyProfit from '../components/Dashboard/MonthlyProfit';
 import BestCategory from '../components/Dashboard/BestCategory';
 import ProductStock from '../components/Dashboard/ProductStock';
+import MonthlyOrder from '../components/Dashboard/MonthlyOrder';
 
 
 const DropDown = ({ currentMode, onSelect }) => (
@@ -382,11 +383,10 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             </div>
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
               <div className="flex justify-between items-center gap-2 mb-10">
-                <p className="text-xl font-semibold">Sales Overview</p>
-                <DropDown currentMode={currentMode} />
+                <p className="text-xl font-semibold">Thống kê trạng thái đơn hàng theo tháng</p>
               </div>
               <div className="md:w-full overflow-auto">
-                <LineChart />
+                <MonthlyOrder />
               </div>
             </div>
           </div>
