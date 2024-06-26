@@ -1,9 +1,9 @@
 import React from 'react'
 
-const EditProfiles = () => {
+const EditProfile = () => {
   return (
     <div>EditProfile</div>
   )
 }
 
-export default EditProfiles
+export default EditProfile

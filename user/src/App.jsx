@@ -16,7 +16,6 @@ import Order from "./pages/Order";
 import Payment from "./components/order/Payment";
 import Filter from "./pages/Filter/Filter";
 import Thanks from "./components/order/Thanks";
-import EditProfile from "./pages/EditProfile/EditProfile";
 import WishList from "./pages/Wishlist";
 import NewsPage from "./pages/News";
 import Profile from "./pages/Profile";
@@ -24,7 +23,7 @@ import HistoryOrder from "./components/profile/HistoryOrder";
 import Feedback from "./components/profile/Feedback";
 import ChangePassword from "./components/profile/ChangePassword";
 import Accumulate from "./components/profile/Accumulate";
-import EditProfiles from "./components/profile/EditProfile";
+import EditProfile from "./components/profile/EditProfile";
 
 
 function App() {
@@ -47,12 +46,10 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/thanks" element={<Thanks />} />
           <Route path="/filter" element={<Filter />} />
-          <Route path="/edit_profile" element={<EditProfile />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/news" element={<NewsPage />} />
-
           <Route path="/profile" element={<Profile />}>
-            <Route path="" element={<EditProfiles />} />
+            <Route path="" element={<EditProfile />} />
             <Route path="history-order" element={<HistoryOrder />} />
             <Route path="my-feedback" element={<Feedback />} />
             <Route path="change-password" element={<ChangePassword />} />
