@@ -384,6 +384,25 @@ class UsersService {
     )
     return result
   }
+  async changeStatus(user_id: string) {
+    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    if (!user) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    
+    return await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          isActive: user.isActive === UserAccountStatus.Actived ? UserAccountStatus.Blocked : UserAccountStatus.Actived
+        }
+      }
+    )
+  }
 }
 
 const usersService = new UsersService()

@@ -14,6 +14,7 @@ import {
 } from '~/middlewares/users.middlewares'
 import {
   addUserController,
+  changeStatusUserController,
   emailVerifyController,
   forgotPasswordController,
   getAllUserController,
@@ -99,5 +100,10 @@ usersRouter.post(
   wrapAsync(addUserController),
   wrapAsync(registerController)
 )
+usersRouter.post(
+  '/change-status/:id',
+  accessTokenValidator,
 
+  wrapAsync(changeStatusUserController)
+)
 export default usersRouter
