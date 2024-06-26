@@ -11,7 +11,7 @@ import {
 
 export function SideBarProfile() {
   return (
-    <Sidebar className="bg-white border-r">
+    <Sidebar className="bg-white border mx-4">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Sidebar.Item href="/profile" icon={HiUser}>
