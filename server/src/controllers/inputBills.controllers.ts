@@ -81,3 +81,24 @@ export const getAllController = async (req: Request, res: Response) => {
     result
   })
 }
+
+export const updateController = async (req: Request, res: Response) => {
+  const inputBill = await databaseService.inputBills.find({ _id: new ObjectId(req.params.id) }) as InputBill
+
+  if (!inputBill) {
+    return res.status(400).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  const result = []
+  
+  const inputBillDetails = await databaseService.inputBillDetails
+    .find({ input_bill_id: inputBill._id?.toString() })
+    .toArray()
+  result.push({ inputBill: inputBill, inputBillDetails: inputBillDetails })
+
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result
+  })
+}

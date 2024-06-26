@@ -4,6 +4,7 @@ import {
   getAllVoucherController,
   getVoucherController,
   getVoucherTypeController,
+  updateController,
   uploadController
 } from '~/controllers/vouchers.controllers'
 import { accessTokenValidator } from '~/middlewares/users.middlewares'
@@ -22,5 +23,7 @@ voucherRouter.get('/all-vouchers', wrapAsync(getAllVoucherController))
 voucherRouter.get('/get-voucher-type', wrapAsync(getVoucherTypeController))
 
 voucherRouter.post('/delete', accessTokenValidator, wrapAsync(deleteController))
+
+voucherRouter.post('/update/:id', accessTokenValidator, wrapAsync(updateController))
 
 export default voucherRouter

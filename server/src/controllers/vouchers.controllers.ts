@@ -75,7 +75,30 @@ export const deleteController = async (req: Request, res: Response) => {
     })
   }
 
-    const result = await voucherServices.delete(req.body.id)
+  const result = await voucherServices.delete(req.body.id)
+
+  return res.status(200).json({
+    message: 'Sucess',
+    result
+  })
+}
+
+export const updateController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload //lấy user_id từ decoded_authorization
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    return res.status(400).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Staff') {
+    return res.status(400).json({
+      message: 'Bạn không có quyền chỉnh sửa voucher'
+    })
+  }
+
+  const result = await voucherServices.update(req.params.id, req.body)
 
   return res.status(200).json({
     message: 'Sucess',
