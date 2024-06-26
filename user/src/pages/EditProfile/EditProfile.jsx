@@ -146,6 +146,7 @@ const EditProfile = () => {
 
   const [isAddress, setIsAddress] = useState(false);
 
+  const [selectedImage, setSelectedImage] = useState(null);
   const [view, setView] = useState("profile"); // State to manage the current view
 
   const handleChange = (e) => {
@@ -165,6 +166,12 @@ const EditProfile = () => {
         [name]: value,
       },
     });
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImage(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const handleSubmit = async (e) => {
