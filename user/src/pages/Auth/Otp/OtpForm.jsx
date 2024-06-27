@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { fetchOtp } from "../../../data/api.jsx";
 
 const OtpForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const navigateTo = location.state?.navigateTo;
 
   const email = location.state?.email;
@@ -16,19 +14,34 @@ const OtpForm = () => {
 
   const [errorList, setErrorList] = useState([]);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [timer, setTimer] = useState(300);
 
-  
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
 
- 
+    return () => clearInterval(countdown);
+  }, []);
 
+  useEffect(() => {
+    if (timer === 0) {
+      setOtp(["", "", "", "", "", ""]);
+    }
+  }, [timer]);
 
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
 
   const resendMail = async (event) => {
     event.preventDefault();
     try {
-      const response =await  fetchOtp({ user_id,digit:"" ,email,key:"resend",navigateTo,result });
+      const response = await fetchOtp({ user_id, digit: "", email, key: "resend", navigateTo, result });
       alert(`${response.data.message}`);
-      console.log(response.data);
+      setTimer(300);
     } catch (error) {
       console.error(error);
     }
@@ -37,34 +50,33 @@ const OtpForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const otpValue = otp.join("");
-    fetchOtp({
-      user_id,
-      digit: otpValue,
-      email,
-      key: "send",
-      navigateTo,
-      result,
-    })
-      .then((res) => {
-        console.log(res.data);
+    try {
+      const res = await fetchOtp({
+        user_id,
+        digit: otpValue,
+        email,
+        key: "send",
+        navigateTo,
+        result,
+      });
+      console.log(res.data);
+      alert(`${res.data.message}`);
 
-        alert(`${res.data.message}`);
-
+      if (res.data.success) {
         navigate(`${navigateTo}`, { state: { user_id, digit: otpValue } });
         if (navigateTo !== "/reset-password") {
           localStorage.setItem("user", JSON.stringify(res.data.user));
-
           window.location.reload();
         }
-      })
-      .catch((error) => {
-        console.log(error.response);
-
-        for (let [key, value] of Object.entries(error.response.data.errors)) {
-          errorList.push(value);
-          setErrorList(errorList);
-        }
-      });
+      }
+    } catch (error) {
+      console.log(error.response);
+      const errors = [];
+      for (let [key, value] of Object.entries(error.response.data.errors)) {
+        errors.push(value);
+      }
+      setErrorList(errors);
+    }
   };
 
   const handleOtpChange = (index, value) => {
@@ -94,6 +106,9 @@ const OtpForm = () => {
             <div className="flex flex-row text-sm font-medium text-gray-400">
               <p>Chúng tôi đã gửi mã tới email của bạn: {email}</p>
             </div>
+          </div>
+          <div className="flex justify-center text-xl font-medium text-gray-500">
+            <p>Thời gian còn lại: {formatTime(timer)}</p>
           </div>
           <div>
             <form onSubmit={handleSubmit}>
@@ -132,7 +147,7 @@ const OtpForm = () => {
                   </div>
                   <div className="flex flex-row items-center justify-center space-x-1 ">
                     <p className="text-lg font-medium text-gray-500">Không có mã?</p>
-                    <Button type="submit" onClick={resendMail} size="small">
+                    <Button type="button" onClick={resendMail} size="small">
                       <span className="text-lg font-medium normal-case">Gửi lại mã</span>
                     </Button>
                   </div>
