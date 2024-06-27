@@ -71,8 +71,8 @@ const PostList = () => (
     <div className="w-full md:w-3/4 p-4">
         {posts.map((post) => (
             <div key={post.id} className="mb-8 flex flex-col md:flex-row items-start border rounded-lg p-4">
-                <img src="https://via.placeholder.com/450x300" alt="" className="mb-2 md:mb-0 md:mr-4 w-full md:w-auto rounded-lg" />
-                <div>
+                <img src="https://via.placeholder.com/450x300" alt="" className="mb-2 md:mb-0 md:mr-4 w-full md:w-1/3 rounded-lg object-cover" />
+                <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-600 mb-2">{post.date}</p>
                     <a href="#" className="block text-xl font-bold mb-2 truncate">
                         {post.title}
@@ -86,7 +86,7 @@ const PostList = () => (
 );
 
 const NewsPage = () => (
-    <div className="container mx-auto p-4 flex flex-wrap">
+    <div className="container mx-auto p-4 flex flex-wrap md:flex-nowrap">
         <Sidebar />
         <PostList />
     </div>

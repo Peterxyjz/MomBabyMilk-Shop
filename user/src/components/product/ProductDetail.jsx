@@ -38,6 +38,13 @@ const ProductDetail = () => {
     });
   };
 
+  // Function to calculate the discounted price
+  const getDiscountedPrice = (price, discount) => {
+    return price - (price * discount) / 100;
+  };
+
+  const discountedPrice = getDiscountedPrice(product.price, product.discount);
+
   return (
     <section className="py-8 bg-white md:py-16 antialiased">
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
@@ -60,12 +67,32 @@ const ProductDetail = () => {
               {product.product_name}
             </h1>
             <div className="mt-4 sm:items-center sm:gap-4 sm:flex">
-              <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
-                {Number(product.price).toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}
-              </p>
+              {product.discount > 0 ? (
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+                    {discountedPrice.toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
+                  </p>
+                  <p className="text-lg line-through text-gray-500 sm:text-xl">
+                    {Number(product.price).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
+                  </p>
+                  <p className="text-lg font-medium text-green-500 sm:text-xl">
+                    {product.discount}% off
+                  </p>
+                </div>
+              ) : (
+                <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+                  {Number(product.price).toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+                </p>
+              )}
 
               <div className="flex items-center gap-2 mt-2 sm:mt-0">
                 <div className="flex items-center gap-1">
