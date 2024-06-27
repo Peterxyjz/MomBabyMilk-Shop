@@ -177,10 +177,10 @@ const AddStaff = () => {
 
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', height: '140vh' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
       <Card
         title="Thêm nhân viên mới"
-        style={{ width: '60%', marginTop: '30px', height: '130vh' }}
+        style={{ width: '90%', maxWidth: '800px', margin: '30px auto', minHeight: '70vh' }}
       >
         <form onSubmit={handleSubmit}>
           <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>

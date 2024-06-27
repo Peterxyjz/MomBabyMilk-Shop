@@ -91,112 +91,112 @@ const OrderDetail = () => {
         <Row justify="center" style={{ width: '100%', marginTop: '50px' }}>
           <Col span={22} style={{ display: 'flex', justifyContent: 'center' }}>
             <Card style={{ width: '100%' }} title={<h2 className="text-2xl font-bold">Theo dõi đơn hàng</h2>}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              {order.order.status === 2 && <Steps
-                items={[
-                  {
-                    title: 'Chờ xác nhận',
-                    status: 'finish',
-                    description: formatDate(order.order.required_date),
-                    icon: <FieldTimeOutlined />,
-                  },
-                  {
-                    title: 'Đã xác nhận',
-                    status: 'finish',
-                    icon: <CheckCircleOutlined />,
-                  },
-                  {
-                    title: 'Đã giao cho ĐVVC',
-                    status: 'finish',
-                    description: formatDate(addOneDay(order.order.required_date)),
-                    icon: <TruckOutlined />,
-                  },
-                  {
-                    title: 'Đã hoàn thành',
-                    status: 'finish',
-                    description: formatDate(order.order.shipped_date),
-                    icon: <SmileOutlined />,
-                  },
-                ]}
-              />}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                {order.order.status === 2 && <Steps
+                  items={[
+                    {
+                      title: 'Chờ xác nhận',
+                      status: 'finish',
+                      description: formatDate(order.order.required_date),
+                      icon: <FieldTimeOutlined />,
+                    },
+                    {
+                      title: 'Đã xác nhận',
+                      status: 'finish',
+                      icon: <CheckCircleOutlined />,
+                    },
+                    {
+                      title: 'Đã giao cho ĐVVC',
+                      status: 'finish',
+                      description: formatDate(addOneDay(order.order.required_date)),
+                      icon: <TruckOutlined />,
+                    },
+                    {
+                      title: 'Đã hoàn thành',
+                      status: 'finish',
+                      description: formatDate(order.order.shipped_date),
+                      icon: <SmileOutlined />,
+                    },
+                  ]}
+                />}
 
-              {order.order.status === 1 && <Steps
-                items={[
-                  {
-                    title: 'Chờ xác nhận',
-                    status: 'finish',
-                    description: formatDate(order.order.required_date),
-                    icon: <FieldTimeOutlined />,
-                  },
-                  {
-                    title: 'Đã xác nhận',
-                    status: 'process',
-                    icon: <CheckCircleOutlined />,
-                  },
-                  {
-                    title: 'Đã giao cho ĐVVC',
-                    status: 'wait',
-                    icon: <TruckOutlined />,
-                  },
-                  {
-                    title: 'Đã hoàn thành',
-                    status: 'wait',
-                    icon: <SmileOutlined />,
-                  },
-                ]}
-              />}
+                {order.order.status === 1 && <Steps
+                  items={[
+                    {
+                      title: 'Chờ xác nhận',
+                      status: 'finish',
+                      description: formatDate(order.order.required_date),
+                      icon: <FieldTimeOutlined />,
+                    },
+                    {
+                      title: 'Đã xác nhận',
+                      status: 'process',
+                      icon: <CheckCircleOutlined />,
+                    },
+                    {
+                      title: 'Đã giao cho ĐVVC',
+                      status: 'wait',
+                      icon: <TruckOutlined />,
+                    },
+                    {
+                      title: 'Đã hoàn thành',
+                      status: 'wait',
+                      icon: <SmileOutlined />,
+                    },
+                  ]}
+                />}
 
-              {order.order.status === 3 && <Steps
-                items={[
-                  {
-                    title: 'Chờ xác nhận',
-                    status: 'finish',
-                    description: formatDate(order.order.required_date),
-                    icon: <FieldTimeOutlined />,
-                  },
-                  {
-                    title: 'Đã hủy',
-                    status: 'error',
-                    icon: <CloseCircleOutlined />,
-                  },
-                  {
-                    title: 'Đã giao cho ĐVVC',
-                    status: 'wait',
-                    icon: <TruckOutlined />,
-                  },
-                  {
-                    title: 'Đã hoàn thành',
-                    status: 'wait',
-                    icon: <SmileOutlined />,
-                  },
-                ]}
-              />}
+                {order.order.status === 3 && <Steps
+                  items={[
+                    {
+                      title: 'Chờ xác nhận',
+                      status: 'finish',
+                      description: formatDate(order.order.required_date),
+                      icon: <FieldTimeOutlined />,
+                    },
+                    {
+                      title: 'Đã hủy',
+                      status: 'error',
+                      icon: <CloseCircleOutlined />,
+                    },
+                    {
+                      title: 'Đã giao cho ĐVVC',
+                      status: 'wait',
+                      icon: <TruckOutlined />,
+                    },
+                    {
+                      title: 'Đã hoàn thành',
+                      status: 'wait',
+                      icon: <SmileOutlined />,
+                    },
+                  ]}
+                />}
 
-{order.order.status === 3 && <Steps
-                items={[
-                  {
-                    title: 'Chờ xác nhận',
-                    status: 'finish',
-                    description: formatDate(order.order.required_date),
-                    icon: <FieldTimeOutlined />,
-                  },
-                  {
-                    title: 'Đã hủy',
-                    status: 'error',
-                    icon: <CloseCircleOutlined />,
-                  },
-                  {
-                    title: 'Đã giao cho ĐVVC',
-                    status: 'wait',
-                    icon: <TruckOutlined />,
-                  },
-                  {
-                    title: 'Đã hoàn thành',
-                    status: 'wait',
-                    icon: <SmileOutlined />,
-                  },
-                ]}
-              />}
+                {order.order.status === 4 && <Steps
+                  items={[
+                    {
+                      title: 'Chờ xác nhận',
+                      status: 'finish',
+                      description: formatDate(order.order.required_date),
+                      icon: <FieldTimeOutlined />,
+                    },
+                    {
+                      title: 'Đã hủy',
+                      status: 'error',
+                      icon: <CloseCircleOutlined />,
+                    },
+                    {
+                      title: 'Đã giao cho ĐVVC',
+                      status: 'wait',
+                      icon: <TruckOutlined />,
+                    },
+                    {
+                      title: 'Đã hoàn thành',
+                      status: 'wait',
+                      icon: <SmileOutlined />,
+                    },
+                  ]}
+                />}
               </div>
             </Card>
           </Col>
