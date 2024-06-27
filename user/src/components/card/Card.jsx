@@ -1,3 +1,4 @@
+import React from "react";
 import { Card } from "flowbite-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -8,9 +9,12 @@ import "./Swiper.css";
 import RenderRating from "../elements/RenderRating";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductCard = ({ products, headline, viewAllLink }) => {
   const { addCartItem } = useCartContext();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -46,6 +50,19 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
       </div>
     );
   }
+
+  const handleAddToCart = (product) => {
+    addCartItem(product);
+    toast.success('Sản phẩm đã được thêm vào giỏ hàng', {
+      position: "top-right",
+      autoClose: 7000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
   return (
     <div className="h-full">
@@ -91,7 +108,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
                     </span>
                     {product.amount > 0 && (
                       <button
-                        onClick={() => addCartItem(product)}
+                        onClick={() => handleAddToCart(product)}
                         className="rounded-lg bg-cyan-700 p-2 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 flex items-center justify-center"
                       >
                         <FaShoppingCart />
@@ -104,6 +121,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
           }
         })}
       </Slider>
+      <ToastContainer />
     </div>
   );
 };
