@@ -64,6 +64,13 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
     });
   };
 
+  const formatCurrency = (amount) => {
+    return Number(amount).toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   return (
     <div className="h-full">
       <div className="flex justify-between items-center mb-2 mt-12">
@@ -75,6 +82,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
       <Slider {...settings}>
         {products.map((product) => {
           if (product.isActive) {
+            const discountedPrice = product.price - (product.price * product.discount / 100);
             return (
               <div key={product._id} className="p-1">
                 <Card className="max-w-xs m-1 product-card flex flex-col justify-between h-full relative">
@@ -99,18 +107,32 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
                       {product.rating}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-gray-900 dark:text-white">
-                      {Number(product.price).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </span>
+                  <div className="flex justify-between items-end w-full h-20">
+                    <div className="flex flex-col justify-between">
+                      {product.discount > 0 ? (
+                        <>
+                          <span className="text-xl font-bold text-gray-900 dark:text-white">
+                            {formatCurrency(discountedPrice)}
+                          </span>
+                          <span className="text-sm line-through text-gray-500 dark:text-gray-400">
+                            {formatCurrency(product.price)}
+                          </span>
+                          <span className="text-green-500 text-sm">
+                            {product.discount}% off
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-xl font-bold text-gray-900 dark:text-white mt-auto">
+                          {formatCurrency(product.price)}
+                        </span>
+                      )}
+                    </div>
                     {product.amount > 0 && (
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="rounded-lg bg-cyan-700 p-2 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 flex items-center justify-center"
+                        className="rounded-lg bg-cyan-700 p-3 text-center text-base font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 flex items-center justify-center"
                       >
+                        <span className="mr-1">Thêm</span>
                         <FaShoppingCart />
                       </button>
                     )}
