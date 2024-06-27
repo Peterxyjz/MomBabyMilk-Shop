@@ -49,7 +49,7 @@ export default class Order {
     this.email = order.email
     this.payment_method = order.payment_method
     this.required_date = order.required_date || date
-    this.shipped_date = order.shipped_date || date
+    this.shipped_date = order.shipped_date || undefined
     this.total_price = order.total_price || 0
   }
 }

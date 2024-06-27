@@ -18,16 +18,17 @@ const EditProfile = () => {
     phone: "",
     gender: "",
     address: "",
-    birthDate: {
-      day: "",
-      month: "",
-      year: "",
-    },
+    date_of_birth: null,
   });
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 18);
+
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [addressInput, setAddressInput] = useState("");
+  const [dateInput, setDateInput] = useState(date);
+ 
   useEffect(() => {
     const getMeProfile = async () => {
       await fetchGetMe(token)
@@ -39,20 +40,14 @@ const EditProfile = () => {
             phone: res.data.result.phone || "",
             address: res.data.result.address || "",
             point: res.data.result.menber_ship || 0,
-            birthDate: res.data.result.date_of_birth
-              ? {
-                  day: new Date(res.data.result.date_of_birth)
-                    .getDate()
-                    .toString(),
-                  month: (
-                    new Date(res.data.result.date_of_birth).getMonth() + 1
-                  ).toString(),
-                  year: new Date(res.data.result.date_of_birth)
-                    .getFullYear()
-                    .toString(),
-                }
-              : "Chưa có ngày sinh",
+            date_of_birth: res.data.result.date_of_birth || null,
           });
+          if(res.data.result.date_of_birth !== null){
+
+            setDateInput(new Date(res.data.result.date_of_birth));
+            console.log(res.data.result.date_of_birth);
+            console.log(dateInput);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -61,10 +56,13 @@ const EditProfile = () => {
 
     getMeProfile();
   }, []);
+
+  
+
   const formatDate = (dateObject) => {
-    if (typeof dateObject === "string") return dateObject;
-    if (dateObject && dateObject.day && dateObject.month && dateObject.year) {
-      return `${dateObject.day}/${dateObject.month}/${dateObject.year}`;
+    if(dateObject !== null){
+      const date = new Date(dateObject);
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
     }
     return "Chưa có ngày sinh";
   };
@@ -152,29 +150,17 @@ const EditProfile = () => {
     });
   };
 
-  const handleDateChange = (e) => {
-    const { name, value } = e.target;
-    setProfile({
-      ...profile,
-      birthDate: {
-        ...profile.birthDate,
-        [name]: value,
-      },
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const date = new Date();
-    date.setDate(profile.birthDate.day);
-    date.setMonth(profile.birthDate.month - 1);
-    date.setFullYear(profile.birthDate.year);
+    const date_input = dateInput
+    date_input.setDate(date_input.getDate() + 1);
     const data = {
       full_name: profile.name,
       phone: profile.phone,
-      address: profile.address,
-      date_of_birth: date,
+      address: `${addressInput}, ${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`,
+      date_of_birth: (date_input).toISOString(),
     };
+
     await fetchUpdateMe(token, data)
       .then((res) => {
         console.log(res.data);
@@ -197,7 +183,7 @@ const EditProfile = () => {
             Chỉnh sửa thông tin tài khoản
           </h1>
           <div>
-            <form className="space-y-4 my-4 px-8">
+            <form className="space-y-4 my-4 px-8" onSubmit={handleSubmit}>
               <div className="w-full mx-auto flex gap-10">
                 <div className="w-1/2">
                   <label className="block text-gray-700">Họ và Tên: </label>
@@ -319,7 +305,14 @@ const EditProfile = () => {
                 </div>
                 <div className="w-1/2">
                   <label className="block text-gray-700">Ngày sinh: </label>
-                  <Datepicker language="vi" />
+                  <Datepicker
+                    language="vi"
+                    defaultDate={dateInput}
+                    onSelectedDateChanged={(date) =>
+                      setDateInput(date)
+                    }
+                    required
+                  />
                 </div>
               </div>
               {errorList.length > 0 && (
@@ -381,7 +374,7 @@ const EditProfile = () => {
               <div>
                 <p className="text-lg">Ngày sinh</p>
                 <p className="text-lg font-semibold">
-                  {formatDate(profile.birthDate)}
+                  {formatDate(profile.date_of_birth)}
                 </p>
               </div>
               <div>
