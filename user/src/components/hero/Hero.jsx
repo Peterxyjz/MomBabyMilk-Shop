@@ -22,7 +22,7 @@ function Hero() {
                                 Mua hàng
                             </a>
                             <a
-                                href="#"
+                                href="/about_us"
                                 className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md"
                             >
                                 Về chúng tôi

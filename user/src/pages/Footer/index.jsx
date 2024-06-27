@@ -1,6 +1,6 @@
 import { Footer } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
-
+import logo from "../../assets/images/logo/Logo.png"
 export default function MainFooter() {
   return (
     <Footer container>

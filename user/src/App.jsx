@@ -19,6 +19,7 @@ import Thanks from "./components/order/Thanks";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import WishList from "./pages/Wishlist";
 import NewsPage from "./pages/News";
+import AboutUs from "./pages/AboutUs/AboutUs";
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/edit_profile" element={<EditProfile />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/about_us" element={<AboutUs />} />
         </Routes>
         <MainFooter />
       </Router>
