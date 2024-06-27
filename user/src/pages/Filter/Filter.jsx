@@ -8,6 +8,7 @@ import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { fetchCategories } from "../../data/api";
+import not_found from '../../assets/images/background/notFind.png'; // Import hình ảnh
 
 const Filter = () => {
   const location = useLocation();
@@ -90,6 +91,11 @@ const Filter = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleResetFilters = () => {
+    setSelectedCategory("");
+    setPriceRange([0, 1000000]);
+    setCurrentPage(1);
+  };
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -107,7 +113,6 @@ const Filter = () => {
     return pageNumbers;
   };
 
-
   if (loading)
     return (
       <div
@@ -123,7 +128,7 @@ const Filter = () => {
       <Breadcrumbs headline="Tất cả sản phẩm" />
       <div className="container mx-auto p-4 min-h-screen flex">
         {/* Sidebar */}
-        <div className="w-1/5 p-4 flex-shrink-0">
+        <div className="w-full md:w-1/5 p-4 flex-shrink-0">
           <div className="mb-4">
             <h2 className="font-bold text-lg mb-2">Bộ lọc sản phẩm</h2>
             <ul className="text-gray-500">
@@ -167,8 +172,16 @@ const Filter = () => {
               <span>{priceRange[1].toLocaleString()}₫</span>
             </div>
           </div>
+          <Link to="/filter">
+            <button
+              onClick={handleResetFilters}
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
+            >
+              Khôi phục bộ lọc
+            </button>
+          </Link>
         </div>
-        <div className="w-4/5 p-4 flex-grow">
+        <div className="w-full md:w-4/5 p-4 flex-grow">
           <div className="flex justify-between mb-4">
             <div className="relative">
               <button
@@ -192,79 +205,92 @@ const Filter = () => {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {" "}
-            {currentProducts.map((product) => (
-              <div
-                key={product._id}
-                className="border p-4 rounded-lg flex flex-col items-center"
-              >
-                {" "}
-                <Link
-                  to="/product"
-                  state={{ product: product }}
-                  className="w-full"
-                >
-                  <div className="flex justify-center mb-2 relative">
-                    <img
-                      src={product.imgUrl}
-                      alt={product.product_name}
-                      className="w-44 h-44 object-cover"
-                    />
-                    {product.amount === 0 && (
-                      <div className="absolute inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center">
-                        <span className="text-white text-xl font-bold">
-                          Hết hàng
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="h-20 mb-2 text-center w-full">
-                    {" "}
-                    <h3
-                      className="font-bold text-base overflow-hidden overflow-ellipsis"
-                      style={{
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                      }}
-                    >
-                      {product.product_name}
-                    </h3>
-                  </div>
-                </Link>
-                <div className="flex justify-between items-center w-full">
-                  <span>
-                    {Number(product.price).toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
-                  </span>
-                  <button
-                    onClick={() => addCartItem(product)}
-                    disabled={product.amount === 0}
-                    className={
-                      product.amount === 0
-                        ? "bg-gray-500 text-white py-2 px-4 rounded-lg flex items-center justify-center cursor-not-allowed"
-                        : "bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center"
-                    }
+          {filteredProducts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentProducts.map((product) => (
+                  <div
+                    key={product._id}
+                    className="border p-4 rounded-lg flex flex-col items-center"
                   >
-                    Thêm <FaShoppingCart className="ml-2" />
-                  </button>
-                </div>
+                    <Link
+                      to="/product"
+                      state={{ product: product }}
+                      className="w-full"
+                    >
+                      <div className="flex justify-center mb-2 relative">
+                        <img
+                          src={product.imgUrl}
+                          alt={product.product_name}
+                          className="w-44 h-44 object-cover"
+                        />
+                        {product.amount === 0 && (
+                          <div className="absolute inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center">
+                            <span className="text-white text-xl font-bold">
+                              Hết hàng
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="h-20 mb-2 text-center w-full">
+                        <h3
+                          className="font-bold text-base overflow-hidden overflow-ellipsis"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                          }}
+                        >
+                          {product.product_name}
+                        </h3>
+                      </div>
+                    </Link>
+                    <div className="flex justify-between items-center w-full">
+                      <span>
+                        {Number(product.price).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </span>
+                      <button
+                        onClick={() => addCartItem(product)}
+                        disabled={product.amount === 0}
+                        className={
+                          product.amount === 0
+                            ? "bg-gray-500 text-white py-2 px-4 rounded-lg flex items-center justify-center cursor-not-allowed"
+                            : "bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center"
+                        }
+                      >
+                        Thêm <FaShoppingCart className="ml-2" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="flex justify-center items-center mt-6">
-            <button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
-              <FaArrowLeft />
-            </button>
-            {renderPageNumbers()}
-            <button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center">
-              <FaArrowRight />
-            </button>
-          </div>
-
+              <div className="flex justify-center items-center mt-6">
+                <button
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center"
+                >
+                  <FaArrowLeft />
+                </button>
+                {renderPageNumbers()}
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 mx-2 bg-gray-300 rounded-lg flex items-center"
+                >
+                  <FaArrowRight />
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center mt-6">
+              <img src={not_found} alt="No products found" className="w-128 h-64 mb-4" /> {/* Thêm hình ảnh */}
+              <p className="text-lg font-semibold">Không có sản phẩm phù hợp với tìm kiếm!</p>
+            </div>
+          )}
         </div>
       </div>
     </>
