@@ -58,14 +58,11 @@ const AddStaff = () => {
       province: selectedProvince.name,
       district: selectedDistrict.name,
       ward: selectedWard.name,
-      address: address,
+      address: address + ', ' + selectedWard.name + ', ' + selectedDistrict.name + ', ' + selectedProvince.name,
       phone: phone,
       membership: 0,
       username: username,
-      email_verify_token: "",
-      forgot_password_token: "",
-      verify: 1,
-      isActive: "1",
+
       updated_at: new Date().toISOString(),
     };
 
@@ -323,6 +320,7 @@ const AddStaff = () => {
                 format="DD/MM/YYYY"
                 onChange={handleDateChange}
                 style={{ width: '100%', height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                required
               />
             </Col>
           </Row>

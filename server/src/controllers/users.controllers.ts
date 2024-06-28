@@ -295,7 +295,7 @@ export const addUserController = async (
     })
   }
 
-  next()
+  return await usersService.addUserByAdmin(req.body)
 }
 
 export const changeStatusUserController = async (
