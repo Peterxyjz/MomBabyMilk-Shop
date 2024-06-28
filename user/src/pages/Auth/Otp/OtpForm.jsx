@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { fetchOtp } from "../../../data/api.jsx";
@@ -8,7 +8,6 @@ const OtpForm = () => {
   const navigate = useNavigate();
 
   const navigateTo = location.state?.navigateTo;
-
   const email = location.state?.email;
   const user_id = location.state?.user_id;
   const result = JSON.parse(localStorage.getItem("result")) || null;
@@ -16,9 +15,11 @@ const OtpForm = () => {
   const [errorList, setErrorList] = useState([]);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [otpErrors, setOtpErrors] = useState(Array(6).fill(""));
+  const [countdown, setCountdown] = useState(90);
 
   const resendMail = async (event) => {
     event.preventDefault();
+    setCountdown(90);
     try {
       const response = await fetchOtp({
         user_id,
@@ -52,13 +53,11 @@ const OtpForm = () => {
         navigate(`${navigateTo}`, { state: { user_id, digit: otpValue } });
         if (navigateTo !== "/reset-password") {
           localStorage.setItem("user", JSON.stringify(res.data.user));
-
           window.location.reload();
         }
       })
       .catch((error) => {
         console.log(error.response);
-
         const newErrorList = [];
         for (let [key, value] of Object.entries(error.response.data.errors)) {
           newErrorList.push(value);
@@ -92,6 +91,16 @@ const OtpForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      alert("Xác minh thất bại. Bạn sẽ được chuyển về trang chủ.");
+      navigate("/");
+    }
+  }, [countdown, navigate]);
+
   return (
     <div className="relative flex flex-col justify-center overflow-hidden py-12 w-full">
       <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
@@ -102,6 +111,9 @@ const OtpForm = () => {
             </div>
             <div className="flex flex-row text-sm font-medium text-gray-400">
               <p>Chúng tôi đã gửi mã tới email của bạn: {email}</p>
+            </div>
+            <div className="flex flex-row text-sm font-medium text-gray-400">
+              <p>Thời gian còn lại: {Math.floor(countdown / 60)}:{countdown % 60}</p>
             </div>
           </div>
           <div>
