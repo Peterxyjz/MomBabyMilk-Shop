@@ -87,7 +87,7 @@ const LoginPage = () => {
                       onChange={handleChange}
                       placeholder="Nhập mật khẩu"
                     />
-                    {/* <InputRightElement width='4.5rem'>
+                    <InputRightElement width='4.5rem'>
                   <Button h='2.5rem'
                     size="sm"
                     onClick={handleClick}
@@ -95,7 +95,7 @@ const LoginPage = () => {
                   >
                     {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                   </Button>
-                </InputRightElement> */}
+                </InputRightElement>
                   </InputGroup>
                   {errorList.length > 0 && (
                     <div className="error-list mt-3 mb-3">
