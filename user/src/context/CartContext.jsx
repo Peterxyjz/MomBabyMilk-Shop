@@ -21,10 +21,11 @@ export const CartContextProvider = ({ children }) => {
     0
   );
 
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const totalPrice = cartItems.reduce((total, item) => {
+    const discount = parseFloat(item.discount) / 100;
+    const itemTotal = item.price * item.quantity * (1 - discount);
+    return total + itemTotal;
+  }, 0);
 
   const removeCartItem = (id) => {
     const currentItemIndex = cartItems.findIndex((item) => item._id === id);

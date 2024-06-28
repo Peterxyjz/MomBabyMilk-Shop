@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { fetchOtp } from "../../../data/api.jsx";
 
 const OtpForm = () => {
@@ -9,26 +8,28 @@ const OtpForm = () => {
   const navigate = useNavigate();
 
   const navigateTo = location.state?.navigateTo;
-
   const email = location.state?.email;
   const user_id = location.state?.user_id;
   const result = JSON.parse(localStorage.getItem("result")) || null;
 
   const [errorList, setErrorList] = useState([]);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-
-  
-
- 
-
-
+  const [otpErrors, setOtpErrors] = useState(Array(6).fill(""));
+  const [countdown, setCountdown] = useState(90);
 
   const resendMail = async (event) => {
     event.preventDefault();
+    setCountdown(90);
     try {
-      const response =await  fetchOtp({ user_id,digit:"" ,email,key:"resend",navigateTo,result });
+      const response = await fetchOtp({
+        user_id,
+        digit: "",
+        email,
+        key: "resend",
+        navigateTo,
+        result,
+      });
       alert(`${response.data.message}`);
-    
     } catch (error) {
       console.error(error);
     }
@@ -37,6 +38,7 @@ const OtpForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const otpValue = otp.join("");
+    console.log(otpValue);
     fetchOtp({
       user_id,
       digit: otpValue,
@@ -46,29 +48,35 @@ const OtpForm = () => {
       result,
     })
       .then((res) => {
-        console.log(res.data);
-
         alert(`${res.data.message}`);
-
+        console.log(res.data);
         navigate(`${navigateTo}`, { state: { user_id, digit: otpValue } });
         if (navigateTo !== "/reset-password") {
           localStorage.setItem("user", JSON.stringify(res.data.user));
-
           window.location.reload();
         }
       })
       .catch((error) => {
         console.log(error.response);
-
+        const newErrorList = [];
         for (let [key, value] of Object.entries(error.response.data.errors)) {
-          errorList.push(value);
-          setErrorList(errorList);
+          newErrorList.push(value);
         }
+        setErrorList(newErrorList);
       });
   };
 
   const handleOtpChange = (index, value) => {
-    if (/[^0-9]/.test(value)) return;
+    if (/[^0-9]/.test(value)) {
+      const newOtpErrors = [...otpErrors];
+      newOtpErrors[index] = "Chỉ nhập số.";
+      setOtpErrors(newOtpErrors);
+      return;
+    } else {
+      const newOtpErrors = [...otpErrors];
+      newOtpErrors[index] = "";
+      setOtpErrors(newOtpErrors);
+    }
 
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -83,6 +91,16 @@ const OtpForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      alert("Xác minh thất bại. Bạn sẽ được chuyển về trang chủ.");
+      navigate("/");
+    }
+  }, [countdown, navigate]);
+
   return (
     <div className="relative flex flex-col justify-center overflow-hidden py-12 w-full">
       <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
@@ -93,6 +111,9 @@ const OtpForm = () => {
             </div>
             <div className="flex flex-row text-sm font-medium text-gray-400">
               <p>Chúng tôi đã gửi mã tới email của bạn: {email}</p>
+            </div>
+            <div className="flex flex-row text-sm font-medium text-gray-400">
+              <p>Thời gian còn lại: {Math.floor(countdown / 60)}:{countdown % 60}</p>
             </div>
           </div>
           <div>
@@ -109,6 +130,9 @@ const OtpForm = () => {
                         onChange={(e) => handleOtpChange(index, e.target.value)}
                         maxLength={1}
                       />
+                      {otpErrors[index] && (
+                        <p className="text-red-600 text-sm">{otpErrors[index]}</p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -131,9 +155,13 @@ const OtpForm = () => {
                     </button>
                   </div>
                   <div className="flex flex-row items-center justify-center space-x-1 ">
-                    <p className="text-lg font-medium text-gray-500">Không có mã?</p>
+                    <p className="text-lg font-medium text-gray-500">
+                      Không có mã?
+                    </p>
                     <Button type="submit" onClick={resendMail} size="small">
-                      <span className="text-lg font-medium normal-case">Gửi lại mã</span>
+                      <span className="text-lg font-medium normal-case">
+                        Gửi lại mã
+                      </span>
                     </Button>
                   </div>
                 </div>
