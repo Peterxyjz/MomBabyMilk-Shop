@@ -7,9 +7,13 @@ import {
   getProvinces,
   getWards,
 } from "../../data/api";
+import { useLocation } from "react-router-dom";
+
 const EditProfile = () => {
+  const location = useLocation();
+  const newAccount = location.state?.newAccount || false;
   const token = JSON.parse(localStorage.getItem("result"));
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(newAccount);
   const [errorList, setErrorList] = useState([]);
   const [profile, setProfile] = useState({
     username: "",
@@ -21,14 +25,12 @@ const EditProfile = () => {
     date_of_birth: null,
   });
   const date = new Date();
-  date.setFullYear(date.getFullYear() - 18);
-
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [addressInput, setAddressInput] = useState("");
   const [dateInput, setDateInput] = useState(date);
- 
+
   useEffect(() => {
     const getMeProfile = async () => {
       await fetchGetMe(token)
@@ -42,11 +44,8 @@ const EditProfile = () => {
             point: res.data.result.menber_ship || 0,
             date_of_birth: res.data.result.date_of_birth || null,
           });
-          if(res.data.result.date_of_birth !== null){
-
+          if (res.data.result.date_of_birth !== null) {
             setDateInput(new Date(res.data.result.date_of_birth));
-            console.log(res.data.result.date_of_birth);
-            console.log(dateInput);
           }
         })
         .catch((error) => {
@@ -57,12 +56,10 @@ const EditProfile = () => {
     getMeProfile();
   }, []);
 
-  
-
   const formatDate = (dateObject) => {
-    if(dateObject !== null){
+    if (dateObject !== null) {
       const date = new Date(dateObject);
-      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     }
     return "Chưa có ngày sinh";
   };
@@ -109,8 +106,7 @@ const EditProfile = () => {
   const handlerChangeAddressInput = (event) => {
     setAddressInput(event.target.value);
   };
-
-  const [selectedProvince, setSelectedProvince] = useState({
+const [selectedProvince, setSelectedProvince] = useState({
     id: "",
     name: "",
   });
@@ -152,19 +148,32 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const date_input = dateInput
-    date_input.setDate(date_input.getDate() + 1);
+    const date_input = new Date(dateInput);
+    const today = new Date();
+    const age = today.getFullYear() - date_input.getFullYear();
+    const monthDifference = today.getMonth() - date_input.getMonth();
+
+    if (
+      age < 13 ||
+      (age === 13 && monthDifference < 0) ||
+      (age === 13 && monthDifference === 0 && today.getDate() < date_input.getDate())
+    ) {
+      alert("Tuổi không hợp lệ");
+      return;
+    }
+
     const data = {
       full_name: profile.name,
       phone: profile.phone,
       address: `${addressInput}, ${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`,
-      date_of_birth: (date_input).toISOString(),
+      date_of_birth: date_input.toISOString(),
     };
 
     await fetchUpdateMe(token, data)
       .then((res) => {
-        console.log(res.data);
-        console.log("Profile updated:", profile);
+        alert("Cập nhật thành công");
+        setIsEditing(false);
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -175,6 +184,7 @@ const EditProfile = () => {
         }
       });
   };
+
   return (
     <>
       {isEditing ? (
@@ -193,25 +203,25 @@ const EditProfile = () => {
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                     placeholder="Nhập họ và tên..."
-                    value={profile.name}
+value={profile.name}
                     onChange={handleChange}
                   />
                 </div>
                 <div className="w-1/2">
                   <label className="block text-gray-700">Số điện thoại: </label>
-                  {
-                    <div className="flex items-center">
-                      <input
-                        type="text"
-                        name="phone"
-                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                        placeholder="Nhập số điện thoại..."
-                        value={profile.phone}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  }
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="phone"
+                      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      placeholder="Nhập số điện thoại..."
+                      value={profile.phone}
+                      pattern="^0[0-9]{2}[0-9]{3}[0-9]{4}"
+                      maxLength={10}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
               </div>
               <div>
@@ -252,7 +262,7 @@ const EditProfile = () => {
                       required
                     >
                       <option value="">Chọn Quận/Huyện</option>
-                      {districts.map((district) => (
+{districts.map((district) => (
                         <option key={district.id} value={district.id}>
                           {district.name}
                         </option>
@@ -308,16 +318,14 @@ const EditProfile = () => {
                   <Datepicker
                     language="vi"
                     defaultDate={dateInput}
-                    onSelectedDateChanged={(date) =>
-                      setDateInput(date)
-                    }
+                    onSelectedDateChanged={(date) => setDateInput(date)}
                     required
                   />
                 </div>
               </div>
               {errorList.length > 0 && (
                 <div className="error-list mt-3 mb-3">
-                  {errorList.map((error, index) => (
+{errorList.map((error, index) => (
                     <p key={index} className="text-red-600">
                       {error}
                     </p>
@@ -377,7 +385,7 @@ const EditProfile = () => {
                   {formatDate(profile.date_of_birth)}
                 </p>
               </div>
-              <div>
+              <div className="col-span-2">
                 <p className="text-lg">Địa chỉ: </p>
                 <p className="text-lg font-semibold">{profile.address}</p>
               </div>
