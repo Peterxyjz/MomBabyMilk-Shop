@@ -7,7 +7,25 @@ export default function MainFooter() {
   return (
     <Footer container>
       <div className="w-full">
-
+        <div className="flex justify-around">
+          <div className="flex items-center mb-5">
+            <FaTruck className="text-3xl mr-2" />
+            <span>Every Fresh Products</span>
+          </div>
+          <div className="flex items-center mb-5">
+            <FaTruck className="text-3xl mr-2" />
+            <span>Free Delivery For Order Over $50</span>
+          </div>
+          <div className="flex items-center mb-5">
+            <FaPercentage className="text-3xl mr-2" />
+            <span>Daily Mega Discounts</span>
+          </div>
+          <div className="flex items-center mb-5">
+            <FaThumbsUp className="text-3xl mr-2" />
+            <span>Best Price On The Market</span>
+          </div>
+        </div>
+        <div className="border-t border-gray-300 mb-8"></div>
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div>
             <Footer.Brand
