@@ -41,7 +41,11 @@ const OtpForm = () => {
     try {
       const response = await fetchOtp({ user_id, digit: "", email, key: "resend", navigateTo, result });
       alert(`${response.data.message}`);
+<<<<<<< HEAD
       setTimer(300);
+=======
+    
+>>>>>>> c1c279abf31d764ab6f5e0597346a9231c5c50e7
     } catch (error) {
       console.error(error);
     }
