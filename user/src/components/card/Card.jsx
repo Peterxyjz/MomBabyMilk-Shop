@@ -1,4 +1,3 @@
-import React from "react";
 import { Card } from "flowbite-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -118,7 +117,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
                             {formatCurrency(product.price)}
                           </span>
                           <span className="text-green-500 text-sm">
-                            {product.discount}% off
+                            Giảm {" "} {product.discount}%
                           </span>
                         </>
                       ) : (

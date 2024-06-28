@@ -13,6 +13,8 @@ import {
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
 import {
+  addUserController,
+  changeStatusUserController,
   emailVerifyController,
   forgotPasswordController,
   getAllUserController,
@@ -81,6 +83,21 @@ usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
 
 usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
+
 usersRouter.patch('/me', accessTokenValidator, updateMeValidator, wrapAsync(updateMeController))
 
+/*
+des: reset password
+path: '/add-user
+method: POST
+Header: cần vì để check ai, có phải admin hay ko
+body: {username: string, email: string, password: string, confirm_password: string}
+*/
+usersRouter.post('/add-user', accessTokenValidator, registerValidator, wrapAsync(addUserController))
+usersRouter.post(
+  '/change-status/:id',
+  accessTokenValidator,
+
+  wrapAsync(changeStatusUserController)
+)
 export default usersRouter
