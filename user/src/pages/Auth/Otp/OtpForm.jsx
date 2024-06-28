@@ -50,7 +50,7 @@ const OtpForm = () => {
       .then((res) => {
         alert(`${res.data.message}`);
         console.log(res.data);
-        navigate(`${navigateTo}`, { state: { user_id, digit: otpValue } });
+        navigate(`${navigateTo}`, { state: { user_id, digit: otpValue, newAccount: true } });
         if (navigateTo !== "/reset-password") {
           localStorage.setItem("user", JSON.stringify(res.data.user));
           window.location.reload();

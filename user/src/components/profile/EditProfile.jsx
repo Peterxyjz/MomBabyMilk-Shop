@@ -7,9 +7,12 @@ import {
   getProvinces,
   getWards,
 } from "../../data/api";
+import { useLocation } from "react-router-dom";
 const EditProfile = () => {
+  const location = useLocation();
+  const newAccount = location.state?.newAccount || false;
   const token = JSON.parse(localStorage.getItem("result"));
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(newAccount);
   const [errorList, setErrorList] = useState([]);
   const [profile, setProfile] = useState({
     username: "",
@@ -21,14 +24,12 @@ const EditProfile = () => {
     date_of_birth: null,
   });
   const date = new Date();
-  date.setFullYear(date.getFullYear() - 18);
-
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [addressInput, setAddressInput] = useState("");
   const [dateInput, setDateInput] = useState(date);
- 
+
   useEffect(() => {
     const getMeProfile = async () => {
       await fetchGetMe(token)
@@ -42,11 +43,8 @@ const EditProfile = () => {
             point: res.data.result.menber_ship || 0,
             date_of_birth: res.data.result.date_of_birth || null,
           });
-          if(res.data.result.date_of_birth !== null){
-
+          if (res.data.result.date_of_birth !== null) {
             setDateInput(new Date(res.data.result.date_of_birth));
-            console.log(res.data.result.date_of_birth);
-            console.log(dateInput);
           }
         })
         .catch((error) => {
@@ -57,12 +55,10 @@ const EditProfile = () => {
     getMeProfile();
   }, []);
 
-  
-
   const formatDate = (dateObject) => {
-    if(dateObject !== null){
+    if (dateObject !== null) {
       const date = new Date(dateObject);
-      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     }
     return "Chưa có ngày sinh";
   };
@@ -152,19 +148,20 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const date_input = dateInput
+    const date_input = dateInput;
     date_input.setDate(date_input.getDate() + 1);
     const data = {
       full_name: profile.name,
       phone: profile.phone,
       address: `${addressInput}, ${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`,
-      date_of_birth: (date_input).toISOString(),
+      date_of_birth: date_input.toISOString(),
     };
 
     await fetchUpdateMe(token, data)
       .then((res) => {
         alert("Cập nhật thành công");
         setIsEditing(false);
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -208,6 +205,8 @@ const EditProfile = () => {
                         required
                         placeholder="Nhập số điện thoại..."
                         value={profile.phone}
+                        pattern="^0[0-9]{2}[0-9]{3}[0-9]{4}"
+                        maxLength={10}
                         onChange={handleChange}
                       />
                     </div>
@@ -308,9 +307,7 @@ const EditProfile = () => {
                   <Datepicker
                     language="vi"
                     defaultDate={dateInput}
-                    onSelectedDateChanged={(date) =>
-                      setDateInput(date)
-                    }
+                    onSelectedDateChanged={(date) => setDateInput(date)}
                     required
                   />
                 </div>
