@@ -1,17 +1,18 @@
 import { Footer } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
-import logo from "../../assets/images/logo/Logo.png"
+import { FaTruck, FaTags, FaPercentage, FaThumbsUp } from "react-icons/fa";
+import logo from "../../assets/images/logo/Logo.png";
+
 export default function MainFooter() {
   return (
     <Footer container>
       <div className="w-full">
+
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div>
             <Footer.Brand
-              href="https://flowbite.com"
-              src="https://flowbite.com/docs/images/logo.svg"
-              alt="Flowbite Logo"
-              name="Flowbite"
+              href="/"
+              src={logo}
             />
           </div>
           <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">
@@ -32,7 +33,7 @@ export default function MainFooter() {
             <div>
               <Footer.Title title="Legal" />
               <Footer.LinkGroup col>
-                <Footer.Link href="#">Privacy Policy</Footer.Link>
+                <Footer.Link href="/exchange_policy">Privacy Policy</Footer.Link>
                 <Footer.Link href="#">Terms &amp; Conditions</Footer.Link>
               </Footer.LinkGroup>
             </div>

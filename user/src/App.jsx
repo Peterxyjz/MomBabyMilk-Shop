@@ -19,7 +19,8 @@ import Thanks from "./components/order/Thanks";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import WishList from "./pages/Wishlist";
 import NewsPage from "./pages/News";
-import AboutUs from "./pages/AboutUs/AboutUs";
+import AboutUs from "./pages/InformationPage/AboutUs";
+import ExchangePolicy from "./pages/InformationPage/ExchangePolicy";
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/about_us" element={<AboutUs />} />
+          <Route path="/exchange_policy" element={<ExchangePolicy />} />
         </Routes>
         <MainFooter />
       </Router>
