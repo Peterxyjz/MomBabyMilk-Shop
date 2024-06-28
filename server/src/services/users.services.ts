@@ -403,6 +403,33 @@ class UsersService {
       }
     )
   }
+
+  async addUserByAdmin(payload: any) {
+    const role = await databaseService.roles.findOne({ role_name: 'Staff' })
+    const roleId = role?._id?.toString() || ''
+    const user_id = new ObjectId()
+    const result = await databaseService.users.insertOne(
+      new User({
+        ...payload,
+        _id: user_id,
+
+        password: hashPassword(payload.password),
+        role_id: roleId,
+        verify: UserVerifyStatus.Verified,
+        isActive: UserAccountStatus.Actived
+      })
+    )
+    const user = await databaseService.users.findOne({ _id: user_id })
+
+    const user_Id = result.insertedId.toString()
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_Id)
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_Id), token: refresh_token })
+    )
+
+    return { access_token, refresh_token }
+  }
+
 }
 
 const usersService = new UsersService()
