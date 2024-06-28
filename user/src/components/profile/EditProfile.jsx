@@ -8,6 +8,7 @@ import {
   getWards,
 } from "../../data/api";
 import { useLocation } from "react-router-dom";
+
 const EditProfile = () => {
   const location = useLocation();
   const newAccount = location.state?.newAccount || false;
@@ -105,8 +106,7 @@ const EditProfile = () => {
   const handlerChangeAddressInput = (event) => {
     setAddressInput(event.target.value);
   };
-
-  const [selectedProvince, setSelectedProvince] = useState({
+const [selectedProvince, setSelectedProvince] = useState({
     id: "",
     name: "",
   });
@@ -148,8 +148,20 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const date_input = dateInput;
-    date_input.setDate(date_input.getDate() + 1);
+    const date_input = new Date(dateInput);
+    const today = new Date();
+    const age = today.getFullYear() - date_input.getFullYear();
+    const monthDifference = today.getMonth() - date_input.getMonth();
+
+    if (
+      age < 13 ||
+      (age === 13 && monthDifference < 0) ||
+      (age === 13 && monthDifference === 0 && today.getDate() < date_input.getDate())
+    ) {
+      alert("Tuổi không hợp lệ");
+      return;
+    }
+
     const data = {
       full_name: profile.name,
       phone: profile.phone,
@@ -172,6 +184,7 @@ const EditProfile = () => {
         }
       });
   };
+
   return (
     <>
       {isEditing ? (
@@ -190,27 +203,25 @@ const EditProfile = () => {
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                     placeholder="Nhập họ và tên..."
-                    value={profile.name}
+value={profile.name}
                     onChange={handleChange}
                   />
                 </div>
                 <div className="w-1/2">
                   <label className="block text-gray-700">Số điện thoại: </label>
-                  {
-                    <div className="flex items-center">
-                      <input
-                        type="text"
-                        name="phone"
-                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                        placeholder="Nhập số điện thoại..."
-                        value={profile.phone}
-                        pattern="^0[0-9]{2}[0-9]{3}[0-9]{4}"
-                        maxLength={10}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  }
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="phone"
+                      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      placeholder="Nhập số điện thoại..."
+                      value={profile.phone}
+                      pattern="^0[0-9]{2}[0-9]{3}[0-9]{4}"
+                      maxLength={10}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
               </div>
               <div>
@@ -251,7 +262,7 @@ const EditProfile = () => {
                       required
                     >
                       <option value="">Chọn Quận/Huyện</option>
-                      {districts.map((district) => (
+{districts.map((district) => (
                         <option key={district.id} value={district.id}>
                           {district.name}
                         </option>
@@ -314,7 +325,7 @@ const EditProfile = () => {
               </div>
               {errorList.length > 0 && (
                 <div className="error-list mt-3 mb-3">
-                  {errorList.map((error, index) => (
+{errorList.map((error, index) => (
                     <p key={index} className="text-red-600">
                       {error}
                     </p>
