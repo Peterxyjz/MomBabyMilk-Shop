@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import LinkToGoogle from "../Google/LinkToGoogle";
 import { fetchRegister } from "../../../data/api.jsx";
 const RegisterForm = () => {
@@ -44,9 +43,7 @@ const RegisterForm = () => {
       })
       .catch((error) => {
         let errorList = [];
-        console.log(error.response);
-        for (let [key, value] of Object.entries(error.response.data.errors)) {
-          console.log(value); // in ra các error từ back-end trả về
+        for (let value of Object.values(error.response.data.errors)) {
           errorList.push(value);
           setErrorList(errorList);
         }
