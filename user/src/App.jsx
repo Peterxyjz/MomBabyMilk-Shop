@@ -18,6 +18,8 @@ import Filter from "./pages/Filter/Filter";
 import Thanks from "./components/order/Thanks";
 import WishList from "./pages/Wishlist";
 import NewsPage from "./pages/News";
+import AboutUs from "./pages/InformationPage/AboutUs";
+import ExchangePolicy from "./pages/InformationPage/ExchangePolicy";
 import Profile from "./pages/Profile";
 import HistoryOrder from "./components/profile/HistoryOrder";
 import Feedback from "./components/profile/Feedback";
@@ -48,6 +50,8 @@ function App() {
           <Route path="/filter" element={<Filter />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/about_us" element={<AboutUs />} />
+          <Route path="/exchange_policy" element={<ExchangePolicy />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="" element={<EditProfile />} />
             <Route path="history-order" element={<HistoryOrder />} />
