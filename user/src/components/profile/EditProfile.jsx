@@ -163,8 +163,8 @@ const EditProfile = () => {
 
     await fetchUpdateMe(token, data)
       .then((res) => {
-        console.log(res.data);
-        console.log("Profile updated:", profile);
+        alert("Cập nhật thành công");
+        setIsEditing(false);
       })
       .catch((error) => {
         console.log(error);
@@ -377,7 +377,7 @@ const EditProfile = () => {
                   {formatDate(profile.date_of_birth)}
                 </p>
               </div>
-              <div>
+              <div className="col-span-2">
                 <p className="text-lg">Địa chỉ: </p>
                 <p className="text-lg font-semibold">{profile.address}</p>
               </div>
