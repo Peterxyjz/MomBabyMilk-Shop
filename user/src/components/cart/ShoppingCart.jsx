@@ -4,7 +4,7 @@ import { useCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchGetAllVoucher, fetchGetVoucher } from "../../data/api";
-import { Button, Dropdown } from "flowbite-react";
+import { Button } from "flowbite-react";
 const ShoppingCart = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const verify = user === null ? 0 : user.verify;
@@ -251,7 +251,7 @@ const ShoppingCart = () => {
                             </div>
                             <div className="text-end md:order-4 md:w-32">
                               <p className="text-base font-bold text-gray-900 dark:text-white">
-                                {Number(product.price).toLocaleString("vi-VN", {
+                                {Number(product.price - (product.price * product.discount) / 100).toLocaleString("vi-VN", {
                                   style: "currency",
                                   currency: "VND",
                                 })}
