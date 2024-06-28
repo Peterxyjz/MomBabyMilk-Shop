@@ -96,7 +96,7 @@ class OrderServinces {
       Promise.all([
         await databaseService.orders.updateOne(
           { _id: new ObjectId(order._id) },
-          { $set: { status: OrderStatus.Completed } }
+          { $set: { status: OrderStatus.Completed, shipped_date: new Date() } }
         ),
 
         await revenueServices.upload(

@@ -21,6 +21,7 @@ import OrderDetail from '../pages/Order/OrderDetail';
 import EditCategory from '../pages/Category/EditCategory';
 import InputBills from '../pages/Warehouse/InputBills';
 import BillDetail from '../pages/Warehouse/BillDetail';
+import AddVoucher from '../pages/Voucher/AddVoucher';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -51,6 +52,8 @@ const StaffRouter = () => {
             <Route path="/add-inputbill" element={(<AddBill />)} />
             <Route path="/input-bills" element={<InputBills/>} />
             <Route path="/bill-detail" element={<BillDetail/>} />
+            {/* voucher */}
+            <Route path="/add-voucher" element={<AddVoucher/>} />
         </Routes>
     )
 }

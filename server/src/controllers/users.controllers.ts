@@ -273,3 +273,52 @@ export const updateMeController = async (
     result
   })
 }
+
+export const addUserController = async (
+  req: Request<ParamsDictionary, any, RegisterReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    throw new ErrorWithStatus({
+      message: USERS_MESSAGES.USER_NOT_FOUND,
+      status: HTTP_STATUS.BAD_REQUEST
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Admin') {
+    throw new ErrorWithStatus({
+      message: ' không có quyền thêm user',
+      status: HTTP_STATUS.UNAUTHORIZED
+    })
+  }
+
+  return await usersService.addUserByAdmin(req.body)
+}
+
+export const changeStatusUserController = async (
+  req: Request<ParamsDictionary, any, any>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload //lấy user_id từ decoded_authorization
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    return res.status(400).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Staff') {
+    return res.status(400).json({
+      message: 'Bạn không có quyền chặn người dùng'
+    })
+  }
+  const result = await usersService.changeStatus(req.params.id)
+  return res.json({
+    message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
+    result
+  })
+}
