@@ -90,7 +90,7 @@ export const fetchOtp = async ({
 }) => {
   const apiList = [
     {
-      navigateTo: "/",
+      navigateTo: "/profile",
       methodHander: "get",
       handlerOtp: `${SCHEMA_HOSTNAME}/users/verify-email`,
       methodResend: "post",

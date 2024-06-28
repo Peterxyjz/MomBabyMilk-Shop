@@ -38,7 +38,7 @@ const RegisterForm = () => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
         navigate("/otp", {
-          state: { navigateTo: "/", email, user_id: res.data.user._id },
+          state: { navigateTo: "/profile", email, user_id: res.data.user._id },
         });
       })
       .catch((error) => {
