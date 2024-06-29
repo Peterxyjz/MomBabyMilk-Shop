@@ -15,7 +15,7 @@ const AddBrands = () => {
   const [address, setAddress] = useState('');
   const [country, setCountry] = useState('');
   const [phone, setPhone] = useState('');
-  const token = JSON.parse(localStorage.getItem('result'))?.access_token;
+  const token = JSON.parse(localStorage.getItem('result'));
 
   const handleChange = (setter) => (event) => {
     setter(event.target.value);
