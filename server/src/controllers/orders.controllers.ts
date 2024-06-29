@@ -28,6 +28,21 @@ export const getAllController = async (req: Request, res: Response) => {
   })
 }
 
+export const getOrderController = async (req: Request, res: Response) => {
+  const user_id = req.body.user_id
+  const orders = await orderServices.getByUserId(user_id)
+  const result = await Promise.all(
+    orders.map(async (order) => {
+      const order_detail = await databaseService.orderDetails.find({ order_id: order._id?.toString() }).toArray()
+      return { order, order_detail }
+    })
+  )
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: result
+  })
+}
+
 export const deleteController = async (req: Request, res: Response) => {
   const order_id = req.body.order_id
   const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()

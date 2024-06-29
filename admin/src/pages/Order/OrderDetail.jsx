@@ -18,8 +18,8 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")) || null;
-  const token = JSON.parse(localStorage.getItem("result"));
+  // const user = JSON.parse(localStorage.getItem("user")) || null;
+  // const token = JSON.parse(localStorage.getItem("result"));
 
   useEffect(() => {
     const getProducts = async () => {
@@ -75,12 +75,12 @@ const OrderDetail = () => {
     return date.toISOString();
   };
 
-  const addThreeDay = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 3);
-    return date.toISOString();
-  };
+  // const addThreeDay = (dateString) => {
+  //   if (!dateString) return "";
+  //   const date = new Date(dateString);
+  //   date.setDate(date.getDate() + 3);
+  //   return date.toISOString();
+  // };
 
   const { Text } = Typography;
 
