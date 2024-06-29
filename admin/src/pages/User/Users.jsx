@@ -9,7 +9,7 @@ import { Card } from 'primereact/card';
 import { format } from 'date-fns';
 
 import { Button, Table, Switch, Pagination, Modal, notification } from 'antd';
-import { fetchAllUsers } from '../../data/api';
+import { fetchAllUsers, fetchUpdateUser } from '../../data/api';
 
 
 
@@ -18,6 +18,7 @@ const Users = () => {
 
     const [Users, setUsers] = useState([]);
     const navigate = useNavigate();
+    const token = JSON.parse(localStorage.getItem("result"));
 
     const formatDate = (dateString) => {
         return format(new Date(dateString), 'dd-MM-yyyy');
@@ -34,6 +35,7 @@ const Users = () => {
                 }));
 
                 setUsers(formattedUsers);
+                console.log(formattedUsers);
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
@@ -42,22 +44,6 @@ const Users = () => {
         fetchUsers();
     }, []);
 
-    // const onToggleChange = (user) => {
-    //     const updatedUsers = Users.map(u => {
-    //         if (u.email === user.email) {
-    //             return { ...u, status: !u.status };
-    //         }
-    //         return u;
-    //     });
-    //     setUsers(updatedUsers);
-    // };
-
-    // const toggleSwitchTemplate = (rowData) => {
-    //     return (
-    //         <ToggleSwitch checked={rowData.status} onChange={() => onToggleChange(rowData)}
-    //             onIcon="pi pi-check" offIcon="pi pi-times" onLabel="Active" offLabel="Inactive" />
-    //     );
-    // };
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -67,46 +53,55 @@ const Users = () => {
         setPageSize(pagination.pageSize);
     };
 
-    // const handleSwitchChange = (checked, Users) => {
-    //     Modal.confirm({
-    //       title: "Xác nhận thay đổi tình trạng người dùng",
-    //       content: `Bạn có muốn thay đổi tình trạng người dùng? Hiện đang ${
-    //         checked ? "tắt" : "bật"
-    //       }`,
-    //       onOk: async () => {
-    //         Users.isActive = checked;
-    //         await updateUser(Users);
-    //         setUsers([...Users]);
-    //         notification.success({
-    //           message: "Thành công",
-    //           description: `Thay đổi thành công! Sản phẩm hiện đang ${
-    //             checked ? "bật" : "tắt"
-    //           }`,
-    //           placement: "top",
-    //         });
-    //       },
-    //       onCancel() {
-    //         console.log("Cancel");
-    //       },
-    //       okButtonProps: {
-    //         style: {
-    //           backgroundColor: "#46B5C1",
-    //           borderColor: "#46B5C1",
-    //         },
-    //       },
-    //       cancelButtonProps: {
-    //         style: {
-    //           backgroundColor: "#FF4D4F",
-    //           borderColor: "#FF4D4F",
-    //           color: "#FFFFFF",
-    //         },
-    //       },
-    //       cancelText: "Đóng",
-    //       okText: "Đồng ý",
-    //     });
-    //   };
+    const handleSwitchChange = (checked, user, token) => {
+        Modal.confirm({
+            title: "Xác nhận chặn tài khoản",
+            content: checked
+                ? "Bạn có muốn bỏ chặn tài khoản này?"
+                : "Bạn có muốn chặn tài khoản này?",
+            onOk: async () => {
+                try {
+                    user.isActive = checked;
+                    await fetchUpdateUser(user, token, user._id);
+                    setUsers((prevUsers) => {
+                        return prevUsers.map((u) => (u._id === user._id ? user : u));
+                    });
 
-
+                    notification.success({
+                        message: "Thành công",
+                        description: `Thay đổi thành công! ${checked ? "Tài khoản đã hoạt động bình thường" : "Tài khoản đã bị chặn"
+                            }`,
+                        placement: "top",
+                    });
+                } catch (error) {
+                    console.log(error);
+                    notification.error({
+                        message: "Lỗi",
+                        description: "Có lỗi xảy ra khi thay đổi trạng thái tài khoản",
+                        placement: "top",
+                    });
+                }
+            },
+            onCancel() {
+                console.log("Cancel");
+            },
+            okButtonProps: {
+                style: {
+                    backgroundColor: "#46B5C1",
+                    borderColor: "#46B5C1",
+                },
+            },
+            cancelButtonProps: {
+                style: {
+                    backgroundColor: "#FF4D4F",
+                    borderColor: "#FF4D4F",
+                    color: "#FFFFFF",
+                },
+            },
+            cancelText: "Đóng",
+            okText: "Đồng ý",
+        });
+    };
     const columns = [
         {
             title: 'Email',
@@ -159,13 +154,14 @@ const Users = () => {
             dataIndex: 'isActive',
             key: 'isActive',
             render: (text, record) => (
-                <Switch checked={record.isActive}
+                <Switch
+                    checked={record.isActive}
                     style={{ backgroundColor: record.isActive ? "#4A99FF" : "#898989" }}
+                    onChange={(checked) => handleSwitchChange(checked, record, token)}
                 />
-
             ),
             width: '10%',
-            sorter: (a, b) => a.status - b.status,
+            sorter: (a, b) => a.isActive - b.isActive,
 
         },
     ];

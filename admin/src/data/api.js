@@ -128,6 +128,19 @@ export const fetchAllUsers = async (result) => {
   });
 };
 
+//update-user
+export const fetchUpdateUser = async (user, token, id) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/users/change-status/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //add-staff
 export const fetchUploadStaff = async (user, token) => {
   return await axios.post(
