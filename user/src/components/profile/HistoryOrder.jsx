@@ -2,6 +2,7 @@ import { FaFilter } from "react-icons/fa";
 import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { fetchOrder } from "../../data/api";
+import { Link } from "react-router-dom";
 
 const HistoryOrder = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
@@ -90,7 +91,10 @@ const HistoryOrder = () => {
             </Table.Head>
             <Table.Body className="divide-y">
               {orders.map((item) => (
-                <Table.Row key={item.order._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Row
+                  key={item.order._id}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                >
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     {formatDate(item.order.required_date)}
                   </Table.Cell>
@@ -99,7 +103,9 @@ const HistoryOrder = () => {
                   </Table.Cell>
                   <Table.Cell>
                     {item.order_detail.map((detail) => (
-                      <p className="text-gray-900 mb-3" key={detail._id}>{getProductName(detail.product_id)}</p>
+                      <p className="text-gray-900 mb-3" key={detail._id}>
+                        {getProductName(detail.product_id)}
+                      </p>
                     ))}
                   </Table.Cell>
                   <Table.Cell>
@@ -116,12 +122,13 @@ const HistoryOrder = () => {
                       : "Hoàn thành"}
                   </Table.Cell>
                   <Table.Cell>
-                    <a
-                      href="#"
+                    <Link
+                      to="/order-detail"
+                      state={{ order: item }}
                       className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                     >
                       Chi tiết
-                    </a>
+                    </Link>
                   </Table.Cell>
                 </Table.Row>
               ))}

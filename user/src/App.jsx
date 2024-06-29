@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./pages/Header";
 import Home from "./pages/Home";
@@ -26,6 +25,7 @@ import Feedback from "./components/profile/Feedback";
 import ChangePassword from "./components/profile/ChangePassword";
 import Accumulate from "./components/profile/Accumulate";
 import EditProfile from "./components/profile/EditProfile";
+import OrderDetail from "./components/order/OrderDetail";
 
 
 function App() {
@@ -52,6 +52,7 @@ function App() {
           <Route path="/news" element={<NewsPage />} />
           <Route path="/about_us" element={<AboutUs />} />
           <Route path="/exchange_policy" element={<ExchangePolicy />} />
+          <Route path="/order-detail" element={<OrderDetail />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="" element={<EditProfile />} />
             <Route path="history-order" element={<HistoryOrder />} />
