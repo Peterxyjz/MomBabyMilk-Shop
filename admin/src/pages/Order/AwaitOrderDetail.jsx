@@ -179,6 +179,7 @@ const AwaitOrderDetail = () => {
                 }}
               >
                 {orderDetails.map((item) => (
+                  
                   <Card
                     type="inner"
                     key={item.product_id}
@@ -199,7 +200,7 @@ const AwaitOrderDetail = () => {
                       <div className="flex items-center justify-between md:order-3 md:justify-end">
                         <div className="text-end md:order-4 md:w-32">
                           <p className="text-base font-bold text-gray-900 dark:text-white">
-                            {Number(item.price).toLocaleString("vi-VN", {
+                            {Number(item.price - (item.price * item.product.discount)/ 100).toLocaleString("vi-VN", {
                               style: "currency",
                               currency: "VND",
                             })}
