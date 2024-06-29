@@ -12,6 +12,7 @@ import avatar2 from './avatar2.jpg';
 import avatar3 from './avatar3.png';
 import avatar4 from './avatar4.jpg';
 import { VscVerified } from 'react-icons/vsc';
+import { FaRegStar } from "react-icons/fa";
 
 
 export const gridOrderImage = (props) => (
@@ -553,7 +554,16 @@ export const stafflinks = [
         subLinks: [
           { name: 'allProduct', path: 'products', label: 'Tất cả sản phẩm' },
           { name: 'addProduct', path: 'add-product', label: 'Thêm sản phẩm' },
-          { name: 'viewFeedback', path: '', label: 'Xem đánh giá' },
+        ],
+      },
+      {
+        name: 'Quản lý đánh giá',
+        icon: <FaRegStar />,
+        type: 'sub',
+        // path: 'products',
+        subLinks: [
+          { name: 'allFeedback', path: 'all-feedback', label: 'Tất cả đánh giá' },
+          { name: 'badFeedback', path: 'bad-feedback', label: 'Đánh giá tiêu cực' },
         ],
       },
       {name: 'Quản lý kho',
