@@ -6,7 +6,6 @@ import {
   fetchProducts,
 } from "../../data/api";
 import { Button } from "flowbite-react";
-import axios from "axios";
 import { Card, Col, Divider, Row, Typography, notification } from "antd";
 
 const AwaitOrderDetail = () => {
@@ -101,7 +100,7 @@ const AwaitOrderDetail = () => {
 
   const handleConfirmOrder = async () => {
     const order_id = order.order._id;
-   await fetchConfirmOrder(order_id, token)
+    await fetchConfirmOrder(order_id, token)
       .then((res) => {
         // Lưu trạng thái vào sessionStorage
         sessionStorage.setItem("orderConfirmed", "true");
@@ -199,7 +198,11 @@ const AwaitOrderDetail = () => {
                       <div className="flex items-center justify-between md:order-3 md:justify-end">
                         <div className="text-end md:order-4 md:w-32">
                           <p className="text-base font-bold text-gray-900 dark:text-white">
-                            {Number(item.price).toLocaleString("vi-VN", {
+                            {Number(
+                              item.product.price -
+                                (item.product.price * item.product.discount) /
+                                  100
+                            ).toLocaleString("vi-VN", {
                               style: "currency",
                               currency: "VND",
                             })}
@@ -332,13 +335,50 @@ const AwaitOrderDetail = () => {
                     {order.order.phone}
                   </Text>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <Text type="secondary" style={{ fontSize: '15px', marginRight: '10px',  whiteSpace: 'nowrap' }}>Địa chỉ:</Text>
-                  <Text strong style={{ fontSize: '17px', textAlign: 'right' }}>{order.order.address}</Text>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Text
+                    type="secondary"
+                    style={{
+                      fontSize: "15px",
+                      marginRight: "10px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Địa chỉ:
+                  </Text>
+                  <Text strong style={{ fontSize: "17px", textAlign: "right" }}>
+                    {order.order.address}
+                  </Text>
                 </div>
-                <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
-                  <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Phương thức thanh toán:</Text>
-                  <Text strong style={{ fontSize: '17px', display: 'inline-block' }}>{order.order.payment_method}</Text>
+                <div
+                  style={{
+                    marginBottom: "10px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    type="secondary"
+                    style={{
+                      fontSize: "15px",
+                      display: "inline-block",
+                      marginRight: "10px",
+                    }}
+                  >
+                    Phương thức thanh toán:
+                  </Text>
+                  <Text
+                    strong
+                    style={{ fontSize: "17px", display: "inline-block" }}
+                  >
+                    {order.order.payment_method}
+                  </Text>
                 </div>
               </div>
               <Divider />
@@ -366,7 +406,9 @@ const AwaitOrderDetail = () => {
                   >
                     {" "}
                     {Number(
-                      order.order.total_price - order.order.ship_fee
+                      order.order.total_price -
+                        order.order.ship_fee +
+                        order.order.voucher_fee
                     ).toLocaleString("vi-VN", {
                       style: "currency",
                       currency: "VND",
@@ -395,7 +437,11 @@ const AwaitOrderDetail = () => {
                     strong
                     style={{ fontSize: "17px", display: "inline-block" }}
                   >
-                    0đ
+                    {" "}
+                    {Number(order.order.voucher_fee).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
                   </Text>
                 </div>
                 <div

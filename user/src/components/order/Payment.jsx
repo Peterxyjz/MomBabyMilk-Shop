@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
@@ -40,7 +40,7 @@ const Payment = () => {
       customer_infor: customer_infor,
       cart_list: cartItems,
       user: user,
-      total_price: totalPrice + ship - 0,
+      total_price: totalPrice + ship - discount,
       payment_method: paymentMethod,
       ship_fee: ship,
       voucher_code: voucher_code,
