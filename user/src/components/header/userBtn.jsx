@@ -36,7 +36,7 @@ const UserBtn = () => {
         </>
       ) : verify === 0 ? (
         <>
-          <Link to="/otp" state={{ navigateTo: "/", email: user.email, user_id: user._id }}>
+          <Link to="/otp" state={{ navigateTo: "/profile", email: user.email, user_id: user._id }}>
             <Dropdown.Item icon={HiCog} className="w-48">
               Xác Minh Email
             </Dropdown.Item>
