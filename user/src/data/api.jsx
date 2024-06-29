@@ -177,6 +177,16 @@ export const fetchOrder = async (order_infor) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/orders/upload`, order_infor);
 };
 
+export const fetchGetOrder = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/orders/all-orders`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
+
 export const fetchProducts = async () => {
   try {
     console.log("dang lay products");

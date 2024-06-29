@@ -1,6 +1,31 @@
 import { FaFilter } from "react-icons/fa";
 import { Table } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { fetchGetOrder } from "../../data/api";
 const HistoryOrder = () => {
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const orderData = await fetchGetOrder();
+        orderData.forEach(element => {
+          if(element.member_id === user._id){
+            setOrders((orders) => [...orders, element]);
+          }
+        });
+        setLoading(false);
+        console.log(orders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setLoading(false);
+      }
+    };
+
+    getOrders();
+  }, []);
   return (
     <div>
       <div>
