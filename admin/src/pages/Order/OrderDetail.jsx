@@ -73,15 +73,6 @@ const OrderDetail = () => {
     return date.toISOString();
   };
 
-  const addThreeDay = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 3);
-    return date.toISOString();
-  };
-
-
-
   const { Text } = Typography;
 
 
