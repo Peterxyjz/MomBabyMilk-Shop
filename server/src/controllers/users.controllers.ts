@@ -311,7 +311,7 @@ export const changeStatusUserController = async (
     })
   }
   const role_name = await usersService.checkRole(user)
-  if (role_name !== 'Staff') {
+  if (role_name !== 'Admin') {
     return res.status(400).json({
       message: 'Bạn không có quyền chặn người dùng'
     })
