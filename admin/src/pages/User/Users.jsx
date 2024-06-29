@@ -1,18 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Header } from "../../components";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { useNavigate } from "react-router-dom";
-import { ToggleSwitch } from "flowbite-react";
-import axios from "axios";
-import { Card } from "primereact/card";
-import { format } from "date-fns";
-
-import { Button, Table, Switch, Pagination, Modal, notification } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { Card } from 'primereact/card';
+import { format } from 'date-fns';
+import { Button, Table, Switch, Modal, notification } from 'antd';
 import { fetchAllUsers, fetchUpdateUser } from '../../data/api';
-
-
-
 
 const Users = () => {
 
@@ -20,18 +11,19 @@ const Users = () => {
     const navigate = useNavigate();
     const token = JSON.parse(localStorage.getItem("result"));
 
-  const formatDate = (dateString) => {
-    return format(new Date(dateString), "dd-MM-yyyy");
-  };
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const result = JSON.parse(localStorage.getItem("result"));
-        const res = await fetchAllUsers(result);
-        const formattedUsers = res.data.users.map((user) => ({
-          ...user,
-          date_of_birth: formatDate(user.date_of_birth),
-        }));
+    const formatDate = (dateString) => {
+        return format(new Date(dateString), 'dd-MM-yyyy');
+    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+
+            try {
+                const result = JSON.parse(localStorage.getItem("result"))
+                const res = await fetchAllUsers(result);
+                const formattedUsers = res.data.users.map(user => ({
+                    ...user,
+                    date_of_birth: formatDate(user.date_of_birth)
+                }));
 
                 setUsers(formattedUsers);
                 console.log(formattedUsers);
@@ -44,13 +36,13 @@ const Users = () => {
     }, []);
 
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
 
-  const handleTableChange = (pagination) => {
-    setCurrentPage(pagination.current);
-    setPageSize(pagination.pageSize);
-  };
+    const handleTableChange = (pagination) => {
+        setCurrentPage(pagination.current);
+        setPageSize(pagination.pageSize);
+    };
 
     const handleSwitchChange = (checked, user, token) => {
         Modal.confirm({
@@ -165,45 +157,38 @@ const Users = () => {
         },
     ];
 
-  return (
-    <div style={{ display: "flex", justifyContent: "center", height: "120vh" }}>
-      <Card
-        title="Tất cả người dùng"
-        subTitle=""
-        footer=""
-        header=""
-        className=""
-        style={{ width: "90%", height: "90vh", marginTop: "50px" }}
-      >
-        <div className="flex justify-between items-center mb-4">
-          <Button
-            type="primary"
-            size="large"
-            style={{ backgroundColor: "#46B5C1", height: "100%" }}
-            onClick={() => navigate("/add-staff")}
-          >
-            Thêm nhân viên
-          </Button>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={Users}
-          pagination={{
-            current: currentPage,
-            pageSize: pageSize,
-            total: Users.length,
-          }}
-          scroll={{ x: "100%" }}
-          onChange={handleTableChange}
-          style={{ overflowX: "auto", flexGrow: 1 }}
-          rowKey="email"
-        />
-        {/* <div style={{ padding: '10px 0', textAlign: 'center', marginTop: 'auto' }}>
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>
+            <Card title="Tất cả người dùng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: '90vh', marginTop: '50px' }}>
+                <div className="flex justify-between items-center mb-4">
+                    <Button
+                        type="primary"
+                        size="large"
+                        style={{ backgroundColor: "#46B5C1", height: "100%" }}
+                        onClick={() => navigate("/add-staff")}
+                    >
+                        Thêm nhân viên
+                    </Button>
+                </div>
+                <Table
+                    columns={columns}
+                    dataSource={Users}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: pageSize,
+                        total: Users.length,
+
+                    }} scroll={{ x: '100%' }}
+                    onChange={handleTableChange}
+                    style={{ overflowX: 'auto', flexGrow: 1 }}
+                    rowKey="email"
+                />
+                {/* <div style={{ padding: '10px 0', textAlign: 'center', marginTop: 'auto' }}>
             <Pagination defaultCurrent={1} total={Users.length} defaultPageSize={6}/>;
             </div> */}
-      </Card>
-    </div>
-  );
-};
+            </Card>
+        </div>
+    )
+}
 
-export default Users;
+export default Users
