@@ -117,12 +117,8 @@ class OrderServinces {
         )
       }
     })
-    return true
-  }
 
-  async getByUserId(id: string) {
-    const filter = { member_id: id }
-    return await databaseService.orders.find(filter).toArray()
+    return true
   }
 }
 const orderServices = new OrderServinces()

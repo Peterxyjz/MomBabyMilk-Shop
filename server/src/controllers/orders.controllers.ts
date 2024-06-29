@@ -22,19 +22,9 @@ export const getAllController = async (req: Request, res: Response) => {
       return { order, order_detail }
     })
   )
-
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     result: result
-  })
-}
-
-export const getByUserController = async (req: Request, res: Response) => {
-  const user = req.body.user
-  const orders = await orderServices.getByUserId(user._id)
-  return res.status(200).json({
-    message: USERS_MESSAGES.GET_SUCCESS,
-    result: orders
   })
 }
 
