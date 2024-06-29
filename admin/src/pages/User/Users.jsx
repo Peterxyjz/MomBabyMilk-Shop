@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Header } from '../../components'
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
 import { useNavigate } from 'react-router-dom';
-import { ToggleSwitch } from 'flowbite-react';
-import axios from 'axios';
 import { Card } from 'primereact/card';
 import { format } from 'date-fns';
-
-import { Button, Table, Switch, Pagination, Modal, notification } from 'antd';
+import { Button, Table, Switch, Modal, notification } from 'antd';
 import { fetchAllUsers, fetchUpdateUser } from '../../data/api';
-
-
-
 
 const Users = () => {
 
