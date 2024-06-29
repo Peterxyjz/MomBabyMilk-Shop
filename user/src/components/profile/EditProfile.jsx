@@ -172,7 +172,7 @@ const [selectedProvince, setSelectedProvince] = useState({
     await fetchUpdateMe(token, data)
       .then((res) => {
         alert("Cập nhật thành công");
-        setIsEditing(false);
+        setIsEditing(true);
         window.location.reload();
       })
       .catch((error) => {

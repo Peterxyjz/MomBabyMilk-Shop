@@ -94,10 +94,5 @@ Header: cần vì để check ai, có phải admin hay ko
 body: {username: string, email: string, password: string, confirm_password: string}
 */
 usersRouter.post('/add-user', accessTokenValidator, registerValidator, wrapAsync(addUserController))
-usersRouter.post(
-  '/change-status/:id',
-  accessTokenValidator,
-
-  wrapAsync(changeStatusUserController)
-)
+usersRouter.post('/change-status/:id', accessTokenValidator, wrapAsync(changeStatusUserController))
 export default usersRouter
