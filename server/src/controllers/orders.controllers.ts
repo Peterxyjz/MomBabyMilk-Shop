@@ -29,6 +29,15 @@ export const getAllController = async (req: Request, res: Response) => {
   })
 }
 
+export const getByUserController = async (req: Request, res: Response) => {
+  const user = req.body.user
+  const orders = await orderServices.getByUserId(user._id)
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: orders
+  })
+}
+
 export const deleteController = async (req: Request, res: Response) => {
   const order_id = req.body.order_id
   const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()

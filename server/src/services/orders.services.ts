@@ -116,10 +116,13 @@ class OrderServinces {
           { $inc: { member_ship: incrementValue } }
         )
       }
-
     })
-
     return true
+  }
+
+  async getByUserId(id: string) {
+    const filter = { member_id: id }
+    return await databaseService.orders.find(filter).toArray()
   }
 }
 const orderServices = new OrderServinces()
