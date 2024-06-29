@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { InputText } from 'primereact/inputtext';
-import { Datepicker, Label, Select, TextInput, Textarea } from 'flowbite-react';
+import { Textarea } from 'flowbite-react';
 import { InputMask } from 'primereact/inputmask';
-import { Calendar } from 'primereact/calendar';
-import { Dropdown } from 'primereact/dropdown';
 import { Card } from 'primereact/card';
 import { Col, DatePicker, Row, notification, } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { fetchUploadStaff, getDistricts, getProvinces, getWards } from '../../data/api';
-import moment from 'moment';
 import { Button, HStack, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
@@ -26,9 +23,9 @@ const AddStaff = () => {
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("result"));
-  const [province, setProvince] = useState('');
-  const [district, setDistrict] = useState('');
-  const [ward, setWard] = useState('');
+  // const [province, setProvince] = useState('');
+  // const [district, setDistrict] = useState('');
+  // const [ward, setWard] = useState('');
   const [selectedProvince, setSelectedProvince] = useState({
     id: "",
     name: "",
