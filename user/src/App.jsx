@@ -26,6 +26,7 @@ import ChangePassword from "./components/profile/ChangePassword";
 import Accumulate from "./components/profile/Accumulate";
 import EditProfile from "./components/profile/EditProfile";
 import OrderDetail from "./components/order/OrderDetail";
+import OrderTracking from "./components/order/OrderTracking";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
           <Route path="/about_us" element={<AboutUs />} />
           <Route path="/exchange_policy" element={<ExchangePolicy />} />
           <Route path="/order-detail" element={<OrderDetail />} />
+          <Route path="/order-tracking" element={<OrderTracking />} />
           <Route path="/profile" element={<Profile />}>
             <Route path="" element={<EditProfile />} />
             <Route path="history-order" element={<HistoryOrder />} />
