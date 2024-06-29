@@ -48,6 +48,7 @@ export const USERS_MESSAGES = {
   LOGIN_SUCCESS: 'Đăng nhập thành công',
   REGISTER_SUCCESS: 'Đăng ký thành công',
   LOGIN_FAIL: 'Đăng nhập với quyền admin hoặc staff thất bại',
+  ACCOUNT_BANNED: 'Tài khoản đặt này đang bị chặn',
   //logout:
   ACCESS_TOKEN_IS_REQUIRED: 'Access token là bắt buộc',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token là bắt buộc',
