@@ -1,6 +1,43 @@
 import { FaFilter } from "react-icons/fa";
 import { Table } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { fetchOrder } from "../../data/api";
+import { Link } from "react-router-dom";
+
 const HistoryOrder = () => {
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([]);
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const getProductName = (productId) => {
+    const product = products.find((product) => product._id === productId);
+    return product ? product.product_name : "Unknown Product";
+  };
+
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const orderData = await fetchOrder(user._id);
+        setOrders(orderData);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getOrders();
+  }, [user?._id]);
+
   return (
     <div>
       <div>
@@ -43,64 +80,58 @@ const HistoryOrder = () => {
         <div className="overflow-x-auto">
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>Thời gian</Table.HeadCell>
-              <Table.HeadCell>Mã đơn hàng</Table.HeadCell>
-              <Table.HeadCell>Sản phẩm</Table.HeadCell>
-              <Table.HeadCell>Tổng tiền</Table.HeadCell>
-              <Table.HeadCell>Trạng thái</Table.HeadCell>
-              <Table.HeadCell>
+              <Table.HeadCell className="w-1/24">Ngày đặt</Table.HeadCell>
+              <Table.HeadCell className="w-1/12">Mã đơn hàng</Table.HeadCell>
+              <Table.HeadCell className="w-1/2">Sản phẩm</Table.HeadCell>
+              <Table.HeadCell className="w-1/12">Tổng tiền</Table.HeadCell>
+              <Table.HeadCell className="w-1/6">Trạng thái</Table.HeadCell>
+              <Table.HeadCell className="w-1/6">
                 <span className="sr-only">Chi tiết</span>
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {'Apple MacBook Pro 17"'}
-                </Table.Cell>
-                <Table.Cell>Sliver</Table.Cell>
-                <Table.Cell>Laptop</Table.Cell>
-                <Table.Cell>$2999</Table.Cell>
-                <Table.Cell>
-                  <a
-                    href="#"
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                  >
-                    Edit
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  Microsoft Surface Pro
-                </Table.Cell>
-                <Table.Cell>White</Table.Cell>
-                <Table.Cell>Laptop PC</Table.Cell>
-                <Table.Cell>$1999</Table.Cell>
-                <Table.Cell>
-                  <a
-                    href="#"
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                  >
-                    Edit
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  Magic Mouse 2
-                </Table.Cell>
-                <Table.Cell>Black</Table.Cell>
-                <Table.Cell>Accessories</Table.Cell>
-                <Table.Cell>$99</Table.Cell>
-                <Table.Cell>
-                  <a
-                    href="#"
-                    className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                  >
-                    Edit
-                  </a>
-                </Table.Cell>
-              </Table.Row>
+              {orders.map((item) => (
+                <Table.Row
+                  key={item.order._id}
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {formatDate(item.order.required_date)}
+                  </Table.Cell>
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {item.order._id}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {item.order_detail.map((detail) => (
+                      <p className="text-gray-900 mb-3" key={detail._id}>
+                        {getProductName(detail.product_id)}
+                      </p>
+                    ))}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {Number(item.order.total_price).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {item.order.status === 0
+                      ? "Chưa xác nhận"
+                      : item.order.status === 1
+                      ? "Đã xác nhận"
+                      : "Hoàn thành"}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link
+                      to="/order-detail"
+                      state={{ order: item }}
+                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    >
+                      Chi tiết
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
             </Table.Body>
           </Table>
         </div>
