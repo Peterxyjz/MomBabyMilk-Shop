@@ -22,7 +22,6 @@ export const getAllController = async (req: Request, res: Response) => {
       return { order, order_detail }
     })
   )
-
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     result: result

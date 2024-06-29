@@ -116,7 +116,6 @@ class OrderServinces {
           { $inc: { member_ship: incrementValue } }
         )
       }
-
     })
 
     return true
