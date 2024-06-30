@@ -86,16 +86,18 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
               <div key={product._id} className="p-1">
                 <Card className="max-w-xs m-1 product-card flex flex-col justify-between h-full relative">
                   <Link to="/product" state={{ product: product }}>
-                    <img
-                      className="product-image mx-auto"
-                      src={product.imgUrl}
-                      alt={product.product_name}
-                    />
-                    {product.amount === 0 && (
-                      <div className="absolute inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center">
-                        <span className="text-white text-xl font-bold">Hết hàng</span>
-                      </div>
-                    )}
+                    <div className="relative product-image-container">
+                      <img
+                        className="product-image mx-auto"
+                        src={product.imgUrl}
+                        alt={product.product_name}
+                      />
+                      {product.amount === 0 && (
+                        <div className="out-of-stock-overlay">
+                          <span className="text-white text-xl font-bold">Hết hàng</span>
+                        </div>
+                      )}
+                    </div>
                     <h5 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white h-16 overflow-hidden overflow-ellipsis" style={{ WebkitLineClamp: 3, display: '-webkit-box', WebkitBoxOrient: 'vertical' }}>
                       {product.product_name}
                     </h5>
