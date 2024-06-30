@@ -13,6 +13,7 @@ import { generateInvoiceHTML } from '~/helper/emailTemplate'
 import sendMail from '~/helper/send.mail'
 import voucherOrderServices from '~/services/voucherOrders.services'
 import VoucherOrder from '~/model/schemas/VoucherOrders.schema'
+import voucherServices from '~/services/vouchers.services'
 
 export const getAllController = async (req: Request, res: Response) => {
   const orders = await orderServices.getAll()
@@ -59,14 +60,20 @@ export const uploadController = async (req: Request, res: Response) => {
     voucher_fee: voucher_fee
   })
 
-  const order = await orderServices.upload(order_infor, orderDetails)
-  const voucher_order = await voucherOrderServices.upload(
-    new VoucherOrder({
-      _id: new ObjectId(),
-      order_id: order_infor._id?.toString() as string,
-      voucher_id: voucher_code
-    })
-  )
+
+  const [order, voucherOrderAdd, voucherSerhviceAdd] = await Promise.all([
+    orderServices.upload(order_infor, orderDetails),
+    voucherOrderServices.upload(
+      new VoucherOrder({
+        _id: new ObjectId(),
+        order_id: order_infor._id?.toString() as string,
+        voucher_id: voucher_code
+      })
+    ),
+    voucherServices.decreaseAmount(voucher_code)
+  ])
+
+
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     order
