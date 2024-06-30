@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import { checkQRPaymet, deleteOrder, fetchOrder } from "../../data/api.jsx";
+import { checkQRPaymet, deleteOrder, fetchCreateOrder } from "../../data/api.jsx";
 const Payment = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
@@ -40,13 +40,13 @@ const Payment = () => {
       customer_infor: customer_infor,
       cart_list: cartItems,
       user: user,
-      total_price: totalPrice + ship - 0,
+      total_price: totalPrice + ship - discount,
       payment_method: paymentMethod,
       ship_fee: ship,
       voucher_code: voucher_code,
       voucher_fee: discount
     };
-    await  fetchOrder(order_infor)
+    await  fetchCreateOrder(order_infor)
       .then((res) => {
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {

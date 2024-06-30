@@ -16,7 +16,7 @@ import { generateEmailVerify } from '~/helper/emailTemplate'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { UserVerifyStatus } from '~/constants/enums'
+import { UserAccountStatus, UserVerifyStatus } from '~/constants/enums'
 import { verifyToken } from '~/utils/jwt'
 import { error } from 'console'
 import { ErrorWithStatus } from '~/model/Errors'
@@ -26,6 +26,13 @@ import { forEach, forIn } from 'lodash'
 export const loginController = async (req: Request, res: Response) => {
   const user = req.user as User // lấy user từ req
   const user_id = user._id as ObjectId // lấy _id từ user
+  if (user.isActive === UserAccountStatus.Blocked) {
+    return res.status(400).json({
+      errors: {
+        message: USERS_MESSAGES.ACCOUNT_BANNED
+      }
+    })
+  }
   const result = await usersService.login(user_id.toString())
 
   return res.status(200).json({
@@ -311,7 +318,7 @@ export const changeStatusUserController = async (
     })
   }
   const role_name = await usersService.checkRole(user)
-  if (role_name !== 'Staff') {
+  if (role_name !== 'Admin') {
     return res.status(400).json({
       message: 'Bạn không có quyền chặn người dùng'
     })

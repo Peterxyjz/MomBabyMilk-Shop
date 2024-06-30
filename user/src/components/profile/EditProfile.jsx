@@ -106,7 +106,7 @@ const EditProfile = () => {
   const handlerChangeAddressInput = (event) => {
     setAddressInput(event.target.value);
   };
-const [selectedProvince, setSelectedProvince] = useState({
+  const [selectedProvince, setSelectedProvince] = useState({
     id: "",
     name: "",
   });
@@ -156,7 +156,9 @@ const [selectedProvince, setSelectedProvince] = useState({
     if (
       age < 13 ||
       (age === 13 && monthDifference < 0) ||
-      (age === 13 && monthDifference === 0 && today.getDate() < date_input.getDate())
+      (age === 13 &&
+        monthDifference === 0 &&
+        today.getDate() < date_input.getDate())
     ) {
       alert("Tuổi không hợp lệ");
       return;
@@ -172,7 +174,7 @@ const [selectedProvince, setSelectedProvince] = useState({
     await fetchUpdateMe(token, data)
       .then((res) => {
         alert("Cập nhật thành công");
-        setIsEditing(false);
+        setIsEditing(true);
         window.location.reload();
       })
       .catch((error) => {
@@ -203,7 +205,7 @@ const [selectedProvince, setSelectedProvince] = useState({
                     className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                     placeholder="Nhập họ và tên..."
-value={profile.name}
+                    value={profile.name}
                     onChange={handleChange}
                   />
                 </div>
@@ -262,7 +264,7 @@ value={profile.name}
                       required
                     >
                       <option value="">Chọn Quận/Huyện</option>
-{districts.map((district) => (
+                      {districts.map((district) => (
                         <option key={district.id} value={district.id}>
                           {district.name}
                         </option>
@@ -325,7 +327,7 @@ value={profile.name}
               </div>
               {errorList.length > 0 && (
                 <div className="error-list mt-3 mb-3">
-{errorList.map((error, index) => (
+                  {errorList.map((error, index) => (
                     <p key={index} className="text-red-600">
                       {error}
                     </p>

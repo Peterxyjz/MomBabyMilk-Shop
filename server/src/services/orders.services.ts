@@ -108,9 +108,21 @@ class OrderServinces {
           })
         )
       ])
+
+      if (order.member_id) {
+        const incrementValue = Number(order.total_price) * 0.01
+        await databaseService.users.updateOne(
+          { _id: new ObjectId(order.member_id) },
+          { $inc: { member_ship: incrementValue } }
+        )
+      }
     })
 
     return true
+  }
+
+  async getByUserId(id: string) {
+    return await databaseService.orders.find({ member_id: id }).toArray()
   }
 }
 const orderServices = new OrderServinces()

@@ -1,33 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  FileInput,
-  Label,
-  Select,
-  TextInput,
-  Textarea,
-  Datepicker,
-} from "flowbite-react";
-
+import { Button, Datepicker, Label, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUploadVoucher } from "../../data/api";
-import { notification } from "antd";
+
 const AddVoucher = () => {
   const [voucherTypes, setVoucherTypes] = useState([]);
-
   const [memberShip, setMemberShip] = useState(0);
   const [discount, setDiscount] = useState(0);
-
   const [amount, setAmount] = useState(0);
   const [selectedVoucherType, setSelectedVoucherType] = useState("");
-
+  const [isType, SetIsType] = useState(false);
   const token = JSON.parse(localStorage.getItem("result"));
-  const [profile, setProfile] = useState({
-    expire_date: {
-      day: "",
-      month: "",
-      year: "",
-    },
-  });
+
+  const date = new Date();
+  const [dateInput, setDateInput] = useState(date);
+
   useEffect(() => {
     // Gọi API để lấy dữ liệu category
     fetchGetVoucherType().then((res) => {
@@ -40,42 +26,28 @@ const AddVoucher = () => {
 
   const handleChangeSelectedVoucherType = (event) => {
     setSelectedVoucherType(event.target.value);
+    SetIsType(event.target.value === "0");
   };
 
   const handleChangeMemberShip = (event) => {
     setMemberShip(event.target.value);
   };
+
   const handleChangeDiscount = (event) => {
     setDiscount(event.target.value);
   };
+
   const handleChangeAmount = (event) => {
     setAmount(event.target.value);
   };
 
-  const handleDateChange = (e) => {
-    const { name, value } = e.target;
-    setProfile({
-      ...profile,
-      expire_date: {
-        ...profile.expire_date,
-        [name]: value,
-      },
-    });
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const date =new Date();
-    console.log(date);
-    console.log(date.toISOString());
-    console.log(date.toUTCString());
-    date.setDate(profile.expire_date.day);
-    date.setMonth(profile.expire_date.month - 1);
-    date.setFullYear(profile.expire_date.year);
+    const date_input = new Date(dateInput);
     const voucher = {
       voucher_type: Number(selectedVoucherType),
       membership: Number(memberShip),
-      expire_date: date.toISOString(),
+      expire_date: date_input.toISOString(),
       discount: Number(discount),
       amount: Number(amount),
     };
@@ -83,6 +55,7 @@ const AddVoucher = () => {
     await fetchUploadVoucher(voucher, token)
       .then((res) => {
         console.log(res.data);
+        alert("Them thanh cong");
       })
       .catch((err) => {
         console.log(err);
@@ -101,7 +74,7 @@ const AddVoucher = () => {
           {/* category */}
           <div className="lg:w-1/2">
             <div className="mb-2 block">
-              <Label htmlFor="category" value="Loại Voucher" />
+              <Label htmlFor="category" value="Loại Voucher: " />
             </div>
 
             <Select
@@ -121,10 +94,10 @@ const AddVoucher = () => {
             </Select>
           </div>
 
-          {/*amount */}
+          {/* amount */}
           <div className="lg:w-1/2">
             <div className="mb-2 block">
-              <Label htmlFor="amount" value="Số lượng" />
+              <Label htmlFor="amount" value="Số lượng: " />
             </div>
             <TextInput
               id="amount"
@@ -142,10 +115,13 @@ const AddVoucher = () => {
 
         {/* row3 */}
         <div className="flex gap-8">
-          {/* price */}
+          {/* membership */}
           <div className="lg:w-1/2">
             <div className="mb-2 block">
-              <Label htmlFor="memberShip" value="MemberShip" />
+              <Label
+                htmlFor="memberShip"
+                value="MemberShip (Đổi bằng bao nhiêu điểm): "
+              />
             </div>
             <TextInput
               id="memberShip"
@@ -155,13 +131,15 @@ const AddVoucher = () => {
               min={0}
               value={memberShip}
               onChange={handleChangeMemberShip}
+              readOnly={isType}
               required
             />
           </div>
+
           {/* discount */}
           <div className="lg:w-1/2">
             <div className="mb-2 block">
-              <Label htmlFor="discount" value="Discount" />
+              <Label htmlFor="discount" value="Mức giảm giá (VND): " />
             </div>
             <TextInput
               id="discount"
@@ -179,55 +157,14 @@ const AddVoucher = () => {
 
         {/* row4 */}
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="description" value="Mô Tả Sản Phẩm" />
-          </div>
           <div>
-            <label className="block text-gray-700">Ngày sinh</label>
-            <div className="flex space-x-4">
-              <select
-                name="day"
-                value={profile.expire_date.day}
-                onChange={handleDateChange}
-                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Chọn Ngày</option>
-                {[...Array(31).keys()].map((day) => (
-                  <option key={day + 1} value={day + 1}>
-                    {day + 1}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="month"
-                value={profile.expire_date.month}
-                onChange={handleDateChange}
-                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Chọn Tháng</option>
-                {[...Array(12).keys()].map((month) => (
-                  <option key={month + 1} value={month + 1}>
-                    Tháng {month + 1}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="year"
-                value={profile.expire_date.year}
-                onChange={handleDateChange}
-                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Chọn Năm</option>
-                {[...Array(120).keys()].map((year) => (
-                  <option key={year + 1920} value={year + 1920}>
-                    {year + 1920}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <label className="block mb-3">Ngày hết hạn: </label>
+            <Datepicker
+              language="vi"
+              defaultDate={dateInput}
+              onSelectedDateChanged={(date) => setDateInput(date)}
+              required
+            />
           </div>
         </div>
 
