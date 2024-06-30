@@ -39,8 +39,8 @@ export const deleteController = async (req: Request, res: Response) => {
   const order = await orderServices.delete(order_id)
 }
 export const uploadController = async (req: Request, res: Response) => {
-  const voucher_code = req.body.voucher_code
-  const voucher_fee = req.body.voucher_fee
+  const voucher_code = req.body?.voucher_code || ''
+  const voucher_fee = req.body?.voucher_fee || 0
   const orderDetails = req.body.cart_list
   const user = req.body.user
   const customer_infor = req.body.customer_infor
@@ -60,19 +60,19 @@ export const uploadController = async (req: Request, res: Response) => {
     voucher_fee: voucher_fee
   })
 
-
-  const [order, voucherOrderAdd, voucherSerhviceAdd] = await Promise.all([
-    orderServices.upload(order_infor, orderDetails),
-    voucherOrderServices.upload(
-      new VoucherOrder({
-        _id: new ObjectId(),
-        order_id: order_infor._id?.toString() as string,
-        voucher_id: voucher_code
-      })
-    ),
-    voucherServices.decreaseAmount(voucher_code)
-  ])
-
+  const [order] = await Promise.all([orderServices.upload(order_infor, orderDetails)])
+  if (voucher_code) {
+    await Promise.all([
+      voucherOrderServices.upload(
+        new VoucherOrder({
+          _id: new ObjectId(),
+          order_id: order_infor._id?.toString() as string,
+          voucher_id: voucher_code
+        })
+      ),
+      voucherServices.decreaseAmount(voucher_code)
+    ])
+  }
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,

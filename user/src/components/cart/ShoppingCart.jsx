@@ -59,6 +59,8 @@ const ShoppingCart = () => {
       })
       .catch((error) => {
         let errorList = [];
+        setDiscount(0);
+        setVoucherCode("");
         for (let [key, value] of Object.entries(error.response.data.errors)) {
           errorList.push(value);
           setErrorList(errorList);
