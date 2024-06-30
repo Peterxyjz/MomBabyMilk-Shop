@@ -36,7 +36,7 @@ export const USERS_MESSAGES = {
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Mã token để quên mật khẩu là bắt buộc',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Mã token để quên mật khẩu không hợp lệ',
   VERIFY_FORGOT_PASSWORD_TOKEN_SUCCESS: 'Xác minh mã token để quên mật khẩu thành công',
-
+  REFRESH_TOKEN_SUCCESS:"REFRESH_TOKEN_SUCCESS",
   //Reset-password
   RESET_PASSWORD_SUCCESS: 'Đặt lại mật khẩu thành công',
 
