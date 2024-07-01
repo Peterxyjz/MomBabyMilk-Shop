@@ -160,7 +160,7 @@ const EditProfile = () => {
         monthDifference === 0 &&
         today.getDate() < date_input.getDate())
     ) {
-      alert("Tuổi không hợp lệ");
+      setErrorList(["Tuổi không hợp lệ"]);
       return;
     }
 
