@@ -90,48 +90,56 @@ const HistoryOrder = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {orders.map((item) => (
-                <Table.Row
-                  key={item.order._id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800 border"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border">
-                    {formatDate(item.order.required_date)}
-                  </Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border">
-                    {item.order._id}
-                  </Table.Cell>
-                  <Table.Cell className="border">
-                    {item.order_detail.map((detail) => (
-                      <p className="text-gray-900 mb-3" key={detail._id}>
-                        {getProductName(detail.product_id)}
-                      </p>
-                    ))}
-                  </Table.Cell>
-                  <Table.Cell className="border">
-                    {Number(item.order.total_price).toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
-                  </Table.Cell>
-                  <Table.Cell className="border">
-                    {item.order.status === 0
-                      ? "Chưa xác nhận"
-                      : item.order.status === 1
-                      ? "Đã xác nhận"
-                      : "Hoàn thành"}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      to="/order-detail"
-                      state={{ order: item }}
-                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                    >
-                      Chi tiết
-                    </Link>
+              {orders.length > 0 ? (
+                orders.map((item) => (
+                  <Table.Row
+                    key={item.order._id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800 border"
+                  >
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border">
+                      {formatDate(item.order.required_date)}
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border">
+                      {item.order._id}
+                    </Table.Cell>
+                    <Table.Cell className="border">
+                      {item.order_detail.map((detail) => (
+                        <p className="text-gray-900 mb-3" key={detail._id}>
+                          {getProductName(detail.product_id)}
+                        </p>
+                      ))}
+                    </Table.Cell>
+                    <Table.Cell className="border">
+                      {Number(item.order.total_price).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </Table.Cell>
+                    <Table.Cell className="border">
+                      {item.order.status === 0
+                        ? "Chưa xác nhận"
+                        : item.order.status === 1
+                        ? "Đã xác nhận"
+                        : "Hoàn thành"}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link
+                        to="/order-detail"
+                        state={{ order: item }}
+                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                      >
+                        Chi tiết
+                      </Link>
+                    </Table.Cell>
+                  </Table.Row>
+                ))
+              ) : (
+                <Table.Row>
+                  <Table.Cell colSpan="6" className="text-center">
+                    Bạn chưa mua đơn hàng nào hết!
                   </Table.Cell>
                 </Table.Row>
-              ))}
+              )}
             </Table.Body>
           </Table>
         </div>
