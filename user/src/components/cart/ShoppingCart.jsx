@@ -87,7 +87,7 @@ const ShoppingCart = () => {
     setShip(calculateShip(cartAmount));
   }, [cartAmount]);
 
-  const total = totalPrice + ship - discount;
+  const total = (totalPrice + ship - discount) > 0 ? totalPrice + ship - discount : 0;
 
   return (
     <>

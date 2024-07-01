@@ -44,6 +44,7 @@ const AddVoucher = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const date_input = new Date(dateInput);
+    date_input.setDate(date_input.getDate() + 1);
     const voucher = {
       voucher_type: Number(selectedVoucherType),
       membership: Number(memberShip),
