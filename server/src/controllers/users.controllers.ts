@@ -341,6 +341,8 @@ export const refreshTokenController = async (
   //ta sẽ lấy user_id để tạo ra access_token và refresh_token mới
   const { user_id, exp } = req.decoded_refresh_token as TokenPayload //lấy refresh_token từ req.body
   const { refresh_token } = req.body
+  console.log(new Date(exp * 1000));
+  
   const result = await usersService.refreshToken({ user_id, refresh_token, exp }) //refreshToken chưa code
   return res.json({
     message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS, //message.ts thêm  REFRESH_TOKEN_SUCCESS: 'Refresh token success',

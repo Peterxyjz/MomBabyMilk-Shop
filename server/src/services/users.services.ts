@@ -36,11 +36,19 @@ class UsersService {
     })
   }
   private signRefreshToken({ user_id, exp }: { user_id: string; exp?: number }) {
-    return signToken({
-      payload: { user_id, token_type: TokenType.RefreshToken },
-      options: { expiresIn: process.env.REFRESH_TOKEN_EXPIRE_IN },
-      privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string //thêm
-    })
+    if (exp) {
+      return signToken({
+        payload: { user_id, token_type: TokenType.RefreshToken, exp },
+
+        privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string
+      })
+    } else {
+      return signToken({
+        payload: { user_id, token_type: TokenType.RefreshToken },
+        options: { expiresIn: process.env.REFRESH_TOKEN_EXPIRE_IN },
+        privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string
+      })
+    }
   }
 
   async register(payload: RegisterReqBody) {

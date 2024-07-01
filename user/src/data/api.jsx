@@ -2,6 +2,14 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
+//fetchRefreshToken
+export const fetchRefreshToken = async (token) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/users/refresh-token`, {
+   refresh_token: token.refresh_token
+  });
+};
+
+
 //fetchUpdateMe
 export const fetchUpdateMe = async (token,data) => {
   return await axios.patch(`${SCHEMA_HOSTNAME}/users/me`,{
