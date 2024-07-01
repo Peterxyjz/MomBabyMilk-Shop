@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
+import { ErrorWithStatus } from '~/model/Errors'
 import { TokenPayload } from '~/model/requests/User.requests'
 import FeedBack from '~/model/schemas/Feeback.schema'
 import databaseService from '~/services/database.services'
@@ -37,8 +39,26 @@ export const getAllController = async (req: Request, res: Response) => {
   })
 }
 
-export const deleteController = async (req: Request, res: Response) => {
+export const deteleFeebBackController = async (req: Request, res: Response) => {
   const id = req.params.id
+  const feedback = await databaseService.feedbacks.findOne({ _id: new ObjectId(id) })
+  const { user_id } = req.decoded_authorization as TokenPayload
+  if (!feedback) {
+    throw new ErrorWithStatus({
+      message: USERS_MESSAGES.FEEDBACK_NOT_FOUND,
+      status: HTTP_STATUS.NOT_FOUND
+    })
+  }
+  if (feedback.user_id !== user_id) {
+    throw new ErrorWithStatus({
+      message: 'Đây không phải feeback của bạn',
+      status: HTTP_STATUS.UNAUTHORIZED
+    })
+  }
+  console.log('feedback: ', feedback.user_id);
+  console.log('user_id: ', user_id);
+  
+  
   const result = await databaseService.feedbacks.deleteOne({ _id: new ObjectId(id) })
   return res.status(200).json({
     message: USERS_MESSAGES.DELETE_SUCCESS,
@@ -68,5 +88,4 @@ export const getFeebBackController = async (req: Request, res: Response) => {
     message: USERS_MESSAGES.GET_SUCCESS,
     result: result
   })
-
 }
