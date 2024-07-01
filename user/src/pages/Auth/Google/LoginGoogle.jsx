@@ -8,11 +8,9 @@ export default function LoginGoogle() {
     const result = params.get("result");
     const user = params.get("user");
 
-    console.log({ result, user }); //log thử
-
     localStorage.setItem("result", result);
     localStorage.setItem("user", user);
-    navigate("/");
+    navigate("/profile", { state: { newAccount: true } });
     window.location.reload();
   }, [params]);
   return <div>Login</div>;

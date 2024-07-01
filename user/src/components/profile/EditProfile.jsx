@@ -31,28 +31,28 @@ const EditProfile = () => {
   const [addressInput, setAddressInput] = useState("");
   const [dateInput, setDateInput] = useState(date);
 
-  useEffect(() => {
-    const getMeProfile = async () => {
-      await fetchGetMe(token)
-        .then((res) => {
-          setProfile({
-            username: res.data.result.username || "",
-            name: res.data.result.full_name || "",
-            email: res.data.result.email || "",
-            phone: res.data.result.phone || "",
-            address: res.data.result.address || "",
-            point: res.data.result.menber_ship || 0,
-            date_of_birth: res.data.result.date_of_birth || null,
-          });
-          if (res.data.result.date_of_birth !== null) {
-            setDateInput(new Date(res.data.result.date_of_birth));
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+  const getMeProfile = async () => {
+    await fetchGetMe(token)
+      .then((res) => {
+        setProfile({
+          username: res.data.result.username || "",
+          name: res.data.result.full_name || "",
+          email: res.data.result.email || "",
+          phone: res.data.result.phone || "",
+          address: res.data.result.address || "",
+          point: res.data.result.menber_ship || 0,
+          date_of_birth: res.data.result.date_of_birth || null,
         });
-    };
+        if (res.data.result.date_of_birth !== null) {
+          setDateInput(new Date(res.data.result.date_of_birth));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
+  useEffect(() => {
     getMeProfile();
   }, []);
 
@@ -174,8 +174,8 @@ const EditProfile = () => {
     await fetchUpdateMe(token, data)
       .then((res) => {
         alert("Cập nhật thành công");
-        setIsEditing(true);
-        window.location.reload();
+        setIsEditing(false);
+        getMeProfile();  // Fetch the updated profile data
       })
       .catch((error) => {
         console.log(error);

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchGetAllVoucher, fetchGetVoucher } from "../../data/api";
 import { Button } from "flowbite-react";
+
 const ShoppingCart = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const verify = user === null ? 0 : user.verify;
@@ -23,32 +24,36 @@ const ShoppingCart = () => {
   const [errorList, setErrorList] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [voucherList, setVoucherList] = useState([]);
+
   useEffect(() => {
-      const getAllVoucger = async () => {
-        await fetchGetAllVoucher()
-          .then((res) => {
-            setVoucherList(res.data.result);
-            console.log(res.data.result);
-          })
-          .catch((error) => {
-            let errorList = [];
-            for (let [key, value] of Object.entries(error.response.data.errors)) {
-              errorList.push(value);
-              setErrorList(errorList);
-            }
-          });
-      }
-      getAllVoucger()
-  },[])
+    const getAllVoucher = async () => {
+      await fetchGetAllVoucher()
+        .then((res) => {
+          setVoucherList(res.data.result);
+          console.log(res.data.result);
+        })
+        .catch((error) => {
+          let errorList = [];
+          for (let [key, value] of Object.entries(error.response.data.errors)) {
+            errorList.push(value);
+            setErrorList(errorList);
+          }
+        });
+    };
+    getAllVoucher();
+  }, []);
+
   const handleRadioChange = (event) => {
     console.log(event.target.value);
     const selectedValue = event.target.value;
     document.getElementById("voucherCode").value = selectedValue;
-    setVoucherCode((selectedValue));
+    setVoucherCode(selectedValue);
   };
+
   const handChangeVoucherCode = (e) => {
     setVoucherCode(e.target.value);
   };
+
   const handClickVoucher = async (event) => {
     event.preventDefault();
     console.log(voucherCode);
@@ -79,7 +84,9 @@ const ShoppingCart = () => {
   useEffect(() => {
     setShip(calculateShip(cartAmount));
   }, [cartAmount]);
+
   const total = totalPrice + ship - discount;
+
   return (
     <>
       <ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
@@ -187,121 +194,113 @@ const ShoppingCart = () => {
                 <div className="space-y-6">
                   {cartItems.map((product) => (
                     // cart Item
-                    <>
-                      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
-                        <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                          <img
-                            className="h-20 w-20 dark:hidden"
-                            src={product.imgUrl}
-                          />
-                          <img
-                            className="hidden h-20 w-20 dark:block"
-                            src={product.imgUrl}
-                          />
-                          <div className="flex items-center justify-between md:order-3 md:justify-end">
-                            <div className="flex items-center">
-                              <button
-                                type="button"
-                                onClick={() => decreaseAmount(product._id)}
-                                className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
-                              >
-                                <svg
-                                  className="h-2.5 w-2.5 text-gray-900 dark:text-white"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 18 2"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M1 1h16"
-                                  />
-                                </svg>
-                              </button>
-                              <input
-                                type="text"
-                                className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
-                                value={product.quantity}
-                                readOnly
-                              />
-                              <button
-                                type="button"
-                                onClick={() => increaseAmount(product)}
-                                className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
-                              >
-                                <svg
-                                  className="h-2.5 w-2.5 text-gray-900 dark:text-white"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 18 18"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M9 1v16M1 9h16"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                            <div className="text-end md:order-4 md:w-32">
-                              <p className="text-base font-bold text-gray-900 dark:text-white">
-                                {Number(product.price - (product.price * product.discount) / 100).toLocaleString("vi-VN", {
-                                  style: "currency",
-                                  currency: "VND",
-                                })}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                            <a
-                              href="#"
-                              className="text-base font-medium text-gray-900 hover:underline dark:text-white"
+                    <div key={product._id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+                      <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
+                        <img className="h-20 w-20 dark:hidden" src={product.imgUrl} />
+                        <img className="hidden h-20 w-20 dark:block" src={product.imgUrl} />
+                        <div className="flex items-center justify-between md:order-3 md:justify-end">
+                          <div className="flex items-center">
+                            <button
+                              type="button"
+                              onClick={() => decreaseAmount(product._id)}
+                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                             >
-                              {product.product_name}
-                            </a>
-                            <div className="flex items-center gap-4">
-                              <button
-                                type="button"
-                                className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+                              <svg
+                                className="h-2.5 w-2.5 text-gray-900 dark:text-white"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 18 2"
                               >
-                                <svg
-                                  className="me-1.5 h-5 w-5"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-                                  />
-                                </svg>
-                                Yêu Thích
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => removeCartItem(product._id)}
-                                className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
+                                <path
+                                  stroke="currentColor"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M1 1h16"
+                                />
+                              </svg>
+                            </button>
+                            <input
+                              type="text"
+                              className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
+                              value={product.quantity}
+                              readOnly
+                            />
+                            <button
+                              type="button"
+                              onClick={() => increaseAmount(product)}
+                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                            >
+                              <svg
+                                className="h-2.5 w-2.5 text-gray-900 dark:text-white"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 18 18"
                               >
-                                <MdDeleteForever className="me-1.5 h-5 w-5" />
-                                Xóa Khỏi Giỏ Hàng
-                              </button>
-                            </div>
+                                <path
+                                  stroke="currentColor"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M9 1v16M1 9h16"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                          <div className="text-end md:order-4 md:w-32">
+                            <p className="text-base font-bold text-gray-900 dark:text-white">
+                              {Number(product.price - (product.price * product.discount) / 100).toLocaleString("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
+                          <a
+                            href="#"
+                            className="text-base font-medium text-gray-900 hover:underline dark:text-white"
+                          >
+                            {product.product_name}
+                          </a>
+                          <div className="flex items-center gap-4">
+                            <button
+                              type="button"
+                              className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+                            >
+                              <svg
+                                className="me-1.5 h-5 w-5"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                                />
+                              </svg>
+                              Yêu Thích
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeCartItem(product._id)}
+                              className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
+                            >
+                              <MdDeleteForever className="me-1.5 h-5 w-5" />
+                              Xóa Khỏi Giỏ Hàng
+                            </button>
                           </div>
                         </div>
                       </div>
-                    </>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -449,37 +448,36 @@ const ShoppingCart = () => {
                                 className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="dropdownRadioHelperButton"
                               >
-                               {voucherList.map((voucher) =>(
-                                <li key={voucher._id}>
-                                <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                  <div className="flex items-center h-5">
-                                    <input
-                                      id="helper-radio-4"
-                                      name="helper-radio"
-                                      type="radio"
-                                      value={voucher._id}
-                                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                      onChange={handleRadioChange}
-                                    />
-                                  </div>
-                                  <div className="ms-2 text-sm">
-                                    <label
-                                      htmlFor="helper-radio-4"
-                                      className="font-medium text-gray-900 dark:text-gray-300"
-                                    >
-                                      <div>Voucher giảm {voucher.discount}</div>
-                                      <p
-                                        id="helper-radio-text-4"
-                                        className="text-xs font-normal text-gray-500 dark:text-gray-300"
-                                      >
-                                        Voucher chỉ còn {voucher.amount} lượt
-                                      </p>
-                                    </label>
-                                  </div>
-                                </div>
-                              </li>
-                               ))}
-                              
+                                {voucherList.map((voucher) => (
+                                  <li key={voucher._id}>
+                                    <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                      <div className="flex items-center h-5">
+                                        <input
+                                          id="helper-radio-4"
+                                          name="helper-radio"
+                                          type="radio"
+                                          value={voucher._id}
+                                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                          onChange={handleRadioChange}
+                                        />
+                                      </div>
+                                      <div className="ms-2 text-sm">
+                                        <label
+                                          htmlFor="helper-radio-4"
+                                          className="font-medium text-gray-900 dark:text-gray-300"
+                                        >
+                                          <div>Voucher giảm {voucher.discount}</div>
+                                          <p
+                                            id="helper-radio-text-4"
+                                            className="text-xs font-normal text-gray-500 dark:text-gray-300"
+                                          >
+                                            Voucher chỉ còn {voucher.amount} lượt
+                                          </p>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
                               </ul>
                             </div>
                           )}
