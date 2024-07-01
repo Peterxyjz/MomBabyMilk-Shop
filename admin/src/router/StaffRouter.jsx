@@ -24,6 +24,7 @@ import BillDetail from '../pages/Warehouse/BillDetail';
 import AddVoucher from '../pages/Voucher/AddVoucher';
 import AllFeedback from '../pages/Feedback/AllFeedback';
 import BadFeedback from '../pages/Feedback/BadFeedback';
+import Vouchers from '../pages/Voucher/Vouchers';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -55,6 +56,7 @@ const StaffRouter = () => {
             <Route path="/input-bills" element={<InputBills/>} />
             <Route path="/bill-detail" element={<BillDetail/>} />
             {/* voucher */}
+            <Route path="/all-voucher" element={<Vouchers/>} />
             <Route path="/add-voucher" element={<AddVoucher/>} />
             {/* feedback */}
             <Route path="/all-feedback" element={<AllFeedback/>} />

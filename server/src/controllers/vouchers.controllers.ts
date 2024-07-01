@@ -25,7 +25,6 @@ export const uploadController = async (req: Request, res: Response) => {
     discount: discount,
     amount: amount
   })
-  console.log(voucher)
 
   const result = await voucherServices.upload(voucher)
   return res.status(200).json({
