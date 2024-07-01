@@ -93,6 +93,7 @@ const Payment = () => {
         }
       })
       .catch((err) => {
+        
         console.log(err);
       });
   };

@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { VoucherMode } from '~/constants/enums'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
+import { ErrorWithStatus } from '~/model/Errors'
 import { TokenPayload } from '~/model/requests/User.requests'
 import Voucher from '~/model/schemas/Voucher.schema'
 import databaseService from '~/services/database.services'
@@ -34,7 +36,21 @@ export const uploadController = async (req: Request, res: Response) => {
 
 export const getVoucherController = async (req: Request, res: Response) => {
   const id = req.params.id
+
   const result = await voucherServices.getById(id)
+  if (result.amount === 0) {
+    throw new ErrorWithStatus({
+      message: 'Voucher đã hết lượt sử dụng',
+      status: HTTP_STATUS.BAD_REQUEST
+    })
+  }
+  if (result.expire_date < new Date()) {
+    throw new ErrorWithStatus({
+      message: 'Voucher đã hết hạn sử dụng',
+      status: HTTP_STATUS.BAD_REQUEST
+    })
+  }
+
   return res.json(result)
 }
 
