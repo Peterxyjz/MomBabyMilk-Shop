@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import {
-    deleteController,
+  deleteController,
   getAllVoucherController,
   getVoucherController,
   getVoucherTypeController,

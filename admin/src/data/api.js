@@ -4,7 +4,7 @@ const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
 //fetchUploadVoucher
 export const fetchUploadVoucher = async (data, token) => {
-  return await axios.post(`${SCHEMA_HOSTNAME}/vouchers/upload`, {...data},{
+  return await axios.post(`${SCHEMA_HOSTNAME}/vouchers/upload`, { ...data }, {
     headers: {
       Authorization: `Bearer ${token.access_token}`,
     },
@@ -316,8 +316,41 @@ export const fetchGetVoucher = async () => {
     throw error;
   }
 };
+//update:
+export const fetchUpdateVoucher = async (voucher, token, id) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/vouchers/update/${id}`,
+    { ...voucher },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+//delete:
+export const fetchDeleteVoucher = async (voucherId, token) => {
+  console.log('Deleting voucher with ID:', voucherId);
+  // console.log('Token:', token.access_token);
 
-
+  try {
+    const response = await axios.post(
+      `${SCHEMA_HOSTNAME}/vouchers/delete`, 
+      {
+        id: voucherId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting voucher:', error);
+    throw error;
+  }
+}
 //API province, district, ward
 const baseUrl = "https://open.oapi.vn/location";
 class Http {
