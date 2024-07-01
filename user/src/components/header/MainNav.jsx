@@ -14,10 +14,10 @@ export function MainNav() {
           <Link to="/filter">Tất Cả Sản Phẩm</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
-          <Link>Bán Chạy Sản Phẩm</Link>
+          <Link>Sản Phẩm Bán Chạy</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
-          <Link>Ưu Đãi</Link>
+          <Link to="/order-tracking">Theo Dõi Đơn Hàng</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
           <Link to="/news">Tin Tức</Link>

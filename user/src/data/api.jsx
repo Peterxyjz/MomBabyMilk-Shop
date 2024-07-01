@@ -181,8 +181,18 @@ export const fetchLogout = async (result) => {
 };
 
 //order
-export const fetchOrder = async (order_infor) => {
+export const fetchCreateOrder = async (order_infor) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/orders/upload`, order_infor);
+};
+
+export const fetchOrder = async (user_id) => {
+  try {
+    const res = await axios.post(`${SCHEMA_HOSTNAME}/orders/get-orderforuser`, { user_id });
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw error;
+  }
 };
 
 export const fetchProducts = async () => {

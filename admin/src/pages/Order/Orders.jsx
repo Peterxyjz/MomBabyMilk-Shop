@@ -18,7 +18,6 @@ const ApprovedOrder = () => {
         const orderData = await fetchOrder();
         setOrders(orderData);
         setLoading(false);
-        console.log(orderData);
       } catch (error) {
         console.error("Error fetching orders:", error);
         setLoading(false);

@@ -31,26 +31,23 @@ const EditProfile = () => {
   const [wards, setWards] = useState([]);
   const [addressInput, setAddressInput] = useState("");
   const [dateInput, setDateInput] = useState(date);
-
-  useEffect(() => {
-    const getMeProfile = async () => {
-      const token = JSON.parse(localStorage.getItem("result"));
-      await fetchGetMe(token)
-        .then((res) => {
-          setProfile({
-            username: res.data.result.username || "",
-            name: res.data.result.full_name || "",
-            email: res.data.result.email || "",
-            phone: res.data.result.phone || "",
-            address: res.data.result.address || "",
-            point: res.data.result.menber_ship || 0,
-            date_of_birth: res.data.result.date_of_birth || null,
-          });
-          if (res.data.result.date_of_birth !== null) {
-            setDateInput(new Date(res.data.result.date_of_birth));
-          }
-        })
-        .catch(async (error) => {
+  const getMeProfile = async () => {
+    await fetchGetMe(token)
+      .then((res) => {
+        setProfile({
+          username: res.data.result.username || "",
+          name: res.data.result.full_name || "",
+          email: res.data.result.email || "",
+          phone: res.data.result.phone || "",
+          address: res.data.result.address || "",
+          point: res.data.result.menber_ship || 0,
+          date_of_birth: res.data.result.date_of_birth || null,
+        });
+        if (res.data.result.date_of_birth !== null) {
+          setDateInput(new Date(res.data.result.date_of_birth));
+        }
+      })
+      .catch(async (error) => {
           if (error.response.status === 401) {
             await fetchRefreshToken(token)
               .then(async(res) => {
@@ -59,22 +56,16 @@ const EditProfile = () => {
                 
                await getMeProfile();
               })
-              .catch((error) => {
-                console.log(error);
-                console.log("Ê đăng nhập lại đi nào");
-              
+              .catch((error) => {       
                 if(error.response.status === 401 ){
-                 
                   localStorage.removeItem("user");
                   localStorage.removeItem("result");
-                  console.log("xoa rui");
                 }
               });
           }
-      
-        });
-    };
+  };
 
+  useEffect(() => {
     getMeProfile();
   }, []);
 
@@ -182,7 +173,7 @@ const EditProfile = () => {
         monthDifference === 0 &&
         today.getDate() < date_input.getDate())
     ) {
-      alert("Tuổi không hợp lệ");
+      setErrorList(["Tuổi không hợp lệ"]);
       return;
     }
 
@@ -196,8 +187,8 @@ const EditProfile = () => {
     await fetchUpdateMe(token, data)
       .then((res) => {
         alert("Cập nhật thành công");
-        setIsEditing(true);
-        window.location.reload();
+        setIsEditing(false);
+        getMeProfile();  // Fetch the updated profile data
       })
       .catch((error) => {
         console.log(error);
