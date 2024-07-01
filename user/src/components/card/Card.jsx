@@ -52,7 +52,6 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
 
   const handleAddToCart = (product) => {
     addCartItem(product);
-    toast.success('Sản phẩm đã được thêm vào giỏ hàng');
   };
 
   const formatCurrency = (amount) => {
