@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { TokenPayload } from '~/model/requests/User.requests'
+import FeedBack from '~/model/schemas/Feeback.schema'
 import databaseService from '~/services/database.services'
 
 export const uploadController = async (req: Request, res: Response) => {
@@ -41,6 +42,21 @@ export const deleteController = async (req: Request, res: Response) => {
   const result = await databaseService.feedbacks.deleteOne({ _id: new ObjectId(id) })
   return res.status(200).json({
     message: USERS_MESSAGES.DELETE_SUCCESS,
+    result: result
+  })
+}
+export const updateFeedBackController = async (req: Request, res: Response) => {
+  const id = req.params.id
+
+  const feedback = new FeedBack({
+    _id: new ObjectId(id),
+    ...req.body
+  })
+  console.log('upload: ', feedback)
+
+  const result = await databaseService.feedbacks.updateOne({ _id: new ObjectId(id) }, { $set: feedback })
+  return res.status(200).json({
+    message: USERS_MESSAGES.UPDATE_SUCCESS,
     result: result
   })
 }

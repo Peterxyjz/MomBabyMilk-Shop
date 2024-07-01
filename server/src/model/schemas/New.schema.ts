@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-interface FeedBackType {
+interface NewType {
   _id?: ObjectId
   staff_id: string
   product_id: string
@@ -7,19 +7,19 @@ interface FeedBackType {
   created_at?: Date
 }
 
-export default class FeedBack {
+export default class New {
   _id?: ObjectId
   staff_id: string
   product_id: string
   description: string
   created_at?: Date
 
-  constructor(feedback: FeedBackType) {
+  constructor(news: NewType) {
     const date = new Date()
-    this._id = feedback._id || new ObjectId()
-    this.staff_id = feedback.staff_id
-    this.product_id = feedback.product_id
-    this.description = feedback.description
+    this._id = news._id || new ObjectId()
+    this.staff_id = news.staff_id
+    this.product_id = news.product_id
+    this.description = news.description
     this.created_at = date
   }
 }
