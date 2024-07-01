@@ -44,6 +44,7 @@ const Vouchers = () => {
       discount: Number(selectedVoucher.discount),
       amount: Number(selectedVoucher.amount),
     };
+    console.log(updatedVoucher);
     await fetchUpdateVoucher(updatedVoucher, token, selectedVoucher._id)
       .then((res) => {
         console.log(res.data);

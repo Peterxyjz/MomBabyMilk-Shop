@@ -330,9 +330,6 @@ export const fetchUpdateVoucher = async (voucher, token, id) => {
 };
 //delete:
 export const fetchDeleteVoucher = async (voucherId, token) => {
-  console.log('Deleting voucher with ID:', voucherId);
-  // console.log('Token:', token.access_token);
-
   try {
     const response = await axios.post(
       `${SCHEMA_HOSTNAME}/vouchers/delete`, 
@@ -347,7 +344,6 @@ export const fetchDeleteVoucher = async (voucherId, token) => {
     );
     return response.data;
   } catch (error) {
-    console.error('Error deleting voucher:', error);
     throw error;
   }
 }
