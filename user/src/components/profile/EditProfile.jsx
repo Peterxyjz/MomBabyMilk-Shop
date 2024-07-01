@@ -48,21 +48,22 @@ const EditProfile = () => {
         }
       })
       .catch(async (error) => {
-          if (error.response.status === 401) {
-            await fetchRefreshToken(token)
-              .then(async(res) => {
-                console.log("set lai ne");
-                localStorage.setItem("result", JSON.stringify(res.data.result));
-                
-               await getMeProfile();
-              })
-              .catch((error) => {       
-                if(error.response.status === 401 ){
-                  localStorage.removeItem("user");
-                  localStorage.removeItem("result");
-                }
-              });
-          }
+        if (error.response.status === 401) {
+          await fetchRefreshToken(token)
+            .then(async (res) => {
+              console.log("set lai ne");
+              localStorage.setItem("result", JSON.stringify(res.data.result));
+
+              await getMeProfile();
+            })
+            .catch((error) => {
+              if (error.response.status === 401) {
+                localStorage.removeItem("user");
+                localStorage.removeItem("result");
+              }
+            });
+        }
+      });
   };
 
   useEffect(() => {
@@ -188,7 +189,7 @@ const EditProfile = () => {
       .then((res) => {
         alert("Cập nhật thành công");
         setIsEditing(false);
-        getMeProfile();  // Fetch the updated profile data
+        getMeProfile(); // Fetch the updated profile data
       })
       .catch((error) => {
         console.log(error);

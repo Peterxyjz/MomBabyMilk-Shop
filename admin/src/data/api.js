@@ -305,6 +305,18 @@ export const fetchRevenue = async () => {
   }
 };
 
+//voucher:
+//getall:
+export const fetchGetVoucher = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/vouchers/all-vouchers`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching vouchers:", error);
+    throw error;
+  }
+};
+
 
 //API province, district, ward
 const baseUrl = "https://open.oapi.vn/location";
