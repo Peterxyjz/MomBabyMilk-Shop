@@ -60,3 +60,13 @@ export const updateFeedBackController = async (req: Request, res: Response) => {
     result: result
   })
 }
+
+export const getFeebBackController = async (req: Request, res: Response) => {
+  const id = req.params.id
+  const result = await databaseService.feedbacks.find({ product_id: id }).toArray()
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: result
+  })
+
+}

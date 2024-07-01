@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getAllController, updateFeedBackController, uploadController } from '~/controllers/feedbacks.controllers'
+import { getAllController, getFeebBackController, updateFeedBackController, uploadController } from '~/controllers/feedbacks.controllers'
 import { updateController } from '~/controllers/products.controllers'
 import { updateFeedBackValidator } from '~/middlewares/feedbacks.middwares'
 import { isParamsIdValidator } from '~/middlewares/products.middleware'
@@ -19,4 +19,5 @@ feedbacksRouter.patch(
     updateFeedBackValidator,
     wrapAsync(updateFeedBackController)
   )
+  feedbacksRouter.get('/feedback/:id', isParamsIdValidator, wrapAsync(getFeebBackController))
 export default feedbacksRouter
