@@ -2,6 +2,7 @@ import { Datepicker } from "flowbite-react";
 import { useEffect, useState } from "react";
 import {
   fetchGetMe,
+  fetchRefreshToken,
   fetchUpdateMe,
   getDistricts,
   getProvinces,
@@ -30,7 +31,6 @@ const EditProfile = () => {
   const [wards, setWards] = useState([]);
   const [addressInput, setAddressInput] = useState("");
   const [dateInput, setDateInput] = useState(date);
-
   const getMeProfile = async () => {
     await fetchGetMe(token)
       .then((res) => {
@@ -47,9 +47,22 @@ const EditProfile = () => {
           setDateInput(new Date(res.data.result.date_of_birth));
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(async (error) => {
+          if (error.response.status === 401) {
+            await fetchRefreshToken(token)
+              .then(async(res) => {
+                console.log("set lai ne");
+                localStorage.setItem("result", JSON.stringify(res.data.result));
+                
+               await getMeProfile();
+              })
+              .catch((error) => {       
+                if(error.response.status === 401 ){
+                  localStorage.removeItem("user");
+                  localStorage.removeItem("result");
+                }
+              });
+          }
   };
 
   useEffect(() => {
@@ -160,7 +173,7 @@ const EditProfile = () => {
         monthDifference === 0 &&
         today.getDate() < date_input.getDate())
     ) {
-      alert("Tuổi không hợp lệ");
+      setErrorList(["Tuổi không hợp lệ"]);
       return;
     }
 
