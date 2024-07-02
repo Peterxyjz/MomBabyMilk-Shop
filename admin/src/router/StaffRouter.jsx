@@ -25,6 +25,7 @@ import AddVoucher from '../pages/Voucher/AddVoucher';
 import AllFeedback from '../pages/Feedback/AllFeedback';
 import BadFeedback from '../pages/Feedback/BadFeedback';
 import Vouchers from '../pages/Voucher/Vouchers';
+import Blogs from '../pages/Blog/Blogs';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -44,6 +45,8 @@ const StaffRouter = () => {
             <Route path="/products" element={<Products />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/edit-product" element={<EditProduct />} />
+            {/* user */}
+            <Route path="/customers" element={<Customers />} />
             {/* brand */}
             <Route path="/brands" element={<Brands />} />
             <Route path="/add-brand" element={<AddBrands />} />
@@ -53,14 +56,16 @@ const StaffRouter = () => {
             <Route path="/edit-category" element={<EditCategory />} />
             {/* warehouse */}
             <Route path="/add-inputbill" element={(<AddBill />)} />
-            <Route path="/input-bills" element={<InputBills/>} />
-            <Route path="/bill-detail" element={<BillDetail/>} />
+            <Route path="/input-bills" element={<InputBills />} />
+            <Route path="/bill-detail" element={<BillDetail />} />
             {/* voucher */}
-            <Route path="/all-voucher" element={<Vouchers/>} />
-            <Route path="/add-voucher" element={<AddVoucher/>} />
+            <Route path="/all-voucher" element={<Vouchers />} />
+            <Route path="/add-voucher" element={<AddVoucher />} />
             {/* feedback */}
-            <Route path="/all-feedback" element={<AllFeedback/>} />
-            <Route path="/bad-feedback" element={<BadFeedback/>} />
+            <Route path="/all-feedback" element={<AllFeedback />} />
+            <Route path="/bad-feedback" element={<BadFeedback />} />
+            {/* blog */}
+            <Route path="/all-blog" element={<Blogs />} />
         </Routes>
     )
 }

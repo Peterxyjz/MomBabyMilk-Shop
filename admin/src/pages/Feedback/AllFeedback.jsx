@@ -1,10 +1,11 @@
 import { Button, Card, Rate, Table, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { fetchProducts } from '../../data/api';
+import { fetchAllFeedback, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
 
 const AllFeedback = () => {
     const [products, setProducts] = useState([]);
+    const [feedback, setFeedback] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
@@ -23,6 +24,18 @@ const AllFeedback = () => {
         };
 
         getProducts();
+
+        const getFeedback = async () => {
+            try {
+                const res = await fetchAllFeedback();
+                setFeedback(res.data.result);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching feedback:", error);
+            }
+        }
+        getFeedback();
+
     }, []);
     if (loading) {
         return <div className="text-center font-bold text-2xl">Loading...</div>;

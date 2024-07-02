@@ -347,6 +347,13 @@ export const fetchDeleteVoucher = async (voucherId, token) => {
     throw error;
   }
 }
+
+//feedback
+export const fetchAllFeedback = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/all-feedback`);
+
+};
+
 //API province, district, ward
 const baseUrl = "https://open.oapi.vn/location";
 class Http {
