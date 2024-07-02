@@ -3,7 +3,7 @@ import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { fetchOrder } from "../../data/api";
 import { Link } from "react-router-dom";
-
+import Loader from "../../assets/loading2.gif";
 const HistoryOrder = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,13 @@ const HistoryOrder = () => {
     getOrders();
   }, [user?._id]);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <img src={Loader} alt="loading" />
+      </div>
+    );
+  }
   return (
     <div>
       <div>
@@ -80,11 +87,21 @@ const HistoryOrder = () => {
         <div className="overflow-x-auto">
           <Table hoverable className="border">
             <Table.Head>
-              <Table.HeadCell className="w-1/24 border">Ngày đặt</Table.HeadCell>
-              <Table.HeadCell className="w-1/24 border">Mã đơn hàng</Table.HeadCell>
-              <Table.HeadCell className="w-5/12 border">Sản phẩm</Table.HeadCell>
-              <Table.HeadCell className="w-2/12 border">Tổng tiền</Table.HeadCell>
-              <Table.HeadCell className="w-3/12 border">Trạng thái</Table.HeadCell>
+              <Table.HeadCell className="w-1/24 border">
+                Ngày đặt
+              </Table.HeadCell>
+              <Table.HeadCell className="w-1/24 border">
+                Mã đơn hàng
+              </Table.HeadCell>
+              <Table.HeadCell className="w-5/12 border">
+                Sản phẩm
+              </Table.HeadCell>
+              <Table.HeadCell className="w-2/12 border">
+                Tổng tiền
+              </Table.HeadCell>
+              <Table.HeadCell className="w-3/12 border">
+                Trạng thái
+              </Table.HeadCell>
               <Table.HeadCell className="w-2/12 border">
                 <span className="sr-only">Chi tiết</span>
               </Table.HeadCell>

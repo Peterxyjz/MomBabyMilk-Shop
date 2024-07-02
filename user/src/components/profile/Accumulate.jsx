@@ -1,9 +1,17 @@
-import React from 'react'
-
 const Accumulate = () => {
+  
   return (
-    <div>Accumulate</div>
-  )
-}
+    <div>
+      <div>
+        <h1 className="text-2xl font-semibold">Đổi quà tặng</h1>
+        <p>Dùng membership tích lũy để đổi quà tại MomBabyMilk Shop</p>
+      </div>
+      <hr className="my-4" />
+      <div className="w-full flex items-center">
 
-export default Accumulate
+      </div>
+    </div>
+  );
+};
+
+export default Accumulate;
