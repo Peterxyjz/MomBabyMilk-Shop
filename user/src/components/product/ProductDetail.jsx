@@ -8,7 +8,7 @@ import { toast, Toaster } from "react-hot-toast";
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state.product || null;
-  const { addCartItem } = useCartContext();
+  const { cartItems, addCartItem } = useCartContext(); // Thêm cartItems vào context
   const { addWishlistItem } = useWishlistContext();
 
   if (!product) {
@@ -16,10 +16,17 @@ const ProductDetail = () => {
   }
 
   const handleAddToCart = (product) => {
-    addCartItem(product);
-    toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-      position: "top-right",
-    });
+    const currentCart = cartItems.find((cartItem) => cartItem._id === product._id);
+    if (currentCart && currentCart.quantity >= product.amount) {
+      toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
+        position: "top-right",
+      });
+    } else {
+      addCartItem(product);
+      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+        position: "top-right",
+      });
+    }
   };
 
   // Function to format description

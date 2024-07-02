@@ -49,19 +49,9 @@ export const CartContextProvider = ({ children }) => {
               : cartItem
           )
         );
-        toast.success('Sản phẩm đã được thêm vào giỏ hàng', {
-          position: "top-right",
-        });
-      } else {
-        toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
-          position: "top-right",
-        });
       }
     } else {
       setCartItems([...cartItems, { ...product, quantity: 1 }]);
-      toast.success('Sản phẩm đã được thêm vào giỏ hàng', {
-        position: "top-right",
-      });
     }
   };
 
