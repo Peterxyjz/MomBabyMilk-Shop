@@ -5,6 +5,7 @@ const OrderTracking = () => {
     <>
         <div className="container mx-auto min-h-screen">
             <Breadcrumbs headline={"Theo dõi đơn hàng"} />
+            {/* Thanh search ==> qua trang order detail */}
         </div>
     </>
   )

@@ -23,6 +23,7 @@ import {
   loginForAdminOrStaffController,
   logoutController,
   oAuthController,
+  refreshTokenController,
   registerController,
   resendEmailVerifyController,
   resetPasswordController,
@@ -95,4 +96,6 @@ body: {username: string, email: string, password: string, confirm_password: stri
 */
 usersRouter.post('/add-user', accessTokenValidator, registerValidator, wrapAsync(addUserController))
 usersRouter.post('/change-status/:id', accessTokenValidator, wrapAsync(changeStatusUserController))
+usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshTokenController))
+
 export default usersRouter

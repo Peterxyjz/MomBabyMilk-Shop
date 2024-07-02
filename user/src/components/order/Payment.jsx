@@ -43,7 +43,7 @@ const Payment = () => {
       customer_infor: customer_infor,
       cart_list: cartItems,
       user: user,
-      total_price: totalPrice + ship - discount,
+      total_price: (totalPrice + ship - discount) > 0 ? totalPrice + ship - discount : 0,
       payment_method: paymentMethod,
       ship_fee: ship,
       voucher_code: voucher_code,
@@ -96,6 +96,7 @@ const Payment = () => {
         }
       })
       .catch((err) => {
+        
         console.log(err);
       });
   };
