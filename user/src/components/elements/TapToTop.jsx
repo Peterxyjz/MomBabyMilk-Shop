@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import Button from '@mui/material/Button';
+
 const TapToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -31,10 +32,13 @@ const TapToTop = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {isVisible && (
-        <Button variant="contained" color="success"
+        <Button 
+          variant="contained" 
+          color="success"
           onClick={scrollToTop}
+          style={{ minWidth: '40px', minHeight: '40px', padding: '10px', borderRadius: '8px' }}
         >
-          <MdKeyboardArrowUp className="text-3xl"/>
+          <MdKeyboardArrowUp className="text-2xl"/>
         </Button>
       )}
     </div>

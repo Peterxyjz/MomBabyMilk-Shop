@@ -16,7 +16,7 @@ const OrderDetail = () => {
   const [feedback, setFeedback] = useState({
     rating: 0,
     description: "",
-    productId: null,
+    product_id: null,
   });
   const token = JSON.parse(localStorage.getItem("result"));
 
@@ -49,14 +49,14 @@ const OrderDetail = () => {
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   };
 
-  const openFeedbackModal = (productId) => {
-    setFeedback({ ...feedback, productId });
+  const openFeedbackModal = (product_id) => {
+    setFeedback({ ...feedback, product_id });
     setShowModal(true);
   };
 
   const closeFeedbackModal = () => {
     setShowModal(false);
-    setFeedback({ rating: 0, description: "", productId: null });
+    setFeedback({ rating: 0, description: "", product_id: null });
   };
 
   const handleFeedbackChange = (e) => {
@@ -69,6 +69,7 @@ const OrderDetail = () => {
   };
 
   const submitFeedback =  async () => {
+    console.log("Frestasv: ", feedback);
     if (feedback.rating === 0 || feedback.description.trim() === "") {
       alert("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
       return;
