@@ -28,6 +28,7 @@ export const uploadController = async (req: Request, res: Response) => {
     product_id: req.body.product_id,
     description: req.body.description,
     created_at: new Date()
+    
   })
   const result = await newsServices.upload(news)
 
