@@ -6,6 +6,7 @@ interface FeedBackType {
   rating: number
   user_id: string
   created_at?: Date
+  reply_id?: string
 }
 
 export default class FeedBack {
@@ -15,6 +16,7 @@ export default class FeedBack {
   rating: number
   user_id: string
   created_at?: Date
+  reply_id?: string
 
   constructor(feedback: FeedBackType) {
     const date = new Date()
@@ -23,6 +25,7 @@ export default class FeedBack {
     this.description = feedback.description
     this.rating = feedback.rating
     this.user_id = feedback.user_id
-    this.created_at = date
+    this.created_at = feedback.created_at || date
+    this.reply_id = feedback.reply_id || undefined
   }
 }

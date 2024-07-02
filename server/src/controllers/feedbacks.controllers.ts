@@ -17,7 +17,11 @@ export const uploadController = async (req: Request, res: Response) => {
   if (!feedback) {
     // Nếu phản hồi không tồn tại, tạo một phản hồi mới
     const newFeedback = { user_id: user_id, ...req.body } // Tạo đối tượng phản hồi mới với user_id và dữ liệu từ request body
-    await databaseService.feedbacks.insertOne(newFeedback)
+    const new_feedback = new FeedBack({
+      _id: new ObjectId(user_id),
+      ...newFeedback
+    })
+    await databaseService.feedbacks.insertOne(new_feedback)
   } else {
     // Nếu phản hồi đã tồn tại, cập nhật phản hồi
     await databaseService.feedbacks.findOneAndUpdate(
