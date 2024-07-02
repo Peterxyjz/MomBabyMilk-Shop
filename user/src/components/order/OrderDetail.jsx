@@ -84,7 +84,7 @@ const OrderDetail = () => {
           </div>
           <hr className="my-4" />
           {/* order detail */}
-
+          
         </div>
       </div>
     </>
