@@ -5,6 +5,7 @@ import { FaCartPlus } from "react-icons/fa6";
 import { FcFeedback } from "react-icons/fc";
 import { useState, useEffect } from "react";
 import RenderRating from "../elements/RenderRating";
+import { fetchUploadFeedback } from "../../data/api";
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const OrderDetail = () => {
     description: "",
     productId: null,
   });
+  const token = JSON.parse(localStorage.getItem("result"));
 
   useEffect(() => {
     const findProductById = (product_id) => {
@@ -66,13 +68,17 @@ const OrderDetail = () => {
     setFeedback({ ...feedback, rating });
   };
 
-  const submitFeedback = () => {
+  const submitFeedback =  async () => {
     if (feedback.rating === 0 || feedback.description.trim() === "") {
       alert("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
       return;
     }
-    // Handle feedback submission logic here
-    console.log(feedback);
+    await fetchUploadFeedback(feedback, token)
+    .then((res) => {
+      alert("Đánh giá cho sản phẩm thành công!")
+    }).catch((err) => {
+      console.log(err);
+    })
     closeFeedbackModal();
   };
 
