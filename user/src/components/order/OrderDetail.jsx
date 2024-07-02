@@ -2,9 +2,32 @@ import { useLocation } from "react-router-dom";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { Button } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+
 const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order || {};
+  const [orderDetails, setOrderDetails] = useState([]);
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+
+  useEffect(() => {
+    const findProductById = (product_id) => {
+      return products.find((product) => product._id === product_id);
+    };
+    if (products.length > 0 && order) {
+      const updateOrderDetails = async () => {
+        const details = await Promise.all(
+          order.order_detail.map(async (item) => {
+            const product = findProductById(item.product_id);
+            return { ...item, product };
+          })
+        );
+        setOrderDetails(details);
+      };
+      updateOrderDetails();
+    }
+  }, []);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -15,13 +38,14 @@ const OrderDetail = () => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   };
+
   return (
     <>
       <div className="container mx-auto min-h-screen">
         <Breadcrumbs headline={"Chi tiết đơn hàng"} />
         {/* order tracking here */}
         <div className="w-full flex flex-col items-center p-10 border rounded-xl">
-          <div className="w-full flex justify-between items-center">
+          <div className="w-full flex justify-between items-center border-b pb-4 mb-4">
             <div>
               <h1 className="text-2xl font-semibold">
                 Chi tiết đơn hàng:{" "}
@@ -38,21 +62,26 @@ const OrderDetail = () => {
               </Button>
             </div>
           </div>
-          <hr className="my-4" />
           {/* order-info */}
-          <div className="w-full flex items-start gap-10">
+          <div className="w-full flex items-start gap-10 border-b p-4 mb-4">
             <div>
               <h2 className="text-xl font-semibold">Thông tin khách hàng</h2>
-              <p className="text-md">Họ và tên khách hàng: {order.order.full_name}</p>
+              <p className="text-md">Họ và tên: {order.order.full_name}</p>
               <p className="text-md">Số điện thoại: {order.order.phone}</p>
               <p className="text-md">Địa chỉ email: {order.order.email}</p>
-              <p className="text-md">Địa chỉ giao hàng: {order.order.address}</p>
+              <p className="text-md">
+                Địa chỉ giao hàng: {order.order.address}
+              </p>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold">Thông tin đơn hàng</h2>
-              <p className="text-md">Ngày đặt: {formatDate(order.order.required_date)}</p>
-              <p className="text-md">Ngày ship (dự kiến): {formatDate(order.order.shipped_date)}</p>
+              <p className="text-md">
+                Ngày đặt: {formatDate(order.order.required_date)}
+              </p>
+              <p className="text-md">
+                Ngày ship (dự kiến): {formatDate(order.order.shipped_date)}
+              </p>
               <p className="text-md">
                 Trạng thái đơn hàng:{" "}
                 {order.order.status === 0
@@ -74,17 +103,63 @@ const OrderDetail = () => {
               {order.order.member_id && (
                 <p className="text-md">
                   Số điểm tích lũy:{" "}
-                  {Number(order.order.total_price * 0.1).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}
+                  {Number(order.order.total_price * 0.1).toLocaleString(
+                    "vi-VN",
+                    {
+                      style: "currency",
+                      currency: "VND",
+                    }
+                  )}
                 </p>
               )}
             </div>
           </div>
-          <hr className="my-4" />
           {/* order detail */}
-          
+          <div className="w-full">
+            {orderDetails.map((item) => (
+              <div
+                key={item.product_id}
+                className="w-full flex flex-col md:flex-row rounded-lg border border-gray-200 bg-white p-4 shadow-sm mb-4 md:p-6"
+              >
+                <img
+                  className="h-20 w-20 mr-4"
+                  src={item.product.imgUrl}
+                  alt={item.product.product_name}
+                />
+                <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-center">
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between">
+                      <a
+                        href="#"
+                        className="text-base font-medium text-gray-900 hover:underline dark:text-white"
+                      >
+                        {item.product.product_name}
+                      </a>
+                      <input
+                        type="text"
+                        className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
+                        value={`x${item.amount}`}
+                        readOnly
+                      />
+                    </div>
+                    <p className="text-base font-bold text-gray-900 dark:text-white mt-2">
+                      {Number(item.price).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </p>
+                  </div>
+                  <Button
+                    color="light"
+                    size={"sm"}
+                    className="text-blue-500 ml-auto mt-4 md:mt-0"
+                  >
+                    Feedback
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
