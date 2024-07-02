@@ -12,7 +12,7 @@ import { useCartContext } from '../../context/CartContext';
 import { Toaster, toast } from 'react-hot-toast';
 
 const ProductCard = ({ products, headline, viewAllLink }) => {
-  const { addCartItem } = useCartContext();
+  const { cartItems, addCartItem } = useCartContext();
 
   const settings = {
     dots: true,
@@ -51,8 +51,17 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
   }
 
   const handleAddToCart = (product) => {
-    addCartItem(product);
-    toast.success('Sản phẩm đã được thêm vào giỏ hàng');
+    const currentCart = cartItems.find((cartItem) => cartItem._id === product._id);
+    if (currentCart && currentCart.quantity >= product.amount) {
+      toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
+        position: "top-right",
+      });
+    } else {
+      addCartItem(product);
+      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+        position: "top-right",
+      });
+    }
   };
 
   const formatCurrency = (amount) => {

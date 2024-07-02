@@ -116,9 +116,6 @@ const AddProduct = () => {
   const sendURL = async (product,id ) => {
     return await fetchUpdateProduct(product, token, id);
   };
-  // const handleSaveImg = (url) => {
-
-  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;

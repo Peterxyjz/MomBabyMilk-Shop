@@ -230,6 +230,20 @@ export const displayProducts = async (page, limit) => {
   }
 };
 
+//feedback:
+//upload:
+export const fetchUploadFeedback = async (feedback, token) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/feedbacks/upload`,
+    { ...feedback },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //todo API province
 
 const baseUrl = "https://open.oapi.vn/location";

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 
 const WishlistContext = createContext();
 
@@ -17,17 +18,26 @@ export const WishlistContextProvider = ({ children }) => {
   }, [wishlistItems]);
 
   const wishlistAmount = wishlistItems.length;
+
   const addWishlistItem = (product) => {
     const currentWishlist = wishlistItems.find(item => item._id === product._id);
     if (!currentWishlist) {
       setWishlistItems([...wishlistItems, product]);
+      toast.success(`Sản phẩm này đã được thêm vào danh sách yêu thích`, {
+        position: "top-right",
+      });
     } else {
-      alert(`${product.name} is already in your wishlist`);
+      toast.error(`Sản phẩm này đã có trong danh sách yêu thích của bạn`, {
+        position: "top-right",
+      });
     }
   };
 
   const removeWishlistItem = (id) => {
     setWishlistItems(wishlistItems.filter(item => item._id !== id));
+    toast.success(`Sản phẩm đã được xóa khỏi danh sách yêu thích`, {
+      position: "top-right",
+    });
   };
 
   return (
@@ -39,6 +49,7 @@ export const WishlistContextProvider = ({ children }) => {
         wishlistAmount,
       }}
     >
+      <Toaster />
       {children}
     </WishlistContext.Provider>
   );

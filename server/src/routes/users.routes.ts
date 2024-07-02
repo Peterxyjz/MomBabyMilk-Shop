@@ -99,4 +99,3 @@ usersRouter.post('/change-status/:id', accessTokenValidator, wrapAsync(changeSta
 usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshTokenController))
 
 export default usersRouter
-  

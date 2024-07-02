@@ -514,7 +514,7 @@ export const updateMeValidator = validate(
           errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
         }
       },
-      phone:{
+      phone: {
         notEmpty: {
           errorMessage: USERS_MESSAGES.PHONE_IS_REQUIRED
         },
@@ -530,7 +530,7 @@ export const updateMeValidator = validate(
           errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
         }
       },
-      address:{
+      address: {
         notEmpty: {
           errorMessage: USERS_MESSAGES.ADDRESS_IS_REQUIRED
         },
@@ -550,9 +550,7 @@ export const updateMeValidator = validate(
         optional: true, //đc phép có hoặc k
         ...dateOfBirthSchema, //phân rã nameSchema ra
         notEmpty: undefined //ghi đè lên notEmpty của nameSchema
-      },
-     
-
+      }
     },
     ['body']
   )
