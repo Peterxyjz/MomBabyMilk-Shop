@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { fetchProducts } from "../data/api.jsx";
+import { fetchProducts, fetchRefreshToken } from "../data/api.jsx";
 
 const ProductContext = createContext();
 
@@ -10,7 +10,7 @@ export const useProductContext = () => {
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const result = JSON.parse(localStorage.getItem("result")) || null;
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -19,20 +19,29 @@ export const ProductProvider = ({ children }) => {
           setProducts(JSON.parse(localProducts));
           setLoading(false);
           setTimeout(async () => {
-        
             const productData = await fetchProducts();
-          
+
             setProducts(productData);
             localStorage.setItem("products", JSON.stringify(productData));
           }, 1000);
         } else {
-      
-      
           const productData = await fetchProducts();
-       
+
           setProducts(productData);
           localStorage.setItem("products", JSON.stringify(productData));
           setLoading(false);
+        }
+        if(result !== null){
+          const token = await fetchRefreshToken(result).then((res) => {
+            console.log(res.data.result);
+            localStorage.setItem("result", JSON.stringify(res.data.result));
+          }).catch((error) => {
+            console.log(error);
+            localStorage.removeItem("user");
+            localStorage.removeItem("result");
+            window.location.href="/login"
+          });
+          
         }
       } catch (error) {
         console.error("Error fetching products:", error);
