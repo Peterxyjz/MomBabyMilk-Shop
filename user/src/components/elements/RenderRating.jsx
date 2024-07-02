@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaStar, FaStarHalf  } from "react-icons/fa6";
+import { TiStarFullOutline , TiStarHalfOutline } from "react-icons/ti";
 const RenderRating = ({ rating, onRatingChange }) => {
   const [hoverRating, setHoverRating] = useState(0);
 
@@ -20,11 +20,11 @@ const RenderRating = ({ rating, onRatingChange }) => {
     const halfFilled = (hoverRating || rating) === i + 0.5;
 
     if (halfFilled) {
-      return <FaStarHalf key={i} className="text-yellow-300 h-5 w-5 cursor-pointer" />;
+      return <TiStarHalfOutline key={i} className="text-yellow-300 h-5 w-5 cursor-pointer" />;
     }
 
     return (
-      <FaStar
+      <TiStarFullOutline
         key={i}
         className={`h-5 w-5 cursor-pointer ${filled ? "text-yellow-300" : "text-gray-300"}`}
       />
