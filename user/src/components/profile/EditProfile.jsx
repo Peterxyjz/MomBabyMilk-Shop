@@ -52,9 +52,7 @@ const EditProfile = () => {
         if (error.response.status === 401) {
           await fetchRefreshToken(token)
             .then(async (res) => {
-              console.log("set lai ne");
               localStorage.setItem("result", JSON.stringify(res.data.result));
-
               await getMeProfile();
             })
             .catch((error) => {

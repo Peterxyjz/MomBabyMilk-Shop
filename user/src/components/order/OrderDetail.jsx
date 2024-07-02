@@ -10,7 +10,6 @@ import { fetchUploadFeedback } from "../../data/api";
 const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order || {};
-  console.log(order);
   const [orderDetails, setOrderDetails] = useState([]);
   const products = JSON.parse(localStorage.getItem("products")) || [];
   const [showModal, setShowModal] = useState(false);
