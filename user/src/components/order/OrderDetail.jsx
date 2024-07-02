@@ -1,14 +1,22 @@
 import { useLocation } from "react-router-dom";
 import Breadcrumbs from "../elements/Breadcrumb";
-import { Button } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa6";
+import { FcFeedback } from "react-icons/fc";
 import { useState, useEffect } from "react";
+import RenderRating from "../elements/RenderRating";
 
 const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order || {};
   const [orderDetails, setOrderDetails] = useState([]);
   const products = JSON.parse(localStorage.getItem("products")) || [];
+  const [showModal, setShowModal] = useState(false);
+  const [feedback, setFeedback] = useState({
+    rating: 0,
+    description: "",
+    productId: null,
+  });
 
   useEffect(() => {
     const findProductById = (product_id) => {
@@ -37,6 +45,35 @@ const OrderDetail = () => {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const openFeedbackModal = (productId) => {
+    setFeedback({ ...feedback, productId });
+    setShowModal(true);
+  };
+
+  const closeFeedbackModal = () => {
+    setShowModal(false);
+    setFeedback({ rating: 0, description: "", productId: null });
+  };
+
+  const handleFeedbackChange = (e) => {
+    const { name, value } = e.target;
+    setFeedback({ ...feedback, [name]: value });
+  };
+
+  const handleRatingChange = (rating) => {
+    setFeedback({ ...feedback, rating });
+  };
+
+  const submitFeedback = () => {
+    if (feedback.rating === 0 || feedback.description.trim() === "") {
+      alert("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
+      return;
+    }
+    // Handle feedback submission logic here
+    console.log(feedback);
+    closeFeedbackModal();
   };
 
   return (
@@ -151,10 +188,11 @@ const OrderDetail = () => {
                   </div>
                   <Button
                     color="light"
-                    size={"sm"}
+                    size={"xl"}
                     className="text-blue-500 ml-auto mt-4 md:mt-0"
+                    onClick={() => openFeedbackModal(item.product_id)}
                   >
-                    Feedback
+                    <FcFeedback className="text-xl mt-0.5 mx-2" /> Đánh giá sản phẩm
                   </Button>
                 </div>
               </div>
@@ -162,6 +200,43 @@ const OrderDetail = () => {
           </div>
         </div>
       </div>
+      <Modal show={showModal} onClose={closeFeedbackModal}>
+        <Modal.Header className="text-xl font-semibold">Đánh giá sản phẩm: </Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">
+            <div className="flex items-center">
+              <label className="block text-xl font-medium text-gray-700 dark:text-gray-200 mr-4">
+                Đánh giá:
+              </label>
+              <RenderRating 
+                rating={feedback.rating}
+                onRatingChange={handleRatingChange}
+              />
+            </div>
+            <div>
+              <label className="block text-xl font-medium text-gray-700 dark:text-gray-200">
+                Mô tả sản phẩm:
+              </label>
+              <textarea
+                name="description"
+                className="mt-1 p-2 border rounded w-full"
+                rows="5"
+                value={feedback.description}
+                onChange={handleFeedbackChange}
+                required
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="blue" onClick={submitFeedback}>
+            Gửi đánh giá
+          </Button>
+          <Button color="gray" onClick={closeFeedbackModal}>
+            Hủy bỏ
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
