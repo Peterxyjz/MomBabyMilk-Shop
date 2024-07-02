@@ -4,7 +4,7 @@ const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
 //fetchUploadVoucher
 export const fetchUploadVoucher = async (data, token) => {
-  return await axios.post(`${SCHEMA_HOSTNAME}/vouchers/upload`, {...data},{
+  return await axios.post(`${SCHEMA_HOSTNAME}/vouchers/upload`, { ...data }, {
     headers: {
       Authorization: `Bearer ${token.access_token}`,
     },
@@ -305,7 +305,48 @@ export const fetchRevenue = async () => {
   }
 };
 
-
+//voucher:
+//getall:
+export const fetchGetVoucher = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/vouchers/all-vouchers`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching vouchers:", error);
+    throw error;
+  }
+};
+//update:
+export const fetchUpdateVoucher = async (voucher, token, id) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/vouchers/update/${id}`,
+    { ...voucher },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+//delete:
+export const fetchDeleteVoucher = async (voucherId, token) => {
+  try {
+    const response = await axios.post(
+      `${SCHEMA_HOSTNAME}/vouchers/delete`, 
+      {
+        id: voucherId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 //API province, district, ward
 const baseUrl = "https://open.oapi.vn/location";
 class Http {
