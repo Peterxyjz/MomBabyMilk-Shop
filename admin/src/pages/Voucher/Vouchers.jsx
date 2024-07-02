@@ -37,7 +37,7 @@ const Vouchers = () => {
     const date_input = new Date(selectedVoucher.expire_date);
     date_input.setDate(date_input.getDate() + 1);
     const updatedVoucher = {
-      ...selectedVoucher,
+   
       voucher_type: Number(selectedVoucher.voucher_type),
       membership: Number(selectedVoucher.membership),
       expire_date: date_input.toISOString(),
