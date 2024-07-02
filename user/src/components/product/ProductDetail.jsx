@@ -3,15 +3,31 @@ import { useLocation } from "react-router-dom";
 import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
+import { toast, Toaster } from "react-hot-toast";
 
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state.product || null;
-  const { addCartItem } = useCartContext();
+  const { cartItems, addCartItem } = useCartContext(); // Thêm cartItems vào context
   const { addWishlistItem } = useWishlistContext();
+
   if (!product) {
     return <div>Product not found</div>;
   }
+
+  const handleAddToCart = (product) => {
+    const currentCart = cartItems.find((cartItem) => cartItem._id === product._id);
+    if (currentCart && currentCart.quantity >= product.amount) {
+      toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
+        position: "top-right",
+      });
+    } else {
+      addCartItem(product);
+      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+        position: "top-right",
+      });
+    }
+  };
 
   // Function to format description
   const formatDescription = (description) => {
@@ -47,6 +63,7 @@ const ProductDetail = () => {
 
   return (
     <section className="py-8 bg-white md:py-16 antialiased">
+      <Toaster />
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto relative">
@@ -138,7 +155,7 @@ const ProductDetail = () => {
               {product.amount > 0 ? (
                 <button
                   className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
-                  onClick={() => addCartItem(product)}
+                  onClick={() => handleAddToCart(product)}
                 >
                   <svg
                     className="w-5 h-5 -ms-2 me-2"
