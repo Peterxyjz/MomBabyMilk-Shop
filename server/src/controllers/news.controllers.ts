@@ -63,3 +63,35 @@ export const getNewsByProIdController = async (req: Request, res: Response) => {
     result: result
   })
 }
+
+export const deteleController = async (req: Request, res: Response) => {
+  const id = req.params.id
+  const news = await databaseService.news.findOne({ _id: new ObjectId(id) })
+  const { user_id } = req.decoded_authorization as TokenPayload
+  if (!news) {
+    throw new ErrorWithStatus({
+      message: USERS_MESSAGES.NEWS_NOT_FOUND,
+      status: HTTP_STATUS.NOT_FOUND
+    })
+  }
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    throw new ErrorWithStatus({
+      message: USERS_MESSAGES.NEWS_NOT_FOUND,
+      status: HTTP_STATUS.NOT_FOUND
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Staff') {
+    throw new ErrorWithStatus({
+      message: USERS_MESSAGES.PERMISSION_DENIED,
+      status: HTTP_STATUS.UNAUTHORIZED
+    })
+  }
+
+  const result = await databaseService.news.deleteOne({ _id: new ObjectId(id) })
+  return res.status(200).json({
+    message: USERS_MESSAGES.DELETE_SUCCESS,
+    result: result
+  })
+}
