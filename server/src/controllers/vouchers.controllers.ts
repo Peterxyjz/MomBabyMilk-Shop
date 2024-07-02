@@ -112,7 +112,7 @@ export const updateController = async (req: Request, res: Response) => {
       message: 'Bạn không có quyền chỉnh sửa voucher'
     })
   }
-
+  
   const result = await voucherServices.update(req.params.id, req.body)
 
   return res.status(200).json({
