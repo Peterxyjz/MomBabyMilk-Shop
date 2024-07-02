@@ -71,7 +71,8 @@ export const USERS_MESSAGES = {
   GET_ME_SUCCESS: 'Lấy thông tin thành công',
   PHONE_IS_REQUIRED: 'Số điện thoại là bắt buộc',
   ADDRESS_IS_REQUIRED: 'Đị̣a chỉ là bắt buộc',
-  FEEDBACK_NOT_FOUND: 'FEEDBACK_NOT_FOUND'
+  FEEDBACK_NOT_FOUND: 'FEEDBACK_NOT_FOUND',
+  PERMISSION_DENIED: 'PERMISSION_DENIED'
 } as const
 
 export const PRODUCTS_MESSAGES = {
