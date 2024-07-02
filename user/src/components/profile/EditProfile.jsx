@@ -9,6 +9,7 @@ import {
   getWards,
 } from "../../data/api";
 import { useLocation } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 const EditProfile = () => {
   const location = useLocation();
@@ -187,9 +188,11 @@ const EditProfile = () => {
 
     await fetchUpdateMe(token, data)
       .then((res) => {
-        alert("Cập nhật thành công");
+        toast.success("Cập nhật thành công", {
+          position: "top-center",
+        });
         setIsEditing(false);
-        getMeProfile(); // Fetch the updated profile data
+        getMeProfile();
       })
       .catch((error) => {
         console.log(error);
@@ -203,6 +206,7 @@ const EditProfile = () => {
 
   return (
     <>
+      <Toaster />
       {isEditing ? (
         <>
           <h1 className="text-2xl font-semibold">

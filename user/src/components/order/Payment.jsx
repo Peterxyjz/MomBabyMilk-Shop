@@ -3,6 +3,8 @@ import Breadcrumbs from "../elements/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { checkQRPaymet, deleteOrder, fetchCreateOrder } from "../../data/api.jsx";
+import toast, { Toaster } from 'react-hot-toast';
+
 const Payment = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
@@ -14,10 +16,11 @@ const Payment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
-  const ship = location.state?.ship
-  const discount = location.state?.discount
-  const voucher_code = location.state?.voucherCode
+  const ship = location.state?.ship;
+  const discount = location.state?.discount;
+  const voucher_code = location.state?.voucherCode;
   const callTime = 300000;
+
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);
   };
@@ -46,7 +49,7 @@ const Payment = () => {
       voucher_code: voucher_code,
       voucher_fee: discount
     };
-    await  fetchCreateOrder(order_infor)
+    await fetchCreateOrder(order_infor)
       .then((res) => {
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
@@ -70,7 +73,7 @@ const Payment = () => {
           setTimeout(() => {
             clearInterval(checkPaymetSucc);
             if (!ischeck) {
-              alert("Thanh Toán Thất Bại");
+              toast.error("Thanh Toán Thất Bại");
               deleteOrder(content);
               navigate("/thanks", {
                 state: {
@@ -102,6 +105,7 @@ const Payment = () => {
   return (
     <>
       <Breadcrumbs headline="Thanh toán" />
+      <Toaster />
       <>
         <ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
           <li className="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280] dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
