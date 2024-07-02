@@ -28,7 +28,6 @@ export const uploadController = async (req: Request, res: Response) => {
     product_id: req.body.product_id,
     description: req.body.description,
     created_at: new Date()
-
   })
   const result = await newsServices.upload(news)
 
@@ -41,6 +40,15 @@ export const uploadController = async (req: Request, res: Response) => {
 
 export const getAllController = async (req: Request, res: Response) => {
   const result = await databaseService.news.find({}).toArray()
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: result
+  })
+}
+
+export const getNewsController = async (req: Request, res: Response) => {
+  const id = req.params.id
+  const result = await databaseService.news.findOne({ _id: new ObjectId(id) })
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     result: result
