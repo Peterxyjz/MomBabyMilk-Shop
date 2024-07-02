@@ -55,10 +55,9 @@ export const deteleFeebBackController = async (req: Request, res: Response) => {
       status: HTTP_STATUS.UNAUTHORIZED
     })
   }
-  console.log('feedback: ', feedback.user_id);
-  console.log('user_id: ', user_id);
-  
-  
+  console.log('feedback: ', feedback.user_id)
+  console.log('user_id: ', user_id)
+
   const result = await databaseService.feedbacks.deleteOne({ _id: new ObjectId(id) })
   return res.status(200).json({
     message: USERS_MESSAGES.DELETE_SUCCESS,
