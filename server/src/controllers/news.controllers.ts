@@ -95,3 +95,38 @@ export const deteleController = async (req: Request, res: Response) => {
     result: result
   })
 }
+
+export const updateNewsController = async (req: Request, res: Response) => {
+  const id = req.params.id
+  const { user_id } = req.decoded_authorization as TokenPayload // Lấy user_id từ decoded_authorization
+
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    throw new ErrorWithStatus({ message: USERS_MESSAGES.USER_NOT_FOUND, status: HTTP_STATUS.NOT_FOUND })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Staff') {
+    throw new ErrorWithStatus({ message: USERS_MESSAGES.PERMISSION_DENIED, status: HTTP_STATUS.UNAUTHORIZED })
+  }
+
+  const news = await databaseService.news.findOne({ _id: new ObjectId(id) })
+  if (!news) {
+    throw new ErrorWithStatus({
+      message: USERS_MESSAGES.NEWS_NOT_FOUND,
+      status: HTTP_STATUS.NOT_FOUND
+    })
+  }
+  const news_update = {
+    _id: new ObjectId(id),
+    staff_id: user_id,
+    product_id: req.body.product_id,
+    description: req.body.description
+  }
+
+  const result = await databaseService.news.updateOne({ _id: new ObjectId(id) }, { $set: news_update })
+
+  return res.status(200).json({
+    message: USERS_MESSAGES.UPDATE_SUCCESS,
+    result: result
+  })
+}
