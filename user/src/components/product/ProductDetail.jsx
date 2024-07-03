@@ -11,6 +11,30 @@ const ProductDetail = () => {
   const product = location.state.product || null;
   const { cartItems, addCartItem } = useCartContext();
   const { addWishlistItem } = useWishlistContext();
+  const [reviews, setReviews] = useState([]);
+    const mockReviews = [
+      {
+        _id: '1',
+        user_id: 'User1',
+        rating: 4,
+        description: 'Great product, highly recommend!',
+      },
+      {
+        _id: '2',
+        user_id: 'User2',
+        rating: 5,
+        description: 'Excellent quality and fast shipping.',
+      },
+      {
+        _id: '3',
+        user_id: 'User3',
+        rating: 3,
+        description: 'Good, but could be improved in some areas.',
+      },
+    ];
+    setReviews(mockReviews);
+  }, [product]);
+
   const [showFullDescription, setShowFullDescription] = useState(false);
   if (!product) {
     return <div>Product not found</div>;
@@ -45,7 +69,6 @@ const ProductDetail = () => {
           </ul>
         );
       } else {
-        // Regular paragraphs
         return (
           <p className="mb-4" key={index}>
             {part.trim()}
@@ -202,6 +225,24 @@ const ProductDetail = () => {
               {showFullDescription ? <FaAngleUp  className="w-5 h-5 mx-2 my-2"/> : <FaAngleDown className="w-5 h-5 mx-2 my-2"/>}
             </div>
           </button>
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
+          {Array.isArray(reviews) && reviews.length > 0 ? (
+            reviews.map((review) => (
+              <div key={review._id} className="mb-4 border-b pb-4">
+                <p className="font-semibold">{review.user_id}</p>
+                <div className="flex items-center">
+                  <RenderRating rating={review.rating} />
+                  <p className="ml-2 text-sm text-gray-500">{review.rating}</p>
+                </div>
+                <p className="text-gray-700">{review.description}</p>
+              </div>
+            ))
+          ) : (
+            <p>Chưa có đánh giá nào</p>
+          )}
         </div>
       </div>
     </section>

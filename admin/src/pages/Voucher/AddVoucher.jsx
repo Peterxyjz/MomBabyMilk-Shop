@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Datepicker, Label, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUploadVoucher } from "../../data/api";
+import { toast, Toaster } from "react-hot-toast";
 
 const AddVoucher = () => {
   const [voucherTypes, setVoucherTypes] = useState([]);
@@ -56,10 +57,15 @@ const AddVoucher = () => {
     await fetchUploadVoucher(voucher, token)
       .then((res) => {
         console.log(res.data);
-        alert("Them thanh cong");
+        toast.success("Thêm thành công", {
+          position: "top-right",
+        });
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Thêm thất bại", {
+          position: "top-right",
+        });
       });
   };
 
@@ -173,6 +179,7 @@ const AddVoucher = () => {
           Thêm Sản Phẩm
         </Button>
       </form>
+      <Toaster />
     </div>
   );
 };
