@@ -188,9 +188,7 @@ const ProductDetail = () => {
         <hr className="my-6 md:my-8 border-gray-200" />
 
         <div
-          className={`text-gray-500 text-lg text-justify ${
-            !showFullDescription ? "gradient-mask" : ""
-          }`}
+          className="text-gray-500 text-lg text-justify"
         >
           {showFullDescription
             ? formatDescription(product.description)
