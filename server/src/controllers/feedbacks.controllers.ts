@@ -8,6 +8,7 @@ import FeedBack from '~/model/schemas/Feeback.schema'
 import databaseService from '~/services/database.services'
 
 export const uploadController = async (req: Request, res: Response) => {
+  console.log(req.body)
   const { user_id } = req.decoded_authorization as TokenPayload // Lấy user_id từ decoded_authorization
 
   // Tìm phản hồi dựa trên user_id
