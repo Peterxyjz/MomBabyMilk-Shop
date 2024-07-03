@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
+import axios from "axios";
 
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state.product || null;
-  const { cartItems, addCartItem } = useCartContext(); // Thêm cartItems vào context
+  const { cartItems, addCartItem } = useCartContext();
   const { addWishlistItem } = useWishlistContext();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    // Fetch reviews from the database
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(`/api/reviews?product_id=${product._id}`);
+        setReviews(response.data || []);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        setReviews([]); // Ensure reviews is an array in case of error
+      }
+    };
+
+    if (product) {
+      fetchReviews();
+    }
+  }, [product]);
 
   if (!product) {
     return <div>Product not found</div>;
@@ -29,12 +48,10 @@ const ProductDetail = () => {
     }
   };
 
-  // Function to format description
   const formatDescription = (description) => {
     const parts = description.split("\n").filter((part) => part.trim() !== "");
     return parts.map((part, index) => {
       if (part.startsWith("*")) {
-        // Convert lists (assuming '*' is used for list items)
         const items = part.split("*").filter((item) => item.trim() !== "");
         return (
           <ul className="list-disc list-inside mb-4" key={index}>
@@ -44,7 +61,6 @@ const ProductDetail = () => {
           </ul>
         );
       } else {
-        // Regular paragraphs
         return (
           <p className="mb-4" key={index}>
             {part.trim()}
@@ -54,7 +70,6 @@ const ProductDetail = () => {
     });
   };
 
-  // Function to calculate the discounted price
   const getDiscountedPrice = (price, discount) => {
     return price - (price * discount) / 100;
   };
@@ -189,6 +204,24 @@ const ProductDetail = () => {
 
         <div className="text-gray-500 text-lg">
           {formatDescription(product.description)}
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
+          {Array.isArray(reviews) && reviews.length > 0 ? (
+            reviews.map((review) => (
+              <div key={review._id} className="mb-4 border-b pb-4">
+                <p className="font-semibold">{review.user_id}</p>
+                <div className="flex items-center">
+                  <RenderRating rating={review.rating} />
+                  <p className="ml-2 text-sm text-gray-500">{review.rating}</p>
+                </div>
+                <p className="text-gray-700">{review.description}</p>
+              </div>
+            ))
+          ) : (
+            <p>Chưa có đánh giá nào</p>
+          )}
         </div>
       </div>
     </section>
