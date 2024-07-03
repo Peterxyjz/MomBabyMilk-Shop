@@ -4,7 +4,7 @@ import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
-import axios from "axios";
+// import axios from "axios";
 
 const ProductDetail = () => {
   const location = useLocation();
@@ -15,6 +15,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     // Fetch reviews from the database
+    /*
     const fetchReviews = async () => {
       try {
         const response = await axios.get(`/api/reviews?product_id=${product._id}`);
@@ -28,6 +29,30 @@ const ProductDetail = () => {
     if (product) {
       fetchReviews();
     }
+    */
+
+    // Mock reviews data for testing
+    const mockReviews = [
+      {
+        _id: '1',
+        user_id: 'User1',
+        rating: 4,
+        description: 'Great product, highly recommend!',
+      },
+      {
+        _id: '2',
+        user_id: 'User2',
+        rating: 5,
+        description: 'Excellent quality and fast shipping.',
+      },
+      {
+        _id: '3',
+        user_id: 'User3',
+        rating: 3,
+        description: 'Good, but could be improved in some areas.',
+      },
+    ];
+    setReviews(mockReviews);
   }, [product]);
 
   if (!product) {
