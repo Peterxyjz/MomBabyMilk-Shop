@@ -14,6 +14,7 @@ import sendMail from '~/helper/send.mail'
 import voucherOrderServices from '~/services/voucherOrders.services'
 import VoucherOrder from '~/model/schemas/VoucherOrders.schema'
 import voucherServices from '~/services/vouchers.services'
+import Voucher from '~/model/schemas/Voucher.schema'
 
 export const getAllController = async (req: Request, res: Response) => {
   const orders = await orderServices.getAll()
@@ -86,6 +87,37 @@ export const uploadController = async (req: Request, res: Response) => {
       ),
       voucherServices.decreaseAmount(voucher_code)
     ])
+    const voucher = await voucherServices.getById(voucher_code)
+    if (voucher) {
+      user.menber_ship = user.menber_ship - (voucher.membership as number)
+    }
+
+    if (user) {
+      await databaseService.users.updateOne(
+        { _id: new ObjectId(user._id) },
+        {
+          $set: {
+            role_id: user.role_id,
+            full_name: user.full_name,
+            email: user.email,
+            date_of_birth: user.date_of_birth,
+            password: user.password,
+            country: user.country,
+            province: user.province,
+            district: user.district,
+            ward: user.ward,
+            address: user.address,
+            phone: user.phone,
+            menber_ship: user.menber_ship,
+            username: user.username,
+            email_verify_token: user.email_verify_token,
+            forgot_password_token: user.forgot_password_token,
+            verify: user.verify,
+            isActive: user.isActive
+          }
+        }
+      )
+    }
   }
 
   return res.status(200).json({
@@ -116,6 +148,7 @@ export const updateStatusController = async (req: Request, res: Response) => {
     order_details.forEach(async (item) => {
       await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
     })
+
     return res.status(200).json({
       message: 'success',
       result

@@ -35,7 +35,9 @@ export const uploadController = async (req: Request, res: Response) => {
 
 export const getVoucherController = async (req: Request, res: Response) => {
   const id = req.params.id
-
+  const user = req.params
+  console.log("body: ", user);
+  
   const result = await voucherServices.getById(id)
   if (result.amount === 0) {
     throw new ErrorWithStatus({

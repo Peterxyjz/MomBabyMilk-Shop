@@ -458,6 +458,16 @@ export const resetPasswordValidator = validate(
   )
 )
 
+export const changePasswordValidator = validate(
+  checkSchema(
+    {
+      password: passwordSchema,
+      confirm_password: confirmPasswordSchema,
+    },
+    ['body']
+  )
+)
+
 //không nên vào database và xóa luôn forgot_password_token của account
 //vì đôi khi họ click vào link , chưa kịp đổi mk thì họ bận gì đó, họ click lại sau
 

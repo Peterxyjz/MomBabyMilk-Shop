@@ -212,6 +212,20 @@ export const resetPasswordController = async (
   return res.json(result)
 }
 
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ResetPasswordReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  //middleware resetPasswordValidator đã chạy rồi, nên ta có thể lấy đc user_id từ decoded_forgot_password_token
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { password } = req.body
+  //vào database tìm user thông qua user_id này và cập nhật lại password mới
+  //vì vào database nên ta sẽ code ở user.services
+  const result = await usersService.resetPassword(user_id, password) //ta chưa code resetPassword
+  return res.json(result)
+}
+
 export const oAuthController = async (req: Request, res: Response, next: NextFunction) => {
   const { code } = req.query
   const data = await usersService.oAuth(code as string)

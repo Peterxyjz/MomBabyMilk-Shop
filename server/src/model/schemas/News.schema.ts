@@ -5,6 +5,7 @@ interface NewsType {
   product_id: string
   description: string
   created_at?: Date
+  img_url?: string
 }
 
 export default class News {
@@ -13,6 +14,7 @@ export default class News {
   product_id: string
   description: string
   created_at?: Date
+  img_url?: string
 
   constructor(news: NewsType) {
     const date = new Date()
@@ -21,5 +23,6 @@ export default class News {
     this.product_id = news.product_id
     this.description = news.description
     this.created_at = date
+    this.img_url = news.img_url || ''
   }
 }
