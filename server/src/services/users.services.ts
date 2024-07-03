@@ -461,10 +461,10 @@ class UsersService {
     )
     return { access_token, refresh_token: new_refresh_token }
   }
-  
+
   async getById(user_id: string) {
     const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
-    if(!user) {
+    if (!user) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.UNPROCESSABLE_ENTITY
