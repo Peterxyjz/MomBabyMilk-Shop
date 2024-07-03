@@ -4,38 +4,28 @@ import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchGetFeedbackById } from "../../data/api";
 
 const ProductDetail = () => {
   const location = useLocation();
-  const product = location.state.product || null;
+  const product = location.state?.product || null;
   const { cartItems, addCartItem } = useCartContext();
   const { addWishlistItem } = useWishlistContext();
   const [reviews, setReviews] = useState([]);
-    const mockReviews = [
-      {
-        _id: '1',
-        user_id: 'User1',
-        rating: 4,
-        description: 'Great product, highly recommend!',
-      },
-      {
-        _id: '2',
-        user_id: 'User2',
-        rating: 5,
-        description: 'Excellent quality and fast shipping.',
-      },
-      {
-        _id: '3',
-        user_id: 'User3',
-        rating: 3,
-        description: 'Good, but could be improved in some areas.',
-      },
-    ];
-    setReviews(mockReviews);
-  }, [product]);
-
   const [showFullDescription, setShowFullDescription] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      console.log(product._id);
+      const getFeedback = async () => {
+        const data = await fetchGetFeedbackById(product._id);
+        setReviews(data.data.result);
+      };
+      getFeedback();
+    }
+  }, [product]);
+  console.log(reviews);
   if (!product) {
     return <div>Product not found</div>;
   }
@@ -209,10 +199,8 @@ const ProductDetail = () => {
         </div>
 
         <hr className="my-6 md:my-8 border-gray-200" />
-
-        <div
-          className="text-gray-500 text-lg text-justify"
-        >
+        <h2 className="text-3xl font-semibold mb-4">Mô tả sản phẩm</h2>
+        <div className="text-gray-500 text-lg text-justify">
           {showFullDescription
             ? formatDescription(product.description)
             : formatDescription(product.description.slice(0, 100))}
@@ -222,7 +210,11 @@ const ProductDetail = () => {
           >
             <div className="flex items-center justify-center mt-2">
               {showFullDescription ? `Thu gọn ` : `Xem thêm mô tả sản phẩm `}
-              {showFullDescription ? <FaAngleUp  className="w-5 h-5 mx-2 my-2"/> : <FaAngleDown className="w-5 h-5 mx-2 my-2"/>}
+              {showFullDescription ? (
+                <FaAngleUp className="w-5 h-5 mx-2 my-2" />
+              ) : (
+                <FaAngleDown className="w-5 h-5 mx-2 my-2" />
+              )}
             </div>
           </button>
         </div>
