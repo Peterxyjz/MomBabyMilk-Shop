@@ -28,7 +28,12 @@ const ChangePassword = () => {
         console.log(res);
       })
       .catch((error) => {
-        setErrorList(error.response.data);
+        console.log(error);
+        let errorList = [];
+        for (let [key, value] of Object.entries(error.response.data.errors)) {
+          errorList.push(value);
+          setErrorList(errorList);
+        }
       });
   };
   return (
@@ -69,6 +74,15 @@ const ChangePassword = () => {
               Lưu thay đổi
             </Button>
           </form>
+          {errorList.length > 0 && (
+          <div className="error-list mt-3 mb-3">
+            {errorList.map((error, index) => (
+              <p key={index} className="text-red-600">
+                {error}
+              </p>
+            ))}
+          </div>
+        )}
         </div>
         <div className="w-1/2 px-10">
           <h1 className="text-xl font-semibold">Mật khẩu của bạn</h1>

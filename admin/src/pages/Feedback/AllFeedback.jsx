@@ -80,7 +80,7 @@ const AllFeedback = () => {
             console.log("Merged Products: ", mergedProducts);
             setProducts(mergedProducts);
         }
-    }, [products, feedback, Users]);
+    }, [ feedback, Users]);
 
 
     if (loading) {
