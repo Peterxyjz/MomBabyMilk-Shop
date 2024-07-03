@@ -617,6 +617,21 @@ export const stafflinks = [
     ],
   },
   {
+    title: 'Khách hàng',
+    links: [
+      {
+        name: 'Quản lý khách hàng',
+        icon: <FiUsers />,
+        type: 'sub',
+        // path: '',
+        subLinks: [
+          { name: 'customers', path: '', label: 'Tất cả khách hàng' },
+  
+        ],
+      },
+    ]
+  },
+  {
     title: 'Tin tức',
     links: [
       {
@@ -625,7 +640,7 @@ export const stafflinks = [
         type: 'sub',
         // path: '',
         subLinks: [
-          { name: 'allBlog', path: '', label: 'Tất cả bài viết' },
+          { name: 'allBlog', path: 'all-blog', label: 'Tất cả bài viết' },
           { name: 'addBlog', path: '', label: 'Thêm bài viết' },
   
         ],
@@ -5332,3 +5347,76 @@ export const PyramidData = [
   { x: 'Fruits', y: 520, text: '520 cal' },
   { x: 'Bread, Rice, Pasta', y: 930, text: '930 cal' },
 ];
+
+export const blogData = [
+  {
+    "id": 1,
+    "title": "Lợi ích dinh dưỡng của sữa",
+    "content": "Sữa chứa nhiều dưỡng chất thiết yếu như canxi, vitamin D và protein. Những dưỡng chất này không chỉ cần thiết cho sự phát triển của xương và răng mà còn hỗ trợ hệ miễn dịch và chức năng thần kinh. Việc tiêu thụ sữa hàng ngày có thể giúp cải thiện sức khỏe xương, giảm nguy cơ loãng xương và tăng cường sức đề kháng. Ngoài ra, sữa còn chứa các axit béo lành mạnh, giúp duy trì sức khỏe tim mạch và hỗ trợ quá trình trao đổi chất. Bài viết này sẽ khám phá chi tiết về các lợi ích sức khỏe của việc bao gồm sữa trong chế độ ăn uống của bạn, từ việc cải thiện tình trạng da cho đến tăng cường năng lượng và sức bền.",
+    "date": "2024-07-01T10:00:00Z",
+    "img": ""
+  },
+  {
+    "id": 2,
+    "title": "Các loại sữa khác nhau và công dụng của chúng",
+    "content": "Từ sữa bò đến các loại sữa thực vật như sữa hạnh nhân và sữa đậu nành, mỗi loại có đặc điểm và công dụng riêng. Sữa bò, ví dụ, là nguồn cung cấp protein và canxi dồi dào, giúp phát triển cơ bắp và xương. Sữa hạnh nhân, mặt khác, chứa ít calo và không chứa cholesterol, phù hợp cho những người ăn kiêng và cần kiểm soát lượng đường huyết. Sữa đậu nành là nguồn cung cấp protein thực vật hoàn hảo, giàu isoflavone giúp cân bằng hormone và giảm nguy cơ mắc bệnh tim mạch. Bài viết này sẽ đi sâu vào từng loại sữa, giải thích rõ ràng về lợi ích và cách sử dụng chúng trong các bữa ăn hàng ngày, từ nấu nướng đến pha chế đồ uống.",
+    "date": "2024-06-28T10:00:00Z",
+    "img": "blogimg"
+  },
+  {
+    "id": 3,
+    "title": "Tác động của sữa đối với sức khỏe xương",
+    "content": "Canxi và vitamin D trong sữa đóng vai trò quan trọng trong việc duy trì sức khỏe xương. Thiếu hụt các dưỡng chất này có thể dẫn đến tình trạng loãng xương, làm xương trở nên yếu và dễ gãy. Việc bổ sung sữa vào chế độ ăn hàng ngày giúp tăng cường mật độ xương, đặc biệt quan trọng đối với trẻ em đang trong giai đoạn phát triển và người già có nguy cơ cao mắc bệnh loãng xương. Ngoài ra, sữa còn chứa các khoáng chất khác như phốt pho và magie, hỗ trợ quá trình tạo xương và bảo vệ sức khỏe toàn diện. Bài viết này sẽ phân tích chi tiết về cơ chế tác động của sữa lên xương, các nghiên cứu khoa học liên quan và lời khuyên từ các chuyên gia dinh dưỡng về lượng sữa cần tiêu thụ mỗi ngày.",
+    "date": "2024-06-20T10:00:00Z",
+    "img": "https://example.com/images/sua-va-suc-khoe-xuong.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Cách chọn loại sữa tốt nhất cho chế độ ăn uống của bạn",
+    "content": "Với rất nhiều lựa chọn sữa có sẵn trên thị trường, từ sữa động vật đến sữa thực vật, việc chọn loại sữa phù hợp có thể trở nên khó khăn. Sữa bò, sữa dê, sữa hạnh nhân, sữa đậu nành, mỗi loại đều có ưu và nhược điểm riêng. Sữa bò cung cấp nhiều protein và canxi, nhưng có thể không phù hợp cho những người không dung nạp lactose. Sữa hạnh nhân ít calo, nhưng không cung cấp nhiều protein như sữa bò. Sữa đậu nành là lựa chọn tuyệt vời cho những người ăn chay, nhưng một số người có thể dị ứng với đậu nành. Bài viết này sẽ hướng dẫn bạn cách đánh giá các loại sữa khác nhau dựa trên nhu cầu dinh dưỡng, tình trạng sức khỏe cá nhân và sở thích cá nhân, giúp bạn đưa ra quyết định thông minh và phù hợp nhất cho chế độ ăn uống của mình.",
+    "date": "2024-07-02T10:00:00Z",
+    "img": "https://example.com/images/chon-loai-sua-tot-nhat.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Những lầm tưởng và sự thật về sữa",
+    "content": "Có nhiều lầm tưởng xung quanh việc tiêu thụ sữa. Một trong những lầm tưởng phổ biến là sữa gây béo phì, nhưng thực tế là sữa chứa các dưỡng chất quan trọng và có thể giúp kiểm soát cân nặng khi tiêu thụ đúng cách. Một lầm tưởng khác là người lớn không cần uống sữa, nhưng sữa cung cấp canxi và vitamin D quan trọng cho sức khỏe xương, đặc biệt là ở người lớn tuổi. Bài viết này sẽ làm sáng tỏ các lầm tưởng phổ biến về sữa, cung cấp bằng chứng khoa học để bạn hiểu rõ hơn về lợi ích và tác động thực sự của sữa đối với sức khỏe. Chúng tôi cũng sẽ chia sẻ những lời khuyên từ các chuyên gia dinh dưỡng về cách kết hợp sữa vào chế độ ăn uống một cách hợp lý và hiệu quả.",
+    "date": "2024-06-25T10:00:00Z",
+    "img": "https://example.com/images/lam-tuong-ve-sua.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Sữa có phải là nguồn canxi tốt nhất?",
+    "content": "Nhiều người tin rằng sữa là nguồn canxi tốt nhất, nhưng thực tế còn có nhiều nguồn khác cung cấp canxi không kém phần quan trọng. Rau xanh, hạt và các sản phẩm từ đậu nành cũng là nguồn canxi phong phú. Tuy nhiên, sữa vẫn là nguồn dễ dàng và phổ biến nhất để bổ sung canxi, đặc biệt là cho trẻ em và người già. Bài viết này sẽ so sánh các nguồn canxi khác nhau, ưu và nhược điểm của từng loại và cách kết hợp chúng vào chế độ ăn uống hàng ngày để đảm bảo cơ thể nhận đủ lượng canxi cần thiết.",
+    "date": "2024-07-05T10:00:00Z",
+    "img": "https://example.com/images/nguon-canxi.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Sữa và sức khỏe tiêu hóa",
+    "content": "Sữa có thể ảnh hưởng đến sức khỏe tiêu hóa của bạn theo nhiều cách khác nhau. Một số người có thể gặp khó khăn trong việc tiêu hóa lactose, dẫn đến các triệu chứng như đau bụng, đầy hơi và tiêu chảy. Tuy nhiên, các sản phẩm sữa không lactose và sữa lên men như sữa chua có thể là lựa chọn tốt cho những người này. Bài viết này sẽ khám phá cách sữa ảnh hưởng đến hệ tiêu hóa, các lựa chọn thay thế cho người không dung nạp lactose và những lợi ích của việc tiêu thụ các sản phẩm sữa lên men.",
+    "date": "2024-07-08T10:00:00Z",
+    "img": "https://example.com/images/sua-va-suc-khoe-tieu-hoa.jpg"
+  },
+  {
+    "id": 8,
+    "title": "Sữa hữu cơ: Có thật sự tốt hơn?",
+    "content": "Sữa hữu cơ được quảng cáo là tốt hơn cho sức khỏe và môi trường, nhưng liệu có thật sự như vậy? Sữa hữu cơ được sản xuất từ những con bò được nuôi dưỡng bằng thức ăn hữu cơ và không sử dụng kháng sinh hoặc hormone tăng trưởng. Tuy nhiên, giá cả của sữa hữu cơ thường cao hơn sữa thông thường. Bài viết này sẽ phân tích sự khác biệt giữa sữa hữu cơ và sữa thông thường, những lợi ích và hạn chế của sữa hữu cơ và giúp bạn quyết định liệu sữa hữu cơ có đáng để bạn đầu tư.",
+    "date": "2024-07-10T10:00:00Z",
+    "img": "https://example.com/images/sua-huu-co.jpg"
+  },
+  {
+    "id": 9,
+    "title": "Sữa và nguy cơ dị ứng",
+    "content": "Dị ứng sữa là một vấn đề phổ biến, đặc biệt là ở trẻ em. Dị ứng sữa có thể gây ra các triệu chứng từ nhẹ đến nặng như phát ban, ngứa, khó thở và thậm chí là sốc phản vệ. Bài viết này sẽ cung cấp thông tin về dị ứng sữa, cách nhận biết các triệu chứng và cách quản lý dị ứng sữa. Ngoài ra, chúng tôi cũng sẽ giới thiệu các lựa chọn thay thế cho sữa, giúp những người bị dị ứng vẫn có thể nhận được dưỡng chất cần thiết mà không gặp phải các phản ứng dị ứng.",
+    "date": "2024-07-15T10:00:00Z",
+    "img": "https://example.com/images/di-ung-sua.jpg"
+  },
+  {
+    "id": 10,
+    "title": "Sữa và thể thao: Tăng cường hiệu suất và phục hồi",
+    "content": "Sữa không chỉ là nguồn dinh dưỡng tuyệt vời mà còn có thể hỗ trợ hiệu suất thể thao và quá trình phục hồi sau khi tập luyện. Protein và các chất điện giải trong sữa giúp xây dựng và phục hồi cơ bắp, cung cấp năng lượng và giữ cho cơ thể được hydrat hóa. Bài viết này sẽ khám phá cách sữa có thể hỗ trợ các vận động viên và người tập thể dục, từ việc cung cấp năng lượng trước khi tập luyện đến hỗ trợ quá trình phục hồi sau khi tập luyện.",
+    "date": "2024-07-20T10:00:00Z",
+    "img": "https://example.com/images/sua-va-the-thao.jpg"
+  }
+]

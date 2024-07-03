@@ -1,20 +1,29 @@
 import { Button, Card, Rate, Table, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { fetchProducts } from '../../data/api';
+import { fetchAllFeedback, fetchAllUsers, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
 
 const AllFeedback = () => {
     const [products, setProducts] = useState([]);
+    const [feedback, setFeedback] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [response, setResponse] = useState('');
+    const [selectedFeedback, setSelectedFeedback] = useState(null);
+    const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+    const [Users, setUsers] = useState([]);
 
+
+    const handleExpand = (expanded, record) => {
+        setExpandedRowKeys(expanded ? [record._id] : []); // Expand only the selected row
+    };
     useEffect(() => {
         const getProducts = async () => {
             try {
                 const productData = await fetchProducts();
                 setProducts(productData);
+
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching products:", error);
@@ -23,7 +32,57 @@ const AllFeedback = () => {
         };
 
         getProducts();
+
+        const getFeedback = async () => {
+            try {
+                const feedback = await fetchAllFeedback();
+
+                setFeedback(feedback.data.result);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching feedbacks:", error);
+                setLoading(false);
+            }
+        };
+
+        getFeedback();
+
+        const getCustomer = async () => {
+            try {
+                const result = JSON.parse(localStorage.getItem("result"))
+                const res = await fetchAllUsers(result);
+                setUsers(res.data.users);
+                console.log(res.data.users);
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        };
+        getCustomer();
     }, []);
+
+    //lay product + feedback
+    useEffect(() => {
+        if (products.length > 0 && feedback.length > 0 && Users.length > 0) {
+            const mergedProducts = products.map(product => {
+                const productFeedback = feedback.filter(item => item.product_id === product._id).map(fb => {
+                    const user = Users.find(user => user._id === fb.user_id);
+                    if (!user) {
+                        console.warn(`No user found for user_id: ${fb.user_id}`);
+                    }
+                    return { ...fb, user };
+                });
+                return {
+                    ...product,
+                    feedback: productFeedback,
+                };
+            });
+
+            console.log("Merged Products: ", mergedProducts);
+            setProducts(mergedProducts);
+        }
+    }, [products, feedback, Users]);
+
+
     if (loading) {
         return <div className="text-center font-bold text-2xl">Loading...</div>;
     }
@@ -31,33 +90,60 @@ const AllFeedback = () => {
 
     const columns = [
         {
-            title: 'Thông tin Sản phẩm',
-            dataIndex: 'productInfo',
-            key: 'productInfo',
+            title: 'Hình Ảnh Sản Phẩm',
+            dataIndex: 'imgUrl',
+            key: 'imgUrl',
             render: (text, record) => (
-                <Card>
-                    <Card.Meta
-                        avatar={<img src={record.imgUrl} alt="product" style={{ width: 100, height: 100 }} />}
-                        title={<span style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{record.product_name}</span>}
-                    />
-                </Card>
+                <img src={record.imgUrl} alt="product" style={{ width: 100, height: 100 }} />
             ),
-            width: "40%",
+            width: "20%",
         },
         {
-            title: 'Đánh giá của Người mua',
-            dataIndex: 'review',
-            key: 'review',
+            title: 'Tên Sản Phẩm',
+            dataIndex: 'product_name',
+            key: 'product_name',
             render: (text, record) => (
-                <div style={{ textAlign: 'start' }}>
-                    <p>
-                        <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>Tên khách hàng | Mã đơn hàng</Text>
-                    </p>
-                    <Rate disabled defaultValue={record.rating} />
-                    <p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>abc xyz xinh đẹp tuyệt vời, ờ mây zing gút chóp lun!! sản phẩm chất lượng, giao hàng nhanh chóng</p>
-                    <Text type="secondary" style={{ fontSize: '15px', display: 'inline-block', marginRight: '10px' }}>01/01/2024 0:00:00</Text>
-                </div>
+                <span style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{record.product_name}</span>
             ),
+            width: "80%",
+        }
+    ];
+
+    const feedbackColumns = [
+        {
+            title: 'Tên khách hàng',
+            dataIndex: 'user',
+            key: 'user',
+            width: "20%",
+            render: (user) => (
+                user ? <Text type="secondary" style={{ fontSize: '15px' }}>{user.username}</Text> : <Text type="secondary" style={{ fontSize: '15px' }}>Không xác định</Text>
+            ),
+        },
+        {
+            title: 'Đánh giá',
+            dataIndex: 'rating',
+            key: 'rating',
+            width: "20%",
+            render: (rating) => (
+                <Rate disabled defaultValue={rating} />
+            ),
+        },
+        {
+            title: 'Bình luận',
+            dataIndex: 'description',
+            key: 'description',
+            render: (description) => (
+                <p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{description}</p>
+            ),
+        },
+        {
+            title: 'Thời gian',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: (created_at) => (
+                <Text type="secondary" style={{ fontSize: '15px' }}>{formatDate(created_at)}</Text>
+            ),
+            width: "15%",
         },
         {
             title: 'Hành động',
@@ -65,7 +151,10 @@ const AllFeedback = () => {
             render: (text, record) => (
                 <Button
                     type="default"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => {
+                        setSelectedFeedback(record);
+                        setModalOpen(true);
+                    }}
                     style={{
                         backgroundColor: "#55B6C3",
                         fontSize: "15px",
@@ -75,10 +164,34 @@ const AllFeedback = () => {
                     Trả lời
                 </Button>
             ),
-        },
+            width: "10%",
+        }
     ];
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+        };
+
+    const expandedRowRender = (record) => (
+        <Table
+            columns={feedbackColumns}
+            dataSource={record.feedback}
+            pagination={false}
+            rowKey={(fb) => fb._id}
+        />
+    );
+
+
     const { Text } = Typography;
+
+    const filteredProducts = products.filter(product => product.feedback && product.feedback.length > 0);
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
@@ -86,14 +199,26 @@ const AllFeedback = () => {
                 title={<h2 className="text-2xl font-bold">Tất cả đánh giá</h2>}
                 style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', minHeight: '70vh' }}
             >
-                <Table columns={columns} dataSource={products} />
-                <ReplyFeedback
-                    modalOpen={modalOpen}
-                    setModalOpen={setModalOpen}
-                    selectedRecord={selectedRecord}
-                    response={response}
-                    setResponse={setResponse}
+                <Table
+                    columns={columns}
+                    dataSource={filteredProducts}
+                    expandable={{
+                        expandedRowRender: record => expandedRowRender(record),
+                        rowExpandable: record => record.feedback && record.feedback.length > 0,
+                        expandedRowKeys: expandedRowKeys,
+                        onExpand: handleExpand,
+                    }}
+                    rowKey="_id"
                 />
+                {modalOpen && (
+                    <ReplyFeedback
+                        modalOpen={modalOpen}
+                        setModalOpen={setModalOpen}
+                        selectedFeedback={selectedFeedback}
+                        response={response}
+                        setResponse={setResponse}
+                    />
+                )}
             </Card>
         </div>
     )

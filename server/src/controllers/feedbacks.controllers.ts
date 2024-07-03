@@ -8,6 +8,7 @@ import FeedBack from '~/model/schemas/Feeback.schema'
 import databaseService from '~/services/database.services'
 
 export const uploadController = async (req: Request, res: Response) => {
+  console.log(req.body)
   const { user_id } = req.decoded_authorization as TokenPayload // Lấy user_id từ decoded_authorization
 
   // Tìm phản hồi dựa trên user_id
@@ -17,7 +18,11 @@ export const uploadController = async (req: Request, res: Response) => {
   if (!feedback) {
     // Nếu phản hồi không tồn tại, tạo một phản hồi mới
     const newFeedback = { user_id: user_id, ...req.body } // Tạo đối tượng phản hồi mới với user_id và dữ liệu từ request body
-    await databaseService.feedbacks.insertOne(newFeedback)
+    const new_feedback = new FeedBack({
+      _id: new ObjectId(user_id),
+      ...newFeedback
+    })
+    await databaseService.feedbacks.insertOne(new_feedback)
   } else {
     // Nếu phản hồi đã tồn tại, cập nhật phản hồi
     await databaseService.feedbacks.findOneAndUpdate(
