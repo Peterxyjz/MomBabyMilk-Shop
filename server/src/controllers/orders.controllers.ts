@@ -122,7 +122,8 @@ export const uploadController = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
-    order
+    order,
+    point: user?.menber_ship
   })
 }
 
