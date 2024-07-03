@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LinkToGoogle from "../Google/LinkToGoogle";
 import { fetchLogin } from "../../../data/api.jsx";
+import { toast, Toaster } from "react-hot-toast";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -22,15 +23,17 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
-    
-    await  fetchLogin({
-        email,
-        password,
-      })
+
+    await fetchLogin({
+      email,
+      password,
+    })
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
-        alert(`${res.data.message}`);
+        toast.success(`${res.data.message}`, {
+          position: "top-right",
+        });
         navigate("/");
         window.location.reload();
       })
@@ -40,11 +43,15 @@ const LoginForm = () => {
           errorList.push(value);
           setErrorList(errorList);
         }
+        toast.error("Có lỗi xảy ra, vui lòng thử lại!", {
+          position: "top-right",
+        });
       });
   };
 
   return (
     <div className="w-full px-10 py-12 rounded-3xl border-solid border-2 border-[rgba(0,0,0,0.1)] shadow-2xl">
+      <Toaster />
       <h1 className="text-5xl font-semibold">Welcome Back</h1>
       <p className="font-medium text-lg text-gray-500 mt-4">
         Vui lòng điền thông tin của bạn!

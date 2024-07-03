@@ -39,10 +39,9 @@ class OrderServinces {
   }
 
   async getById(id: string) {
-    const filter = { product_id: id }
+    const filter = { _id: new ObjectId(id) }
     return await databaseService.orders.findOne(filter)
   }
-
   async delete(id: string) {
     const filter = { _id: new ObjectId(id) }
     await databaseService.orderDetails.deleteMany({ order_id: id })
@@ -93,6 +92,7 @@ class OrderServinces {
       })
       .toArray()
     orders.forEach(async (order) => {
+      const date = new Date()
       Promise.all([
         await databaseService.orders.updateOne(
           { _id: new ObjectId(order._id) },
@@ -104,7 +104,7 @@ class OrderServinces {
             _id: order._id,
             type: RevenueStatus.Order,
             total: Number(order.total_price),
-            completed_date: twelveHoursAgo
+            completed_date: date
           })
         )
       ])

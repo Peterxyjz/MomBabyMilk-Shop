@@ -1,22 +1,39 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { fetchGetFeedbackById } from "../../data/api";
 
 const ProductDetail = () => {
   const location = useLocation();
-  const product = location.state.product || null;
-  const { cartItems, addCartItem } = useCartContext(); // Thêm cartItems vào context
+  const product = location.state?.product || null;
+  const { cartItems, addCartItem } = useCartContext();
   const { addWishlistItem } = useWishlistContext();
+  const [reviews, setReviews] = useState([]);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
+  useEffect(() => {
+    if (product) {
+      console.log(product._id);
+      const getFeedback = async () => {
+        const data = await fetchGetFeedbackById(product._id);
+        setReviews(data.data.result);
+      };
+      getFeedback();
+    }
+  }, [product]);
+  console.log(reviews);
   if (!product) {
     return <div>Product not found</div>;
   }
 
   const handleAddToCart = (product) => {
-    const currentCart = cartItems.find((cartItem) => cartItem._id === product._id);
+    const currentCart = cartItems.find(
+      (cartItem) => cartItem._id === product._id
+    );
     if (currentCart && currentCart.quantity >= product.amount) {
       toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
         position: "top-right",
@@ -29,12 +46,10 @@ const ProductDetail = () => {
     }
   };
 
-  // Function to format description
   const formatDescription = (description) => {
     const parts = description.split("\n").filter((part) => part.trim() !== "");
     return parts.map((part, index) => {
       if (part.startsWith("*")) {
-        // Convert lists (assuming '*' is used for list items)
         const items = part.split("*").filter((item) => item.trim() !== "");
         return (
           <ul className="list-disc list-inside mb-4" key={index}>
@@ -44,7 +59,6 @@ const ProductDetail = () => {
           </ul>
         );
       } else {
-        // Regular paragraphs
         return (
           <p className="mb-4" key={index}>
             {part.trim()}
@@ -54,7 +68,6 @@ const ProductDetail = () => {
     });
   };
 
-  // Function to calculate the discounted price
   const getDiscountedPrice = (price, discount) => {
     return price - (price * discount) / 100;
   };
@@ -68,7 +81,7 @@ const ProductDetail = () => {
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto relative">
             <img
-              className={`w-full ${product.amount === 0 ? "grayscale" : ""}`}
+              className={`w-56 ${product.amount === 0 ? "grayscale" : ""}`} // Set width to 224 pixels (56 * 4)
               src={product.imgUrl}
               alt={product.product_name}
             />
@@ -186,9 +199,42 @@ const ProductDetail = () => {
         </div>
 
         <hr className="my-6 md:my-8 border-gray-200" />
+        <h2 className="text-3xl font-semibold mb-4">Mô tả sản phẩm</h2>
+        <div className="text-gray-500 text-lg text-justify">
+          {showFullDescription
+            ? formatDescription(product.description)
+            : formatDescription(product.description.slice(0, 100))}
+          <button
+            className="w-full text-center text-blue-600 hover:text-blue-800 visited:text-purple-600"
+            onClick={() => setShowFullDescription(!showFullDescription)}
+          >
+            <div className="flex items-center justify-center mt-2">
+              {showFullDescription ? `Thu gọn ` : `Xem thêm mô tả sản phẩm `}
+              {showFullDescription ? (
+                <FaAngleUp className="w-5 h-5 mx-2 my-2" />
+              ) : (
+                <FaAngleDown className="w-5 h-5 mx-2 my-2" />
+              )}
+            </div>
+          </button>
+        </div>
 
-        <div className="text-gray-500 text-lg">
-          {formatDescription(product.description)}
+        <div className="mt-8">
+          <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
+          {Array.isArray(reviews) && reviews.length > 0 ? (
+            reviews.map((review) => (
+              <div key={review._id} className="mb-4 border-b pb-4">
+                <p className="font-semibold">{review.user_id}</p>
+                <div className="flex items-center">
+                  <RenderRating rating={review.rating} />
+                  <p className="ml-2 text-sm text-gray-500">{review.rating}</p>
+                </div>
+                <p className="text-gray-700">{review.description}</p>
+              </div>
+            ))
+          ) : (
+            <p>Chưa có đánh giá nào</p>
+          )}
         </div>
       </div>
     </section>

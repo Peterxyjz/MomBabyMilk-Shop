@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { fetchProducts } from "../data/api.jsx";
+import { createContext, useState, useEffect, useContext } from "react";
+import { fetchProducts, fetchRefreshToken } from "../data/api.jsx";
 
 const ProductContext = createContext();
 
@@ -10,26 +10,32 @@ export const useProductContext = () => {
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const result = JSON.parse(localStorage.getItem("result")) || null;
   useEffect(() => {
     const getProducts = async () => {
       try {
+        if(result !== null){
+          await fetchRefreshToken(result).then((res) => {
+            localStorage.setItem("result", JSON.stringify(res.data.result));
+          }).catch(() => {
+            localStorage.removeItem("user");
+            localStorage.removeItem("result");
+            window.location.reload();
+          });
+        }
         const localProducts = localStorage.getItem("products");
         if (localProducts) {
           setProducts(JSON.parse(localProducts));
           setLoading(false);
           setTimeout(async () => {
-        
             const productData = await fetchProducts();
-          
+
             setProducts(productData);
             localStorage.setItem("products", JSON.stringify(productData));
           }, 1000);
         } else {
-      
-      
           const productData = await fetchProducts();
-       
+
           setProducts(productData);
           localStorage.setItem("products", JSON.stringify(productData));
           setLoading(false);
@@ -42,7 +48,6 @@ export const ProductProvider = ({ children }) => {
 
     getProducts();
   }, []);
-
   return (
     <ProductContext.Provider value={{ products, loading }}>
       {children}

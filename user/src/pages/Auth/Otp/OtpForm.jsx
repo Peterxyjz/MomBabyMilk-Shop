@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { fetchOtp } from "../../../data/api.jsx";
+import { toast } from "react-hot-toast";
 
 const OtpForm = () => {
   const location = useLocation();
@@ -29,8 +30,9 @@ const OtpForm = () => {
         navigateTo,
         result,
       });
-      alert(`${response.data.message}`);
+      toast.success(`${response.data.message}`);
     } catch (error) {
+      toast.error("Có lỗi xảy ra khi gửi lại mã.");
       console.error(error);
     }
   };
@@ -48,7 +50,7 @@ const OtpForm = () => {
       result,
     })
       .then((res) => {
-        alert(`${res.data.message}`);
+        toast.success(`${res.data.message}`);
         console.log(res.data);
         navigate(`${navigateTo}`, { state: { user_id, digit: otpValue, newAccount: true } });
         if (navigateTo !== "/reset-password") {
@@ -57,6 +59,7 @@ const OtpForm = () => {
         }
       })
       .catch((error) => {
+        toast.error("Có lỗi xảy ra khi xác nhận OTP.");
         console.log(error.response);
         const newErrorList = [];
         for (let [key, value] of Object.entries(error.response.data.errors)) {
@@ -96,7 +99,7 @@ const OtpForm = () => {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else {
-      alert("Xác minh thất bại. Bạn sẽ được chuyển về trang chủ.");
+      toast.error("Xác minh thất bại. Bạn sẽ được chuyển về trang chủ.");
       navigate("/");
     }
   }, [countdown, navigate]);

@@ -2,6 +2,26 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 
+//fetchUploadFeedback
+export const fetchUploadFeedback = async (feedback, token) => {
+  return await axios.post(
+    `${SCHEMA_HOSTNAME}/feedbacks/upload`,
+    { ...feedback },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
+//fetchRefreshToken
+export const fetchRefreshToken = async (token) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/users/refresh-token`, {
+   refresh_token: token.refresh_token
+  });
+};
+
 //fetchUploadVoucher
 export const fetchUploadVoucher = async (data, token) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/vouchers/upload`, { ...data }, {
@@ -347,6 +367,13 @@ export const fetchDeleteVoucher = async (voucherId, token) => {
     throw error;
   }
 }
+
+//feedback
+export const fetchAllFeedback = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/all-feedback`);
+
+};
+
 //API province, district, ward
 const baseUrl = "https://open.oapi.vn/location";
 class Http {

@@ -2,29 +2,46 @@ import axios from "axios";
 
 const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
+//fetchChangePassword
+export const fetchChangePassword = async (token, data) => {
+  return await axios.patch(
+    `${SCHEMA_HOSTNAME}/users/change-password`,
+    {
+      ...data,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
+
 //fetchRefreshToken
 export const fetchRefreshToken = async (token) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/users/refresh-token`, {
-   refresh_token: token.refresh_token
+    refresh_token: token.refresh_token,
   });
 };
-
 
 //fetchUpdateMe
-export const fetchUpdateMe = async (token,data) => {
-  return await axios.patch(`${SCHEMA_HOSTNAME}/users/me`,{
-    ...data
-  },{
-    headers: {
-      Authorization: `Bearer ${token.access_token}`,
+export const fetchUpdateMe = async (token, data) => {
+  return await axios.patch(
+    `${SCHEMA_HOSTNAME}/users/me`,
+    {
+      ...data,
     },
-  });
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
 };
-
 
 //fetchGetMe
 export const fetchGetMe = async (token) => {
-  return await axios.get(`${SCHEMA_HOSTNAME}/users/me`,{
+  return await axios.get(`${SCHEMA_HOSTNAME}/users/me`, {
     headers: {
       Authorization: `Bearer ${token.access_token}`,
     },
@@ -187,7 +204,9 @@ export const fetchCreateOrder = async (order_infor) => {
 
 export const fetchOrder = async (user_id) => {
   try {
-    const res = await axios.post(`${SCHEMA_HOSTNAME}/orders/get-orderforuser`, { user_id });
+    const res = await axios.post(`${SCHEMA_HOSTNAME}/orders/get-orderforuser`, {
+      user_id,
+    });
     return res.data.result;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -242,6 +261,11 @@ export const fetchUploadFeedback = async (feedback, token) => {
       },
     }
   );
+};
+//getFeedback by id:
+export const fetchGetFeedbackById = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/feedback/${id}`, {
+  });
 };
 
 //todo API province

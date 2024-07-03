@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchGetAllVoucher, fetchGetVoucher } from "../../data/api";
 import { Button } from "flowbite-react";
+import { ImGift } from "react-icons/im";
 
 const ShoppingCart = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
@@ -26,25 +27,23 @@ const ShoppingCart = () => {
   const [voucherList, setVoucherList] = useState([]);
 
   useEffect(() => {
-    const getAllVoucher = async () => {
-      await fetchGetAllVoucher()
-        .then((res) => {
-          setVoucherList(res.data.result);
-          console.log(res.data.result);
-        })
-        .catch((error) => {
-          let errorList = [];
-          for (let [key, value] of Object.entries(error.response.data.errors)) {
-            errorList.push(value);
-            setErrorList(errorList);
-          }
-        });
+    const getVouchers = async () => {
+      try {
+        const data = await fetchGetAllVoucher();
+        const currentDate = new Date();
+        const sortedVouchers = data.data.result
+          .filter((voucher) => voucher.voucher_type === 1)
+          .filter((voucher) => new Date(voucher.expire_date) > currentDate)
+          .filter((voucher) => voucher.membership <= user.menber_ship);
+        setVoucherList(sortedVouchers);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    getAllVoucher();
-  }, []);
+    getVouchers();
+  }, [user]);
 
   const handleRadioChange = (event) => {
-    console.log(event.target.value);
     const selectedValue = event.target.value;
     document.getElementById("voucherCode").value = selectedValue;
     setVoucherCode(selectedValue);
@@ -56,10 +55,8 @@ const ShoppingCart = () => {
 
   const handClickVoucher = async (event) => {
     event.preventDefault();
-    console.log(voucherCode);
     await fetchGetVoucher(voucherCode)
       .then((res) => {
-        console.log(res.data.discount);
         setDiscount(Number(res.data.discount));
       })
       .catch((error) => {
@@ -87,13 +84,14 @@ const ShoppingCart = () => {
     setShip(calculateShip(cartAmount));
   }, [cartAmount]);
 
-  const total = (totalPrice + ship - discount) > 0 ? totalPrice + ship - discount : 0;
+  const total =
+    totalPrice + ship - discount > 0 ? totalPrice + ship - discount : 0;
 
   return (
     <>
-      <ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
-        <li className="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280] dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
-          <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
+      <ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500  sm:text-base">
+        <li className="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280]  sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
+          <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/']  sm:after:hidden">
             <svg
               className="me-2 h-4 w-4 sm:h-5 sm:w-5"
               aria-hidden="true"
@@ -114,8 +112,8 @@ const ShoppingCart = () => {
             Giỏ Hàng
           </span>
         </li>
-        <li className="after:border-1 flex items-center after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280] dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
-          <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
+        <li className="after:border-1 flex items-center after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280]  sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
+          <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/'] sm:after:hidden">
             <svg
               className="me-2 h-4 w-4 sm:h-5 sm:w-5"
               aria-hidden="true"
@@ -136,8 +134,8 @@ const ShoppingCart = () => {
             Thông Tin
           </span>
         </li>
-        <li className="after:border-1 flex items-center after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280] dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
-          <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
+        <li className="after:border-1 flex items-center after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-[#6b7280]  sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
+          <span className="w-full flex items-center after:mx-2 after:text-gray-200 after:content-['/'] sm:after:hidden">
             <svg
               className="me-2 h-4 w-4 sm:h-5 sm:w-5"
               aria-hidden="true"
@@ -180,9 +178,9 @@ const ShoppingCart = () => {
         </li>
       </ol>
 
-      <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+      <section className="bg-white py-8 antialiased md:py-16">
         <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+          <h2 className="text-xl font-semibold text-gray-900  sm:text-2xl">
             Giỏ hàng{" "}
             {cartAmount > 0 ? (
               <span className="text-base">({cartAmount} sản phẩm)</span>
@@ -196,19 +194,25 @@ const ShoppingCart = () => {
                 <div className="space-y-6">
                   {cartItems.map((product) => (
                     // cart Item
-                    <div key={product._id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+                    <div
+                      key={product._id}
+                      className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6"
+                    >
                       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                        <img className="h-20 w-20 dark:hidden" src={product.imgUrl} />
-                        <img className="hidden h-20 w-20 dark:block" src={product.imgUrl} />
+                        <img className="h-20 w-20" src={product.imgUrl} />
+                        <img
+                          className="hidden h-20 w-20"
+                          src={product.imgUrl}
+                        />
                         <div className="flex items-center justify-between md:order-3 md:justify-end">
                           <div className="flex items-center">
                             <button
                               type="button"
                               onClick={() => decreaseAmount(product._id)}
-                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100"
                             >
                               <svg
-                                className="h-2.5 w-2.5 text-gray-900 dark:text-white"
+                                className="h-2.5 w-2.5 text-gray-900 "
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -225,17 +229,17 @@ const ShoppingCart = () => {
                             </button>
                             <input
                               type="text"
-                              className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
+                              className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 "
                               value={product.quantity}
                               readOnly
                             />
                             <button
                               type="button"
                               onClick={() => increaseAmount(product)}
-                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100"
                             >
                               <svg
-                                className="h-2.5 w-2.5 text-gray-900 dark:text-white"
+                                className="h-2.5 w-2.5 text-gray-900 "
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -252,8 +256,11 @@ const ShoppingCart = () => {
                             </button>
                           </div>
                           <div className="text-end md:order-4 md:w-32">
-                            <p className="text-base font-bold text-gray-900 dark:text-white">
-                              {Number(product.price - (product.price * product.discount) / 100).toLocaleString("vi-VN", {
+                            <p className="text-base font-bold text-gray-900 ">
+                              {Number(
+                                product.price -
+                                  (product.price * product.discount) / 100
+                              ).toLocaleString("vi-VN", {
                                 style: "currency",
                                 currency: "VND",
                               })}
@@ -263,14 +270,14 @@ const ShoppingCart = () => {
                         <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
                           <a
                             href="#"
-                            className="text-base font-medium text-gray-900 hover:underline dark:text-white"
+                            className="text-base font-medium text-gray-900 hover:underline "
                           >
                             {product.product_name}
                           </a>
                           <div className="flex items-center gap-4">
                             <button
                               type="button"
-                              className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white"
+                              className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline"
                             >
                               <svg
                                 className="me-1.5 h-5 w-5"
@@ -294,7 +301,7 @@ const ShoppingCart = () => {
                             <button
                               type="button"
                               onClick={() => removeCartItem(product._id)}
-                              className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
+                              className="inline-flex items-center text-sm font-medium text-red-600 hover:underline "
                             >
                               <MdDeleteForever className="me-1.5 h-5 w-5" />
                               Xóa Khỏi Giỏ Hàng
@@ -308,17 +315,17 @@ const ShoppingCart = () => {
               </div>
               {/* Order summary */}
               <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
-                <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
-                  <p className="text-xl font-semibold text-gray-900 dark:text-white">
+                <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+                  <p className="text-xl font-semibold text-gray-900 ">
                     Tóm Tắt Đơn Hàng
                   </p>
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                        <dt className="text-base font-normal text-gray-500 ">
                           Giá gốc
                         </dt>
-                        <dd className="text-base font-medium text-gray-900 dark:text-white">
+                        <dd className="text-base font-medium text-gray-900 ">
                           {Number(totalPrice).toLocaleString("vi-VN", {
                             style: "currency",
                             currency: "VND",
@@ -326,7 +333,7 @@ const ShoppingCart = () => {
                         </dd>
                       </dl>
                       <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                        <dt className="text-base font-normal text-gray-500 ">
                           Phí ship:
                         </dt>
                         <dd className="text-base font-medium text-green-600">
@@ -337,10 +344,10 @@ const ShoppingCart = () => {
                         </dd>
                       </dl>
                       <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                        <dt className="text-base font-normal text-gray-500 ">
                           Mã giảm giá
                         </dt>
-                        <dd className="text-base font-medium text-gray-900 dark:text-white">
+                        <dd className="text-base font-medium text-gray-900 ">
                           -
                           {Number(discount).toLocaleString("vi-VN", {
                             style: "currency",
@@ -349,11 +356,11 @@ const ShoppingCart = () => {
                         </dd>
                       </dl>
                     </div>
-                    <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
-                      <dt className="text-base font-bold text-gray-900 dark:text-white">
+                    <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2">
+                      <dt className="text-base font-bold text-gray-900 ">
                         Tổng Cộng
                       </dt>
-                      <dd className="text-base font-bold text-gray-900 dark:text-white">
+                      <dd className="text-base font-bold text-gray-900 ">
                         {Number(total).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
@@ -368,18 +375,18 @@ const ShoppingCart = () => {
                       ship: ship,
                       voucherCode: voucherCode,
                     }}
-                    className="flex w-full items-center justify-center rounded-lg bg-[#1d4ed8] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1e40af] focus:outline-none focus:ring-4 focus:ring-[#93c5fd] dark:bg-[#2563eb] dark:hover:bg-[#1d4ed8] dark:focus:ring-[#1e40af]"
+                    className="flex w-full items-center justify-center rounded-lg bg-[#1d4ed8] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1e40af] focus:outline-none focus:ring-4 focus:ring-[#93c5fd]"
                   >
                     Thanh Toán Ngay
                   </Link>
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    <span className="text-sm font-normal text-gray-500 ">
                       {" "}
                       Hoặc{" "}
                     </span>
                     <a
                       href="/filter"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline "
                     >
                       Tiếp Tục Mua Hàng
                       <svg
@@ -400,11 +407,11 @@ const ShoppingCart = () => {
                     </a>
                   </div>
                 </div>
-                <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
                   <form className="space-y-4" onSubmit={handClickVoucher}>
                     <label
                       htmlFor="voucher"
-                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                      className="mb-2 block text-sm font-medium text-gray-900"
                     >
                       Bạn có voucher hoặc thẻ quà tặng không?
                     </label>
@@ -416,7 +423,7 @@ const ShoppingCart = () => {
                           name="voucherCode"
                           value={voucherCode}
                           onChange={handChangeVoucherCode}
-                          className="block w-full h-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                          className="block w-full h-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 "
                           placeholder=""
                           required
                         />
@@ -433,47 +440,55 @@ const ShoppingCart = () => {
                           <button
                             id="dropdownRadioHelperButton"
                             data-dropdown-toggle="dropdownRadioHelper"
-                            className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 w-full inline-flex justify-center items-center"
+                            className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 w-full inline-flex justify-center items-center"
                             type="button"
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                           >
                             Kho Voucher
                           </button>
-
                           {/* Dropdown menu */}
                           {dropdownOpen && (
                             <div
                               id="dropdownRadioHelper"
-                              className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700 dark:divide-gray-600"
+                              className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full "
                             >
                               <ul
-                                className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                                className="p-3 space-y-1 text-sm text-gray-700 "
                                 aria-labelledby="dropdownRadioHelperButton"
                               >
                                 {voucherList.map((voucher) => (
                                   <li key={voucher._id}>
-                                    <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <div className="flex p-2 rounded hover:bg-gray-100 ">
                                       <div className="flex items-center h-5">
                                         <input
                                           id="helper-radio-4"
                                           name="helper-radio"
                                           type="radio"
                                           value={voucher._id}
-                                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
                                           onChange={handleRadioChange}
                                         />
                                       </div>
                                       <div className="ms-2 text-sm">
                                         <label
                                           htmlFor="helper-radio-4"
-                                          className="font-medium text-gray-900 dark:text-gray-300"
+                                          className="font-medium text-gray-900 "
                                         >
-                                          <div>Voucher giảm {voucher.discount}</div>
+                                          <div>
+                                            Voucher giảm{" "}
+                                            {Number(
+                                              voucher.discount
+                                            ).toLocaleString("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            })}
+                                          </div>
                                           <p
                                             id="helper-radio-text-4"
-                                            className="text-xs font-normal text-gray-500 dark:text-gray-300"
+                                            className="text-xs font-normal text-gray-500 "
                                           >
-                                            Voucher chỉ còn {voucher.amount} lượt
+                                            Voucher chỉ còn {voucher.amount}{" "}
+                                            lượt
                                           </p>
                                         </label>
                                       </div>
@@ -483,6 +498,15 @@ const ShoppingCart = () => {
                               </ul>
                             </div>
                           )}
+                          <div className="flex items-center justify-center my-2 gap-2">
+                            <a
+                              href="/profile/accumulated-points"
+                              className="inline-flex items-center gap-2 text-sm font-medium text-black underline hover:no-underline"
+                            >
+                              <ImGift className="h-5 w-5" /> Tìm hiểu thêm về
+                              quà tặng?
+                            </a>
+                          </div>
                         </div>
                       )}
                     </div>

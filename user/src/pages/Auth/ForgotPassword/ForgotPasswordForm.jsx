@@ -1,14 +1,15 @@
-
 import React, { useState } from "react";
-import axios from "axios";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchForgotPassword } from "../../../data/api.jsx";
+import { toast, Toaster } from "react-hot-toast";
+
 const ForgotPasswordForm = () => {
   const [formValues, setFormValues] = useState({
     email: "",
   });
   const [errorList, setErrorList] = useState([]);
   const navigate = useNavigate();
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues({
@@ -19,13 +20,14 @@ const ForgotPasswordForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const {email }  = formValues;
+    const { email } = formValues;
     await fetchForgotPassword({ email })
       .then((res) => {
         console.log(res.data);
-        alert(`${res.data.message}`);
+        toast.success(`${res.data.message}`, {
+          position: "top-right",
+        });
         navigate("/otp", { state: { navigateTo: "/reset-password", email, user_id: res.data.user_id } });
-
       })
       .catch((error) => {
         let errorList = [];
@@ -33,11 +35,15 @@ const ForgotPasswordForm = () => {
           errorList.push(value);
           setErrorList(errorList);
         }
+        toast.error("Có lỗi xảy ra, vui lòng thử lại!", {
+          position: "top-right",
+        });
       });
   };
 
   return (
     <div className="w-full px-10 py-12 rounded-3xl border-solid border-2 border-[rgba(0,0,0,0.1)] shadow-2xl">
+      <Toaster />
       <p className="font-medium text-2xl text-gray-500 mt-4">
         Vui lòng kiểm tra mail sau khi xác nhận!
       </p>
@@ -57,7 +63,7 @@ const ForgotPasswordForm = () => {
           <div className="mt-8 flex flex-col gap-y-4">
             <button
               type="submit"
-              className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform py-4 bg-violet-500 rounded-xl text-white font-bold text-lg"
+              className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 bg-violet-500 rounded-xl text-white font-bold text-lg"
             >
               Xác Nhận
             </button>
