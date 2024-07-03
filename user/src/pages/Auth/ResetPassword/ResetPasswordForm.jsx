@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchResetPassword } from "../../../data/api.jsx";
+import { toast } from "react-hot-toast";
 
 const ResetPasswordForm = () => {
   const location = useLocation();
@@ -14,7 +15,6 @@ const ResetPasswordForm = () => {
   });
   const [errorList, setErrorList] = useState([]);
 
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues({
@@ -26,12 +26,13 @@ const ResetPasswordForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { password, confirm_password } = formValues;
-    await  fetchResetPassword(user_id, digit, password, confirm_password)
+    await fetchResetPassword(user_id, digit, password, confirm_password)
       .then((res) => {
-        alert(`${res.data.message}`);
+        toast.success(`${res.data.message}`);
         navigate("/login");
       })
       .catch((error) => {
+        toast.error("Có lỗi xảy ra khi đặt lại mật khẩu.");
         let errorList = [];
         for (let [key, value] of Object.entries(error.response.data.errors)) {
           errorList.push(value);
@@ -51,7 +52,7 @@ const ResetPasswordForm = () => {
           <input
             className="w-full border-2 border-[rgba(0,0,0,0.2)] rounded-xl p-4 mt-1 bg-transparent"
             placeholder="Nhập mật khẩu..."
-            type={"password"}
+            type="password"
             id="password"
             name="password"
             value={formValues.password}
@@ -63,7 +64,7 @@ const ResetPasswordForm = () => {
           <input
             className="w-full border-2 border-[rgba(0,0,0,0.2)] rounded-xl p-4 mt-1 bg-transparent"
             placeholder="Nhập lại mật khẩu..."
-            type={"password"}
+            type="password"
             id="confirm_password"
             name="confirm_password"
             value={formValues.confirm_password}
