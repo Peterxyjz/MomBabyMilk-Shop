@@ -39,6 +39,7 @@ const Payment = () => {
     } else {
       console.log(totalPrice);
     }
+    
     const order_infor = {
       customer_infor: customer_infor,
       cart_list: cartItems,

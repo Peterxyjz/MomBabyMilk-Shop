@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   accessTokenValidator,
+  changePasswordValidator,
   checkEmailToken,
   checkPasswordToken,
   emailVerifyTokenValidator,
@@ -14,6 +15,7 @@ import {
 } from '~/middlewares/users.middlewares'
 import {
   addUserController,
+  changePasswordController,
   changeStatusUserController,
   emailVerifyController,
   forgotPasswordController,
@@ -79,6 +81,12 @@ body: {forgot_password_token: string, password: string, confirm_password: string
 */
 usersRouter.post('/reset-password', checkPasswordToken, resetPasswordValidator, wrapAsync(resetPasswordController))
 
+usersRouter.patch(
+  '/change-password',
+  accessTokenValidator,
+  changePasswordValidator,
+  wrapAsync(changePasswordController)
+)
 usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 
 usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
