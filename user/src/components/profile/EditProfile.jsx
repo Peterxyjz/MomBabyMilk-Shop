@@ -2,6 +2,7 @@ import { Datepicker } from "flowbite-react";
 import { useEffect, useState } from "react";
 import {
   fetchGetMe,
+  fetchRefreshToken,
   fetchUpdateMe,
   getDistricts,
   getProvinces,
@@ -31,29 +32,42 @@ const EditProfile = () => {
   const [wards, setWards] = useState([]);
   const [addressInput, setAddressInput] = useState("");
   const [dateInput, setDateInput] = useState(date);
+  const getMeProfile = async () => {
+    await fetchGetMe(token)
+      .then((res) => {
+        setProfile({
+          username: res.data.result.username || "",
+          name: res.data.result.full_name || "",
+          email: res.data.result.email || "",
+          phone: res.data.result.phone || "",
+          address: res.data.result.address || "",
+          point: res.data.result.menber_ship || 0,
+          date_of_birth: res.data.result.date_of_birth || null,
+        });
+        if (res.data.result.date_of_birth !== null) {
+          setDateInput(new Date(res.data.result.date_of_birth));
+        }
+      })
+      .catch(async (error) => {
+        if (error.response.status === 401) {
+          await fetchRefreshToken(token)
+            .then(async (res) => {
+              console.log("set lai ne");
+              localStorage.setItem("result", JSON.stringify(res.data.result));
+
+              await getMeProfile();
+            })
+            .catch((error) => {
+              if (error.response.status === 401) {
+                localStorage.removeItem("user");
+                localStorage.removeItem("result");
+              }
+            });
+        }
+      });
+  };
 
   useEffect(() => {
-    const getMeProfile = async () => {
-      await fetchGetMe(token)
-        .then((res) => {
-          setProfile({
-            username: res.data.result.username || "",
-            name: res.data.result.full_name || "",
-            email: res.data.result.email || "",
-            phone: res.data.result.phone || "",
-            address: res.data.result.address || "",
-            point: res.data.result.menber_ship || 0,
-            date_of_birth: res.data.result.date_of_birth || null,
-          });
-          if (res.data.result.date_of_birth !== null) {
-            setDateInput(new Date(res.data.result.date_of_birth));
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
     getMeProfile();
   }, []);
 
@@ -161,9 +175,7 @@ const EditProfile = () => {
         monthDifference === 0 &&
         today.getDate() < date_input.getDate())
     ) {
-      toast.error("Tuổi không hợp lệ", {
-        position: "top-center",
-      });
+      setErrorList(["Tuổi không hợp lệ"]);
       return;
     }
 
@@ -179,8 +191,8 @@ const EditProfile = () => {
         toast.success("Cập nhật thành công", {
           position: "top-center",
         });
-        setIsEditing(true);
-        window.location.reload();
+        setIsEditing(false);
+        getMeProfile();
       })
       .catch((error) => {
         console.log(error);

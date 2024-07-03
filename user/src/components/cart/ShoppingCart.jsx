@@ -64,6 +64,8 @@ const ShoppingCart = () => {
       })
       .catch((error) => {
         let errorList = [];
+        setDiscount(0);
+        setVoucherCode("");
         for (let [key, value] of Object.entries(error.response.data.errors)) {
           errorList.push(value);
           setErrorList(errorList);
@@ -85,7 +87,7 @@ const ShoppingCart = () => {
     setShip(calculateShip(cartAmount));
   }, [cartAmount]);
 
-  const total = totalPrice + ship - discount;
+  const total = (totalPrice + ship - discount) > 0 ? totalPrice + ship - discount : 0;
 
   return (
     <>

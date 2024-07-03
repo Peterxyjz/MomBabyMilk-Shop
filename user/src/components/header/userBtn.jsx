@@ -3,7 +3,7 @@ import { HiCog, HiViewGrid, HiLogout } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
 import { fetchLogout } from "../../data/api.jsx";
 import { Link, useNavigate } from "react-router-dom";
-
+import { FaHistory } from "react-icons/fa";
 const UserBtn = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const verify = user?.verify;
@@ -56,6 +56,9 @@ const UserBtn = () => {
           </Dropdown.Header>
           <Dropdown.Item icon={HiViewGrid} className="w-48" href="/profile">
             Chỉnh Sửa
+          </Dropdown.Item>
+          <Dropdown.Item icon={FaHistory} className="w-48" href="/profile/history-order">
+            Lịch Sử Đơn Hàng
           </Dropdown.Item>
           <Dropdown.Item icon={HiCog} className="w-48" href="/profile/accumulated-points">
             Tích Điểm

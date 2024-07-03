@@ -36,7 +36,7 @@ export const USERS_MESSAGES = {
   FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Mã token để quên mật khẩu là bắt buộc',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Mã token để quên mật khẩu không hợp lệ',
   VERIFY_FORGOT_PASSWORD_TOKEN_SUCCESS: 'Xác minh mã token để quên mật khẩu thành công',
-
+  REFRESH_TOKEN_SUCCESS: 'REFRESH_TOKEN_SUCCESS',
   //Reset-password
   RESET_PASSWORD_SUCCESS: 'Đặt lại mật khẩu thành công',
 
@@ -71,8 +71,10 @@ export const USERS_MESSAGES = {
   GET_ME_SUCCESS: 'Lấy thông tin thành công',
   PHONE_IS_REQUIRED: 'Số điện thoại là bắt buộc',
   ADDRESS_IS_REQUIRED: 'Đị̣a chỉ là bắt buộc',
+  FEEDBACK_NOT_FOUND: 'FEEDBACK_NOT_FOUND',
+  PERMISSION_DENIED: 'PERMISSION_DENIED',
+  NEWS_NOT_FOUND:'NEWS_NOT_FOUND'
 } as const
-
 
 export const PRODUCTS_MESSAGES = {
   PRODUCT_HAS_BEEN_EXISTED: 'Sản phẩm đã tồn tại',

@@ -27,18 +27,26 @@ class VoucherServices {
         status: HTTP_STATUS.UNPROCESSABLE_ENTITY
       })
     }
+    if (voucher.amount === 0) {
+      throw new ErrorWithStatus({
+        message: 'Voucher đã hết lượt sử dụng',
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    if (new Date(voucher.expire_date) <= new Date()) {
+      throw new ErrorWithStatus({
+        message: 'Voucher đã hết hạn sử dụng',
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
 
     return voucher
   }
   async decreaseAmount(id: string) {
     const vouchcer = await this.getById(id)
 
-    if ((vouchcer.amount as number) < 1) {
-      throw new ErrorWithStatus({
-        message: 'Voucer hết lượt sử dụng',
-        status: HTTP_STATUS.UNPROCESSABLE_ENTITY
-      })
-    }
+   
     return await databaseService.vouchers.updateOne(
       { _id: new ObjectId(id) },
       { $set: { amount: (vouchcer.amount as number) - 1 } }
