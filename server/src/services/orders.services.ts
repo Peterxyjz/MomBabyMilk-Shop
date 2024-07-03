@@ -39,10 +39,9 @@ class OrderServinces {
   }
 
   async getById(id: string) {
-    const filter = { product_id: id }
+    const filter = { _id: new ObjectId(id) }
     return await databaseService.orders.findOne(filter)
   }
-
   async delete(id: string) {
     const filter = { _id: new ObjectId(id) }
     await databaseService.orderDetails.deleteMany({ order_id: id })
@@ -99,7 +98,7 @@ class OrderServinces {
           { _id: new ObjectId(order._id) },
           { $set: { status: OrderStatus.Completed, shipped_date: new Date() } }
         ),
-        
+
         await revenueServices.upload(
           new Revenue({
             _id: order._id,
