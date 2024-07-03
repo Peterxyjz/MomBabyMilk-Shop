@@ -1,37 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import { BsBoxSeam, BsCurrencyDollar } from 'react-icons/bs';
-import { GoPrimitiveDot } from 'react-icons/go';
-import { IoIosMore } from 'react-icons/io';
-import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import React, { useEffect, useState } from "react";
+import { BsBoxSeam, BsCurrencyDollar } from "react-icons/bs";
+import { GoPrimitiveDot } from "react-icons/go";
+import { IoIosMore } from "react-icons/io";
+import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 
-import { Stacked, Pie, Button, LineChart, SparkLine } from '../components';
-import { medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
-import { useStateContext } from '../contexts/ContextProvider';
-import product9 from '../data/product9.jpg';
-import { fetchAllUsers, fetchCategories, fetchProducts, fetchRevenue } from '../data/api';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
-import { FiBarChart } from 'react-icons/fi';
-import { HiOutlineRefresh } from 'react-icons/hi';
-import { Col, Row } from 'antd';
-import { Bar } from 'react-chartjs-2';
-import 'chart.js/auto';
-import RevenueMixCost from '../components/Dashboard/RevenueMixCost';
-import MonthlyProfit from '../components/Dashboard/MonthlyProfit';
-import BestCategory from '../components/Dashboard/BestCategory';
-import ProductStock from '../components/Dashboard/ProductStock';
-import MonthlyOrder from '../components/Dashboard/MonthlyOrder';
-
+import { Stacked, Pie, Button, LineChart, SparkLine } from "../components";
+import {
+  medicalproBranding,
+  recentTransactions,
+  weeklyStats,
+  dropdownData,
+  SparklineAreaData,
+  ecomPieChartData,
+} from "../data/dummy";
+import { useStateContext } from "../contexts/ContextProvider";
+import product9 from "../data/product9.jpg";
+import {
+  fetchAllUsers,
+  fetchCategories,
+  fetchProducts,
+  fetchRefreshToken,
+  fetchRevenue,
+} from "../data/api";
+import { MdOutlineSupervisorAccount } from "react-icons/md";
+import { FiBarChart } from "react-icons/fi";
+import { HiOutlineRefresh } from "react-icons/hi";
+import { Col, Row } from "antd";
+import { Bar } from "react-chartjs-2";
+import "chart.js/auto";
+import RevenueMixCost from "../components/Dashboard/RevenueMixCost";
+import MonthlyProfit from "../components/Dashboard/MonthlyProfit";
+import BestCategory from "../components/Dashboard/BestCategory";
+import ProductStock from "../components/Dashboard/ProductStock";
+import MonthlyOrder from "../components/Dashboard/MonthlyOrder";
 
 const DropDown = ({ currentMode, onSelect }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
     <DropDownListComponent
       id="time"
-      fields={{ text: 'option', value: 'Id' }}
-      style={{ border: 'none', color: currentMode === 'Dark' ? 'white' : 'black' }}
+      fields={{ text: "option", value: "Id" }}
+      style={{
+        border: "none",
+        color: currentMode === "Dark" ? "white" : "black",
+      }}
       value="1"
       dataSource={[
-        { Id: '1', option: 'Sắp hết' },
-        { Id: '2', option: 'Nhiều nhất' },
+        { Id: "1", option: "Sắp hết" },
+        { Id: "2", option: "Nhiều nhất" },
       ]}
       popupHeight="220px"
       popupWidth="120px"
@@ -54,10 +69,28 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const [totalProduct, setTotalProduct] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
   const [categories, setCategories] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('Sắp hết');
-
-
-
+  const [selectedOption, setSelectedOption] = useState("Sắp hết");
+  const result = JSON.parse(localStorage.getItem("result")) || null;
+  useEffect(() => {
+    const checkToken = async () => {
+      if (result !== null) {
+        console.log("result: ", result);
+        await fetchRefreshToken(result)
+          .then((res) => {
+            localStorage.setItem("result", JSON.stringify(res.data.result));
+          })
+          .catch((error) => {
+            console.log("Error refreshing token:", error);
+            localStorage.removeItem("user");
+            localStorage.removeItem("result");
+            localStorage.removeItem("isAuthenticatedStaff");
+            window.location.reload();
+           
+          });
+      }
+    };
+    checkToken();
+  },[])
   useEffect(() => {
     const getRevenue = async () => {
       try {
@@ -158,7 +191,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     setTotalSales(total);
   };
 
-
   const earningData = [
     {
       icon: <BsCurrencyDollar />,
@@ -167,52 +199,50 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
         currency: "VND",
       }).format(totalRevenue),
       // percentage: '-4%',
-      title: 'Tổng doanh thu',
-      iconColor: 'rgb(0, 194, 146)',
-      iconBg: 'rgb(235, 250, 242)',
-      pcColor: 'green-600',
+      title: "Tổng doanh thu",
+      iconColor: "rgb(0, 194, 146)",
+      iconBg: "rgb(235, 250, 242)",
+      pcColor: "green-600",
     },
     {
       icon: <BsCurrencyDollar />,
-      amount:
-        new Intl.NumberFormat("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        }).format(totalProfit)
-      ,
+      amount: new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(totalProfit),
       // percentage: '-4%',
-      title: 'Tổng lợi nhuận',
-      iconColor: '#03C9D7',
-      iconBg: '#E5FAFB',
-      pcColor: 'red-600',
+      title: "Tổng lợi nhuận",
+      iconColor: "#03C9D7",
+      iconBg: "#E5FAFB",
+      pcColor: "red-600",
     },
     {
       icon: <MdOutlineSupervisorAccount />,
       amount: totalCustomer,
       // percentage: '-4%',
-      title: 'Tổng khách hàng',
-      iconColor: '#03C9D7',
-      iconBg: '#E5FAFB',
-      pcColor: 'red-600',
+      title: "Tổng khách hàng",
+      iconColor: "#03C9D7",
+      iconBg: "#E5FAFB",
+      pcColor: "red-600",
     },
     {
       icon: <BsBoxSeam />,
       amount: totalProduct,
       // percentage: '+23%',
-      title: 'Tổng sản phẩm',
-      iconColor: 'rgb(255, 244, 229)',
-      iconBg: 'rgb(254, 201, 15)',
-      pcColor: 'green-600',
+      title: "Tổng sản phẩm",
+      iconColor: "rgb(255, 244, 229)",
+      iconBg: "rgb(254, 201, 15)",
+      pcColor: "green-600",
     },
     {
       icon: <FiBarChart />,
       amount: totalSales,
       // percentage: '+38%',
-      title: 'Tổng lượt bán',
-      iconColor: 'rgb(228, 106, 118)',
-      iconBg: 'rgb(255, 244, 229)',
+      title: "Tổng lượt bán",
+      iconColor: "rgb(228, 106, 118)",
+      iconBg: "rgb(255, 244, 229)",
 
-      pcColor: 'green-600',
+      pcColor: "green-600",
     },
   ];
 
@@ -231,13 +261,18 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                   <div className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 p-4 pt-9 rounded-2xl">
                     <button
                       type="button"
-                      style={{ color: item.iconColor, backgroundColor: item.iconBg }}
+                      style={{
+                        color: item.iconColor,
+                        backgroundColor: item.iconBg,
+                      }}
                       className="text-2xl opacity-0.9 rounded-full p-4 hover:drop-shadow-xl"
                     >
                       {item.icon}
                     </button>
                     <p className="mt-3">
-                      <span className="text-lg font-semibold">{item.amount}</span>
+                      <span className="text-lg font-semibold">
+                        {item.amount}
+                      </span>
                       <span className={`text-sm text-${item.pcColor} ml-2`}>
                         {item.percentage}
                       </span>
@@ -253,7 +288,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
           <div className="flex gap-10 flex-wrap justify-center">
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">
               <div className="flex justify-between">
-                <p className="font-semibold text-xl">Bảng tương quan giữa doanh thu và vốn</p>
+                <p className="font-semibold text-xl">
+                  Bảng tương quan giữa doanh thu và vốn
+                </p>
                 {/* <div className="flex items-center gap-4">
                   <p className="flex items-center gap-2 text-gray-600 hover:drop-shadow-xl">
                     <span>
@@ -312,7 +349,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 style={{ backgroundColor: currentColor }}
               >
                 <div className="flex justify-between items-center ">
-                  <p className="font-semibold text-white text-xl">Lợi nhuận theo tháng</p>
+                  <p className="font-semibold text-white text-xl">
+                    Lợi nhuận theo tháng
+                  </p>
 
                   {/* <div>
                     <p className="text-xl text-white font-semibold mt-8">$63,448.78</p>
@@ -327,7 +366,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
 
               <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl md:w-400 p-8 m-3 flex justify-center items-center gap-10">
                 <div>
-                  <p className="text-xl font-semibold ">Thống kê phân loại sữa theo lượt mua</p>
+                  <p className="text-xl font-semibold ">
+                    Thống kê phân loại sữa theo lượt mua
+                  </p>
                 </div>
 
                 <div className="w-40">
@@ -342,7 +383,10 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl">
               <div className="flex justify-between items-center gap-2">
                 <p className="text-xl font-semibold">Số lượng hàng tồn kho</p>
-                <DropDown currentMode={currentMode} onSelect={setSelectedOption} />
+                <DropDown
+                  currentMode={currentMode}
+                  onSelect={setSelectedOption}
+                />
               </div>
               <div className="mt-2 w-72 md:w-400">
                 {/* {recentTransactions.map((item) => (
@@ -383,7 +427,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             </div>
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
               <div className="flex justify-between items-center gap-2 mb-10">
-                <p className="text-xl font-semibold">Thống kê trạng thái đơn hàng theo tháng</p>
+                <p className="text-xl font-semibold">
+                  Thống kê trạng thái đơn hàng theo tháng
+                </p>
               </div>
               <div className="md:w-full overflow-auto">
                 <MonthlyOrder />
@@ -394,15 +440,23 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
           <div className="flex flex-wrap justify-center">
             <div className="md:w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
               <div className="flex justify-between">
-                <p className="text-xl font-semibold">Khách hàng có điểm tích lũy cao nhất</p>
-                <button type="button" className="text-xl font-semibold text-gray-500">
+                <p className="text-xl font-semibold">
+                  Khách hàng có điểm tích lũy cao nhất
+                </p>
+                <button
+                  type="button"
+                  className="text-xl font-semibold text-gray-500"
+                >
                   <IoIosMore />
                 </button>
               </div>
 
               <div className="mt-10 ">
                 {weeklyStats.map((item) => (
-                  <div key={item.title} className="flex justify-between mt-4 w-full">
+                  <div
+                    key={item.title}
+                    className="flex justify-between mt-4 w-full"
+                  >
                     <div className="flex gap-4">
                       <button
                         type="button"
@@ -421,15 +475,25 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                   </div>
                 ))}
                 <div className="mt-4">
-                  <SparkLine currentColor={currentColor} id="area-sparkLine" height="160px" type="Area" data={SparklineAreaData} width="320" color="rgb(242, 252, 253)" />
+                  <SparkLine
+                    currentColor={currentColor}
+                    id="area-sparkLine"
+                    height="160px"
+                    type="Area"
+                    data={SparklineAreaData}
+                    width="320"
+                    color="rgb(242, 252, 253)"
+                  />
                 </div>
               </div>
-
             </div>
             <div className="w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
               <div className="flex justify-between">
                 <p className="text-xl font-semibold">Thống kê voucher</p>
-                <button type="button" className="text-xl font-semibold text-gray-400">
+                <button
+                  type="button"
+                  className="text-xl font-semibold text-gray-400"
+                >
                   <IoIosMore />
                 </button>
               </div>
@@ -439,7 +503,10 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
 
               <div className="flex gap-4 border-b-1 border-color mt-6">
                 {medicalproBranding.data.map((item) => (
-                  <div key={item.title} className="border-r-1 border-color pr-4 pb-2">
+                  <div
+                    key={item.title}
+                    className="border-r-1 border-color pr-4 pb-2"
+                  >
                     <p className="text-xs text-gray-400">{item.title}</p>
                     <p className="text-sm">{item.desc}</p>
                   </div>
@@ -464,7 +531,12 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 <p className="text-md font-semibold mb-2">Leaders</p>
                 <div className="flex gap-4">
                   {medicalproBranding.leaders.map((item, index) => (
-                    <img key={index} className="rounded-full w-8 h-8" src={item.image} alt="" />
+                    <img
+                      key={index}
+                      className="rounded-full w-8 h-8"
+                      src={item.image}
+                      alt=""
+                    />
                   ))}
                 </div>
               </div>
@@ -484,22 +556,21 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             <div className="w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
               <div className="flex justify-between">
                 <p className="text-xl font-semibold">Daily Activities</p>
-                <button type="button" className="text-xl font-semibold text-gray-500">
+                <button
+                  type="button"
+                  className="text-xl font-semibold text-gray-500"
+                >
                   <IoIosMore />
                 </button>
               </div>
               <div className="mt-10">
-                <img
-                  className="md:w-96 h-50 "
-                  src={product9}
-                  alt=""
-                />
+                <img className="md:w-96 h-50 " src={product9} alt="" />
                 <div className="mt-8">
                   <p className="font-semibold text-lg">React 18 coming soon!</p>
                   <p className="text-gray-400 ">By Johnathan Doe</p>
                   <p className="mt-8 text-sm text-gray-400">
-                    This will be the small description for the news you have shown
-                    here. There could be some great info.
+                    This will be the small description for the news you have
+                    shown here. There could be some great info.
                   </p>
                   <div className="mt-3">
                     <Button
@@ -517,11 +588,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       )}
 
       {isAuthenticatedStaff && (
-        <div className="w-full">
-          Dashboard cho staff
-        </div>
+        <div className="w-full">Dashboard cho staff</div>
       )}
-
     </div>
   );
 };

@@ -93,18 +93,19 @@ class OrderServinces {
       })
       .toArray()
     orders.forEach(async (order) => {
+      const date = new Date()
       Promise.all([
         await databaseService.orders.updateOne(
           { _id: new ObjectId(order._id) },
           { $set: { status: OrderStatus.Completed, shipped_date: new Date() } }
         ),
-
+        
         await revenueServices.upload(
           new Revenue({
             _id: order._id,
             type: RevenueStatus.Order,
             total: Number(order.total_price),
-            completed_date: twelveHoursAgo
+            completed_date: date
           })
         )
       ])
