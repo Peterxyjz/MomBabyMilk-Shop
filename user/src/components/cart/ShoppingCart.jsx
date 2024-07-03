@@ -34,14 +34,14 @@ const ShoppingCart = () => {
         const sortedVouchers = data.data.result
           .filter((voucher) => voucher.voucher_type === 1)
           .filter((voucher) => new Date(voucher.expire_date) > currentDate)
-          .filter((voucher) => voucher.membership <= user.menber_ship)
+          .filter((voucher) => voucher.membership <= user.menber_ship);
         setVoucherList(sortedVouchers);
       } catch (error) {
         console.log(error);
       }
     };
     getVouchers();
-  }, []);
+  }, [user]);
 
   const handleRadioChange = (event) => {
     const selectedValue = event.target.value;
@@ -475,7 +475,13 @@ const ShoppingCart = () => {
                                           className="font-medium text-gray-900 "
                                         >
                                           <div>
-                                            Voucher giảm {voucher.discount}
+                                            Voucher giảm{" "}
+                                            {Number(
+                                              voucher.discount
+                                            ).toLocaleString("vi-VN", {
+                                              style: "currency",
+                                              currency: "VND",
+                                            })}
                                           </div>
                                           <p
                                             id="helper-radio-text-4"
@@ -492,7 +498,7 @@ const ShoppingCart = () => {
                               </ul>
                             </div>
                           )}
-                                                    <div className="flex items-center justify-center my-2 gap-2">
+                          <div className="flex items-center justify-center my-2 gap-2">
                             <a
                               href="/profile/accumulated-points"
                               className="inline-flex items-center gap-2 text-sm font-medium text-black underline hover:no-underline"

@@ -52,6 +52,8 @@ const Payment = () => {
     };
     await fetchCreateOrder(order_infor)
       .then((res) => {
+        const membership = res.data.point;
+        console.log(membership);
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
           const price = totalPrice + ship - discount;
@@ -66,8 +68,13 @@ const Payment = () => {
               clearInterval(checkPaymetSucc);
               ischeck = true;
               clearCart();
+              toast.success("Thanh Toán Thành Công");
+              if(membership !== undefined) {
+                user.menber_ship = membership;
+                localStorage.setItem("user", JSON.stringify(user));
+              }
               navigate("/thanks", {
-                state: { order_infor: order_infor, isCheck: true },
+                state: { order_id: content, isCheck: true  },
               });
             }
           }, 1000);
@@ -78,7 +85,6 @@ const Payment = () => {
               deleteOrder(content);
               navigate("/thanks", {
                 state: {
-                  order_infor: order_infor,
                   isCheck: false,
                   order_id: content,
                 },
@@ -87,9 +93,13 @@ const Payment = () => {
           }, callTime);
         } else {
           clearCart();
+          toast.success("Đặt Hàng Thành Công");
+          if(membership !== undefined) {
+            user.menber_ship = membership;
+            localStorage.setItem("user", JSON.stringify(user));
+          }
           navigate("/thanks", {
             state: {
-              order_infor: order_infor,
               isCheck: true,
               order_id: content,
             },
@@ -97,7 +107,6 @@ const Payment = () => {
         }
       })
       .catch((err) => {
-        
         console.log(err);
       });
   };

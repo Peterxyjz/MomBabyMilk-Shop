@@ -1,5 +1,5 @@
-import { Button, Card, Rate, Table, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Card, Rate, Table, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { fetchAllFeedback, fetchAllUsers, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
 
@@ -8,64 +8,42 @@ const AllFeedback = () => {
     const [feedback, setFeedback] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedRecord, setSelectedRecord] = useState(null);
-    const [response, setResponse] = useState('');
     const [selectedFeedback, setSelectedFeedback] = useState(null);
+    const [response, setResponse] = useState('');
     const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-    const [Users, setUsers] = useState([]);
-
+    const [users, setUsers] = useState([]);
 
     const handleExpand = (expanded, record) => {
         setExpandedRowKeys(expanded ? [record._id] : []); // Expand only the selected row
     };
+
     useEffect(() => {
-        const getProducts = async () => {
+        const fetchData = async () => {
             try {
-                const productData = await fetchProducts();
+                const [productData, feedbackData, usersData] = await Promise.all([
+                    fetchProducts(),
+                    fetchAllFeedback(),
+                    fetchAllUsers(JSON.parse(localStorage.getItem("result")))
+                ]);
+
                 setProducts(productData);
-
+                setFeedback(feedbackData.data.result);
+                setUsers(usersData.data.users);
                 setLoading(false);
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("Error fetching data:", error);
                 setLoading(false);
             }
         };
 
-        getProducts();
-
-        const getFeedback = async () => {
-            try {
-                const feedback = await fetchAllFeedback();
-
-                setFeedback(feedback.data.result);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching feedbacks:", error);
-                setLoading(false);
-            }
-        };
-
-        getFeedback();
-
-        const getCustomer = async () => {
-            try {
-                const result = JSON.parse(localStorage.getItem("result"))
-                const res = await fetchAllUsers(result);
-                setUsers(res.data.users);
-                console.log(res.data.users);
-            } catch (error) {
-                console.error("Error fetching user:", error);
-            }
-        };
-        getCustomer();
+        fetchData();
     }, []);
 
-    //lay product + feedback
     useEffect(() => {
-        if (products.length > 0 && feedback.length > 0 && Users.length > 0) {
+        if (products.length > 0 && feedback.length > 0 && users.length > 0) {
             const mergedProducts = products.map(product => {
                 const productFeedback = feedback.filter(item => item.product_id === product._id).map(fb => {
-                    const user = Users.find(user => user._id === fb.user_id);
+                    const user = users.find(user => user._id === fb.user_id);
                     if (!user) {
                         console.warn(`No user found for user_id: ${fb.user_id}`);
                     }
@@ -77,10 +55,9 @@ const AllFeedback = () => {
                 };
             });
 
-            console.log("Merged Products: ", mergedProducts);
             setProducts(mergedProducts);
         }
-    }, [products, feedback, Users]);
+    }, [feedback, users]);
 
 
     if (loading) {
