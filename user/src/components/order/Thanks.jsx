@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import successImg from "../../assets/images/background/order-success-poster.png";
 import { IoMdCloseCircleOutline } from "react-icons/io";
