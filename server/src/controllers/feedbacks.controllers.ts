@@ -1,4 +1,6 @@
+import { log } from 'console'
 import { NextFunction, Request, Response } from 'express'
+import { forEach } from 'lodash'
 import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
@@ -86,8 +88,15 @@ export const updateFeedBackController = async (req: Request, res: Response) => {
 }
 
 export const getFeebBackController = async (req: Request, res: Response) => {
+  let username = null
   const id = req.params.id
-  const result = await databaseService.feedbacks.find({ product_id: id }).toArray()
+  const feedback = await databaseService.feedbacks.find({ product_id: id }).toArray()
+  forEach(feedback, async (item) => {
+    if (item.reply_id === null) {
+      username = await databaseService.users.findOne({ _id: new ObjectId(item.user_id) })
+    }
+  })
+  const result = { feedback: feedback, username: username }
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     result: result
