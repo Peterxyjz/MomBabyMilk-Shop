@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { Button, Modal } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa6";
@@ -127,7 +127,7 @@ const OrderDetail = () => {
               <p className="text-md">Ngày đặt: {formatDate(order.order.required_date)}</p>
               {order.order.status === 2 && (
                 <p className="text-md">
-                  Ngày ship (dự kiến): {formatDate(order.order.shipped_date)}
+                  Ngày ship: {formatDate(order.order.shipped_date)}
                 </p>
               )}
               <p className="text-md">
@@ -139,7 +139,7 @@ const OrderDetail = () => {
               <p className="text-md">
                 Tổng giá trị sản phẩm: {Number(order.order.total_price).toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
               </p>
-              {order.order.member_id && (
+              {order.order.member_id && order.order.status === 2 && (
                 <p className="text-md">
                   Số điểm tích lũy: {Number(order.order.total_price * 0.1).toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
                 </p>
@@ -153,9 +153,11 @@ const OrderDetail = () => {
                 <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-center">
                   <div className="flex flex-col">
                     <div className="flex items-center justify-between">
-                      <a href="#" className="text-base font-medium text-gray-900 hover:underline dark:text-white">
+                      <Link to={"/product"} 
+                        state={{ product: item.product }}
+                        className="text-base font-medium text-gray-900 hover:underline dark:text-white">
                         {item.product.product_name}
-                      </a>
+                      </Link>
                       <input type="text" className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white" value={`x${item.amount}`} readOnly />
                     </div>
                     <p className="text-base font-bold text-gray-900 dark:text-white mt-2">

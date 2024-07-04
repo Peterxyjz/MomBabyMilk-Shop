@@ -224,6 +224,10 @@ export const fetchProducts = async () => {
     throw error;
   }
 };
+//getOrderbyId
+export const fetchGetOrderById = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/orders/get-order/${id}`);
+}
 
 //categori
 
