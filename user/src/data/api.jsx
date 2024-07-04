@@ -268,7 +268,7 @@ export const fetchUploadFeedback = async (feedback, token) => {
 };
 //getFeedback by id:
 export const fetchGetFeedbackById = async (id) => {
-  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/feedback/${id}`, {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/product/${id}`, {
   });
 };
 
