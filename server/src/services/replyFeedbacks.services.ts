@@ -5,14 +5,15 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from './database.services'
 import News from '~/model/schemas/News.schema'
 import FeedBack from '~/model/schemas/Feeback.schema'
+import ReplyFeedBack from '~/model/schemas/ReplyFeeback.schema'
 
 config()
 
-class FeedBackService {
-  async upload(feeback: FeedBack) {
-    const result = await databaseService.feedbacks.insertOne(feeback)
+class ReplyFeedBackService {
+  async upload(feeback: ReplyFeedBack) {
+    const result = await databaseService.replyFeebacks.insertOne(feeback)
     return result
   }
 }
-const feedBackService = new FeedBackService()
-export default feedBackService
+const replyFeedBackService = new ReplyFeedBackService()
+export default replyFeedBackService
