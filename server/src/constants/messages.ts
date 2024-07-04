@@ -72,10 +72,10 @@ export const USERS_MESSAGES = {
   GET_ME_SUCCESS: 'Lấy thông tin thành công',
   PHONE_IS_REQUIRED: 'Số điện thoại là bắt buộc',
   ADDRESS_IS_REQUIRED: 'Đị̣a chỉ là bắt buộc',
-  FEEDBACK_NOT_FOUND: "Không Tìm Thấy Phản Hồi",
-  PERMISSION_DENIED: "Từ Chối Quyền Truy Cập",
-  NEWS_NOT_FOUND: "Không Tìm Thấy Tin Tức",
-  FEEDBACK_IS_HAS_BEEN_REPLYED: "Phản Hồi Đã Được Trả Lời"
+  FEEDBACK_NOT_FOUND: 'Không Tìm Thấy Phản Hồi',
+  PERMISSION_DENIED: 'Từ Chối Quyền Truy Cập',
+  NEWS_NOT_FOUND: 'Không Tìm Thấy Tin Tức',
+  FEEDBACK_IS_HAS_BEEN_REPLYED: 'Phản Hồi Đã Được Trả Lời'
 } as const
 
 export const PRODUCTS_MESSAGES = {

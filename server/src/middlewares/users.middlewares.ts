@@ -462,7 +462,7 @@ export const changePasswordValidator = validate(
   checkSchema(
     {
       password: passwordSchema,
-      confirm_password: confirmPasswordSchema,
+      confirm_password: confirmPasswordSchema
     },
     ['body']
   )

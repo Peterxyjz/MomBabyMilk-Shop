@@ -2,7 +2,7 @@ import { Router } from 'express'
 import {
   deteleFeebBackController,
   getAllController,
-  getFeebBackController,
+  getFeedbackByProIdController,
   replyUploadController,
   updateFeedBackController,
   updateReplyFeedBackController,
@@ -49,5 +49,5 @@ feedbacksRouter.patch(
   updateFeedBackValidator,
   wrapAsync(updateReplyFeedBackController)
 )
-feedbacksRouter.get('/feedback/:id', isParamsIdValidator, wrapAsync(getFeebBackController))
+feedbacksRouter.get('/feedback/:id', isParamsIdValidator, wrapAsync(getFeedbackByProIdController))
 export default feedbacksRouter

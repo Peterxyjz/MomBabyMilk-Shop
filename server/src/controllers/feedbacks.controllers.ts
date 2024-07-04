@@ -162,4 +162,16 @@ export const updateReplyFeedBackController = async (req: Request, res: Response)
   })
 }
 
-export const getFeebBackController = async (req: Request, res: Response) => {}
+export const getFeedbackByProIdController = async (req: Request, res: Response) => {
+  const product_id = req.params.id
+  const feedback = await databaseService.feedbacks.find({ product_id: product_id }).toArray()
+  const result = []
+  for (const item of feedback) {
+    const user = await databaseService.users.findOne({ _id: new ObjectId(item.user_id) })
+    result.push({ ...item, username: user?.username })
+  }
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: result
+  })
+}
