@@ -5,7 +5,7 @@ const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
 //fetchUploadFeedback
 export const fetchUploadFeedback = async (feedback, token) => {
   return await axios.post(
-    `${SCHEMA_HOSTNAME}/feedbacks/upload`,
+    `${SCHEMA_HOSTNAME}/feedbacks/reply/upload`,
     { ...feedback },
     {
       headers: {

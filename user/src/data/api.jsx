@@ -253,7 +253,7 @@ export const displayProducts = async (page, limit) => {
 //upload:
 export const fetchUploadFeedback = async (feedback, token) => {
   return await axios.post(
-    `${SCHEMA_HOSTNAME}/feedbacks/upload`,
+    `${SCHEMA_HOSTNAME}/feedbacks/feedback/upload`,
     { ...feedback },
     {
       headers: {
