@@ -71,7 +71,8 @@ export const getAllController = async (req: Request, res: Response) => {
   const result = []
   for (const feedback of feebacks) {
     const reply_feedback = await databaseService.replyFeebacks.findOne({ _id: new ObjectId(feedback._id) })
-    result.push({ feedback, reply_feedback })
+    result.push({ ...feedback })
+    result.push({ ...reply_feedback })
   }
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,

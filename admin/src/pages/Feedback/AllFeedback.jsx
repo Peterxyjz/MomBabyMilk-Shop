@@ -28,6 +28,7 @@ const AllFeedback = () => {
 
                 setProducts(productData);
                 setFeedback(feedbackData.data.result);
+                console.log(feedbackData.data.result);
                 setUsers(usersData.data.users);
                 setLoading(false);
             } catch (error) {
