@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { fetchAllUsers } from '../../data/api';
-import { Button, Modal, Table } from 'antd';
+import { Button, Input, Modal, Table } from 'antd';
 import { Card } from 'primereact/card';
 
 
 const Customers = () => {
-  const [Users, setUsers] = useState([]);
-    const navigate = useNavigate();
-    const token = JSON.parse(localStorage.getItem("result"));
+    const [Users, setUsers] = useState([]);
+    const [searchText, setSearchText] = useState('');
 
+    const { Search } = Input;
     const formatDate = (dateString) => {
         return format(new Date(dateString), 'dd-MM-yyyy');
     };
@@ -48,19 +48,19 @@ const Customers = () => {
 
     const columns = [
         {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-            width: '25%',
-        },
-        {
             title: 'Họ và tên',
             dataIndex: 'full_name',
             key: 'full_name',
             ellipsis: true,
-            width: '10%',
+            width: '12%',
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.full_name.localeCompare(b.full_name),
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            width: '25%',
         },
         {
             title: 'Ngày sinh',
@@ -94,15 +94,32 @@ const Customers = () => {
         },
     ];
 
+
+
+    const onSearch = (value) => {
+        setSearchText(value);
+    };
+
+    const filteredUsers = Users.filter(user =>
+        user.full_name.toLowerCase().includes(searchText.toLowerCase()) &&
+        user.role_name === "Member"
+    );
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>
             <Card title="Tất cả khách hàng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: '90vh', marginTop: '50px' }}>
-                <div className="flex justify-between items-center mb-4">
-
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                    <Search
+                        placeholder="Nhập tên khách hàng"
+                        allowClear
+                        enterButton={<Button style={{ backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
+                        size="large"
+                        onSearch={onSearch}
+                        style={{ width: '40%' }}
+                    />
                 </div>
                 <Table
                     columns={columns}
-                    dataSource={Users.filter(u => u.role_name === "Member")}
+                    dataSource={filteredUsers}
                     pagination={{
                         current: currentPage,
                         pageSize: pageSize,
