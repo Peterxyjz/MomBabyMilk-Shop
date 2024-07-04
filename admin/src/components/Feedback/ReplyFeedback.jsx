@@ -18,11 +18,11 @@ const ReplyFeedback = ({
     setResponse("");
     console.log(selectedFeedback);
     const data = {
+      feedback_id: selectedFeedback._id,
       product_id: selectedFeedback.product_id,
       description: response,
       rating: selectedFeedback.rating,
       user_id: user._id,
-      reply_id: selectedFeedback._id
     };
     console.log(data);
     await fetchUploadFeedback(data, token).then((res) => {

@@ -268,12 +268,13 @@ const ShoppingCart = () => {
                           </div>
                         </div>
                         <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                          <a
-                            href="#"
+                          <Link
+                            to={"/product"}
+                            state={{ product: product }}
                             className="text-base font-medium text-gray-900 hover:underline "
                           >
                             {product.product_name}
-                          </a>
+                          </Link>
                           <div className="flex items-center gap-4">
                             <button
                               type="button"
