@@ -62,6 +62,7 @@ export const USERS_MESSAGES = {
   //get:
   GET_SUCCESS: 'Lấy thành công',
   GET_FAIL: 'Lấy thất bại',
+  NOT_FOUND: 'Không tìm thấy',
   //update:
   UPDATE_SUCCESS: 'Cập nhật thành công',
   UPDATE_FAIL: 'Cập nhật thất bại',
@@ -73,7 +74,7 @@ export const USERS_MESSAGES = {
   ADDRESS_IS_REQUIRED: 'Đị̣a chỉ là bắt buộc',
   FEEDBACK_NOT_FOUND: 'FEEDBACK_NOT_FOUND',
   PERMISSION_DENIED: 'PERMISSION_DENIED',
-  NEWS_NOT_FOUND:'NEWS_NOT_FOUND'
+  NEWS_NOT_FOUND: 'NEWS_NOT_FOUND'
 } as const
 
 export const PRODUCTS_MESSAGES = {
