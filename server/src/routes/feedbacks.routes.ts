@@ -3,6 +3,7 @@ import {
   deteleFeebBackController,
   getAllController,
   getFeedbackByProIdController,
+  getFeedBackByUserIdController,
   replyUploadController,
   updateFeedBackController,
   updateReplyFeedBackController,
@@ -49,5 +50,7 @@ feedbacksRouter.patch(
   updateFeedBackValidator,
   wrapAsync(updateReplyFeedBackController)
 )
-feedbacksRouter.get('/feedback/:id', isParamsIdValidator, wrapAsync(getFeedbackByProIdController))
+feedbacksRouter.get('/product/:id', isParamsIdValidator, wrapAsync(getFeedbackByProIdController))
+//getFeedBackByUserId
+feedbacksRouter.get('/user/:id', isParamsIdValidator, wrapAsync(getFeedBackByUserIdController))
 export default feedbacksRouter

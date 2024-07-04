@@ -3,7 +3,8 @@ import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaReply, FaRegHeart } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { fetchGetFeedbackById } from "../../data/api";
 
@@ -17,7 +18,6 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (product) {
-      console.log(product._id);
       const getFeedback = async () => {
         const data = await fetchGetFeedbackById(product._id);
         setReviews(data.data.result);
@@ -25,7 +25,7 @@ const ProductDetail = () => {
       getFeedback();
     }
   }, [product]);
-  console.log(reviews);
+
   if (!product) {
     return <div>Product not found</div>;
   }
@@ -81,7 +81,7 @@ const ProductDetail = () => {
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto relative">
             <img
-              className={`w-56 ${product.amount === 0 ? "grayscale" : ""}`} // Set width to 224 pixels (56 * 4)
+              className={`w-56 ${product.amount === 0 ? "grayscale" : ""}`}
               src={product.imgUrl}
               alt={product.product_name}
             />
@@ -132,7 +132,6 @@ const ProductDetail = () => {
                   ({product.rating})
                 </p>
                 <a
-                  href="#"
                   className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline"
                 >
                   {product.reviewer} Đánh Giá
@@ -145,23 +144,7 @@ const ProductDetail = () => {
                 className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                 onClick={() => addWishlistItem(product)}
               >
-                <svg
-                  className="w-5 h-5 -ms-2 me-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-                  />
-                </svg>
+                <FaRegHeart className="w-5 h-5 -ms-2 me-2"/>
                 Yêu Thích
               </button>
 
@@ -170,23 +153,7 @@ const ProductDetail = () => {
                   className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
                   onClick={() => handleAddToCart(product)}
                 >
-                  <svg
-                    className="w-5 h-5 -ms-2 me-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6"
-                    />
-                  </svg>
+                  < FaCartPlus className="w-5 h-5 -ms-2 me-2" />
                   Thêm Vào Giỏ Hàng
                 </button>
               ) : (
@@ -221,19 +188,44 @@ const ProductDetail = () => {
 
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
-          {Array.isArray(reviews) && reviews.length > 0 ? (
+          {reviews.length > 0 ? (
             reviews.map((review) => (
-              <div key={review._id} className="mb-4 border-b pb-4">
-                <p className="font-semibold">{review.user_id}</p>
-                <div className="flex items-center">
-                  <RenderRating rating={review.rating} />
-                  <p className="ml-2 text-sm text-gray-500">{review.rating}</p>
+              <div key={review._id} className=" p-4 rounded-lg text-black mb-4">
+                <div className="flex items-center mb-2">
+                  <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                    {review.username.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="ml-2 w-full flex items-start justify-between">
+                    <p className="text-lg font-semibold">{review.username}</p>
+                    <RenderRating rating={review.rating} />
+                  </div>
                 </div>
-                <p className="text-gray-700">{review.description}</p>
+                <div className="text-black mx-2 flex">
+                <FaReply className="mx-2 mt-1 text-sm transform rotate-180"/>{review.description}
+                </div>
+                <p className="text-gray-500 text-sm mt-2">
+                  {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                </p>
+                {review.reply_feedback && (
+                  <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                        M
+                      </div>
+                      <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                    </div>
+                    <div className="text-black mx-8 flex">
+                      <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
+                      {review.reply_feedback.description}
+                    </div>
+                  </div>
+                )}
               </div>
             ))
           ) : (
-            <p>Chưa có đánh giá nào</p>
+            <p className="text-lg text-center text-gray-600">
+              Sản phẩm chưa có đánh giá
+            </p>
           )}
         </div>
       </div>
