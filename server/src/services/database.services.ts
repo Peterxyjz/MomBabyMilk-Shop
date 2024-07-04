@@ -16,6 +16,7 @@ import Revenue from '~/model/schemas/Revenue.schema'
 import Voucher from '~/model/schemas/Voucher.schema'
 import VoucherOrder from '~/model/schemas/VoucherOrders.schema'
 import News from '~/model/schemas/News.schema'
+import ReplyFeedBack from '~/model/schemas/ReplyFeeback.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@mombabymilk.lrg7esv.mongodb.net/?retryWrites=true&w=majority&appName=MomBabyMilk`
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -78,6 +79,9 @@ class DatabaseService {
   //feedback:
   get feedbacks(): Collection<FeedBack> {
     return this.db.collection(process.env.DB_FEEDBACKS_COLLECTION as string)
+  }
+  get replyFeebacks(): Collection<ReplyFeedBack> {
+    return this.db.collection(process.env.DB_REPLY_FEEDBACKS_COLLECTION as string)
   }
   //order:
   get orders(): Collection<Order> {
