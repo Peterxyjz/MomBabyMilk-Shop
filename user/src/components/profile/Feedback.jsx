@@ -4,9 +4,9 @@ import Loader from "../../assets/loading2.gif";
 import { FaFilter } from "react-icons/fa6";
 import { AiOutlineDelete } from "react-icons/ai";
 import { RxUpdate } from "react-icons/rx";
-import { fetchGetFeedbackByUser } from "../../data/api";
+import { fetchDeleteFeedback, fetchGetFeedbackByUser, fetchUpdateFeedback } from "../../data/api";
 import RenderRating from "../elements/RenderRating";
-
+import toast from "react-hot-toast";
 const Feedback = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
@@ -14,7 +14,7 @@ const Feedback = () => {
   const [currentFeedback, setCurrentFeedback] = useState(null);
   const products = JSON.parse(localStorage.getItem("products"));
   const user = JSON.parse(localStorage.getItem("user")) || null;
-
+  const token = JSON.parse(localStorage.getItem("result"));
   useEffect(() => {
     const findProductById = (product_id) => {
       return products.find((product) => product._id === product_id);
@@ -69,16 +69,32 @@ const Feedback = () => {
     setCurrentFeedback({ ...currentFeedback, rating: newRating });
   };
 
-  const submitFeedback = () => {
+  const submitFeedback = async () => {
     if(currentFeedback.rating === 0 || currentFeedback.description === "") {
-      alert("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
+      toast.error("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
       return;
     }
+    await fetchUpdateFeedback(currentFeedback._id, currentFeedback, token)
+      .then(() => {
+        toast.success("Cập nhật thành công");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Cập nhật thất bại");
+      });
     closeFeedbackModal();
   };
 
-  const deleteFeedback = () => {
-    console.log("delete: ", currentFeedback);
+  const deleteFeedback = async () => {
+    await fetchDeleteFeedback(currentFeedback._id, token)
+      .then(() => {
+        toast.success("Xóa đánh giá thành công");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Xóa đánh giá thất bại");
+      });
     closeFeedbackModal();
   };
 

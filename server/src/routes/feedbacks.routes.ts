@@ -20,7 +20,6 @@ const feedbacksRouter = Router()
 //upload:
 feedbacksRouter.post('/feedback/upload', accessTokenValidator, wrapAsync(uploadController))
 feedbacksRouter.post('/reply/upload', accessTokenValidator, wrapAsync(replyUploadController))
-
 feedbacksRouter.get('/all-feedback', wrapAsync(getAllController))
 
 feedbacksRouter.delete(
@@ -36,14 +35,14 @@ feedbacksRouter.delete(
   wrapAsync(deteleFeebBackController)
 )
 
-feedbacksRouter.patch(
+feedbacksRouter.post(
   '/feedback/:id',
   accessTokenValidator,
   isParamsIdValidator,
   updateFeedBackValidator,
   wrapAsync(updateFeedBackController)
 )
-feedbacksRouter.patch(
+feedbacksRouter.post(
   '/reply/:id',
   accessTokenValidator,
   isParamsIdValidator,

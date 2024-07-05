@@ -6,7 +6,7 @@ import { FcFeedback } from "react-icons/fc";
 import { useState, useEffect } from "react";
 import RenderRating from "../elements/RenderRating";
 import { fetchGetFeedbackByUser, fetchUploadFeedback } from "../../data/api";
-
+import toast from "react-hot-toast";
 const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order || {};
@@ -91,12 +91,12 @@ const OrderDetail = () => {
 
   const submitFeedback = async () => {
     if (feedback.rating === 0 || feedback.description.trim() === "") {
-      alert("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
+      toast.error("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
       return;
     }
     await fetchUploadFeedback(feedback, token)
       .then(() => {
-        alert("Đánh giá cho sản phẩm thành công!");
+        toast.success("Đánh giá cho sản phẩm thành công!");
       })
       .catch((err) => {
         console.log(err);

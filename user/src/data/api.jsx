@@ -274,6 +274,25 @@ export const fetchGetFeedbackById = async (id) => {
 export const fetchGetFeedbackByUser = async (id) => {
   return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/user/${id}`);
 };
+//update:
+export const fetchUpdateFeedback = async (id, feedback, token) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/feedbacks/feedback/${id}`, {
+    ...feedback,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
+//delete:
+export const fetchDeleteFeedback = async (id, token) => {
+  return await axios.delete(`${SCHEMA_HOSTNAME}/feedbacks/feedback/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
 //todo API province
 
 const baseUrl = "https://open.oapi.vn/location";
