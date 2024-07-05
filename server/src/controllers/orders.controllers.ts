@@ -114,7 +114,7 @@ export const uploadController = async (req: Request, res: Response) => {
     ])
     const voucher = await voucherServices.getById(voucher_code)
     if (voucher) {
-      user.menber_ship = user.menber_ship - (voucher.membership as number)
+      user.member_ship = user.member_ship - (voucher.membership as number)
     }
 
     if (user) {
@@ -133,7 +133,7 @@ export const uploadController = async (req: Request, res: Response) => {
             ward: user.ward,
             address: user.address,
             phone: user.phone,
-            menber_ship: user.menber_ship,
+            member_ship: user.member_ship,
             username: user.username,
             email_verify_token: user.email_verify_token,
             forgot_password_token: user.forgot_password_token,
@@ -148,7 +148,7 @@ export const uploadController = async (req: Request, res: Response) => {
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     order,
-    point: user?.menber_ship
+    point: user?.member_ship
   })
 }
 
