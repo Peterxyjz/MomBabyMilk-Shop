@@ -118,10 +118,11 @@ export const updateNewsController = async (req: Request, res: Response) => {
     })
   }
   const news_update = {
-    _id: new ObjectId(id),
+    news_name: req.body.news_name,
     staff_id: user_id,
     product_id: req.body.product_id,
-    description: req.body.description
+    description: req.body.description,
+    img_url: req.body.img_url
   }
 
   const result = await databaseService.news.updateOne({ _id: new ObjectId(id) }, { $set: news_update })

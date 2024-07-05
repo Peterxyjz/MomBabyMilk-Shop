@@ -1,6 +1,15 @@
 import axios from "axios";
 
 const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
+//fetchUpdateNews
+export const fetchUpdateNews = async (data, token, id) => {
+  return await axios.patch(`${SCHEMA_HOSTNAME}/news/update/${id}`, { ...data }, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
+
 
 //fetchUploadNews
 export const fetchUploadNews = async (data, token) => {

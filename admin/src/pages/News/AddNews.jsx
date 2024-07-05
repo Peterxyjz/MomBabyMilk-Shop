@@ -12,7 +12,10 @@ import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import {
   fetchProducts,
+  fetchUpdateNews,
   fetchUpdateProduct,
+  fetchUploadFeedback,
+  fetchUploadNews,
   fetchUploadProduct,
 } from "../../data/api";
 import { notification } from "antd";
@@ -183,21 +186,21 @@ const AddNews = () => {
     setDescription(event.target.value);
   };
 
-  async function uploadImage(product, id) {
+  async function uploadImage(news, id) {
     if (img !== null) {
-      const imgRef = ref(imageDb, `product_img/${v4()}`);
+      const imgRef = ref(imageDb, `news_img/${v4()}`);
       const snapshot = await uploadBytes(imgRef, img);
       const url = await getDownloadURL(snapshot.ref);
 
-      product.imgUrl = url;
-      console.log("product: ", product);
-      await sendURL(product, id);
+      news.img_url = url;
+      console.log("news: ", news);
+      await sendURL(news, id);
     } else {
       console.log("null");
     }
   }
-  const sendURL = async (product, id) => {
-    return await fetchUpdateProduct(product, token, id);
+  const sendURL = async (news, id) => {
+    return await fetchUpdateNews(news, token, id);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -206,22 +209,23 @@ const AddNews = () => {
     const news = {
       product_id: selectedProductId,
       news_name,
-
       description,
     };
     console.log(news);
     // send data to db:
-    await fetchUploadProduct(product, token)
+    await fetchUploadNews(news, token)
       .then(async (res) => {
+        console.log(res.data);
         const id = res.data.result.insertedId
-        await uploadImage(product,id);
+        await uploadImage(news,id);
       })
       .then((data) => {
         notification.success({
-          message: "Thêm sản phẩm thành công!",
+          message: "Thêm bài viết thành công!",
           placement: "top",
         })
         form.reset();
+        setDescription("");
       })
       .catch((error) => {
         console.log(error.response);
