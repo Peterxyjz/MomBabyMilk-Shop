@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchDeleteVoucher, fetchGetVoucher } from "../../data/api";
 import { Button, Datepicker, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUpdateVoucher } from "../../data/api";
+import Loading from "../../components/Loading";
 
 const Vouchers = () => {
   const [vouchers, setVouchers] = useState([]);
@@ -67,7 +68,7 @@ const Vouchers = () => {
       });
   };
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading/>
   }
   return (
     <>

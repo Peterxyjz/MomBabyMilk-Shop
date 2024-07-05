@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchAllBills, fetchProducts } from "../../data/api";
 import Column from "antd/es/table/Column";
+import Loading from "../../components/Loading";
 
 const InputBills = () => {
   const navigate = useNavigate();
@@ -158,6 +159,10 @@ const InputBills = () => {
       ),
     },
   ];
+
+  if (loading) {
+    return <Loading/>
+  }
 
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "80vh" }}>

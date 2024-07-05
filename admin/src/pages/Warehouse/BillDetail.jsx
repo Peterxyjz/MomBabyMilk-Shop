@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchProducts } from '../../data/api';
 import { Button } from 'flowbite-react';
+import Loading from '../../components/Loading';
 
 const BillDetail = () => {
     const location = useLocation();
@@ -53,7 +54,9 @@ const BillDetail = () => {
         }
     }, [products, inputBill]);
 
-    if (loading) return <div className="w-full h-full mx-6 py-6">Loading...</div>;
+    if (loading) {
+        return <Loading/>
+      }
 
 
     const formatDate = (dateString) => {
