@@ -41,7 +41,7 @@ const EditProfile = () => {
           email: res.data.result.email || "",
           phone: res.data.result.phone || "",
           address: res.data.result.address || "",
-          point: res.data.result.menber_ship || 0,
+          point: res.data.result.member_ship || 0,
           date_of_birth: res.data.result.date_of_birth || null,
         });
         if (res.data.result.date_of_birth !== null) {
