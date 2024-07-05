@@ -268,10 +268,12 @@ export const fetchUploadFeedback = async (feedback, token) => {
 };
 //getFeedback by id:
 export const fetchGetFeedbackById = async (id) => {
-  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/product/${id}`, {
-  });
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/product/${id}`);
 };
-
+//getfeedback by user:
+export const fetchGetFeedbackByUser = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/user/${id}`);
+};
 //todo API province
 
 const baseUrl = "https://open.oapi.vn/location";
