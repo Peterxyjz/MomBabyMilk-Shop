@@ -111,12 +111,12 @@ const HistoryOrder = () => {
                 orders.map((item) => (
                   <Table.Row
                     key={item.order._id}
-                    className="bg-white dark:border-gray-700 dark:bg-gray-800 border"
+                    className="bg-white  border"
                   >
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border">
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.order.required_date)}
                     </Table.Cell>
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border">
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {item.order._id}
                     </Table.Cell>
                     <Table.Cell className="border">
@@ -143,7 +143,7 @@ const HistoryOrder = () => {
                       <Link
                         to="/order-detail"
                         state={{ order: item }}
-                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                        className="font-medium text-cyan-600 hover:underline"
                       >
                         Chi tiết
                       </Link>

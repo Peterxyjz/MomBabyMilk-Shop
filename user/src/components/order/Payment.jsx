@@ -70,7 +70,7 @@ const Payment = () => {
               clearCart();
               toast.success("Thanh Toán Thành Công");
               if(membership !== undefined) {
-                user.menber_ship = membership;
+                user.member_ship = membership;
                 localStorage.setItem("user", JSON.stringify(user));
               }
               navigate("/thanks", {
@@ -95,7 +95,7 @@ const Payment = () => {
           clearCart();
           toast.success("Đặt Hàng Thành Công");
           if(membership !== undefined) {
-            user.menber_ship = membership;
+            user.member_ship = membership;
             localStorage.setItem("user", JSON.stringify(user));
           }
           navigate("/thanks", {

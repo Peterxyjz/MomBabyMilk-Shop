@@ -112,7 +112,9 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
         selectedProvince.name,
     };
 
-    navigate("/payment", { state: { customer_infor, discount, ship, voucherCode } });
+    navigate("/payment", {
+      state: { customer_infor, discount, ship, voucherCode },
+    });
   };
   return (
     <>

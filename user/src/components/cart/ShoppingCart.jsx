@@ -34,7 +34,7 @@ const ShoppingCart = () => {
         const sortedVouchers = data.data.result
           .filter((voucher) => voucher.voucher_type === 1)
           .filter((voucher) => new Date(voucher.expire_date) > currentDate)
-          .filter((voucher) => voucher.membership <= user.menber_ship);
+          .filter((voucher) => voucher.membership <= user.member_ship);
         setVoucherList(sortedVouchers);
       } catch (error) {
         console.log(error);

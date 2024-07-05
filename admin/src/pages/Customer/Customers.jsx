@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { fetchAllUsers } from '../../data/api';
-import { Button, Input, Modal, Table } from 'antd';
+import { Button, Input, Table } from 'antd';
 import { Card } from 'primereact/card';
 
 
@@ -86,10 +84,10 @@ const Customers = () => {
         },
         {
             title: 'Điểm thành viên',
-            dataIndex: 'menber_ship',
-            key: 'menber_ship',
+            dataIndex: 'member_ship',
+            key: 'member_ship',
             width: '10%',
-            sorter: (a, b) => a.menber_ship - b.menber_ship,
+            sorter: (a, b) => a.member_ship - b.member_ship,
 
         },
     ];

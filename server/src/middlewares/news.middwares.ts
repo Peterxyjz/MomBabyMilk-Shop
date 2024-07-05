@@ -2,6 +2,7 @@ import { checkSchema } from 'express-validator'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/model/Errors'
+import databaseService from '~/services/database.services'
 import productsService from '~/services/products.services'
 import usersService from '~/services/users.services'
 import { validate } from '~/utils/validation'
@@ -27,6 +28,23 @@ export const updateNewsValidator =
               }
               return true
             }
+          }
+        },
+
+        news_name: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Tên không được bỏ trống'
+          },
+          isString: {
+            errorMessage: 'Tênphải là chữ'
+          },
+          trim: true,
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Tên ít nhất 3 ký tự'
           }
         },
 
