@@ -641,7 +641,7 @@ export const stafflinks = [
         // path: '',
         subLinks: [
           { name: 'allBlog', path: 'all-blog', label: 'Tất cả bài viết' },
-          { name: 'addBlog', path: '', label: 'Thêm bài viết' },
+          { name: 'addBlog', path: 'add-news', label: 'Thêm bài viết' },
   
         ],
       },

@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb'
 interface NewsType {
   _id?: ObjectId
+  news_name: string
   staff_id: string
   product_id: string
   description: string
@@ -10,6 +11,7 @@ interface NewsType {
 
 export default class News {
   _id?: ObjectId
+  news_name: string
   staff_id: string
   product_id: string
   description: string
@@ -18,6 +20,7 @@ export default class News {
 
   constructor(news: NewsType) {
     const date = new Date()
+    this.news_name = news.news_name
     this._id = news._id || new ObjectId()
     this.staff_id = news.staff_id
     this.product_id = news.product_id
