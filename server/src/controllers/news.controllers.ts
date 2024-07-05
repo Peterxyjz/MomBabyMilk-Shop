@@ -24,6 +24,7 @@ export const uploadController = async (req: Request, res: Response) => {
   // Tìm phân hồi của user_id trong db
   const news = new News({
     _id: new ObjectId(),
+    news_name: req.body.news_name,
     staff_id: user_id,
     product_id: req.body.product_id,
     description: req.body.description,
