@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useProductContext } from "../../context/ProductContext";
 import { FaShoppingCart, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { MdOutlineRestore } from "react-icons/md";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Loader from "../../assets/loading.gif";
@@ -8,6 +9,7 @@ import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { fetchCategories } from "../../data/api";
+import toast from "react-hot-toast";
 import not_found from '../../assets/images/background/notFind.png'; // Import hình ảnh
 
 const Filter = () => {
@@ -193,9 +195,9 @@ const Filter = () => {
             <Link to="/filter">
               <button
                 onClick={handleResetFilters}
-                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg flex"
               >
-                Khôi phục bộ lọc
+                <MdOutlineRestore className="mr-2 my-auto w-5 h-5"/>Khôi phục bộ lọc
               </button>
             </Link>
             <div className="relative">
@@ -203,7 +205,7 @@ const Filter = () => {
                 onClick={() => setSortOpen(!sortOpen)}
                 className="bg-gray-200 px-10 py-2 rounded-lg"
               >
-                Sắp xếp theo:
+                Sắp xếp theo
               </button>
               {sortOpen && (
                 <div className="absolute right-0 bg-white border mt-2 rounded-lg shadow-lg z-10">
@@ -277,7 +279,12 @@ const Filter = () => {
                         })}
                       </span>
                       <button
-                        onClick={() => addCartItem(product)}
+                        onClick={() => {
+                          addCartItem(product)
+                          toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+                            position: "top-right",
+                          });
+                        }}
                         disabled={product.amount === 0}
                         className={
                           product.amount === 0
