@@ -134,12 +134,8 @@ export const deteleReplyFeebBackController = async (req: Request, res: Response)
 export const updateFeedBackController = async (req: Request, res: Response) => {
   const id = req.params.id
 
-  const feedback = new FeedBack({
-    _id: new ObjectId(id),
-    ...req.body
-  })
-  console.log('upload: ', feedback)
-
+  const { _id, ...feedback } = req.body
+  log('upload: ', feedback)
   const result = await databaseService.feedbacks.updateOne({ _id: new ObjectId(id) }, { $set: feedback })
   return res.status(200).json({
     message: USERS_MESSAGES.UPDATE_SUCCESS,

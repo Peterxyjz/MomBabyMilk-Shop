@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchResetPassword } from "../../../data/api.jsx";
 import { toast } from "react-hot-toast";
