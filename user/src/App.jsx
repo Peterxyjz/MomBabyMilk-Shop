@@ -27,6 +27,7 @@ import Accumulate from "./components/profile/Accumulate";
 import EditProfile from "./components/profile/EditProfile";
 import OrderDetail from "./components/order/OrderDetail";
 import OrderTracking from "./components/order/OrderTracking";
+import Contact from "./pages/InformationPage/Contact";
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
                     <Route path="/wishlist" element={<WishList />} />
                     <Route path="/news" element={<NewsPage />} />
                     <Route path="/about_us" element={<AboutUs />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/exchange_policy" element={<ExchangePolicy />} />
                     <Route path="/order-detail" element={<OrderDetail />} />
                     <Route path="/order-tracking" element={<OrderTracking />} />

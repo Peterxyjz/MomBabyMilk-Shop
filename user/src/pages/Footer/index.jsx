@@ -10,19 +10,19 @@ export default function MainFooter() {
         <div className="flex justify-around">
           <div className="flex items-center mb-5">
             <FaTruck className="text-3xl mr-2" />
-            <span>Every Fresh Products</span>
+            <span>Hàng Luôn Được Cập Nhật</span>
           </div>
           <div className="flex items-center mb-5">
             <FaTruck className="text-3xl mr-2" />
-            <span>Free Delivery For Order Over $50</span>
+            <span>Miễn Phí Giao Hàng Nội Thành</span>
           </div>
           <div className="flex items-center mb-5">
             <FaPercentage className="text-3xl mr-2" />
-            <span>Daily Mega Discounts</span>
+            <span>Luôn Có Ưu Đãi</span>
           </div>
           <div className="flex items-center mb-5">
             <FaThumbsUp className="text-3xl mr-2" />
-            <span>Best Price On The Market</span>
+            <span>Bình Ổn Giá Thị Trường</span>
           </div>
         </div>
         <div className="border-t border-gray-300 mb-8"></div>
@@ -35,21 +35,14 @@ export default function MainFooter() {
           </div>
           <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">
             <div>
-              <Footer.Title title="about" />
+              <Footer.Title title="Về MOMBABYMILK" />
               <Footer.LinkGroup col>
-                <Footer.Link href="#">Flowbite</Footer.Link>
-                <Footer.Link href="#">Tailwind CSS</Footer.Link>
+                <Footer.Link href="/about_us">Về chúng tôi</Footer.Link>
+                <Footer.Link href="/contact">Liên hệ</Footer.Link>
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Follow us" />
-              <Footer.LinkGroup col>
-                <Footer.Link href="#">Github</Footer.Link>
-                <Footer.Link href="#">Discord</Footer.Link>
-              </Footer.LinkGroup>
-            </div>
-            <div>
-              <Footer.Title title="Legal" />
+              <Footer.Title title="Chính sách" />
               <Footer.LinkGroup col>
                 <Footer.Link href="/exchange_policy">Privacy Policy</Footer.Link>
                 <Footer.Link href="#">Terms &amp; Conditions</Footer.Link>
