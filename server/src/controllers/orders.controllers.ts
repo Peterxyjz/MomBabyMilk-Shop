@@ -45,6 +45,31 @@ export const getOrderController = async (req: Request, res: Response) => {
   })
 }
 
+export const getOrderByIdController = async (req: Request, res: Response) => {
+  const order_id = req.params.id
+  const [order, order_detail] = await Promise.all([
+    orderServices.getById(order_id),
+    databaseService.orderDetails.find({ order_id: order_id }).toArray()
+  ])
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: { order, order_detail }
+  })
+
+  const user_id = req.body.user_id
+  const orders = await orderServices.getByUserId(user_id)
+  const result = await Promise.all(
+    orders.map(async (order) => {
+      const order_detail = await databaseService.orderDetails.find({ order_id: order._id?.toString() }).toArray()
+      return { order, order_detail }
+    })
+  )
+  return res.status(200).json({
+    message: USERS_MESSAGES.GET_SUCCESS,
+    result: result
+  })
+}
+
 export const deleteController = async (req: Request, res: Response) => {
   const order_id = req.body.order_id
   const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
@@ -89,7 +114,7 @@ export const uploadController = async (req: Request, res: Response) => {
     ])
     const voucher = await voucherServices.getById(voucher_code)
     if (voucher) {
-      user.menber_ship = user.menber_ship - (voucher.membership as number)
+      user.member_ship = user.member_ship - (voucher.membership as number)
     }
 
     if (user) {
@@ -108,7 +133,7 @@ export const uploadController = async (req: Request, res: Response) => {
             ward: user.ward,
             address: user.address,
             phone: user.phone,
-            menber_ship: user.menber_ship,
+            member_ship: user.member_ship,
             username: user.username,
             email_verify_token: user.email_verify_token,
             forgot_password_token: user.forgot_password_token,
@@ -122,7 +147,8 @@ export const uploadController = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
-    order
+    order,
+    point: user?.member_ship
   })
 }
 

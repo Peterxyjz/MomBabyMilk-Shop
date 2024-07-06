@@ -16,10 +16,8 @@ export const ProductProvider = ({ children }) => {
       try {
         if(result !== null){
           await fetchRefreshToken(result).then((res) => {
-            console.log(res.data.result);
             localStorage.setItem("result", JSON.stringify(res.data.result));
-          }).catch((error) => {
-            console.log(error);
+          }).catch(() => {
             localStorage.removeItem("user");
             localStorage.removeItem("result");
             window.location.reload();

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { fetchDeleteVoucher, fetchGetVoucher } from "../../data/api";
 import { Button, Datepicker, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUpdateVoucher } from "../../data/api";
-import Loading from "../../components/Loading";
 
 const Vouchers = () => {
   const [vouchers, setVouchers] = useState([]);
@@ -38,7 +37,6 @@ const Vouchers = () => {
     const date_input = new Date(selectedVoucher.expire_date);
     date_input.setDate(date_input.getDate() + 1);
     const updatedVoucher = {
-   
       voucher_type: Number(selectedVoucher.voucher_type),
       membership: Number(selectedVoucher.membership),
       expire_date: date_input.toISOString(),
@@ -49,27 +47,39 @@ const Vouchers = () => {
     await fetchUpdateVoucher(updatedVoucher, token, selectedVoucher._id)
       .then((res) => {
         console.log(res.data);
-        alert("Cập nhật thành công");
+        toast.success("Cập nhật thành công", {
+          position: "top-right",
+        });
         setShowModal(false);
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Cập nhật thất bại", {
+          position: "top-right",
+        });
       });
   };
 
   const handleDelete = async (voucherId) => {
-    await fetchDeleteVoucher( voucherId, token)
+    await fetchDeleteVoucher(voucherId, token)
       .then((res) => {
-        alert("Xóa thanh cong");
+        toast.success("Xóa voucher thành công", {
+          position: "top-right",
+        });
         window.location.reload();
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Xóa voucher thất bại", {
+          position: "top-right",
+        });
       });
   };
+
   if (loading) {
     return <Loading/>
   }
+
   return (
     <>
       <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
@@ -328,6 +338,7 @@ const Vouchers = () => {
           )}
         </div>
       </div>
+      <Toaster position="top-right" />
     </>
   );
 };

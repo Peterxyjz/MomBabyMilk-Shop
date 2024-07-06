@@ -18,10 +18,16 @@ const Accumulate = () => {
           .filter((voucher) => voucher.voucher_type === 1)
           .filter((voucher) => new Date(voucher.expire_date) > currentDate) // Filter vouchers that have not expired
           .sort((a, b) => {
-            const userMembership = Number(user.menber_ship);
-            if (userMembership >= a.membership && userMembership < b.membership) {
+            const userMembership = Number(user.member_ship);
+            if (
+              userMembership >= a.membership &&
+              userMembership < b.membership
+            ) {
               return -1;
-            } else if (userMembership < a.membership && userMembership >= b.membership) {
+            } else if (
+              userMembership < a.membership &&
+              userMembership >= b.membership
+            ) {
               return 1;
             } else {
               return new Date(a.expire_date) - new Date(b.expire_date);
@@ -61,7 +67,7 @@ const Accumulate = () => {
           >
             <ImGift className="mr-2 h-5 w-5" />
             Điểm tích lũy:{" "}
-            {Number(user.menber_ship).toLocaleString("vi-VN", {
+            {Number(user.member_ship).toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
@@ -78,7 +84,7 @@ const Accumulate = () => {
             >
               <div
                 className={`h-20 flex items-center justify-between ${
-                  Number(user.menber_ship) < voucher.membership
+                  Number(user.member_ship) < voucher.membership
                     ? "bg-red-500"
                     : "bg-green-500"
                 }`}

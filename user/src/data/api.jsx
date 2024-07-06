@@ -4,38 +4,44 @@ const SCHEMA_HOSTNAME = import.meta.env.VITE_SCHEMA_HOSTNAME;
 
 //fetchChangePassword
 export const fetchChangePassword = async (token, data) => {
-  return await axios.patch(`${SCHEMA_HOSTNAME}/users/change-password`, {
-    ...data
-  }, {
-    headers: {
-      Authorization: `Bearer ${token.access_token}`,
+  return await axios.patch(
+    `${SCHEMA_HOSTNAME}/users/change-password`,
+    {
+      ...data,
     },
-  });
-}
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
+};
 
 //fetchRefreshToken
 export const fetchRefreshToken = async (token) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/users/refresh-token`, {
-   refresh_token: token.refresh_token
+    refresh_token: token.refresh_token,
   });
 };
-
 
 //fetchUpdateMe
-export const fetchUpdateMe = async (token,data) => {
-  return await axios.patch(`${SCHEMA_HOSTNAME}/users/me`,{
-    ...data
-  },{
-    headers: {
-      Authorization: `Bearer ${token.access_token}`,
+export const fetchUpdateMe = async (token, data) => {
+  return await axios.patch(
+    `${SCHEMA_HOSTNAME}/users/me`,
+    {
+      ...data,
     },
-  });
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
 };
-
 
 //fetchGetMe
 export const fetchGetMe = async (token) => {
-  return await axios.get(`${SCHEMA_HOSTNAME}/users/me`,{
+  return await axios.get(`${SCHEMA_HOSTNAME}/users/me`, {
     headers: {
       Authorization: `Bearer ${token.access_token}`,
     },
@@ -198,7 +204,9 @@ export const fetchCreateOrder = async (order_infor) => {
 
 export const fetchOrder = async (user_id) => {
   try {
-    const res = await axios.post(`${SCHEMA_HOSTNAME}/orders/get-orderforuser`, { user_id });
+    const res = await axios.post(`${SCHEMA_HOSTNAME}/orders/get-orderforuser`, {
+      user_id,
+    });
     return res.data.result;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -216,6 +224,10 @@ export const fetchProducts = async () => {
     throw error;
   }
 };
+//getOrderbyId
+export const fetchGetOrderById = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/orders/get-order/${id}`);
+}
 
 //categori
 
@@ -245,7 +257,7 @@ export const displayProducts = async (page, limit) => {
 //upload:
 export const fetchUploadFeedback = async (feedback, token) => {
   return await axios.post(
-    `${SCHEMA_HOSTNAME}/feedbacks/upload`,
+    `${SCHEMA_HOSTNAME}/feedbacks/feedback/upload`,
     { ...feedback },
     {
       headers: {
@@ -254,7 +266,33 @@ export const fetchUploadFeedback = async (feedback, token) => {
     }
   );
 };
-
+//getFeedback by id:
+export const fetchGetFeedbackById = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/product/${id}`);
+};
+//getfeedback by user:
+export const fetchGetFeedbackByUser = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/user/${id}`);
+};
+//update:
+export const fetchUpdateFeedback = async (id, feedback, token) => {
+  return await axios.post(`${SCHEMA_HOSTNAME}/feedbacks/feedback/${id}`, {
+    ...feedback,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
+//delete:
+export const fetchDeleteFeedback = async (id, token) => {
+  return await axios.delete(`${SCHEMA_HOSTNAME}/feedbacks/feedback/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
 //todo API province
 
 const baseUrl = "https://open.oapi.vn/location";

@@ -11,7 +11,7 @@ import { useStateContext } from './contexts/ContextProvider';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';
-import 'antd/dist/reset.css'; 
+import 'antd/dist/reset.css';
 
 
 import StaffRouter from './router/StaffRouter';
@@ -57,11 +57,11 @@ const App = () => {
               </div>
               {activeMenu ? (
                 <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-                  <Sidebar  isAuthenticatedStaff={isAuthenticatedStaff} />
+                  <Sidebar isAuthenticatedStaff={isAuthenticatedStaff} />
                 </div>
               ) : (
                 <div className="w-0 dark:bg-secondary-dark-bg">
-                  <Sidebar isAuthenticatedStaff={isAuthenticatedStaff}  />
+                  <Sidebar isAuthenticatedStaff={isAuthenticatedStaff} />
                 </div>
               )}
               <div
@@ -76,7 +76,7 @@ const App = () => {
                 </div>
                 <div>
                   {themeSettings && (<ThemeSettings />)}
-                  <StaffRouter/>
+                  <StaffRouter />
                 </div>
               </div>
             </>
@@ -119,12 +119,12 @@ const App = () => {
                 </div>
                 <div>
                   {themeSettings && (<ThemeSettings />)}
-                  <AdminRouter/>
+                  <AdminRouter />
                 </div>
               </div>
             </>
           ) : (
-            <AuthRouter/>
+            <AuthRouter />
           )
 
           }

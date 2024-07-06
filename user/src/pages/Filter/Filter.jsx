@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useProductContext } from "../../context/ProductContext";
 import { FaShoppingCart, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { MdOutlineRestore } from "react-icons/md";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Loader from "../../assets/loading.gif";
@@ -8,6 +9,7 @@ import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { fetchCategories } from "../../data/api";
+import toast from "react-hot-toast";
 import not_found from '../../assets/images/background/notFind.png'; // Import hình ảnh
 
 const Filter = () => {
@@ -16,6 +18,7 @@ const Filter = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [sortOption, setSortOption] = useState("");
   const { products, loading } = useProductContext();
   const { addCartItem } = useCartContext();
   const search_name = location.state?.product_name || "";
@@ -50,11 +53,19 @@ const Filter = () => {
           product.price >= priceRange[0] && product.price <= priceRange[1]
       );
 
+      if (sortOption === "price-asc") {
+        updatedProducts = updatedProducts.sort((a, b) => a.price - b.price);
+      } else if (sortOption === "price-desc") {
+        updatedProducts = updatedProducts.sort((a, b) => b.price - a.price);
+      } else if (sortOption === "popular") {
+        updatedProducts = updatedProducts.sort((a, b) => b.sales - a.sales);
+      }
+
       setFilteredProducts(updatedProducts);
     };
 
     filterProducts();
-  }, [products, search_name, selectedCategory, priceRange]);
+  }, [products, search_name, selectedCategory, priceRange, sortOption]);
 
   const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -94,7 +105,13 @@ const Filter = () => {
   const handleResetFilters = () => {
     setSelectedCategory("");
     setPriceRange([0, 1000000]);
+    setSortOption("");
     setCurrentPage(1);
+  };
+
+  const handleSortChange = (option) => {
+    setSortOption(option);
+    setSortOpen(false);
   };
 
   const renderPageNumbers = () => {
@@ -172,34 +189,43 @@ const Filter = () => {
               <span>{priceRange[1].toLocaleString()}₫</span>
             </div>
           </div>
-          <Link to="/filter">
-            <button
-              onClick={handleResetFilters}
-              className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg"
-            >
-              Khôi phục bộ lọc
-            </button>
-          </Link>
         </div>
         <div className="w-full md:w-4/5 p-4 flex-grow">
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 items-center">
+            <Link to="/filter">
+              <button
+                onClick={handleResetFilters}
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg flex"
+              >
+                <MdOutlineRestore className="mr-2 my-auto w-5 h-5"/>Khôi phục bộ lọc
+              </button>
+            </Link>
             <div className="relative">
               <button
                 onClick={() => setSortOpen(!sortOpen)}
                 className="bg-gray-200 px-10 py-2 rounded-lg"
               >
-                Sắp xếp theo:
+                Sắp xếp theo
               </button>
               {sortOpen && (
-                <div className="absolute right-0 bg-white border mt-2 rounded-lg shadow-lg">
-                  <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    <Link to="/">Phổ biến</Link>
+                <div className="absolute right-0 bg-white border mt-2 rounded-lg shadow-lg z-10">
+                  <div
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleSortChange("popular")}
+                  >
+                    Phổ biến
                   </div>
-                  <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    <Link to="/">Giá thấp - cao</Link>
+                  <div
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleSortChange("price-asc")}
+                  >
+                    Giá thấp - cao
                   </div>
-                  <div className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    <Link to="/">Giá cao - thấp</Link>
+                  <div
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleSortChange("price-desc")}
+                  >
+                    Giá cao - thấp
                   </div>
                 </div>
               )}
@@ -253,7 +279,12 @@ const Filter = () => {
                         })}
                       </span>
                       <button
-                        onClick={() => addCartItem(product)}
+                        onClick={() => {
+                          addCartItem(product)
+                          toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+                            position: "top-right",
+                          });
+                        }}
                         disabled={product.amount === 0}
                         className={
                           product.amount === 0
@@ -297,4 +328,4 @@ const Filter = () => {
   );
 };
 
-export default Filter
+export default Filter;
