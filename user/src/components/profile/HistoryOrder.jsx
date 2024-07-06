@@ -15,7 +15,7 @@ const HistoryOrder = () => {
     minPrice: "",
     maxPrice: "",
     fromDate: "",
-    toDate: ""
+    toDate: "",
   });
   const products = JSON.parse(localStorage.getItem("products")) || [];
 
@@ -52,7 +52,7 @@ const HistoryOrder = () => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -79,7 +79,8 @@ const HistoryOrder = () => {
 
     if (filters.fromDate) {
       updatedOrders = updatedOrders.filter(
-        (item) => new Date(item.order.required_date) >= new Date(filters.fromDate)
+        (item) =>
+          new Date(item.order.required_date) >= new Date(filters.fromDate)
       );
     }
 
@@ -182,10 +183,7 @@ const HistoryOrder = () => {
             <Table.Body className="divide-y">
               {filteredOrders.length > 0 ? (
                 filteredOrders.map((item) => (
-                  <Table.Row
-                    key={item.order._id}
-                    className="bg-white  border"
-                  >
+                  <Table.Row key={item.order._id} className="bg-white  border">
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.order.required_date)}
                     </Table.Cell>
@@ -206,11 +204,14 @@ const HistoryOrder = () => {
                       })}
                     </Table.Cell>
                     <Table.Cell className="border">
-                      {item.order.status === 0
-                        ? "Chưa xác nhận"
-                        : item.order.status === 1
-                          ? "Đã xác nhận"
-                          : "Hoàn thành"}
+                      {
+                        [
+                          "Chờ xác nhận",
+                          "Đã xác nhận",
+                          "Đã hoàn thành",
+                          "Hủy đơn",
+                        ][item.order.status]
+                      }
                     </Table.Cell>
                     <Table.Cell>
                       <Link

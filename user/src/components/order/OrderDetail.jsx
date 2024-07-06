@@ -151,7 +151,7 @@ const OrderDetail = () => {
                 Trạng thái đơn hàng:{" "}
                 <span className="font-semibold">
                   {
-                    ["Chờ xác nhận", "Đã xác nhận", "Đã hoàn thành"][
+                    ["Chờ xác nhận", "Đã xác nhận", "Đã hoàn thành", "Hủy đơn"][
                       order.order.status
                     ]
                   }
