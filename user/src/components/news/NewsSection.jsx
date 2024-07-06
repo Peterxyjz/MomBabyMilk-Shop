@@ -7,7 +7,7 @@ const NewsSection = ({ news }) => {
         <div className="p-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 mt-12">
                 <h2 className="text-2xl font-bold">Tin tức</h2>
-                <Link to="/all-news" className="text-blue-500 hover:underline">
+                <Link to="/all-news" className="text-blue-500 hover:underline" onClick={() => window.scrollTo(0, 0)}>
                     Xem tất cả
                 </Link>
             </div>
@@ -30,7 +30,7 @@ const NewsSection = ({ news }) => {
                                     <span>{item.comments} Bình luận</span>
                                     <span className="ml-2">{item.author}</span>
                                 </div>
-                                <Link to={`/news/${item.id}`} className="text-blue-500 hover:underline">
+                                <Link to={`/news/${item.id}`} className="text-blue-500 hover:underline" onClick={() => window.scrollTo(0, 0)}>
                                     Đọc thêm
                                 </Link>
                             </div>

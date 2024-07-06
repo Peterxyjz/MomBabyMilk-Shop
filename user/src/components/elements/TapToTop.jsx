@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import Button from '@mui/material/Button';
-import Messenger from '../../assets/images/logo/messenger.png'
+import Messenger from '../../assets/images/logo/messenger.png';
+
 const TapToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
-
   // Show button when page is scrolled down
   const toggleVisibility = () => {
     if (window.pageYOffset > 300) {
@@ -31,21 +31,21 @@ const TapToTop = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      {isVisible && (
-        <Button 
-          variant="contained" 
-          color="success"
-          onClick={scrollToTop}
-          style={{ minWidth: '40px', minHeight: '40px', padding: '10px', borderRadius: '8px' }}
-        >
-          <MdKeyboardArrowUp className="text-2xl"/>
-        </Button>
-      )}
       <div style={{ position: 'fixed', bottom: '90px', right: '20px', zIndex: 1000 }}>
-        <a href="https://m.me/353628511170589">
-          <img src={Messenger} alt="M" style={{ width: '40px', height: '40px' }} />
-        </a>
+        {isVisible && (
+          <Button 
+            variant="contained" 
+            color="success"
+            onClick={scrollToTop}
+            style={{ minWidth: '40px', minHeight: '40px', padding: '10px', borderRadius: '8px' }}
+          >
+            <MdKeyboardArrowUp className="text-2xl"/>
+          </Button>
+        )}
       </div>
+      <a href="https://m.me/353628511170589" style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
+        <img src={Messenger} alt="M" style={{ width: '40px', height: '40px' }} />
+      </a>
     </div>
   );
 };

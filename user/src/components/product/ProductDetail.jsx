@@ -7,6 +7,7 @@ import { FaAngleDown, FaAngleUp, FaReply, FaRegHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { fetchGetFeedbackById } from "../../data/api";
+import ProductCard from "../card/Card";
 
 const ProductDetail = () => {
   const location = useLocation();
@@ -16,7 +17,8 @@ const ProductDetail = () => {
   const [reviews, setReviews] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
-
+  const products = JSON.parse(localStorage.getItem("products"));
+  const [relatedProducts, setRelatedProducts] = useState([]);
   useEffect(() => {
     if (product) {
       const getFeedback = async () => {
@@ -24,13 +26,21 @@ const ProductDetail = () => {
         setReviews(data.data.result);
       };
       getFeedback();
+      
+      const relatedProduct = async () => {
+        const relatedItems = products.filter(
+          (item) => item.category_id === product.category_id && item._id !== product._id
+        );
+        setRelatedProducts(relatedItems);
+      };
+      relatedProduct();
     }
   }, [product]);
+  
 
   if (!product) {
     return <div>Product not found</div>;
   }
-
   const handleAddToCart = (product) => {
     const currentCart = cartItems.find(
       (cartItem) => cartItem._id === product._id
@@ -113,7 +123,7 @@ const ProductDetail = () => {
                     })}
                   </p>
                   <p className="text-lg font-medium text-green-500 sm:text-xl">
-                    {product.discount}% off
+                    Giảm {product.discount}%
                   </p>
                 </div>
               ) : (
@@ -132,9 +142,7 @@ const ProductDetail = () => {
                 <p className="text-sm font-medium leading-none text-gray-500">
                   ({product.rating})
                 </p>
-                <a
-                  className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline"
-                >
+                <a className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline">
                   {product.reviewer} Đánh Giá
                 </a>
               </div>
@@ -145,7 +153,7 @@ const ProductDetail = () => {
                 className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                 onClick={() => addWishlistItem(product)}
               >
-                <FaRegHeart className="w-5 h-5 -ms-2 me-2"/>
+                <FaRegHeart className="w-5 h-5 -ms-2 me-2" />
                 Yêu Thích
               </button>
 
@@ -154,7 +162,7 @@ const ProductDetail = () => {
                   className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
                   onClick={() => handleAddToCart(product)}
                 >
-                  < FaCartPlus className="w-5 h-5 -ms-2 me-2" />
+                  <FaCartPlus className="w-5 h-5 -ms-2 me-2" />
                   Thêm Vào Giỏ Hàng
                 </button>
               ) : (
@@ -167,6 +175,7 @@ const ProductDetail = () => {
         </div>
 
         <hr className="my-6 md:my-8 border-gray-200" />
+        {/* Mô tả */}
         <h2 className="text-3xl font-semibold mb-4">Mô tả sản phẩm</h2>
         <div className="text-gray-500 text-lg text-justify">
           {showFullDescription
@@ -187,6 +196,7 @@ const ProductDetail = () => {
           </button>
         </div>
 
+        {/* feedback */}
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
           {reviews.length > 0 ? (
@@ -213,7 +223,9 @@ const ProductDetail = () => {
                         {review.description}
                       </div>
                       <p className="text-gray-500 text-sm mt-2">
-                        {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                        {new Date(review.created_at).toLocaleDateString(
+                          "vi-VN"
+                        )}
                       </p>
                       {review.reply_feedback && (
                         <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
@@ -221,7 +233,9 @@ const ProductDetail = () => {
                             <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
                               M
                             </div>
-                            <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                            <p className="font-medium ml-2">
+                              MomBabyMilk Shop:
+                            </p>
                           </div>
                           <div className="text-black mx-8 flex">
                             <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
@@ -252,7 +266,9 @@ const ProductDetail = () => {
                         {review.description}
                       </div>
                       <p className="text-gray-500 text-sm mt-2">
-                        {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                        {new Date(review.created_at).toLocaleDateString(
+                          "vi-VN"
+                        )}
                       </p>
                       {review.reply_feedback && (
                         <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
@@ -260,7 +276,9 @@ const ProductDetail = () => {
                             <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
                               M
                             </div>
-                            <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                            <p className="font-medium ml-2">
+                              MomBabyMilk Shop:
+                            </p>
                           </div>
                           <div className="text-black mx-8 flex">
                             <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
@@ -289,6 +307,14 @@ const ProductDetail = () => {
               Sản phẩm chưa có đánh giá
             </p>
           )}
+        </div>
+
+        {/* related products */}
+        <div className="w-full">
+          <ProductCard
+            products={relatedProducts}
+            headline={"Sản phẩm liên quan"}
+          />
         </div>
       </div>
     </section>
