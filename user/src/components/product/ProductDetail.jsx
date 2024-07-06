@@ -3,7 +3,13 @@ import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
-import { FaAngleDown, FaAngleUp, FaReply, FaRegHeart } from "react-icons/fa";
+import {
+  FaAngleDown,
+  FaAngleUp,
+  FaReply,
+  FaRegHeart,
+  FaHeart,
+} from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { fetchGetFeedbackById } from "../../data/api";
@@ -13,7 +19,8 @@ const ProductDetail = () => {
   const location = useLocation();
   const product = location.state?.product || null;
   const { cartItems, addCartItem } = useCartContext();
-  const { addWishlistItem } = useWishlistContext();
+  const { checkWishlistItem, addWishlistItem, removeWishlistItem } =
+    useWishlistContext();
   const [reviews, setReviews] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
@@ -26,17 +33,17 @@ const ProductDetail = () => {
         setReviews(data.data.result);
       };
       getFeedback();
-      
+
       const relatedProduct = async () => {
         const relatedItems = products.filter(
-          (item) => item.category_id === product.category_id && item._id !== product._id
+          (item) =>
+            item.category_id === product.category_id && item._id !== product._id
         );
         setRelatedProducts(relatedItems);
       };
       relatedProduct();
     }
   }, [product]);
-  
 
   if (!product) {
     return <div>Product not found</div>;
@@ -149,13 +156,23 @@ const ProductDetail = () => {
             </div>
 
             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
-              <button
-                className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
-                onClick={() => addWishlistItem(product)}
-              >
-                <FaRegHeart className="w-5 h-5 -ms-2 me-2" />
-                Yêu Thích
-              </button>
+              {checkWishlistItem(product) ? (
+                <button
+                  className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                  onClick={() => removeWishlistItem(product._id)}
+                >
+                  <FaHeart className="w-5 h-5 -ms-2 me-2 text-red-500" />
+                  Yêu Thích
+                </button>
+              ) : (
+                <button
+                  className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                  onClick={() => addWishlistItem(product)}
+                >
+                  <FaRegHeart className="w-5 h-5 -ms-2 me-2" />
+                  Yêu Thích
+                </button>
+              )}
 
               {product.amount > 0 ? (
                 <button
