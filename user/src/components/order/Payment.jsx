@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { checkQRPaymet, deleteOrder, fetchCreateOrder } from "../../data/api.jsx";
 import toast, { Toaster } from 'react-hot-toast';
@@ -225,14 +225,14 @@ const Payment = () => {
                       <p>Địa Chỉ: {customer_infor.address}</p>
                     </div>
                   </div>
-                  <button
-                    type="button"
+                  <Link
+                    to={"/order"}
                     data-modal-target="billingInformationModal"
                     data-modal-toggle="billingInformationModal"
                     className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
                   >
                     Chỉnh Sửa
-                  </button>
+                  </Link>
                 </div>
                 <div className="mt-6 sm:mt-8">
                   <div className="relative overflow-x-auto ">
@@ -393,13 +393,12 @@ const Payment = () => {
                   >
                     {" "}
                     Tôi đồng ý với{" "}
-                    <a
-                      href="#"
-                      title=""
+                    <Link
+                      to={"/exchange_policy"}
                       className="text-primary-700 underline hover:no-underline dark:text-primary-500"
                     >
-                      Các điều khoản và điều kiện
-                    </a>{" "}
+                      các điều khoản và điều kiện
+                    </Link>{" "}
                     việc mua và đổi trả của MomBabyMilk{" "}
                   </label>
                 </div>

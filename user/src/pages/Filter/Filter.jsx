@@ -192,7 +192,7 @@ const Filter = () => {
         </div>
         <div className="w-full md:w-4/5 p-4 flex-grow">
           <div className="flex justify-between mb-4 items-center">
-            <Link to="/filter">
+            <Link to="/filter" onClick={() => window.scrollTo(0, 0)}>
               <button
                 onClick={handleResetFilters}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg flex"

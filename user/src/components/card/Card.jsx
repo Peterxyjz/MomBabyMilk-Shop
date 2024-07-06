@@ -76,7 +76,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
     <div className="h-full">
       <div className="flex justify-between items-center mb-2 mt-12">
         <h1 className="text-2xl font-bold">{headline}</h1>
-        <Link to={viewAllLink} className="text-blue-500 hover:underline">
+        <Link to={viewAllLink} className="text-blue-500 hover:underline" onClick={() => window.scrollTo(0, 0)}>
           Xem tất cả
         </Link>
       </div>
@@ -88,7 +88,11 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
             return (
               <div key={product._id} className="p-1">
                 <Card className="max-w-xs m-1 product-card flex flex-col justify-between h-full relative">
-                  <Link to="/product" state={{ product: product }}>
+                  <Link
+                    to="/product"
+                    state={{ product: product }}
+                    onClick={() => window.scrollTo(0, 0)}
+                  >
                     <div className="relative product-image-container">
                       <img
                         className="product-image mx-auto"

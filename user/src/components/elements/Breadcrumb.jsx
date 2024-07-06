@@ -11,7 +11,7 @@ const Breadcrumbs = ({ headline }) => {
           className="text-2xl"
         >
           <BreadcrumbItem icon={HiHome}>
-            <Link to="/">
+            <Link to="/" onClick={() => window.scrollTo(0, 0)}>
               <p className="text-lg font-semibold text-black">Trang chủ</p>
             </Link>
           </BreadcrumbItem>

@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactCardSlider from 'react-card-slider-component';
 
 const Slider = ({ title, slides }) => {

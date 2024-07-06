@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { fetchGetAllVoucher, fetchGetVoucher } from "../../data/api";
 import { Button } from "flowbite-react";
 import { ImGift } from "react-icons/im";
-
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { useWishlistContext } from "../../context/WishlistContext";
 const ShoppingCart = () => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const verify = user === null ? 0 : user.verify;
@@ -18,7 +19,8 @@ const ShoppingCart = () => {
     decreaseAmount,
     cartAmount,
   } = useCartContext();
-
+  const { checkWishlistItem, addWishlistItem, removeWishlistItem } =
+    useWishlistContext();
   const [voucherCode, setVoucherCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [ship, setShip] = useState(0);
@@ -276,29 +278,23 @@ const ShoppingCart = () => {
                             {product.product_name}
                           </Link>
                           <div className="flex items-center gap-4">
-                            <button
-                              type="button"
-                              className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline"
-                            >
-                              <svg
-                                className="me-1.5 h-5 w-5"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="none"
-                                viewBox="0 0 24 24"
+                            {checkWishlistItem(product) ? (
+                              <button
+                                className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                onClick={() => removeWishlistItem(product._id)}
                               >
-                                <path
-                                  stroke="currentColor"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-                                />
-                              </svg>
-                              Yêu Thích
-                            </button>
+                                <FaHeart className="w-5 h-5 -ms-2 me-2 text-red-500" />
+                                Yêu Thích
+                              </button>
+                            ) : (
+                              <button
+                                className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                onClick={() => addWishlistItem(product)}
+                              >
+                                <FaRegHeart className="w-5 h-5 -ms-2 me-2" />
+                                Yêu Thích
+                              </button>
+                            )}
                             <button
                               type="button"
                               onClick={() => removeCartItem(product._id)}
@@ -448,57 +444,62 @@ const ShoppingCart = () => {
                             Kho Voucher
                           </button>
                           {/* Dropdown menu */}
-                          {dropdownOpen && (
-                            <div
-                              id="dropdownRadioHelper"
-                              className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full "
-                            >
-                              <ul
-                                className="p-3 space-y-1 text-sm text-gray-700 "
-                                aria-labelledby="dropdownRadioHelperButton"
+                          {dropdownOpen &&
+                            (voucherList.length > 0 ? (
+                              <div
+                                id="dropdownRadioHelper"
+                                className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full "
                               >
-                                {voucherList.map((voucher) => (
-                                  <li key={voucher._id}>
-                                    <div className="flex p-2 rounded hover:bg-gray-100 ">
-                                      <div className="flex items-center h-5">
-                                        <input
-                                          id="helper-radio-4"
-                                          name="helper-radio"
-                                          type="radio"
-                                          value={voucher._id}
-                                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
-                                          onChange={handleRadioChange}
-                                        />
-                                      </div>
-                                      <div className="ms-2 text-sm">
-                                        <label
-                                          htmlFor="helper-radio-4"
-                                          className="font-medium text-gray-900 "
-                                        >
-                                          <div>
-                                            Voucher giảm{" "}
-                                            {Number(
-                                              voucher.discount
-                                            ).toLocaleString("vi-VN", {
-                                              style: "currency",
-                                              currency: "VND",
-                                            })}
-                                          </div>
-                                          <p
-                                            id="helper-radio-text-4"
-                                            className="text-xs font-normal text-gray-500 "
+                                <ul
+                                  className="p-3 space-y-1 text-sm text-gray-700 "
+                                  aria-labelledby="dropdownRadioHelperButton"
+                                >
+                                  {voucherList.map((voucher) => (
+                                    <li key={voucher._id}>
+                                      <div className="flex p-2 rounded hover:bg-gray-100 ">
+                                        <div className="flex items-center h-5">
+                                          <input
+                                            id="helper-radio-4"
+                                            name="helper-radio"
+                                            type="radio"
+                                            value={voucher._id}
+                                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                                            onChange={handleRadioChange}
+                                          />
+                                        </div>
+                                        <div className="ms-2 text-sm">
+                                          <label
+                                            htmlFor="helper-radio-4"
+                                            className="font-medium text-gray-900 "
                                           >
-                                            Voucher chỉ còn {voucher.amount}{" "}
-                                            lượt
-                                          </p>
-                                        </label>
+                                            <div>
+                                              Voucher giảm{" "}
+                                              {Number(
+                                                voucher.discount
+                                              ).toLocaleString("vi-VN", {
+                                                style: "currency",
+                                                currency: "VND",
+                                              })}
+                                            </div>
+                                            <p
+                                              id="helper-radio-text-4"
+                                              className="text-xs font-normal text-gray-500 "
+                                            >
+                                              Voucher chỉ còn {voucher.amount}{" "}
+                                              lượt
+                                            </p>
+                                          </label>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ) : (
+                              <p className="text-md text-center font-normal text-red-600 ">
+                                Điểm tích lũy không đủ!
+                              </p>
+                            ))}
                           <div className="flex items-center justify-center my-2 gap-2">
                             <a
                               href="/profile/accumulated-points"
@@ -527,7 +528,7 @@ const ShoppingCart = () => {
           ) : (
             <div className="w-full min-h-60 flex flex-col items-center justify-center outline-none rounded-xl border-2 border-[rgba(0,0,0,0.1)] mx-8 my-8 p-4">
               <h1 className="text-2xl font-semibold">Giỏ hàng trống</h1>
-              <img src={cartEmptyImg} className="min-h-[400px] " />
+              <img src={cartEmptyImg} className="min-h-[400px]" />
             </div>
           )}
         </div>

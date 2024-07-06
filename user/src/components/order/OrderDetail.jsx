@@ -97,9 +97,11 @@ const OrderDetail = () => {
     await fetchUploadFeedback(feedback, token)
       .then(() => {
         toast.success("Đánh giá cho sản phẩm thành công!");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Đánh giá cho sản phẩm thất bại!");
       });
     closeFeedbackModal();
   };
@@ -149,7 +151,7 @@ const OrderDetail = () => {
                 Trạng thái đơn hàng:{" "}
                 <span className="font-semibold">
                   {
-                    ["Chờ xác nhận", "Đã xác nhận", "Đã hoàn thành"][
+                    ["Chờ xác nhận", "Đã xác nhận", "Đã hoàn thành", "Hủy đơn"][
                       order.order.status
                     ]
                   }

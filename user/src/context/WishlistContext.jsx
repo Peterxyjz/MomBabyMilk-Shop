@@ -19,6 +19,9 @@ export const WishlistContextProvider = ({ children }) => {
 
   const wishlistAmount = wishlistItems.length;
 
+  const checkWishlistItem = (product) => {
+    return wishlistItems.find(item => item._id === product._id);
+  }
   const addWishlistItem = (product) => {
     const currentWishlist = wishlistItems.find(item => item._id === product._id);
     if (!currentWishlist) {
@@ -44,6 +47,7 @@ export const WishlistContextProvider = ({ children }) => {
     <WishlistContext.Provider
       value={{
         wishlistItems,
+        checkWishlistItem,
         addWishlistItem,
         removeWishlistItem,
         wishlistAmount,

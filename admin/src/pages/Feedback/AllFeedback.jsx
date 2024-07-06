@@ -2,6 +2,7 @@ import { Button, Card, Rate, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { fetchAllFeedback, fetchAllUsers, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
+import Loading from '../../components/Loading';
 
 const AllFeedback = () => {
     const [products, setProducts] = useState([]);
@@ -62,8 +63,8 @@ const AllFeedback = () => {
 
 
     if (loading) {
-        return <div className="text-center font-bold text-2xl">Loading...</div>;
-    }
+        return <Loading/>
+      }
 
 
     const columns = [

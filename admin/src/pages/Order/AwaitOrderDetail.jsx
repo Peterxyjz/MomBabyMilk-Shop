@@ -7,6 +7,7 @@ import {
 } from "../../data/api";
 import { Button } from "flowbite-react";
 import { Card, Col, Divider, Row, Typography, notification } from "antd";
+import Loading from "../../components/Loading";
 
 const AwaitOrderDetail = () => {
   const location = useLocation();
@@ -51,7 +52,9 @@ const AwaitOrderDetail = () => {
     }
   }, [products, order]);
 
-  if (loading) return <div className="w-full h-full mx-6 py-6">Loading...</div>;
+  if (loading) {
+    return <Loading/>
+  }
 
   const handleCancelOrder = async () => {
     const order_id = order.order._id;

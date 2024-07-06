@@ -10,6 +10,7 @@ import {
   SmileOutlined,
   TruckOutlined,
 } from "@ant-design/icons";
+import Loading from "../../components/Loading";
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -55,7 +56,9 @@ const OrderDetail = () => {
     }
   }, [products, order]);
 
-  if (loading) return <div className="w-full h-full mx-6 py-6">Loading...</div>;
+  if (loading) {
+    return <Loading/>
+  }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
