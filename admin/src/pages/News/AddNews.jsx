@@ -1,22 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  Button,
-  FileInput,
-  Label,
-  Select,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import { Button, FileInput, Label, TextInput } from "flowbite-react";
 import { imageDb } from "../../data/firebase.config";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import {
   fetchProducts,
   fetchUpdateNews,
-  fetchUpdateProduct,
-  fetchUploadFeedback,
   fetchUploadNews,
-  fetchUploadProduct,
 } from "../../data/api";
 import { notification } from "antd";
 
@@ -182,10 +172,6 @@ const AddNews = () => {
     setNews_name(event.target.value);
   };
 
-  const handleChangeDescription = (event) => {
-    setDescription(event.target.value);
-  };
-
   async function uploadImage(news, id) {
     if (img !== null) {
       const imgRef = ref(imageDb, `news_img/${v4()}`);
@@ -193,10 +179,7 @@ const AddNews = () => {
       const url = await getDownloadURL(snapshot.ref);
 
       news.img_url = url;
-      console.log("news: ", news);
       await sendURL(news, id);
-    } else {
-      console.log("null");
     }
   }
   const sendURL = async (news, id) => {
@@ -211,19 +194,17 @@ const AddNews = () => {
       news_name,
       description,
     };
-    console.log(news);
-    // send data to db:
     await fetchUploadNews(news, token)
       .then(async (res) => {
         console.log(res.data);
-        const id = res.data.result.insertedId
-        await uploadImage(news,id);
+        const id = res.data.result.insertedId;
+        await uploadImage(news, id);
       })
       .then((data) => {
         notification.success({
           message: "Thêm bài viết thành công!",
           placement: "top",
-        })
+        });
         form.reset();
         setDescription("");
       })
@@ -239,7 +220,6 @@ const AddNews = () => {
           rel="stylesheet"
           href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css"
         />
-        {/* If you are using premium features: */}
         <link
           rel="stylesheet"
           href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.0/ckeditor5-premium-features.css"
@@ -250,7 +230,6 @@ const AddNews = () => {
         className="flex lg:w-[1180px] flex-col flex-wrap gap-4"
         onSubmit={handleSubmit}
       >
-        {/* img: */}
         <div className="flex gap-8">
           <Label htmlFor="file-upload" value="Chọn ảnh bài viết" />
         </div>
@@ -259,10 +238,8 @@ const AddNews = () => {
           required
           onChange={(event) => setImg(event.target.files[0])}
         />
-        {/* row1 */}
-        <div className="flex gap-8">
-          {/* product_name */}
-          <div className="lg:w-3/5">
+        <div className="flex gap-8 w-full">
+          <div className="lg:w-1/2">
             <div className="mb-2 block">
               <Label htmlFor="product_name" value="Tên Bài Viết" />
             </div>
@@ -275,63 +252,52 @@ const AddNews = () => {
               required
             />
           </div>
-        </div>
-
-        {/* row2 */}
-        <div className="flex gap-8">
-          {/* category */}
           <div className="lg:w-1/2">
             <div className="mb-2 block">
               <Label htmlFor="product" value="Chọn Sản Phẩm" />
             </div>
-
-            <Select
-              id="product"
-              className="w-full rounded"
-              onChange={handleChangeSelectedProduct}
-              required
-            >
-              <option value="" disabled selected>
-                Chọn Tên Sản Phẩm
-              </option>
-              {products.map((option) => (
-                <option key={option._id} value={option._id}>
-                  {option.product_name}
-                </option>
-              ))}
-            </Select>
+            <div className="relative">
+              <TextInput
+                id="product"
+                type="text"
+                placeholder="Tìm kiếm sản phẩm..."
+                list="product-options"
+                onChange={handleChangeSelectedProduct}
+                required
+              />
+              <datalist id="product-options">
+                {products.map((option) => (
+                  <option key={option._id} value={option.product_name}>
+                    {option.product_name}
+                  </option>
+                ))}
+              </datalist>
+            </div>
           </div>
         </div>
 
-        {/* row3 */}
-        <div className="flex gap-8"></div>
-
-        {/* row4 */}
         <div>
           <div className="mb-2 block">
             <Label htmlFor="description" value="Mô Tả Bài Viết" />
           </div>
-          {/* description  */}
-          <div>
-            <div className="main-container">
-              <div
-                className="editor-container editor-container_inline-editor"
-                ref={editorContainerRef}
-              >
-                <div className="editor-container__editor">
-                  <div ref={editorRef}>
-                    {isLayoutReady && (
-                      <CKEditor
-                        data={description}
-                        onChange={handleEditorChange}
-                        editor={InlineEditor}
-                        config={editorConfig}
-                      />
-                    )}
-                  </div>
+          <div className="main-container w-full">
+            <div
+              className="editor-container editor-container_inline-editor"
+              ref={editorContainerRef}
+            >
+              <div className="editor-container__editor">
+                <div ref={editorRef}>
+                  {isLayoutReady && (
+                    <CKEditor
+                      data={description}
+                      onChange={handleEditorChange}
+                      editor={InlineEditor}
+                      config={editorConfig}
+                    />
+                  )}
                 </div>
-                {/* <div dangerouslySetInnerHTML={{ __html: description }} /> Dung de render*/} 
               </div>
+              {/* <div dangerouslySetInnerHTML={{ __html: description }} /> Dung de render*/}
             </div>
           </div>
         </div>
