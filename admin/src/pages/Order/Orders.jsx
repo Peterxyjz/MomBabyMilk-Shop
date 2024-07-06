@@ -5,6 +5,7 @@ import { Card } from "primereact/card";
 import Column from "antd/es/table/Column";
 import { Table, Tag } from "antd";
 import { CheckCircleOutlined, SyncOutlined, SmileOutlined , CloseCircleOutlined } from '@ant-design/icons';
+import Loading from "../../components/Loading";
 
 const ApprovedOrder = () => {
   const [loading, setLoading] = useState(true);
@@ -43,7 +44,7 @@ const ApprovedOrder = () => {
   };
 
   if (loading) {
-    return <div className="w-full h-full mx-6 py-6">Loading...</div>;
+    return <Loading/>
   }
  
   const formatDate = (dateString) => {

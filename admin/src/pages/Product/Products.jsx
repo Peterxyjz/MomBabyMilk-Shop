@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchProducts, fetchUpdateProduct } from "../../data/api";
 import { Card } from "primereact/card";
 import { Button, Image, Modal, Switch, Table, notification } from "antd";
+import Loading from "../../components/Loading";
 const Product = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
@@ -177,7 +178,7 @@ const Product = () => {
   ];
 
   if (loading) {
-    return <div className="text-center font-bold text-2xl">Loading...</div>;
+    return <Loading/>
   }
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "auto" }}>

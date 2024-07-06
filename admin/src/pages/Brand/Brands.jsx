@@ -4,6 +4,7 @@ import { Card } from 'primereact/card'
 import React, { useEffect, useState } from 'react'
 import { useNavigate  } from 'react-router-dom';
 import { fetchBrands } from '../../data/api';
+import Loading from '../../components/Loading';
 
 const Brands = () => {
   const [loading, setLoading] = useState(true);
@@ -72,7 +73,7 @@ const Brands = () => {
   ];
 
   if (loading) {
-    return <div className="text-center font-bold text-2xl">Loading...</div>;
+    return <Loading/>
   }
 
   return (

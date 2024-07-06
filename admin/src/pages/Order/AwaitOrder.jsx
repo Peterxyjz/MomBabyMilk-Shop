@@ -6,6 +6,7 @@ import { Card } from "primereact/card";
 import { Table, Tag } from "antd";
 import Column from "antd/es/table/Column";
 import {SyncOutlined} from '@ant-design/icons';
+import Loading from "../../components/Loading";
 const AwaitOrder = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -28,7 +29,7 @@ const AwaitOrder = () => {
   }, []);
 
   if (loading) {
-    return <div className="w-full h-full mx-6 py-6">Loading...</div>;
+    return <Loading/>
   }
 
   const formatDate = (dateString) => {
