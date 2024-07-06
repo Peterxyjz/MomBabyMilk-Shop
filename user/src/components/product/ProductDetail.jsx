@@ -1,26 +1,21 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 import { toast, Toaster } from "react-hot-toast";
-import { FaAngleDown, FaAngleUp, FaReply, FaRegHeart, FaShoppingCart, FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { FaAngleDown, FaAngleUp, FaReply, FaRegHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
-import { useEffect, useState, useRef } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useProductContext } from "../../context/ProductContext";
+import { useEffect, useState } from "react";
+import { fetchGetFeedbackById } from "../../data/api";
 
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state?.product || null;
   const { cartItems, addCartItem } = useCartContext();
   const { addWishlistItem } = useWishlistContext();
-  const { products } = useProductContext();
   const [reviews, setReviews] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const sliderRef = useRef(null);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -35,10 +30,6 @@ const ProductDetail = () => {
   if (!product) {
     return <div>Product not found</div>;
   }
-
-  const relatedProducts = products.filter(
-    (p) => p.category_name === product.category_name && p._id !== product._id
-  );
 
   const handleAddToCart = (product) => {
     const currentCart = cartItems.find(
@@ -83,54 +74,6 @@ const ProductDetail = () => {
   };
 
   const discountedPrice = getDiscountedPrice(product.price, product.discount);
-
-  const NextArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <div className="absolute top-1/2 transform -translate-y-1/2 right-0 z-10 cursor-pointer text-black" onClick={onClick}>
-        <IoIosArrowForward size={30} />
-      </div>
-    );
-  };
-
-  const PrevArrow = (props) => {
-    const { onClick } = props;
-    return (
-      <div className="absolute top-1/2 transform -translate-y-1/2 left-0 z-10 cursor-pointer text-black" onClick={onClick}>
-        <IoIosArrowBack size={30} />
-      </div>
-    );
-  };
-
-  const settings = {
-    dots: false,
-    infinite: relatedProducts.length > 4,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow onClick={() => sliderRef.current.slickNext()} />,
-    prevArrow: <PrevArrow onClick={() => sliderRef.current.slickPrev()} />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: relatedProducts.length > 2,
-          dots: false
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: relatedProducts.length > 1,
-          dots: false
-        }
-      }
-    ]
-  };
 
   return (
     <section className="py-8 bg-white md:py-16 antialiased">
@@ -202,7 +145,7 @@ const ProductDetail = () => {
                 className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                 onClick={() => addWishlistItem(product)}
               >
-                <FaRegHeart className="w-5 h-5 -ms-2 me-2" />
+                <FaRegHeart className="w-5 h-5 -ms-2 me-2"/>
                 Yêu Thích
               </button>
 
@@ -247,119 +190,105 @@ const ProductDetail = () => {
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
           {reviews.length > 0 ? (
-            reviews.map((review) => (
-              <div key={review._id} className=" p-4 rounded-lg text-black mb-4">
-                <div className="flex items-center mb-2">
-                  <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                    {review.username.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="ml-2 w-full flex items-start justify-between">
-                    <p className="text-lg font-semibold">{review.username}</p>
-                    <RenderRating rating={review.rating} />
-                  </div>
-                </div>
-                <div className="text-black mx-2 flex">
-                  <FaReply className="mx-2 mt-1 text-sm transform rotate-180" />{review.description}
-                </div>
-                <p className="text-gray-500 text-sm mt-2">
-                  {new Date(review.created_at).toLocaleDateString("vi-VN")}
-                </p>
-                {review.reply_feedback && (
-                  <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                        M
+            <>
+              {showAllReviews
+                ? reviews.map((review) => (
+                    <div
+                      key={review._id}
+                      className=" p-4 rounded-lg text-black mb-4"
+                    >
+                      <div className="flex items-center mb-2">
+                        <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                          {review.username.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="ml-2 w-full flex items-start justify-between">
+                          <p className="text-lg font-semibold">
+                            {review.username}
+                          </p>
+                          <RenderRating rating={review.rating} />
+                        </div>
                       </div>
-                      <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                      <div className="text-black mx-2 flex">
+                        <FaReply className="mx-2 mt-1 text-sm transform rotate-180" />
+                        {review.description}
+                      </div>
+                      <p className="text-gray-500 text-sm mt-2">
+                        {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                      </p>
+                      {review.reply_feedback && (
+                        <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
+                          <div className="flex items-center mb-2">
+                            <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                              M
+                            </div>
+                            <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                          </div>
+                          <div className="text-black mx-8 flex">
+                            <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
+                            {review.reply_feedback.description}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div className="text-black mx-8 flex">
-                      <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
-                      {review.reply_feedback.description}
+                  ))
+                : reviews.slice(0, 1).map((review) => (
+                    <div
+                      key={review._id}
+                      className=" p-4 rounded-lg text-black mb-4"
+                    >
+                      <div className="flex items-center mb-2">
+                        <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                          {review.username.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="ml-2 w-full flex items-start justify-between">
+                          <p className="text-lg font-semibold">
+                            {review.username}
+                          </p>
+                          <RenderRating rating={review.rating} />
+                        </div>
+                      </div>
+                      <div className="text-black mx-2 flex">
+                        <FaReply className="mx-2 mt-1 text-sm transform rotate-180" />
+                        {review.description}
+                      </div>
+                      <p className="text-gray-500 text-sm mt-2">
+                        {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                      </p>
+                      {review.reply_feedback && (
+                        <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
+                          <div className="flex items-center mb-2">
+                            <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                              M
+                            </div>
+                            <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                          </div>
+                          <div className="text-black mx-8 flex">
+                            <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
+                            {review.reply_feedback.description}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
-              </div>
-            ))
+                  ))}
+              <button
+                className="w-full text-center text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                onClick={() => setShowAllReviews(!showAllReviews)}
+              >
+                <div className="flex items-center justify-center mt-2">
+                  {showAllReviews ? `Thu gọn ` : `Xem tất cả đánh giá `}
+                  {showAllReviews ? (
+                    <FaAngleUp className="w-5 h-5 mx-2 my-2" />
+                  ) : (
+                    <FaAngleDown className="w-5 h-5 mx-2 my-2" />
+                  )}
+                </div>
+              </button>
+            </>
           ) : (
             <p className="text-lg text-center text-gray-600">
               Sản phẩm chưa có đánh giá
             </p>
           )}
-        </div>
-
-        <div className="mt-8 relative">
-          <h2 className="text-3xl font-semibold mb-4">Sản phẩm liên quan</h2>
-          <div className="relative">
-            <Slider ref={sliderRef} {...settings}>
-              {relatedProducts.map((relatedProduct) => (
-                <div key={relatedProduct._id} className="p-4">
-                  <div className="border p-4 rounded-lg flex flex-col items-center">
-                    <Link
-                      to="/product"
-                      state={{ product: relatedProduct }}
-                      className="w-full"
-                    >
-                      <div className="flex justify-center mb-2 relative">
-                        <img
-                          src={relatedProduct.imgUrl}
-                          alt={relatedProduct.product_name}
-                          className="w-44 h-44 object-cover"
-                        />
-                        {relatedProduct.amount === 0 && (
-                          <div className="absolute inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center">
-                            <span className="text-white text-xl font-bold">
-                              Hết hàng
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="h-20 mb-2 text-center w-full">
-                        <h3
-                          className="font-bold text-base overflow-hidden overflow-ellipsis"
-                          style={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                          }}
-                        >
-                          {relatedProduct.product_name}
-                        </h3>
-                      </div>
-                    </Link>
-                    <div className="flex justify-between items-center w-full">
-                      <span>
-                        {Number(relatedProduct.price).toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </span>
-                      <button
-                        onClick={() => addCartItem(relatedProduct)}
-                        disabled={relatedProduct.amount === 0}
-                        className={
-                          relatedProduct.amount === 0
-                            ? "bg-gray-500 text-white py-2 px-4 rounded-lg flex items-center justify-center cursor-not-allowed"
-                            : "bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center"
-                        }
-                      >
-                        Thêm <FaShoppingCart className="ml-2" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-            {relatedProducts.length > 4 && (
-              <>
-                <div className="absolute top-1/2 transform -translate-y-1/2 right-0 z-10 cursor-pointer text-black" onClick={() => sliderRef.current.slickNext()}>
-                  <IoIosArrowForward size={30} />
-                </div>
-                <div className="absolute top-1/2 transform -translate-y-1/2 left-0 z-10 cursor-pointer text-black" onClick={() => sliderRef.current.slickPrev()}>
-                  <IoIosArrowBack size={30} />
-                </div>
-              </>
-            )}
-          </div>
         </div>
       </div>
     </section>

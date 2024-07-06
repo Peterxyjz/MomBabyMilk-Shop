@@ -448,57 +448,60 @@ const ShoppingCart = () => {
                             Kho Voucher
                           </button>
                           {/* Dropdown menu */}
-                          {dropdownOpen && (
-                            <div
-                              id="dropdownRadioHelper"
-                              className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full "
-                            >
-                              <ul
-                                className="p-3 space-y-1 text-sm text-gray-700 "
-                                aria-labelledby="dropdownRadioHelperButton"
+                          {dropdownOpen &&
+                            (voucherList.length > 0 ? (
+                              <div
+                                id="dropdownRadioHelper"
+                                className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-full "
                               >
-                                {voucherList.map((voucher) => (
-                                  <li key={voucher._id}>
-                                    <div className="flex p-2 rounded hover:bg-gray-100 ">
-                                      <div className="flex items-center h-5">
-                                        <input
-                                          id="helper-radio-4"
-                                          name="helper-radio"
-                                          type="radio"
-                                          value={voucher._id}
-                                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
-                                          onChange={handleRadioChange}
-                                        />
-                                      </div>
-                                      <div className="ms-2 text-sm">
-                                        <label
-                                          htmlFor="helper-radio-4"
-                                          className="font-medium text-gray-900 "
-                                        >
-                                          <div>
-                                            Voucher giảm{" "}
-                                            {Number(
-                                              voucher.discount
-                                            ).toLocaleString("vi-VN", {
-                                              style: "currency",
-                                              currency: "VND",
-                                            })}
-                                          </div>
-                                          <p
-                                            id="helper-radio-text-4"
-                                            className="text-xs font-normal text-gray-500 "
+                                <ul
+                                  className="p-3 space-y-1 text-sm text-gray-700 "
+                                  aria-labelledby="dropdownRadioHelperButton"
+                                >
+                                  {voucherList.map((voucher) => (
+                                    <li key={voucher._id}>
+                                      <div className="flex p-2 rounded hover:bg-gray-100 ">
+                                        <div className="flex items-center h-5">
+                                          <input
+                                            id="helper-radio-4"
+                                            name="helper-radio"
+                                            type="radio"
+                                            value={voucher._id}
+                                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                                            onChange={handleRadioChange}
+                                          />
+                                        </div>
+                                        <div className="ms-2 text-sm">
+                                          <label
+                                            htmlFor="helper-radio-4"
+                                            className="font-medium text-gray-900 "
                                           >
-                                            Voucher chỉ còn {voucher.amount}{" "}
-                                            lượt
-                                          </p>
-                                        </label>
+                                            <div>
+                                              Voucher giảm{" "}
+                                              {Number(
+                                                voucher.discount
+                                              ).toLocaleString("vi-VN", {
+                                                style: "currency",
+                                                currency: "VND",
+                                              })}
+                                            </div>
+                                            <p
+                                              id="helper-radio-text-4"
+                                              className="text-xs font-normal text-gray-500 "
+                                            >
+                                              Voucher chỉ còn {voucher.amount}{" "}
+                                              lượt
+                                            </p>
+                                          </label>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ) : (
+                              <p className="text-md text-center font-normal text-red-600 ">Điểm tích lũy không đủ!</p>
+                            ))}
                           <div className="flex items-center justify-center my-2 gap-2">
                             <a
                               href="/profile/accumulated-points"
@@ -527,7 +530,7 @@ const ShoppingCart = () => {
           ) : (
             <div className="w-full min-h-60 flex flex-col items-center justify-center outline-none rounded-xl border-2 border-[rgba(0,0,0,0.1)] mx-8 my-8 p-4">
               <h1 className="text-2xl font-semibold">Giỏ hàng trống</h1>
-              <img src={cartEmptyImg} className="min-h-[400px] " />
+              <img src={cartEmptyImg} className="min-h-[400px]" />
             </div>
           )}
         </div>
