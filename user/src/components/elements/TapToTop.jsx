@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import Button from '@mui/material/Button';
-
+import Messenger from '../../assets/images/logo/messenger.png'
 const TapToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -41,6 +41,11 @@ const TapToTop = () => {
           <MdKeyboardArrowUp className="text-2xl"/>
         </Button>
       )}
+      <div style={{ position: 'fixed', bottom: '90px', right: '20px', zIndex: 1000 }}>
+        <a href="https://m.me/353628511170589">
+          <img src={Messenger} alt="M" style={{ width: '40px', height: '40px' }} />
+        </a>
+      </div>
     </div>
   );
 };
