@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import coverImg from "../../assets/images/cover_img.png";
 import cover_imgedit from "../../assets/images/cover_imgedit.png";
-import { Card } from 'primereact/card';
-import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Card } from "primereact/card";
+import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Checkbox } from "@mui/material";
 import { fetchResetPassword } from "../../data/api";
@@ -20,9 +20,8 @@ const ResetPassword = () => {
   });
   const [errorList, setErrorList] = useState([]);
 
-  const [show, setShow] = React.useState(false)
-  const handleClick = () => setShow(!show)
-
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
 
   console.log("reset: " + user_id, digit);
   const handleChange = (event) => {
@@ -36,7 +35,6 @@ const ResetPassword = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { password, confirm_password } = formValues;
-    console.log("xskaxh" + password, confirm_password);
     await fetchResetPassword({ user_id, digit, password, confirm_password })
       .then((res) => {
         navigate("/login");
@@ -51,39 +49,53 @@ const ResetPassword = () => {
   };
   return (
     <>
-
       <div className="w-full h-screen flex">
         <div className="relative w-full h-full flex flex-col">
-          <img src={cover_imgedit} alt="" className="absolute top-0 left-0 w-full h-full object-cover" />
+          <img
+            src={cover_imgedit}
+            alt=""
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
 
-          <Card title="Đặt lại mật khẩu" subTitle="Staff & Admin Only" className="absolute top-[25%] left-[7%] flex flex-col bg-white p-8 rounded-lg shadow-lg w-[35rem]">
+          <Card
+            title="Đặt lại mật khẩu"
+            subTitle="Staff & Admin Only"
+            className="absolute top-[25%] left-[7%] flex flex-col bg-white p-8 rounded-lg shadow-lg w-[35rem]"
+          >
             <div className="w-full flex flex-col max-w-[500px]">
               <div>
                 <form className="w-full flex flex-col" onSubmit={handleSubmit}>
-                  <label htmlFor="password" className="font-bold block mb-2 mt-4">
+                  <label
+                    htmlFor="password"
+                    className="font-bold block mb-2 mt-4"
+                  >
                     Mật khẩu mới
                   </label>
                   <InputGroup>
                     <Input
                       className="w-full h-10 border border-gray-300 rounded-md p-2"
-                      type={show ? 'text' : 'password'}
+                      type={show ? "text" : "password"}
                       id="password"
                       name="password"
                       value={formValues.password}
                       onChange={handleChange}
                     />
-                    <InputRightElement width='4.5rem'>
-                      <Button h='2.5rem'
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="2.5rem"
                         size="sm"
                         onClick={handleClick}
-                        fontSize={'1.5rem'}
+                        fontSize={"1.5rem"}
                       >
                         {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                       </Button>
                     </InputRightElement>
                   </InputGroup>
 
-                  <label htmlFor="confirm_password" className="font-bold block mb-2 mt-4">
+                  <label
+                    htmlFor="confirm_password"
+                    className="font-bold block mb-2 mt-4"
+                  >
                     Xác nhận mật khẩu
                   </label>
                   <InputGroup>
@@ -96,8 +108,6 @@ const ResetPassword = () => {
                       onChange={handleChange}
                     />
                   </InputGroup>
-
-
 
                   {errorList.length > 0 && (
                     <div className="error-list mt-3 mb-3">

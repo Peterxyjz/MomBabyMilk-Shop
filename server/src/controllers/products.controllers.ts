@@ -105,8 +105,6 @@ export const updateController = async (req: Request, res: Response) => {
     _id: new ObjectId(id),
     ...req.body
   })
-  console.log('upload: ', product)
-
   const result = await productsService.update(id, product)
   return res.status(200).json({
     message: USERS_MESSAGES.UPDATE_SUCCESS,

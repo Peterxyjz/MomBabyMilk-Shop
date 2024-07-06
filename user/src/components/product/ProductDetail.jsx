@@ -15,6 +15,7 @@ const ProductDetail = () => {
   const { addWishlistItem } = useWishlistContext();
   const [reviews, setReviews] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -189,39 +190,100 @@ const ProductDetail = () => {
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-4">Đánh giá sản phẩm</h2>
           {reviews.length > 0 ? (
-            reviews.map((review) => (
-              <div key={review._id} className=" p-4 rounded-lg text-black mb-4">
-                <div className="flex items-center mb-2">
-                  <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                    {review.username.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="ml-2 w-full flex items-start justify-between">
-                    <p className="text-lg font-semibold">{review.username}</p>
-                    <RenderRating rating={review.rating} />
-                  </div>
-                </div>
-                <div className="text-black mx-2 flex">
-                <FaReply className="mx-2 mt-1 text-sm transform rotate-180"/>{review.description}
-                </div>
-                <p className="text-gray-500 text-sm mt-2">
-                  {new Date(review.created_at).toLocaleDateString("vi-VN")}
-                </p>
-                {review.reply_feedback && (
-                  <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                        M
+            <>
+              {showAllReviews
+                ? reviews.map((review) => (
+                    <div
+                      key={review._id}
+                      className=" p-4 rounded-lg text-black mb-4"
+                    >
+                      <div className="flex items-center mb-2">
+                        <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                          {review.username.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="ml-2 w-full flex items-start justify-between">
+                          <p className="text-lg font-semibold">
+                            {review.username}
+                          </p>
+                          <RenderRating rating={review.rating} />
+                        </div>
                       </div>
-                      <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                      <div className="text-black mx-2 flex">
+                        <FaReply className="mx-2 mt-1 text-sm transform rotate-180" />
+                        {review.description}
+                      </div>
+                      <p className="text-gray-500 text-sm mt-2">
+                        {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                      </p>
+                      {review.reply_feedback && (
+                        <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
+                          <div className="flex items-center mb-2">
+                            <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                              M
+                            </div>
+                            <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                          </div>
+                          <div className="text-black mx-8 flex">
+                            <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
+                            {review.reply_feedback.description}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div className="text-black mx-8 flex">
-                      <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
-                      {review.reply_feedback.description}
+                  ))
+                : reviews.slice(0, 1).map((review) => (
+                    <div
+                      key={review._id}
+                      className=" p-4 rounded-lg text-black mb-4"
+                    >
+                      <div className="flex items-center mb-2">
+                        <div className="text-xl flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                          {review.username.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="ml-2 w-full flex items-start justify-between">
+                          <p className="text-lg font-semibold">
+                            {review.username}
+                          </p>
+                          <RenderRating rating={review.rating} />
+                        </div>
+                      </div>
+                      <div className="text-black mx-2 flex">
+                        <FaReply className="mx-2 mt-1 text-sm transform rotate-180" />
+                        {review.description}
+                      </div>
+                      <p className="text-gray-500 text-sm mt-2">
+                        {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                      </p>
+                      {review.reply_feedback && (
+                        <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
+                          <div className="flex items-center mb-2">
+                            <div className="text-lg flex-shrink-0 bg-yellow-400 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                              M
+                            </div>
+                            <p className="font-medium ml-2">MomBabyMilk Shop:</p>
+                          </div>
+                          <div className="text-black mx-8 flex">
+                            <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
+                            {review.reply_feedback.description}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
-              </div>
-            ))
+                  ))}
+              <button
+                className="w-full text-center text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                onClick={() => setShowAllReviews(!showAllReviews)}
+              >
+                <div className="flex items-center justify-center mt-2">
+                  {showAllReviews ? `Thu gọn ` : `Xem tất cả đánh giá `}
+                  {showAllReviews ? (
+                    <FaAngleUp className="w-5 h-5 mx-2 my-2" />
+                  ) : (
+                    <FaAngleDown className="w-5 h-5 mx-2 my-2" />
+                  )}
+                </div>
+              </button>
+            </>
           ) : (
             <p className="text-lg text-center text-gray-600">
               Sản phẩm chưa có đánh giá
