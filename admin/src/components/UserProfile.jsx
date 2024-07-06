@@ -4,41 +4,56 @@ import { Button } from ".";
 import { adminProfileData, staffProfileData } from "../data/dummy";
 import Buttonlogout from "@mui/material/Button";
 import axios from "axios";
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
-import { fetchLogout } from "../data/api";
+import { fetchLogout, fetchRefreshToken } from "../data/api";
 const UserProfile = ({ isAdmin }) => {
-  const user = JSON.parse(localStorage.getItem('user'));
-
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const handleLogout = async () => {
     const result = JSON.parse(localStorage.getItem("result"));
     Modal.confirm({
-      title: 'Xác nhận đăng xuất',
+      title: "Xác nhận đăng xuất",
       content: `Bạn có chắc chắn muốn đăng xuất?`,
       onOk: async () => {
-        await fetchLogout(result);
-        localStorage.clear();
-        window.location.reload();
+        const logout = async () => {
+          await fetchLogout(result)
+            .then((res) => {
+              localStorage.clear();
+              window.location.reload();
+            })
+            .catch(async (err) => {
+              await fetchRefreshToken(result).then((res) => {
+               logout();
+              }).catch((error) => {
+                localStorage.clear();
+              window.location.reload();
+              });
+            });
+          localStorage.clear();
+          window.location.reload();
+        };
+
+        logout();
       },
       onCancel() {
-        console.log('Cancel');
+        console.log("Cancel");
       },
       okButtonProps: {
         style: {
-          backgroundColor: '#46B5C1',
-          borderColor: '#46B5C1',
+          backgroundColor: "#46B5C1",
+          borderColor: "#46B5C1",
         },
       },
       cancelButtonProps: {
         style: {
-          backgroundColor: '#FF4D4F',
-          borderColor: '#FF4D4F',
-          color: '#FFFFFF',
+          backgroundColor: "#FF4D4F",
+          borderColor: "#FF4D4F",
+          color: "#FFFFFF",
         },
       },
-      cancelText: 'Đóng',
-      okText: 'Đồng ý',
+      cancelText: "Đóng",
+      okText: "Đồng ý",
     });
   };
   return (
@@ -77,14 +92,19 @@ const UserProfile = ({ isAdmin }) => {
                 >
                   <button
                     type="button"
-                    style={{ color: item.iconColor, backgroundColor: item.iconBg }}
+                    style={{
+                      color: item.iconColor,
+                      backgroundColor: item.iconBg,
+                    }}
                     className=" text-xl rounded-lg p-3 hover:bg-light-gray"
                   >
                     {item.icon}
                   </button>
 
                   <div>
-                    <p className="font-semibold dark:text-gray-200 ">{item.title}</p>
+                    <p className="font-semibold dark:text-gray-200 ">
+                      {item.title}
+                    </p>
                     <p className="text-gray-500 text-sm dark:text-gray-400">
                       {" "}
                       {item.desc}{" "}
@@ -113,14 +133,27 @@ const UserProfile = ({ isAdmin }) => {
                   className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer dark:hover:bg-[#42464D]"
                 >
                   <div
-                    style={{ color: item.iconColor, backgroundColor: item.iconBg }}
+                    style={{
+                      color: item.iconColor,
+                      backgroundColor: item.iconBg,
+                    }}
                     className="text-xl rounded-lg p-3 hover:bg-light-gray"
                   >
                     {item.icon}
                   </div>
                   <div>
-                    <p className="font-semibold dark:text-gray-200" style={{marginBottom: '5px'}}>{item.title}</p>
-                    <p className="text-gray-500 text-sm dark:text-gray-400" style={{marginBottom: '5px'}}>{item.desc}</p>
+                    <p
+                      className="font-semibold dark:text-gray-200"
+                      style={{ marginBottom: "5px" }}
+                    >
+                      {item.title}
+                    </p>
+                    <p
+                      className="text-gray-500 text-sm dark:text-gray-400"
+                      style={{ marginBottom: "5px" }}
+                    >
+                      {item.desc}
+                    </p>
                   </div>
                 </NavLink>
               ))}
