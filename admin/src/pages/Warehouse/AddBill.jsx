@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { fetchProducts, fetchUploadBill } from "../../data/api";
 import { Button } from "flowbite-react";
 import { Card } from "primereact/card";
-import { Col, InputNumber, Row, Table, notification } from 'antd';
+import { Col, InputNumber, Row, Table } from 'antd';
 import moment from 'moment';
 import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-
+import { toast, Toaster } from "react-hot-toast";
 
 const AddBill = () => {
   const [loading, setLoading] = useState(true);
@@ -177,13 +177,10 @@ const AddBill = () => {
   const handleDeleteFromBill = (record) => {
     const newBillProducts = billProducts.filter(item => item._id !== record._id);
     setBillProducts(newBillProducts);
-    notification.success({
-      message: 'Xóa thành công',
-      description: 'Xóa sản phẩm khỏi đơn nhập hàng thành công',
-      placement: 'top'
+    toast.success('Xóa sản phẩm khỏi đơn nhập hàng thành công', {
+      position: 'top-right',
     });
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -194,26 +191,28 @@ const AddBill = () => {
         product_id: product._id,
         amount: product.amount
       })
-    ),
-    total: calculateTotal()
+      ),
+      total: calculateTotal()
     };
 
     try {
       await fetchUploadBill(inputBill, token);
-      notification.success({
-        message: 'Tạo đơn nhập hàng thành công',
-        placement: 'top'
+      toast.success('Tạo đơn nhập hàng thành công', {
+        position: 'top-right',
       });
       setBillProducts([]); //reset 
       setFormState({}); //reset
     } catch (error) {
       console.error('Lỗi từ server:', error.response.data);
-      alert(`Lỗi khi tạo đơn: ${error.response.data.message}`);
+      toast.error(`Lỗi khi tạo đơn: ${error.response.data.message}`, {
+        position: 'top-right',
+      });
     }
   };
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Toaster />
       <Row justify="space-between" style={{ flexGrow: 1 }}>
         <Col span={13}>
           <div style={{ display: 'flex', justifyContent: 'center', height: '100vh' }}>
@@ -225,7 +224,7 @@ const AddBill = () => {
                 <Button type="primary" style={{ backgroundColor: '#46B5C1' }} disabled={selectedRowKeys.length === 0} onClick={handleAddToBill}>Nhập Hàng</Button>
               </div>
               <div style={{ flexGrow: 1 }}>
-              <Table
+                <Table
                   columns={productTable}
                   dataSource={products}
                   pagination={{
@@ -281,13 +280,13 @@ const AddBill = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong>Tổng Tiền: </strong>
-                <strong>
-                  {Number(calculateTotal()).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}
-                </strong>
+                  <strong>Tổng Tiền: </strong>
+                  <strong>
+                    {Number(calculateTotal()).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
+                  </strong>
                 </div>
               </div>
             </Card>
@@ -295,8 +294,6 @@ const AddBill = () => {
         </Col>
       </Row>
     </div>
-
-
   );
 };
 

@@ -2,8 +2,11 @@ import { Router } from 'express'
 import {
   deteleFeebBackController,
   getAllController,
-  getFeebBackController,
+  getFeedbackByProIdController,
+  getFeedBackByUserIdController,
+  replyUploadController,
   updateFeedBackController,
+  updateReplyFeedBackController,
   uploadController
 } from '~/controllers/feedbacks.controllers'
 import { updateController } from '~/controllers/products.controllers'
@@ -15,15 +18,38 @@ import { wrapAsync } from '~/utils/handlers'
 const feedbacksRouter = Router()
 
 //upload:
-feedbacksRouter.post('/upload', accessTokenValidator, wrapAsync(uploadController))
+feedbacksRouter.post('/feedback/upload', accessTokenValidator, wrapAsync(uploadController))
+feedbacksRouter.post('/reply/upload', accessTokenValidator, wrapAsync(replyUploadController))
 feedbacksRouter.get('/all-feedback', wrapAsync(getAllController))
-feedbacksRouter.delete('/delete/:id', accessTokenValidator, isParamsIdValidator, wrapAsync(deteleFeebBackController))
-feedbacksRouter.patch(
+
+feedbacksRouter.delete(
+  '/feedback/delete/:id',
+  accessTokenValidator,
+  isParamsIdValidator,
+  wrapAsync(deteleFeebBackController)
+)
+feedbacksRouter.delete(
+  '/reply/delete/:id',
+  accessTokenValidator,
+  isParamsIdValidator,
+  wrapAsync(deteleFeebBackController)
+)
+
+feedbacksRouter.post(
   '/feedback/:id',
   accessTokenValidator,
   isParamsIdValidator,
   updateFeedBackValidator,
   wrapAsync(updateFeedBackController)
 )
-feedbacksRouter.get('/feedback/:id', isParamsIdValidator, wrapAsync(getFeebBackController))
+feedbacksRouter.post(
+  '/reply/:id',
+  accessTokenValidator,
+  isParamsIdValidator,
+  updateFeedBackValidator,
+  wrapAsync(updateReplyFeedBackController)
+)
+feedbacksRouter.get('/product/:id', isParamsIdValidator, wrapAsync(getFeedbackByProIdController))
+//getFeedBackByUserId
+feedbacksRouter.get('/user/:id', isParamsIdValidator, wrapAsync(getFeedBackByUserIdController))
 export default feedbacksRouter

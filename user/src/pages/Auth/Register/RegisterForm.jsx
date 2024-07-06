@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LinkToGoogle from "../Google/LinkToGoogle";
 import { fetchRegister } from "../../../data/api.jsx";
+import { toast } from "react-hot-toast";
+
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -26,14 +28,14 @@ const RegisterForm = () => {
 
     const { username, email, password, confirm_password } = formValues;
     console.log(username, email, password, confirm_password);
-    await  fetchRegister({
+    await fetchRegister({
       username,
       email,
       password,
       confirm_password,
     })
       .then((res) => {
-        alert(`${res.data.message}`);
+        toast.success(`${res.data.message}`);
         console.log(res.data);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
@@ -42,6 +44,7 @@ const RegisterForm = () => {
         });
       })
       .catch((error) => {
+        toast.error("Có lỗi xảy ra khi đăng ký.");
         let errorList = [];
         for (let value of Object.values(error.response.data.errors)) {
           errorList.push(value);
@@ -49,6 +52,7 @@ const RegisterForm = () => {
         }
       });
   };
+
   return (
     <div className="w-full px-10 py-12 rounded-3xl border-solid border-2 border-[rgba(0,0,0,0.1)] shadow-2xl">
       <h1 className="text-5xl font-semibold">Welcome</h1>
@@ -89,7 +93,7 @@ const RegisterForm = () => {
             name="password"
             value={formValues.password}
             onChange={handleChange}
-            type={"password"}
+            type="password"
           />
         </div>
         <div className="flex flex-col mt-4">
@@ -101,7 +105,7 @@ const RegisterForm = () => {
             name="confirm_password"
             value={formValues.confirm_password}
             onChange={handleChange}
-            type={"password"}
+            type="password"
           />
         </div>
         {/* hien loi */}

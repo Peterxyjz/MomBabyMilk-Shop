@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { checkQRPaymet, deleteOrder, fetchCreateOrder } from "../../data/api.jsx";
 import toast, { Toaster } from 'react-hot-toast';
@@ -52,6 +52,8 @@ const Payment = () => {
     };
     await fetchCreateOrder(order_infor)
       .then((res) => {
+        const membership = res.data.point;
+        console.log(membership);
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
           const price = totalPrice + ship - discount;
@@ -66,8 +68,13 @@ const Payment = () => {
               clearInterval(checkPaymetSucc);
               ischeck = true;
               clearCart();
+              toast.success("Thanh Toán Thành Công");
+              if(membership !== undefined) {
+                user.member_ship = membership;
+                localStorage.setItem("user", JSON.stringify(user));
+              }
               navigate("/thanks", {
-                state: { order_infor: order_infor, isCheck: true },
+                state: { order_id: content, isCheck: true  },
               });
             }
           }, 1000);
@@ -78,7 +85,6 @@ const Payment = () => {
               deleteOrder(content);
               navigate("/thanks", {
                 state: {
-                  order_infor: order_infor,
                   isCheck: false,
                   order_id: content,
                 },
@@ -87,9 +93,13 @@ const Payment = () => {
           }, callTime);
         } else {
           clearCart();
+          toast.success("Đặt Hàng Thành Công");
+          if(membership !== undefined) {
+            user.member_ship = membership;
+            localStorage.setItem("user", JSON.stringify(user));
+          }
           navigate("/thanks", {
             state: {
-              order_infor: order_infor,
               isCheck: true,
               order_id: content,
             },
@@ -97,7 +107,6 @@ const Payment = () => {
         }
       })
       .catch((err) => {
-        
         console.log(err);
       });
   };
@@ -216,14 +225,14 @@ const Payment = () => {
                       <p>Địa Chỉ: {customer_infor.address}</p>
                     </div>
                   </div>
-                  <button
-                    type="button"
+                  <Link
+                    to={"/order"}
                     data-modal-target="billingInformationModal"
                     data-modal-toggle="billingInformationModal"
                     className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
                   >
                     Chỉnh Sửa
-                  </button>
+                  </Link>
                 </div>
                 <div className="mt-6 sm:mt-8">
                   <div className="relative overflow-x-auto ">
@@ -384,13 +393,12 @@ const Payment = () => {
                   >
                     {" "}
                     Tôi đồng ý với{" "}
-                    <a
-                      href="#"
-                      title=""
+                    <Link
+                      to={"/exchange_policy"}
                       className="text-primary-700 underline hover:no-underline dark:text-primary-500"
                     >
-                      Các điều khoản và điều kiện
-                    </a>{" "}
+                      các điều khoản và điều kiện
+                    </Link>{" "}
                     việc mua và đổi trả của MomBabyMilk{" "}
                   </label>
                 </div>

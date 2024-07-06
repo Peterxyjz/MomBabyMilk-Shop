@@ -57,9 +57,6 @@ export const CartContextProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
-    toast.success("Giỏ hàng đã được dọn sạch", {
-      position: "top-right",
-    });
   };
 
   const increaseAmount = (product) => {

@@ -9,7 +9,7 @@ import {
   getWards,
 } from "../../data/api";
 import { useLocation } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const EditProfile = () => {
   const location = useLocation();
@@ -41,7 +41,7 @@ const EditProfile = () => {
           email: res.data.result.email || "",
           phone: res.data.result.phone || "",
           address: res.data.result.address || "",
-          point: res.data.result.menber_ship || 0,
+          point: res.data.result.member_ship || 0,
           date_of_birth: res.data.result.date_of_birth || null,
         });
         if (res.data.result.date_of_birth !== null) {
@@ -178,6 +178,7 @@ const EditProfile = () => {
     }
 
     const data = {
+      username: profile.username,
       full_name: profile.name,
       phone: profile.phone,
       address: `${addressInput}, ${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`,
@@ -185,12 +186,22 @@ const EditProfile = () => {
     };
 
     await fetchUpdateMe(token, data)
-      .then((res) => {
+      .then(() => {
         toast.success("Cập nhật thành công", {
           position: "top-center",
         });
         setIsEditing(false);
         getMeProfile();
+        const user = JSON.parse(localStorage.getItem("user")) || {};
+        const updatedUser = {
+          ...user,
+          username: data.username,
+          full_name: data.full_name,
+          phone: data.phone,
+          address: data.address,
+          date_of_birth: data.date_of_birth,
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
       })
       .catch((error) => {
         console.log(error);
@@ -213,7 +224,19 @@ const EditProfile = () => {
           <div>
             <form className="space-y-4 my-4 px-8" onSubmit={handleSubmit}>
               <div className="w-full mx-auto flex gap-10">
-                <div className="w-1/2">
+                <div className="w-1/3">
+                  <label className="block text-gray-700">Tên đăng nhập: </label>
+                  <input
+                    type="text"
+                    name="username"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                    placeholder="Nhập tên đăng nhập..."
+                    value={profile.username}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="w-1/3">
                   <label className="block text-gray-700">Họ và Tên: </label>
                   <input
                     type="text"
@@ -225,7 +248,7 @@ const EditProfile = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="w-1/3">
                   <label className="block text-gray-700">Số điện thoại: </label>
                   <div className="flex items-center">
                     <input

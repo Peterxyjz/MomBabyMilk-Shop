@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getProvinces, getDistricts, getWards } from "../../data/api.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
 const OrderInfor = ({ discount, ship, voucherCode }) => {
-  console.log(discount, ship);
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
@@ -112,7 +111,9 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
         selectedProvince.name,
     };
 
-    navigate("/payment", { state: { customer_infor, discount, ship, voucherCode } });
+    navigate("/payment", {
+      state: { customer_infor, discount, ship, voucherCode },
+    });
   };
   return (
     <>

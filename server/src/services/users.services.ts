@@ -10,7 +10,7 @@ import RefreshToken from '~/model/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
 import { config } from 'dotenv'
 import { USERS_MESSAGES } from '~/constants/messages'
-import { generateEmailVerify } from '~/helper/emailTemplate'
+import { generateEmailStatus, generateEmailVerify } from '~/helper/emailTemplate'
 import sendMail from '~/helper/send.mail'
 import { ErrorWithStatus } from '~/model/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
@@ -404,6 +404,21 @@ class UsersService {
         status: HTTP_STATUS.NOT_FOUND
       })
     }
+    if (user.isActive === UserAccountStatus.Actived) {
+      const emailHtml = generateEmailStatus(user.username, 'bị cấm')
+      sendMail({
+        email: user.email,
+        subject: 'Email Verification Mail',
+        html: emailHtml
+      })
+    } else {
+      const emailHtml = generateEmailStatus(user.username, 'được mở khóa')
+      sendMail({
+        email: user.email,
+        subject: 'Email Verification Mail',
+        html: emailHtml
+      })
+    }
 
     return await databaseService.users.updateOne(
       { _id: new ObjectId(user_id) },
@@ -461,10 +476,10 @@ class UsersService {
     )
     return { access_token, refresh_token: new_refresh_token }
   }
-  
+
   async getById(user_id: string) {
     const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
-    if(!user) {
+    if (!user) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.UNPROCESSABLE_ENTITY

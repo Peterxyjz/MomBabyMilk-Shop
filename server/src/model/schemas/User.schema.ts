@@ -15,7 +15,7 @@ interface UserType {
   ward?: string
   address?: string
   phone?: string
-  menber_ship?: number
+  member_ship?: number
   username: string // optional
   email_verify_token?: string // jwt hoặc '' nếu đã xác thực email
   forgot_password_token?: string // jwt hoặc '' nếu đã xác thực email
@@ -36,7 +36,7 @@ export default class User {
   ward: string
   address: string
   phone: string
-  menber_ship: number
+  member_ship: number
   username: string // optional
   email_verify_token: string // jwt hoặc '' nếu đã xác thực email
   forgot_password_token: string // jwt hoặc '' nếu đã xác thực email
@@ -56,7 +56,7 @@ export default class User {
     this.ward = user.ward || ''
     this.address = user.address || ''
     this.phone = user.phone || ''
-    this.menber_ship = user.menber_ship || 0
+    this.member_ship = user.member_ship || 0
     this.username = user.username || ''
     this.email_verify_token = user.email_verify_token || ''
     this.forgot_password_token = user.forgot_password_token || ''

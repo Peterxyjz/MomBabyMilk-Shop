@@ -13,7 +13,7 @@ const NavBar = () => {
         <div className="flex items-center">
           {/* logo */}
           <div className="mr-auto md:w-48 flex-shrink-0">
-            <Link to="/">
+            <Link to="/" onClick={() => window.scrollTo(0, 0)}>
               <img className="h-8 md:h-10" src={LogoImg} alt="" />
             </Link>
           </div>

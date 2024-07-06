@@ -339,6 +339,7 @@ export const changeStatusUserController = async (
     })
   }
   const result = await usersService.changeStatus(req.params.id)
+  
   return res.json({
     message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
     result

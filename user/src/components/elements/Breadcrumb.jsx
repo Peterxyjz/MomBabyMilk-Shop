@@ -1,4 +1,3 @@
-import React from "react";
 import { Breadcrumb, BreadcrumbItem } from "flowbite-react";
 import { HiHome } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -12,7 +11,7 @@ const Breadcrumbs = ({ headline }) => {
           className="text-2xl"
         >
           <BreadcrumbItem icon={HiHome}>
-            <Link to="/">
+            <Link to="/" onClick={() => window.scrollTo(0, 0)}>
               <p className="text-lg font-semibold text-black">Trang chủ</p>
             </Link>
           </BreadcrumbItem>
