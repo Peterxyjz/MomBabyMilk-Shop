@@ -259,15 +259,14 @@ export function generateInvoiceHTML(order: any, orderDetail: any) {
     </head>
     <body>
         <div class="container">
-            <h2>Hóa Đơn Mua Hàng</h2>
+            <h2>Hóa Đơn Mua Hàng: <span style="color: blue; font-weight: bold">#${order._id}<span></h2>
             <div class="details">
                 <p><strong>Tên khách hàng:</strong> ${order.full_name}</p>
                 <p><strong>Địa chỉ:</strong> ${order.address}</p>
                 <p><strong>Số điện thoại:</strong> ${order.phone}</p>
                 <p><strong>Email:</strong> ${order.email}</p>
                 <p><strong>Phương thức thanh toán:</strong> ${order.payment_method}</p>
-                <p><strong>Ngày yêu cầu:</strong> ${new Date(order.required_date).toLocaleDateString()}</p>
-                <p><strong>Ngày giao hàng:</strong> ${shippedDate.toLocaleDateString()}</p>
+                <p><strong>Ngày đặt:</strong> ${new Date(order.required_date).toLocaleDateString()}</p>
             </div>
             <table>
                 <thead>
@@ -318,7 +317,7 @@ export function generateInvoiceHTML(order: any, orderDetail: any) {
 }
 
 export function generateEmailStatus(username: string, status: string): string {
-    return `
+  return `
   <!DOCTYPE html>
   <html>
   
@@ -414,4 +413,4 @@ export function generateEmailStatus(username: string, status: string): string {
   
   </html>
   `
-  }
+}

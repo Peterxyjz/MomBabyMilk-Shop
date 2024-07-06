@@ -97,9 +97,11 @@ const OrderDetail = () => {
     await fetchUploadFeedback(feedback, token)
       .then(() => {
         toast.success("Đánh giá cho sản phẩm thành công!");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Đánh giá cho sản phẩm thất bại!");
       });
     closeFeedbackModal();
   };
