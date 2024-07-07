@@ -16,7 +16,8 @@ import Payment from "./components/order/Payment";
 import Filter from "./pages/Filter/Filter";
 import Thanks from "./components/order/Thanks";
 import WishList from "./pages/Wishlist";
-import NewsPage from "./pages/News";
+import NewsPage from "./pages/News/tmp";
+import News from "./pages/News";
 import AboutUs from "./pages/InformationPage/AboutUs";
 import ExchangePolicy from "./pages/InformationPage/ExchangePolicy";
 import Profile from "./pages/Profile";
@@ -56,7 +57,8 @@ function App() {
                     <Route path="/best_seller" element={<BestSeller />} />
                     <Route path="/latest_product" element={<LatestProduct />} />
                     <Route path="/wishlist" element={<WishList />} />
-                    <Route path="/news" element={<NewsPage />} />
+                    <Route path="/news-tmp" element={<NewsPage />} />
+                    <Route path="/news" element={<News />} />
                     <Route path="/about_us" element={<AboutUs />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/exchange_policy" element={<ExchangePolicy />} />
