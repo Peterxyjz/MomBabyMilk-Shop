@@ -5,8 +5,13 @@ import { Card } from "primereact/card";
 import { Col, InputNumber, Row, Table } from 'antd';
 import moment from 'moment';
 import { Navigate } from "react-router-dom";
+<<<<<<< HEAD
 import { toast, Toaster } from "react-hot-toast";
 
+=======
+import Loading from "../../components/Loading";
+import { toast, Toaster } from "react-hot-toast";
+>>>>>>> a3cbd2d9d12fa882a1b23c744dcc275e26d9206c
 
 const AddBill = () => {
   const [loading, setLoading] = useState(true);

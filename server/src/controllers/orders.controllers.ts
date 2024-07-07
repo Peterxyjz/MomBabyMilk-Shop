@@ -145,6 +145,13 @@ export const uploadController = async (req: Request, res: Response) => {
     }
   }
 
+  const emailHtml = generateInvoiceHTML(order_infor, orderDetails)
+  sendMail({
+    email: user.email,
+    subject: 'Email Verification Mail',
+    html: emailHtml
+  })
+
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
     order,
