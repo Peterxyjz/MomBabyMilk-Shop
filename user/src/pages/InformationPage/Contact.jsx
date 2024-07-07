@@ -16,7 +16,7 @@ const Contact = () => {
                             <strong>Điện thoại:</strong> 090 7089078
                         </p>
                         <p>
-                            <strong>Email:</strong> cskh@thegioisua.com
+                            <strong>Email:</strong> pass10diemswp391@gmail.com
                         </p>
 
                         <h2 className="text-xl font-semibold mt-8">Liên hệ với chúng tôi</h2>

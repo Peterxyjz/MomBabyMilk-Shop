@@ -1,5 +1,4 @@
 import { Footer } from "flowbite-react";
-import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
 import { FaTruck, FaTags, FaPercentage, FaThumbsUp } from "react-icons/fa";
 import logo from "../../assets/images/logo/Logo.png";
 
@@ -44,21 +43,17 @@ export default function MainFooter() {
             <div>
               <Footer.Title title="Chính sách" />
               <Footer.LinkGroup col>
-                <Footer.Link href="/exchange_policy">Privacy Policy</Footer.Link>
-                <Footer.Link href="#">Terms &amp; Conditions</Footer.Link>
+                <Footer.Link href="/exchange_policy">Chính sách đổi hàng</Footer.Link>
+                <Footer.Link href="/privacy_policy">Chính sách bảo mật</Footer.Link>
               </Footer.LinkGroup>
             </div>
           </div>
         </div>
         <Footer.Divider />
         <div className="w-full sm:flex sm:items-center sm:justify-between">
-          <Footer.Copyright href="#" by="Flowbite™" year={2022} />
+          <Footer.Copyright by="MomBabyMilk" year={2024} />
           <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
-            <Footer.Icon href="#" icon={BsFacebook} />
-            <Footer.Icon href="#" icon={BsInstagram} />
-            <Footer.Icon href="#" icon={BsTwitter} />
-            <Footer.Icon href="#" icon={BsGithub} />
-            <Footer.Icon href="#" icon={BsDribbble} />
+
           </div>
         </div>
       </div>

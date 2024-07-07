@@ -28,6 +28,7 @@ import EditProfile from "./components/profile/EditProfile";
 import OrderDetail from "./components/order/OrderDetail";
 import OrderTracking from "./components/order/OrderTracking";
 import Contact from "./pages/InformationPage/Contact";
+import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
                     <Route path="/about_us" element={<AboutUs />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/exchange_policy" element={<ExchangePolicy />} />
+                    <Route path="/privacy_policy" element={<PrivacyPolicy />} />
                     <Route path="/order-detail" element={<OrderDetail />} />
                     <Route path="/order-tracking" element={<OrderTracking />} />
                     <Route path="/profile" element={<Profile />}>
