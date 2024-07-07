@@ -3,6 +3,7 @@ import PostListNews from "../../components/news/PostListNews";
 import SidebarNews from "../../components/news/SidebarNews";
 import { fetchGetAllNews } from "../../data/api";
 import Loader from "../../assets/loading2.gif";
+import Breadcrumbs from "../../components/elements/Breadcrumb";
 const News = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,17 +24,20 @@ const News = () => {
   console.log(posts);
   if (loading) {
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <img src={Loader} alt="loading" />
       </div>
     );
   }
   const recent = posts.slice(-5).reverse();
   return (
-    <div className="container mx-auto p-4 flex flex-wrap md:flex-nowrap">
-      <SidebarNews posts={recent} />
-      <PostListNews posts={posts} />
-    </div>
+    <>
+      <Breadcrumbs headline="Tin tức" />
+      <div className="container mx-auto p-4 flex flex-wrap md:flex-nowrap">
+        <SidebarNews posts={recent} />
+        <PostListNews posts={posts} />
+      </div>
+    </>
   );
 };
 

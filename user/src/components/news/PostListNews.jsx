@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const PostListNews = ({ posts }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,17 +50,25 @@ const PostListNews = ({ posts }) => {
             <p className="text-sm text-gray-600 mb-2">
               {formatDate(item.created_at)}
             </p>
-            <a href="#" className="block text-xl font-bold mb-2 truncate">
+            <Link 
+            to={"/news-detail"}
+            state={{news: item}}
+            onClick={() => window.scrollTo(0, 0)}
+            className="block text-xl font-bold mb-2 truncate">
               {item.news_name}
-            </a>
+            </Link>
             <div
               className="text-gray-500"
               style={truncateStyle}
               dangerouslySetInnerHTML={{ __html: item.description }}
             />
-            <a href="#" className="text-blue-500 mt-2 inline-block font-semibold">
+            <Link 
+            to={"/news-detail"}
+            state={{news: item}}
+            onClick={() => window.scrollTo(0, 0)}
+            className="text-blue-500 mt-2 inline-block font-semibold">
               Đọc thêm
-            </a>
+            </Link>
           </div>
         </div>
       ))}

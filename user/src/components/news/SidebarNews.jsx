@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const SidebarNews = ({ posts }) => {
 
     const formatDate = (dateString) => {
@@ -29,12 +31,14 @@ const SidebarNews = ({ posts }) => {
               className="w-16 h-16 rounded-lg mr-4"
             />
             <div className="flex-1 min-w-0">
-              <a
-                href="#"
+              <Link
+                to={"/news-detail"}
+                state={{news: item}}
+                onClick={() => window.scrollTo(0, 0)}
                 className="block font-bold truncate w-full overflow-hidden whitespace-nowrap"
               >
                 {item.news_name}
-              </a>
+              </Link>
               <p className="text-sm text-gray-600">{formatDate(item.created_at)}</p>
             </div>
           </div>
