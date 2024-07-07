@@ -1,15 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-<<<<<<< HEAD
-import {
-  Button,
-  FileInput,
-  Label,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
-=======
+
 import { Button, FileInput, Label, TextInput } from "flowbite-react";
->>>>>>> a3cbd2d9d12fa882a1b23c744dcc275e26d9206c
 import { imageDb } from "../../data/firebase.config";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
@@ -197,7 +188,6 @@ const AddNews = () => {
     setNews_name(event.target.value);
   };
 
-<<<<<<< HEAD
   const handleChangeDescription = (event) => {
     setDescription(event.target.value);
   };
@@ -218,8 +208,7 @@ const AddNews = () => {
   }, []);
 
 
-=======
->>>>>>> a3cbd2d9d12fa882a1b23c744dcc275e26d9206c
+
   async function uploadImage(news, id) {
     if (img !== null) {
       const imgRef = ref(imageDb, `news_img/${v4()}`);
@@ -245,14 +234,8 @@ const AddNews = () => {
     await fetchUploadNews(news, token)
       .then(async (res) => {
         console.log(res.data);
-<<<<<<< HEAD
         const id = res.data.result.insertedId
         await uploadImage(news, id);
-
-=======
-        const id = res.data.result.insertedId;
-        await uploadImage(news, id);
->>>>>>> a3cbd2d9d12fa882a1b23c744dcc275e26d9206c
       })
       .then((data) => {
         notification.success({
@@ -298,7 +281,6 @@ const AddNews = () => {
         title={<h2 className="text-2xl font-bold">Thêm bài viết</h2>}
         style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', minHeight: '70vh' }}
       >
-<<<<<<< HEAD
         <form onSubmit={handleSubmit}>
           <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
             <Col span={4}>
@@ -454,85 +436,8 @@ const AddNews = () => {
           </Row>
         </form>
       </Card>
-=======
-        <div className="flex gap-8">
-          <Label htmlFor="file-upload" value="Chọn ảnh bài viết" />
-        </div>
-        <FileInput
-          id="file-upload"
-          required
-          onChange={(event) => setImg(event.target.files[0])}
-        />
-        <div className="flex gap-8 w-full">
-          <div className="lg:w-1/2">
-            <div className="mb-2 block">
-              <Label htmlFor="product_name" value="Tên Bài Viết" />
-            </div>
-            <TextInput
-              id="news_name"
-              type="text"
-              name="news_name"
-              placeholder="Tên Bài Viết..."
-              onChange={handleChangeNewsName}
-              required
-            />
-          </div>
-          <div className="lg:w-1/2">
-            <div className="mb-2 block">
-              <Label htmlFor="product" value="Chọn Sản Phẩm" />
-            </div>
-            <div className="relative">
-              <TextInput
-                id="product"
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                list="product-options"
-                onChange={handleChangeSelectedProduct}
-                required
-              />
-              <datalist id="product-options">
-                {products.map((option) => (
-                  <option key={option._id} value={option.product_name}>
-                    {option.product_name}
-                  </option>
-                ))}
-              </datalist>
-            </div>
-          </div>
         </div>
 
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="description" value="Mô Tả Bài Viết" />
-          </div>
-          <div className="main-container w-full">
-            <div
-              className="editor-container editor-container_inline-editor"
-              ref={editorContainerRef}
-            >
-              <div className="editor-container__editor">
-                <div ref={editorRef}>
-                  {isLayoutReady && (
-                    <CKEditor
-                      data={description}
-                      onChange={handleEditorChange}
-                      editor={InlineEditor}
-                      config={editorConfig}
-                    />
-                  )}
-                </div>
-              </div>
-              {/* <div dangerouslySetInnerHTML={{ __html: description }} /> Dung de render*/}
-            </div>
-          </div>
-        </div>
-
-        <Button type="submit" className="mt-5">
-          Lưu Bài Viết
-        </Button>
-      </form>
->>>>>>> a3cbd2d9d12fa882a1b23c744dcc275e26d9206c
-    </div>
 
     // <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl h-screen w-full">
     //   <div>

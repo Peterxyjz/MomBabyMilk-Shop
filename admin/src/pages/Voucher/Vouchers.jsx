@@ -2,14 +2,10 @@ import React, { useEffect, useState } from "react";
 import { fetchDeleteVoucher, fetchGetVoucher } from "../../data/api";
 import { Button, Datepicker, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUpdateVoucher } from "../../data/api";
-<<<<<<< HEAD
 import { toast, Toaster } from "react-hot-toast";
 import Loading from "../../components/Loading";
 import { Card, Modal, notification, Table } from "antd";
-=======
-import Loading from "../../components/Loading";
-import { toast, Toaster } from "react-hot-toast";
->>>>>>> a3cbd2d9d12fa882a1b23c744dcc275e26d9206c
+
 
 const Vouchers = () => {
   const [vouchers, setVouchers] = useState([]);
