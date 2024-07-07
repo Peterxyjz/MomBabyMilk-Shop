@@ -1,6 +1,16 @@
 import axios from "axios";
 
 const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
+
+//fetchDeleteNews
+export const fetchDeleteNews = async (id, token) => {
+  return await axios.delete(`${SCHEMA_HOSTNAME}/news/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
+
 //fetchUpdateNews
 export const fetchUpdateNews = async (data, token, id) => {
   return await axios.patch(`${SCHEMA_HOSTNAME}/news/update/${id}`, { ...data }, {
