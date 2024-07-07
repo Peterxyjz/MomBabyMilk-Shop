@@ -49,7 +49,7 @@ const Blogs = () => {
           }}>
             <Button
                 type="default"
-                onClick={() => navigate(`/edit-news?id=${id}`)}
+                onClick={() => navigate(`/edit-news`, { state: { id } })}
                 style={{
                     backgroundColor: "#55B6C3",
                     fontSize: "10px",
