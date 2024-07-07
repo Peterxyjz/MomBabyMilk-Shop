@@ -29,6 +29,7 @@ import OrderDetail from "./components/order/OrderDetail";
 import OrderTracking from "./components/order/OrderTracking";
 import Contact from "./pages/InformationPage/Contact";
 import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
+import BestSeller from "./components/product/BestSeller";
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
                     <Route path="/payment" element={<Payment />} />
                     <Route path="/thanks" element={<Thanks />} />
                     <Route path="/filter" element={<Filter />} />
+                    <Route path="/best_seller" element={<BestSeller />} />
                     <Route path="/wishlist" element={<WishList />} />
                     <Route path="/news" element={<NewsPage />} />
                     <Route path="/about_us" element={<AboutUs />} />

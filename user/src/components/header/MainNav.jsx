@@ -14,7 +14,7 @@ export function MainNav() {
           <Link to="/filter" onClick={() => window.scrollTo(0, 0)}>Tất Cả Sản Phẩm</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
-          <Link to="/filter" onClick={() => window.scrollTo(0, 0)}>Sản Phẩm Bán Chạy</Link>
+          <Link to="/best_seller" onClick={() => window.scrollTo(0, 0)}>Sản Phẩm Bán Chạy</Link>
         </Navbar.Link>
         <Navbar.Link className="text-lg">
           <Link to="/order-tracking" onClick={() => window.scrollTo(0, 0)}>Theo Dõi Đơn Hàng</Link>
