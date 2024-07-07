@@ -30,6 +30,7 @@ import OrderTracking from "./components/order/OrderTracking";
 import Contact from "./pages/InformationPage/Contact";
 import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
 import BestSeller from "./components/product/BestSeller";
+import LatestProduct from "./components/product/LatestProduct";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
                     <Route path="/thanks" element={<Thanks />} />
                     <Route path="/filter" element={<Filter />} />
                     <Route path="/best_seller" element={<BestSeller />} />
+                    <Route path="/latest_product" element={<LatestProduct />} />
                     <Route path="/wishlist" element={<WishList />} />
                     <Route path="/news" element={<NewsPage />} />
                     <Route path="/about_us" element={<AboutUs />} />
