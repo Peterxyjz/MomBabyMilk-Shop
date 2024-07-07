@@ -27,6 +27,7 @@ import BadFeedback from '../pages/Feedback/BadFeedback';
 import Vouchers from '../pages/Voucher/Vouchers';
 import Blogs from '../pages/Blog/Blogs';
 import AddNews from '../pages/News/AddNews';
+import EditNews from '../pages/News/EditNews';
 const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
@@ -68,6 +69,7 @@ const StaffRouter = () => {
             {/* blog */}
             <Route path="/all-blog" element={<Blogs />} />
             <Route path="/add-news" element={<AddNews />} />
+            <Route path="/edit-news" element={<EditNews />} />
         </Routes>
     )
 }

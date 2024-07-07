@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { Modal, notification } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React from "react";
 import { fetchUploadFeedback } from "../../data/api";
@@ -28,6 +28,11 @@ const ReplyFeedback = ({
     await fetchUploadFeedback(data, token).then((res) => {
       console.log(res.data);
       console.log("uyeh reply xong rồi");
+      window.location.reload();
+      notification.success({
+        message: "Trả lời thành công",
+        placement: 'top',
+      })
     }).catch((error) => {
       console.log(error);
     })
@@ -60,7 +65,7 @@ const ReplyFeedback = ({
         },
       }}
     >
-      <p>Trả lời đánh giá của: Tên khách hàng</p>
+      <p>Trả lời đánh giá của: {selectedFeedback.user.username}</p>
       <TextArea
         value={response}
         onChange={(e) => setResponse(e.target.value)}

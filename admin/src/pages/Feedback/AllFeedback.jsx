@@ -1,8 +1,10 @@
-import { Button, Card, Rate, Table, Typography } from 'antd';
+import { Avatar, Button, Card, List, Rate, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { fetchAllFeedback, fetchAllUsers, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
 import Loading from '../../components/Loading';
+import { Comment } from '@ant-design/compatible';
+
 
 const AllFeedback = () => {
     const [products, setProducts] = useState([]);
@@ -13,6 +15,7 @@ const AllFeedback = () => {
     const [response, setResponse] = useState('');
     const [expandedRowKeys, setExpandedRowKeys] = useState([]);
     const [users, setUsers] = useState([]);
+
 
     const handleExpand = (expanded, record) => {
         setExpandedRowKeys(expanded ? [record._id] : []); // Expand only the selected row
@@ -51,9 +54,17 @@ const AllFeedback = () => {
                     }
                     return { ...fb, user };
                 });
+                const memberFeedback = productFeedback.filter(fb => fb.user?.role_name === 'Member');
+                const averageRating = memberFeedback.length > 0
+                    ? memberFeedback.reduce((sum, fb) => sum + (fb.rating || 0), 0) / memberFeedback.length
+                    : 0;
+
                 return {
                     ...product,
                     feedback: productFeedback,
+                    averageRating,
+                    averageRating,
+                    memberFeedbackCount: memberFeedback.length,
                 };
             });
 
@@ -63,8 +74,8 @@ const AllFeedback = () => {
 
 
     if (loading) {
-        return <Loading/>
-      }
+        return <Loading />
+    }
 
 
     const columns = [
@@ -84,68 +95,88 @@ const AllFeedback = () => {
             render: (text, record) => (
                 <span style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{record.product_name}</span>
             ),
-            width: "80%",
+            width: "50%",
+        },
+        {
+            title: 'Đánh Giá',
+            dataIndex: 'averageRating',
+            key: 'averageRating',
+            render: (text, record) => (
+                <div>
+                    <Rate allowHalf disabled value={record.averageRating} />
+                    <div>{record.averageRating.toFixed(1)} / 5 ({record.memberFeedbackCount} đánh giá)</div>
+                </div>
+            ),
+            width: "30%",
+            fontSize: "20px",
         }
     ];
 
-    const feedbackColumns = [
-        {
-            title: 'Tên khách hàng',
-            dataIndex: 'user',
-            key: 'user',
-            width: "20%",
-            render: (user) => (
-                user ? <Text type="secondary" style={{ fontSize: '15px' }}>{user.username}</Text> : <Text type="secondary" style={{ fontSize: '15px' }}>Không xác định</Text>
-            ),
-        },
-        {
-            title: 'Đánh giá',
-            dataIndex: 'rating',
-            key: 'rating',
-            width: "20%",
-            render: (rating) => (
-                <Rate disabled defaultValue={rating} />
-            ),
-        },
-        {
-            title: 'Bình luận',
-            dataIndex: 'description',
-            key: 'description',
-            render: (description) => (
-                <p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{description}</p>
-            ),
-        },
-        {
-            title: 'Thời gian',
-            dataIndex: 'created_at',
-            key: 'created_at',
-            render: (created_at) => (
-                <Text type="secondary" style={{ fontSize: '15px' }}>{formatDate(created_at)}</Text>
-            ),
-            width: "15%",
-        },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (text, record) => (
-                <Button
-                    type="default"
-                    onClick={() => {
-                        setSelectedFeedback(record);
-                        setModalOpen(true);
-                    }}
-                    style={{
-                        backgroundColor: "#55B6C3",
-                        fontSize: "15px",
-                        color: 'white'
-                    }}
-                >
-                    Trả lời
-                </Button>
-            ),
-            width: "10%",
-        }
-    ];
+    const renderComments = (feedback) => {
+        return (
+            <List
+                dataSource={feedback}
+                itemLayout="horizontal"
+                renderItem={item => (
+                    <Comment
+                        author={<Text type="secondary" style={{ fontSize: '15px' }}>{item.user?.username || 'Không xác định'}</Text>}
+                        avatar={<Avatar>{item.user?.username?.charAt(0) || '?'}</Avatar>}
+                        content={
+                            <>
+                                <span style={{ fontSize: '15px', display: 'flex', justifyContent: 'space-between' }}>
+                                    <p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{item.description}</p>
+                                    {item.user?.role_name === 'Member' && (
+                                        <div style={{ marginRight: '10%' }}>
+                                            <Rate style={{ fontSize: '20px' }} disabled defaultValue={item.rating} />
+                                        </div>
+                                    )}
+                                </span>
+                            </>
+                        }
+                        datetime={formatDate(item.created_at)}
+                        actions={[
+                            item.user?.role_name === 'Member' && (
+                                <Button
+                                    type="default"
+                                    onClick={() => {
+                                        setSelectedFeedback(item);
+                                        setModalOpen(true);
+                                    }}
+                                    style={{
+                                        backgroundColor: "#55B6C3",
+                                        fontSize: "15px",
+                                        color: 'white'
+                                    }}
+                                    disabled={item.replies && item.replies.length > 0}
+                                >
+                                    Trả lời
+                                </Button>
+                            )
+                        ]}
+                    >
+                        {item.replies && item.replies.length > 0 && renderReplies(item.replies)}
+                    </Comment>
+                )}
+            />
+        );
+    };
+
+    const renderReplies = (replies) => {
+        return (
+            <List
+                dataSource={replies}
+                itemLayout="horizontal"
+                renderItem={reply => (
+                    <Comment
+                        author={<Text type="secondary" style={{ fontSize: '15px' }}>{reply.user?.username || 'Không xác định'}</Text>}
+                        avatar={<Avatar>{reply.user?.username?.charAt(0) || '?'}</Avatar>}
+                        content={<p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{reply.description}</p>}
+                        datetime={formatDate(reply.created_at)}
+                    />
+                )}
+            />
+        );
+    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -156,21 +187,28 @@ const AllFeedback = () => {
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-        };
+    };
 
-    const expandedRowRender = (record) => (
-        <Table
-            columns={feedbackColumns}
-            dataSource={record.feedback}
-            pagination={false}
-            rowKey={(fb) => fb._id}
-        />
-    );
+    const expandedRowRender = (record) => {
+        const feedbackRows = record.feedback.filter(fb => fb.user && fb.user.role_name === 'Member');
+        feedbackRows.forEach(fb => {
+            fb.replies = record.feedback.filter(reply => reply.user && reply.user.role_name === 'Staff' && reply._id === fb._id);
+        });
+
+        return (
+            <div>
+                {renderComments(feedbackRows)}
+            </div>
+        );
+    };
+
 
 
     const { Text } = Typography;
 
     const filteredProducts = products.filter(product => product.feedback && product.feedback.length > 0);
+    console.log(filteredProducts);
+
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
@@ -182,9 +220,9 @@ const AllFeedback = () => {
                     columns={columns}
                     dataSource={filteredProducts}
                     expandable={{
-                        expandedRowRender: record => expandedRowRender(record),
+                        expandedRowRender,
                         rowExpandable: record => record.feedback && record.feedback.length > 0,
-                        expandedRowKeys: expandedRowKeys,
+                        expandedRowKeys,
                         onExpand: handleExpand,
                     }}
                     rowKey="_id"
