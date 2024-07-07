@@ -1,6 +1,16 @@
 import axios from "axios";
 
 const SCHEMA_HOSTNAME = process.env.REACT_APP_SCHEMA_HOSTNAME;
+
+//fetchDeleteNews
+export const fetchDeleteNews = async (id, token) => {
+  return await axios.delete(`${SCHEMA_HOSTNAME}/news/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+}
+
 //fetchUpdateNews
 export const fetchUpdateNews = async (data, token, id) => {
   return await axios.patch(`${SCHEMA_HOSTNAME}/news/update/${id}`, { ...data }, {
@@ -9,6 +19,12 @@ export const fetchUpdateNews = async (data, token, id) => {
     },
   });
 }
+
+
+//fetchNewsByID
+export const fetchNewsByID = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/news/news/${id}`);
+} 
 
 
 //fetchUploadNews
@@ -48,6 +64,16 @@ export const fetchUploadVoucher = async (data, token) => {
     },
   });
 }
+
+export const fetchAllNews = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/news/all-news`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
 
 
 

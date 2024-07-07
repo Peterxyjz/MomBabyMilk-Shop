@@ -1,50 +1,78 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import blogimg from "../../assets/images/cover_imgedit.png";
 import { Col, Pagination, Row } from 'antd';
 import { Card } from 'primereact/card';
 import { blogData } from '../../data/dummy';
 import { Button } from "flowbite-react";
-
+import { fetchAllNews, deleteNews, fetchDeleteNews } from '../../data/api'; // Import hàm deleteNews
+import { useNavigate } from 'react-router-dom';
 
 const Blogs = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
+    const [news, setNews] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
     const onPageChange = (page, pageSize) => {
         setCurrentPage(page);
         setPageSize(pageSize);
     };
-    const header = (
-        <img src={blogimg} style={{ objectFit: 'cover' }} />
+
+    const header = (img_url) => (
+        <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
+            <img src={img_url} alt="header" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
     );
 
-    const footer = (
-        <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "60%",
-          }}>
+    useEffect(() => {
+        const getNews = async () => {
+            try {
+                const news = await fetchAllNews();
+                setNews(news);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+                setLoading(false);
+            }
+        };
+
+        getNews();
+    }, []);
+
+    console.log(news);
+
+    const handleDelete = async (id) => {
+        try {
+            const token = JSON.parse(localStorage.getItem("result"));
+            await fetchDeleteNews(id, token);
+            const updatedNews = news.filter(n => n._id !== id);
+            setNews(updatedNews);
+        } catch (error) {
+            console.error("Error deleting news:", error);
+        }
+    };
+
+    const footer = (id) => (
+        <div style={{ display: "flex", justifyContent: "space-between", width: "60%" }}>
             <Button
                 type="default"
-                onClick={"#"}
-                style={{
-                    backgroundColor: "#55B6C3",
-                    fontSize: "10px",
-                }}
+                onClick={() => navigate(`/edit-news`, { state: { id } })}
+                style={{ backgroundColor: "#55B6C3", fontSize: "10px" }}
             >
                 Xem chi tiết
             </Button>
             <Button
                 type="default"
-                onClick={"#"}
-                style={{
-                    backgroundColor: "#ff4d4f",
-                    fontSize: "10px",
-                }}
+                onClick={() => handleDelete(id)}
+                style={{ backgroundColor: "#ff4d4f", fontSize: "10px" }}
             >
                 Xóa
             </Button>
         </div>
     );
+
+    const currentNews = news.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -64,31 +92,31 @@ const Blogs = () => {
                 style={{ width: '90%', maxWidth: '1400px', margin: '30px auto', minHeight: '70vh' }}
             >
                 <Row gutter={[24, 24]} justify="center" >
-                    {blogData.map((blog) => (
-                        <Col span={8} key={blog.id} style={{ marginBottom: '30px' }}>
+                    {currentNews.map((n) => (
+                        <Col span={8} key={n._id} style={{ marginBottom: '30px' }}>
                             <Card
-                                title={<h5 className="truncate">{blog.title}</h5>}
-                                subTitle={<span>{formatDate(blog.date)}</span>}
-                                header={header}
-                                footer={footer}
+                                title={<h5 className="truncate">{n.news_name}</h5>}
+                                subTitle={<span>{formatDate(n.created_at)}</span>}
+                                header={header(n.img_url)}
+                                footer={footer(n._id)}
                             >
                                 <div className="card-content">
-                                    <p className="m-0 truncate">{blog.content}</p>
+                                    <div className="truncate" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 1, overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: n.description }} />
                                 </div>
                             </Card>
                         </Col>
                     ))}
                 </Row>
                 <Pagination
-                 current={currentPage}
-                 pageSize={pageSize}
-                 total={blogData.length}
-                 onChange={onPageChange}
-                 style={{ textAlign: 'center', marginTop: '20px' }}
-            />
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={news.length}
+                    onChange={onPageChange}
+                    style={{ textAlign: 'center', marginTop: '20px' }}
+                />
             </Card>
         </div>
-  )
+    );
 }
 
-export default Blogs
+export default Blogs;

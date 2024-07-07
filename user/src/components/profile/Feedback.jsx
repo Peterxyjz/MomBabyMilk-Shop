@@ -7,6 +7,7 @@ import { RxUpdate } from "react-icons/rx";
 import { fetchDeleteFeedback, fetchGetFeedbackByUser, fetchUpdateFeedback } from "../../data/api";
 import RenderRating from "../elements/RenderRating";
 import toast from "react-hot-toast";
+
 const Feedback = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
@@ -15,6 +16,7 @@ const Feedback = () => {
   const products = JSON.parse(localStorage.getItem("products"));
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = JSON.parse(localStorage.getItem("result"));
+
   useEffect(() => {
     const findProductById = (product_id) => {
       return products.find((product) => product._id === product_id);
@@ -70,7 +72,7 @@ const Feedback = () => {
   };
 
   const submitFeedback = async () => {
-    if(currentFeedback.rating === 0 || currentFeedback.description === "") {
+    if (currentFeedback.rating === 0 || currentFeedback.description === "") {
       toast.error("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
       return;
     }
@@ -81,7 +83,7 @@ const Feedback = () => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Cập nhật thất bại");
+        toast.error("Cập nhật thất bại");
       });
     closeFeedbackModal();
   };
@@ -89,11 +91,12 @@ const Feedback = () => {
   const deleteFeedback = async () => {
     await fetchDeleteFeedback(currentFeedback._id, token)
       .then(() => {
-        toast.success("Xóa đánh giá thành công");
+        toast.success("Xóa đánh giá thành công");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Xóa đánh giá thất bại");
+        toast.error("Xóa đánh giá thất bại");
       });
     closeFeedbackModal();
   };
@@ -130,7 +133,9 @@ const Feedback = () => {
             placeholder="Đến ngày"
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
           />
-          <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center">
+          <button
+            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center"
+          >
             <FaFilter className="mr-2" />
             Lọc
           </button>
@@ -138,13 +143,11 @@ const Feedback = () => {
         <div className="overflow-x-auto">
           <Table hoverable className="border">
             <Table.Head>
-              <Table.HeadCell className="w-1/7 border">
-                Ngày viết
-              </Table.HeadCell>
+              <Table.HeadCell className="w-1/7 border">Ngày viết</Table.HeadCell>
               <Table.HeadCell className="w-2/7 border">Nội dung</Table.HeadCell>
               <Table.HeadCell className="w-1/7 border">Đánh giá</Table.HeadCell>
               <Table.HeadCell className="w-2/7 border">
-                Trả lời từ MombabyMilk
+                Trả lời từ MomBabyMilk
               </Table.HeadCell>
               <Table.HeadCell className="w-1/7 border">
                 <span className="sr-only"></span>
@@ -239,11 +242,11 @@ const Feedback = () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button color="blue" size={"md"}  onClick={submitFeedback}>
-              <RxUpdate className="text-lg mr-1"/>Cập nhật
+            <Button color="blue" size={"md"} onClick={submitFeedback}>
+              <RxUpdate className="text-lg mr-1" /> Cập nhật
             </Button>
-            <Button color="failure"  size={"md"} onClick={deleteFeedback}>
-              <AiOutlineDelete className="text-lg mr-1"/> Xóa
+            <Button color="failure" size={"md"} onClick={deleteFeedback}>
+              <AiOutlineDelete className="text-lg mr-1" /> Xóa
             </Button>
           </Modal.Footer>
         </Modal>

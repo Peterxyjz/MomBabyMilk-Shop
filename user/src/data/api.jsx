@@ -293,6 +293,12 @@ export const fetchDeleteFeedback = async (id, token) => {
     },
   });
 }
+//news:
+//getallnews:
+export const fetchGetAllNews = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/news/all-news`);
+}
+
 //todo API province
 
 const baseUrl = "https://open.oapi.vn/location";

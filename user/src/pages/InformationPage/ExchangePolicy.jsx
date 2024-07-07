@@ -92,7 +92,7 @@ const ExchangePolicy = () => {
                 QUY TRÌNH ĐỔI HÀNG
             </h1>
             <div className="text-left mb-8">
-                <p>- BƯỚC 1: KHÁCH HÀNG GỌI HOTLINE <span className="text-yellow-500">0986777514</span> HOẶC EMAIL TỚI ĐỊA CHỈ <span className="text-yellow-500">CSKH@THEGIOISUA.VN</span> ĐỂ YÊU CẦU VIỆC ĐỔI SẢN PHẨM. THẾ GIỚI SỮA SẼ HƯỚNG DẪN CÁC BƯỚC ĐỂ KHÁCH ĐỔI SẢN PHẨM.</p>
+                <p>- BƯỚC 1: KHÁCH HÀNG GỌI HOTLINE <span className="text-yellow-500">0986777514</span> HOẶC EMAIL TỚI ĐỊA CHỈ <span className="text-yellow-500">pass10diemswp391@gmail.com</span> ĐỂ YÊU CẦU VIỆC ĐỔI SẢN PHẨM. THẾ GIỚI SỮA SẼ HƯỚNG DẪN CÁC BƯỚC ĐỂ KHÁCH ĐỔI SẢN PHẨM.</p>
                 <p>- BƯỚC 2: KHÁCH HÀNG GỬI SẢN PHẨM TỚI THẾ GIỚI SỮA (KHÁCH TRỰC TIẾP TỚI CỬA HÀNG THẾ GIỚI SỮA HOẶC CHUYỂN PHÁT TRONG TRƯỜNG HỢP KHÁCH MUA HÀNG QUA CÁC KÊNH ONLINE).</p>
                 <p>- BƯỚC 3: <span className="text-yellow-500">THẾ GIỚI SỮA</span> NHẬN VÀ KIỂM TRA SẢN PHẨM, SAU ĐÓ CHÚNG TÔI SẼ TIẾN HÀNH HỖ TRỢ KHÁCH HÀNG TÙY TRƯỜNG HỢP CỤ THỂ THEO ĐÚNG QUY ĐỊNH.</p>
                 <p>- BƯỚC 4: KHÁCH HÀNG NHẬN SẢN PHẨM 1 ĐỔI 1 HOẶC SẢN PHẨM THAY THẾ MÀ KHÁCH LỰA CHỌN THEO CÁC QUY ĐỊNH NÊU TRÊN CỦA <span className="text-yellow-500">THẾ GIỚI SỮA</span>.</p>
@@ -106,7 +106,7 @@ const ExchangePolicy = () => {
             </div>
 
             <div className="bg-blue-700 text-white text-center py-2">
-                <p>HOTLINE: 0986777514 | WWW.THEGIOISUA.COM</p>
+                <p>HOTLINE: 090 7089078 | WWW.MOMBABYMILK.COM</p>
             </div>
         </div>
     );
