@@ -5,11 +5,12 @@ import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { fetchProducts } from "../../data/api";
+import toast, { Toaster } from "react-hot-toast";
 
 const BestSeller = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { addCartItem } = useCartContext();
+    const { addCartItem, cartItems } = useCartContext();
 
     useEffect(() => {
         const getProducts = async () => {
@@ -33,6 +34,22 @@ const BestSeller = () => {
         getProducts();
     }, []);
 
+    const handleAddToCart = (product) => {
+        const currentCart = cartItems.find(
+            (cartItem) => cartItem._id === product._id
+        );
+        if (currentCart && currentCart.quantity >= product.amount) {
+            toast.error("Số lượng mua vượt quá số lượng trong kho", {
+                position: "top-right",
+            });
+        } else {
+            addCartItem(product);
+            toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+                position: "top-right",
+            });
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -43,6 +60,7 @@ const BestSeller = () => {
 
     return (
         <div className="container mx-auto p-4">
+            <Toaster />
             <Breadcrumbs headline="Sản phẩm bán chạy" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {products.map((product) => (
@@ -88,7 +106,7 @@ const BestSeller = () => {
                                 })}
                             </span>
                             <button
-                                onClick={() => addCartItem(product)}
+                                onClick={() => handleAddToCart(product)}
                                 disabled={product.amount === 0}
                                 className={
                                     product.amount === 0
