@@ -1,5 +1,5 @@
 import { Footer } from "flowbite-react";
-import { FaTruck, FaTags, FaPercentage, FaThumbsUp } from "react-icons/fa";
+import { FaTruck, FaCartPlus, FaPercentage, FaThumbsUp } from "react-icons/fa";
 import logo from "../../assets/images/logo/Logo.png";
 
 export default function MainFooter() {
@@ -8,7 +8,7 @@ export default function MainFooter() {
       <div className="w-full">
         <div className="flex justify-around">
           <div className="flex items-center mb-5">
-            <FaTruck className="text-3xl mr-2" />
+            <FaCartPlus className="text-3xl mr-2" />
             <span>Hàng Luôn Được Cập Nhật</span>
           </div>
           <div className="flex items-center mb-5">
@@ -25,14 +25,15 @@ export default function MainFooter() {
           </div>
         </div>
         <div className="border-t border-gray-300 mb-8"></div>
-        <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
+        <div className="flex justify-between items-center">
           <div>
             <Footer.Brand
               href="/"
               src={logo}
+              alt="MomBabyMilk Logo"
             />
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">
+          <div className="flex space-x-8">
             <div>
               <Footer.Title title="Về MOMBABYMILK" />
               <Footer.LinkGroup col>
