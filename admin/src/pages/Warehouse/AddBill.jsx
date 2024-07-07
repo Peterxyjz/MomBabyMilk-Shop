@@ -8,6 +8,7 @@ import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { toast, Toaster } from "react-hot-toast";
 
+
 const AddBill = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);

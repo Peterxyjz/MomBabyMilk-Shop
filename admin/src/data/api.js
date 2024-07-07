@@ -11,6 +11,12 @@ export const fetchUpdateNews = async (data, token, id) => {
 }
 
 
+//fetchNewsByID
+export const fetchNewsByID = async (id) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/news/news/${id}`);
+} 
+
+
 //fetchUploadNews
 export const fetchUploadNews = async (data, token) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/news/upload`, { ...data }, {
@@ -48,6 +54,16 @@ export const fetchUploadVoucher = async (data, token) => {
     },
   });
 }
+
+export const fetchAllNews = async () => {
+  try {
+    const res = await axios.get(`${SCHEMA_HOSTNAME}/news/all-news`);
+    return res.data.result;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
 
 
 
