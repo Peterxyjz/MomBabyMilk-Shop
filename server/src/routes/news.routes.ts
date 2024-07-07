@@ -7,7 +7,7 @@ import {
   updateNewsController,
   uploadController
 } from '~/controllers/news.controllers'
-import { updateNewsValidator } from '~/middlewares/news.middwares'
+import { updateNewsValidator, uploadNewsValidator } from '~/middlewares/news.middwares'
 import { isParamsIdValidator } from '~/middlewares/products.middleware'
 import { accessTokenValidator } from '~/middlewares/users.middlewares'
 
@@ -16,7 +16,7 @@ import { wrapAsync } from '~/utils/handlers'
 const newsRouter = Router()
 
 //upload:
-newsRouter.post('/upload', accessTokenValidator, wrapAsync(uploadController))
+newsRouter.post('/upload', accessTokenValidator, uploadNewsValidator, wrapAsync(uploadController))
 newsRouter.get('/all-news', wrapAsync(getAllController))
 newsRouter.get('/news/:id', isParamsIdValidator, wrapAsync(getNewsController))
 newsRouter.get('/product/:id', isParamsIdValidator, wrapAsync(getNewsByProIdController))
