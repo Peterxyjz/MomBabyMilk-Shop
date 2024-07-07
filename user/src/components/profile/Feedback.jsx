@@ -11,12 +11,8 @@ import toast from "react-hot-toast";
 const Feedback = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
-  const [filteredReviews, setFilteredReviews] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
-  const [filterContent, setFilterContent] = useState("");
-  const [filterStartDate, setFilterStartDate] = useState("");
-  const [filterEndDate, setFilterEndDate] = useState("");
   const products = JSON.parse(localStorage.getItem("products"));
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = JSON.parse(localStorage.getItem("result"));
@@ -39,7 +35,6 @@ const Feedback = () => {
         );
 
         setReviews(updatedReviews);
-        setFilteredReviews(updatedReviews); // Set initial filtered reviews
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -106,44 +101,6 @@ const Feedback = () => {
     closeFeedbackModal();
   };
 
-  const handleFilterContentChange = (e) => {
-    setFilterContent(e.target.value);
-  };
-
-  const handleFilterStartDateChange = (e) => {
-    setFilterStartDate(e.target.value);
-  };
-
-  const handleFilterEndDateChange = (e) => {
-    setFilterEndDate(e.target.value);
-  };
-
-  const handleFilter = () => {
-    let filtered = [...reviews];
-
-    if (filterContent) {
-      filtered = filtered.filter((review) =>
-        review.description.toLowerCase().includes(filterContent.toLowerCase())
-      );
-    }
-
-    if (filterStartDate) {
-      filtered = filtered.filter((review) => {
-        const reviewDate = new Date(review.created_at);
-        return reviewDate >= new Date(filterStartDate);
-      });
-    }
-
-    if (filterEndDate) {
-      filtered = filtered.filter((review) => {
-        const reviewDate = new Date(review.created_at);
-        return reviewDate <= new Date(filterEndDate);
-      });
-    }
-
-    setFilteredReviews(filtered);
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center">
@@ -165,26 +122,19 @@ const Feedback = () => {
             type="text"
             placeholder="Nội dung đánh giá..."
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-3/6"
-            value={filterContent}
-            onChange={handleFilterContentChange}
           />
           <input
             type="date"
             placeholder="Từ ngày"
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
-            value={filterStartDate}
-            onChange={handleFilterStartDateChange}
           />
           <input
             type="date"
             placeholder="Đến ngày"
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
-            value={filterEndDate}
-            onChange={handleFilterEndDateChange}
           />
           <button
             className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center"
-            onClick={handleFilter}
           >
             <FaFilter className="mr-2" />
             Lọc
@@ -204,8 +154,8 @@ const Feedback = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {filteredReviews.length > 0 ? (
-                filteredReviews.map((item) => (
+              {reviews.length > 0 ? (
+                reviews.map((item) => (
                   <Table.Row key={item._id} className="bg-white border">
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.created_at)}
