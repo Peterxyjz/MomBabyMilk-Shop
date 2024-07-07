@@ -57,8 +57,8 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Hero />
-      <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
-      <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} />
+      <ProductCard products={newProducts} headline={"Sản phẩm mới"} viewAllLink="/latest_product" />
+      <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} viewAllLink="/best_seller" />
       <SecondHero />
       <ProductCard products={products} headline={"Sữa dành cho mẹ bầu"} />
       <ProductCard products={products} headline={"Sữa dành cho trẻ sơ sinh"} />

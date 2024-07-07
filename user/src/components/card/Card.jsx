@@ -76,7 +76,7 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
     <div className="h-full">
       <div className="flex justify-between items-center mb-2 mt-12">
         <h1 className="text-2xl font-bold">{headline}</h1>
-        <Link to={viewAllLink} className="text-blue-500 hover:underline" onClick={() => window.scrollTo(0, 0)}>
+        <Link to={{ pathname: viewAllLink, state: { type: headline } }} className="text-blue-500 hover:underline" onClick={() => window.scrollTo(0, 0)}>
           Xem tất cả
         </Link>
       </div>

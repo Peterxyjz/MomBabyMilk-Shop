@@ -7,14 +7,20 @@ import { RxUpdate } from "react-icons/rx";
 import { fetchDeleteFeedback, fetchGetFeedbackByUser, fetchUpdateFeedback } from "../../data/api";
 import RenderRating from "../elements/RenderRating";
 import toast from "react-hot-toast";
+
 const Feedback = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
+  const [filteredReviews, setFilteredReviews] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
+  const [filterContent, setFilterContent] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
   const products = JSON.parse(localStorage.getItem("products"));
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = JSON.parse(localStorage.getItem("result"));
+
   useEffect(() => {
     const findProductById = (product_id) => {
       return products.find((product) => product._id === product_id);
@@ -33,6 +39,7 @@ const Feedback = () => {
         );
 
         setReviews(updatedReviews);
+        setFilteredReviews(updatedReviews); // Set initial filtered reviews
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -70,7 +77,7 @@ const Feedback = () => {
   };
 
   const submitFeedback = async () => {
-    if(currentFeedback.rating === 0 || currentFeedback.description === "") {
+    if (currentFeedback.rating === 0 || currentFeedback.description === "") {
       toast.error("Vui lòng nhập đủ thông tin đánh giá và mô tả sản phẩm.");
       return;
     }
@@ -81,7 +88,7 @@ const Feedback = () => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Cập nhật thất bại");
+        toast.error("Cập nhật thất bại");
       });
     closeFeedbackModal();
   };
@@ -89,13 +96,52 @@ const Feedback = () => {
   const deleteFeedback = async () => {
     await fetchDeleteFeedback(currentFeedback._id, token)
       .then(() => {
-        toast.success("Xóa đánh giá thành công");
+        toast.success("Xóa đánh giá thành công");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Xóa đánh giá thất bại");
+        toast.error("Xóa đánh giá thất bại");
       });
     closeFeedbackModal();
+  };
+
+  const handleFilterContentChange = (e) => {
+    setFilterContent(e.target.value);
+  };
+
+  const handleFilterStartDateChange = (e) => {
+    setFilterStartDate(e.target.value);
+  };
+
+  const handleFilterEndDateChange = (e) => {
+    setFilterEndDate(e.target.value);
+  };
+
+  const handleFilter = () => {
+    let filtered = [...reviews];
+
+    if (filterContent) {
+      filtered = filtered.filter((review) =>
+        review.description.toLowerCase().includes(filterContent.toLowerCase())
+      );
+    }
+
+    if (filterStartDate) {
+      filtered = filtered.filter((review) => {
+        const reviewDate = new Date(review.created_at);
+        return reviewDate >= new Date(filterStartDate);
+      });
+    }
+
+    if (filterEndDate) {
+      filtered = filtered.filter((review) => {
+        const reviewDate = new Date(review.created_at);
+        return reviewDate <= new Date(filterEndDate);
+      });
+    }
+
+    setFilteredReviews(filtered);
   };
 
   if (loading) {
@@ -119,18 +165,27 @@ const Feedback = () => {
             type="text"
             placeholder="Nội dung đánh giá..."
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-3/6"
+            value={filterContent}
+            onChange={handleFilterContentChange}
           />
           <input
             type="date"
             placeholder="Từ ngày"
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
+            value={filterStartDate}
+            onChange={handleFilterStartDateChange}
           />
           <input
             type="date"
             placeholder="Đến ngày"
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
+            value={filterEndDate}
+            onChange={handleFilterEndDateChange}
           />
-          <button className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center">
+          <button
+            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center"
+            onClick={handleFilter}
+          >
             <FaFilter className="mr-2" />
             Lọc
           </button>
@@ -138,21 +193,19 @@ const Feedback = () => {
         <div className="overflow-x-auto">
           <Table hoverable className="border">
             <Table.Head>
-              <Table.HeadCell className="w-1/7 border">
-                Ngày viết
-              </Table.HeadCell>
+              <Table.HeadCell className="w-1/7 border">Ngày viết</Table.HeadCell>
               <Table.HeadCell className="w-2/7 border">Nội dung</Table.HeadCell>
               <Table.HeadCell className="w-1/7 border">Đánh giá</Table.HeadCell>
               <Table.HeadCell className="w-2/7 border">
-                Trả lời từ MombabyMilk
+                Trả lời từ MomBabyMilk
               </Table.HeadCell>
               <Table.HeadCell className="w-1/7 border">
                 <span className="sr-only"></span>
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {reviews.length > 0 ? (
-                reviews.map((item) => (
+              {filteredReviews.length > 0 ? (
+                filteredReviews.map((item) => (
                   <Table.Row key={item._id} className="bg-white border">
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.created_at)}
@@ -239,11 +292,11 @@ const Feedback = () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button color="blue" size={"md"}  onClick={submitFeedback}>
-              <RxUpdate className="text-lg mr-1"/>Cập nhật
+            <Button color="blue" size={"md"} onClick={submitFeedback}>
+              <RxUpdate className="text-lg mr-1" /> Cập nhật
             </Button>
-            <Button color="failure"  size={"md"} onClick={deleteFeedback}>
-              <AiOutlineDelete className="text-lg mr-1"/> Xóa
+            <Button color="failure" size={"md"} onClick={deleteFeedback}>
+              <AiOutlineDelete className="text-lg mr-1" /> Xóa
             </Button>
           </Modal.Footer>
         </Modal>
