@@ -242,6 +242,7 @@ const Filter = () => {
                     <Link
                       to="/product"
                       state={{ product: product }}
+                      onClick={() => window.scrollTo(0, 0)}
                       className="w-full"
                     >
                       <div className="flex justify-center mb-2 relative">

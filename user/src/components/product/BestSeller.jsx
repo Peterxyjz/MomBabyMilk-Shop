@@ -1,40 +1,17 @@
-import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import Loader from "../../assets/loading.gif";
 import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import { fetchProducts } from "../../data/api";
 import toast, { Toaster } from "react-hot-toast";
 import banner from "../../assets/images/body/babyDrinkMilk.png"
+import { useProductContext } from "../../context/ProductContext";
 
 const BestSeller = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { products, loading } = useProductContext();
     const { addCartItem, cartItems } = useCartContext();
 
-    useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const res = await fetchProducts();
-                console.log('API response:', res); // In toàn bộ phản hồi API để kiểm tra
-
-                if (res && Array.isArray(res)) {
-                    const sortedProducts = res.sort((a, b) => b.sales - a.sales);
-                    const topProducts = sortedProducts.slice(0, 12);
-                    setProducts(topProducts);
-                } else {
-                    console.error("API response is not as expected.");
-                }
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getProducts();
-    }, []);
-
+    const topProducts = products.slice().sort((a, b) => a.sales - b.sales).slice(0, 12);
     const handleAddToCart = (product) => {
         const currentCart = cartItems.find(
             (cartItem) => cartItem._id === product._id
@@ -75,7 +52,7 @@ const BestSeller = () => {
             <div className="container mx-auto p-4">
                 <Toaster />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {products.map((product) => (
+                    {topProducts.map((product) => (
                         <div
                             key={product._id}
                             className="border p-4 rounded-lg flex flex-col items-center"
