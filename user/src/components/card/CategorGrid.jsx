@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import CategoryCard from './CategoryCard';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
@@ -11,7 +10,6 @@ import VrpanoIcon from '@mui/icons-material/Vrpano';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import './Swiper.css'; // Đảm bảo bạn import file CSS mới vào đây
 
@@ -58,14 +56,14 @@ export default function CategoryGrid() {
         arrows: true,
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
-        centerMode: true, // Center mode to ensure the slides are centered
-        centerPadding: "60px", // Adjust the padding to center the slides
+        centerMode: true, 
+        centerPadding: "60px",
     };
 
     return (
         <div className="category-slider relative">
-            <Typography variant="h5" component="div" align="center" sx={{ my: 4 }}>
-                See More
+            <Typography variant="h5" component="div" align="center" sx={{ my: 4 }} >
+                Tìm hiểu thêm
             </Typography>
             <Slider {...settings}>
                 {categories.map((category, index) => (

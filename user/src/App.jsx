@@ -29,9 +29,8 @@ import OrderDetail from "./components/order/OrderDetail";
 import OrderTracking from "./components/order/OrderTracking";
 import Contact from "./pages/InformationPage/Contact";
 import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
-import BestSeller from "./components/product/BestSeller";
-import LatestProduct from "./components/product/LatestProduct";
 import NewsDetail from "./pages/News/NewsDetail";
+import ListProduct from "./components/product/ListProduct";
 
 
 function App() {
@@ -54,8 +53,7 @@ function App() {
                     <Route path="/payment" element={<Payment />} />
                     <Route path="/thanks" element={<Thanks />} />
                     <Route path="/filter" element={<Filter />} />
-                    <Route path="/best_seller" element={<BestSeller />} />
-                    <Route path="/latest_product" element={<LatestProduct />} />
+                    <Route path="/list-products" element={<ListProduct />} />
                     <Route path="/wishlist" element={<WishList />} />
                     <Route path="/news" element={<News />} />
                     <Route path="/news-detail" element={<NewsDetail />} />
