@@ -321,7 +321,7 @@ const AddNews = () => {
 
           <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
             <Col span={4}>
-              <label htmlFor="img" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Người tạo</label>
+              <label htmlFor="img" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Nhân viên</label>
             </Col>
             <Col span={18}>
               <Input

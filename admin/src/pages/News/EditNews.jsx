@@ -189,10 +189,8 @@ const EditNews = () => {
     });
   }, []);
 
-  const handleChangeSelectedProduct = (event) => {
-    const selectedProductId = event.target.value;
-
-    setSelectedProductId(selectedProductId);
+  const handleChangeSelectedProduct = (value) => {
+    setSelectedProductId(value);
     console.log(selectedProductId);
   };
 
@@ -210,6 +208,10 @@ const EditNews = () => {
         const response = await fetchNewsByID(id);
         const newsData = response.data.result;
         setNews(newsData);
+        setNews_name(newsData.news_name);
+        setDescription(newsData.description);
+        setDayCreated(newsData.created_at);
+        setSelectedProductId(newsData.product_id);
         setImgUrlOld(newsData.img_url);
         if (newsData.img_url) {
           setFileList([
@@ -221,6 +223,7 @@ const EditNews = () => {
             },
           ]);
         }
+
       } catch (error) {
         console.error("Error fetching news:", error);
       } finally {
@@ -255,15 +258,11 @@ const EditNews = () => {
       }
     }
 
-    setNews_name(news?.news_name);
-    setDescription(news?.description);
-    setDayCreated(news?.created_at);
-    setSelectedProductId(news?.product_id);
   }, [news, users]);
 
   async function uploadImage(news, id) {
-    
-    console.log("img: ",img !== null);
+
+    console.log("img: ", img !== null);
     if (fileList[0] !== null) {
       const imgRef = ref(imageDb, `news_img/${v4()}`);
       const imgRefOld = ref(imageDb, news.img_url);
@@ -286,8 +285,8 @@ const EditNews = () => {
 
     const news = {
       news_name,
-      staff_id: user_id,
       product_id: selectedProductId,
+      staff_id: user_id,
       description,
       img_url: imgUrlOld,
     };
@@ -300,8 +299,7 @@ const EditNews = () => {
             message: "Thêm bài viết thành công!",
             placement: "top",
           });
-          form.reset();
-          setDescription("");
+          navigate("/all-blog");
         });
       })
       .catch((error) => {
@@ -339,122 +337,18 @@ const EditNews = () => {
           rel="stylesheet"
           href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.ckeditor.com/ckeditor5-premium-features/42.0.0/ckeditor5-premium-features.css"
+        />
+      </div>
+      <Card
+        title={<h2 className="text-2xl font-bold">Thêm bài viết</h2>}
+        style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', minHeight: '70vh' }}
+      >
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4"
-          style={{ width: "100%", marginTop: "20px", borderRadius: "20px" }}
         >
-          <h1
-            style={{
-              fontSize: "30px",
-              textAlign: "center",
-              fontWeight: "bold",
-              color: "#1F5070",
-              marginBottom: "50px",
-            }}
-          >
-            Chỉnh sửa bài viết
-          </h1>
-
-          <Row
-            justify="space-around"
-            align="middle"
-            style={{ marginBottom: "40px", marginTop: "20px" }}
-          >
-            <Col span={4}>
-              <label
-                htmlFor="news_name"
-                style={{
-                  fontSize: "17px",
-                  color: "#1F5070",
-                  fontWeight: "bold",
-                }}
-              >
-                Tên bài viết
-              </label>
-            </Col>
-            <Col span={18}>
-              <Input
-                value={news_name}
-                onChange={handleChangeNewsName}
-                className="w-full"
-                style={{
-                  height: "50px",
-                  fontSize: "15px",
-                  border: "1px solid #6b7280",
-                  borderRadius: "0.375rem",
-                }}
-              />
-            </Col>
-          </Row>
-
-          <Row
-            justify="space-around"
-            align="middle"
-            style={{ marginBottom: "40px", marginTop: "20px" }}
-          >
-            <Col span={4}>
-              <label
-                htmlFor="product_id"
-                style={{
-                  fontSize: "17px",
-                  color: "#1F5070",
-                  fontWeight: "bold",
-                }}
-              >
-                Tên sản phẩm
-              </label>
-            </Col>
-            <Col span={18}>
-              <Select
-                value={selectedProductId}
-                onChange={handleChangeSelectedProduct}
-                className="w-full"
-                style={{
-                  height: "50px",
-                  fontSize: "15px",
-                  border: "1px solid #6b7280",
-                  borderRadius: "0.375rem",
-                }}
-              >
-                {products.map((product) => (
-                  <Option key={product._id} value={product._id}>
-                    {product.product_name}
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-          </Row>
-
-          <Row
-            justify="space-around"
-            align="middle"
-            style={{ marginBottom: "40px", marginTop: "20px" }}
-          >
-            <Col span={4}>
-              <label
-                htmlFor="description"
-                style={{
-                  fontSize: "17px",
-                  color: "#1F5070",
-                  fontWeight: "bold",
-                }}
-              >
-                Mô tả
-              </label>
-            </Col>
-            <Col span={18}>
-              {isLayoutReady && (
-                <CKEditor
-                  editor={InlineEditor}
-                  data={description}
-                  config={editorConfig}
-                  onChange={handleEditorChange}
-                />
-              )}
-            </Col>
-          </Row>
-
           <Row
             justify="space-around"
             align="middle"
@@ -482,10 +376,42 @@ const EditNews = () => {
                 {fileList.length >= 1 ? null : (
                   <div>
                     <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
+                    <div style={{ marginTop: 8 }}>Tải hình ảnh</div>
                   </div>
                 )}
               </Upload>
+            </Col>
+          </Row>
+
+          <Row
+            justify="space-around"
+            align="middle"
+            style={{ marginBottom: "40px", marginTop: "20px" }}
+          >
+            <Col span={4}>
+              <label
+                htmlFor="news_name"
+                style={{
+                  fontSize: "17px",
+                  color: "#1F5070",
+                  fontWeight: "bold",
+                }}
+              >
+                Tiêu đề
+              </label>
+            </Col>
+            <Col span={18}>
+              <Input
+                value={news_name}
+                onChange={handleChangeNewsName}
+                className="w-full"
+                style={{
+                  height: "50px",
+                  fontSize: "15px",
+                  border: "1px solid #6b7280",
+                  borderRadius: "0.375rem",
+                }}
+              />
             </Col>
           </Row>
 
@@ -535,7 +461,7 @@ const EditNews = () => {
                   fontWeight: "bold",
                 }}
               >
-                Người tạo
+                Nhân viên
               </label>
             </Col>
             <Col span={18}>
@@ -553,27 +479,109 @@ const EditNews = () => {
             </Col>
           </Row>
 
-          <HStack spacing="10px" justifyContent="center">
-            <Button
-              type="submit"
-              style={{
-                width: "150px",
-                backgroundColor: "#1F5070",
-                borderRadius: "0.375rem",
-              }}
-            >
-              Lưu
-            </Button>
-            <Button
-              color="gray"
-              onClick={() => navigate("/news", { replace: true })}
-              style={{ width: "150px", borderRadius: "0.375rem" }}
-            >
-              Hủy
-            </Button>
-          </HStack>
+
+          <Row
+            justify="space-around"
+            align="middle"
+            style={{ marginBottom: "40px", marginTop: "20px" }}
+          >
+            <Col span={4}>
+              <label
+                htmlFor="product_id"
+                style={{
+                  fontSize: "17px",
+                  color: "#1F5070",
+                  fontWeight: "bold",
+                }}
+              >
+                Tên sản phẩm
+              </label>
+            </Col>
+            <Col span={18}>
+              <Select
+                value={selectedProductId}
+                onChange={handleChangeSelectedProduct}
+                className="w-full"
+                style={{
+                  height: "50px",
+                  fontSize: "15px",
+                  border: "1px solid #6b7280",
+                  borderRadius: "0.375rem",
+                }}
+              >
+                {products.map((product) => (
+                  <Option key={product._id} value={product._id}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <img
+                        src={product.imgUrl}
+                        style={{ width: 20, height: 20, marginRight: 10 }}
+                        alt={product.product_name}
+                      />
+                      {product.product_name}
+                    </div>
+                  </Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+
+          <Row
+            justify="space-around"
+            align="middle"
+            style={{ marginBottom: "40px", marginTop: "20px" }}
+          >
+            <Col span={4}>
+              <label
+                htmlFor="description"
+                style={{
+                  fontSize: "17px",
+                  color: "#1F5070",
+                  fontWeight: "bold",
+                }}
+              >
+                Mô tả
+              </label>
+            </Col>
+            <Col span={18}>
+              {isLayoutReady && (
+                <CKEditor
+                  editor={InlineEditor}
+                  data={description}
+                  config={editorConfig}
+                  onChange={handleEditorChange}
+                />
+              )}
+            </Col>
+          </Row>
+
+          <Row justify="center" align="middle">
+            <HStack spacing={10}>
+              <Button
+                type="default"
+                onClick={() => navigate("/all-blog")}
+                style={{
+                  borderColor: "#55B6C3",
+                  color: "#55B6C3",
+                  fontSize: "10px",
+                  backgroundColor: "white",
+                }}
+              >
+                Quay về trang danh sách
+              </Button>
+              <Button
+                type="default"
+                htmlType="submit"
+                style={{
+                  backgroundColor: "#55B6C3",
+                  fontSize: "10px",
+                }}
+              >
+                Lưu
+              </Button>
+            </HStack>
+          </Row>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };
