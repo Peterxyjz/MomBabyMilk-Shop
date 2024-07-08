@@ -69,7 +69,7 @@ const EditNews = () => {
   const [img, setImg] = useState(null);
   const [imgUrl, setImgUrl] = useState([]);
   const [fileList, setFileList] = useState([]);
-
+  const [isChanged, setIsChanged] = useState(false);
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
@@ -294,6 +294,7 @@ const EditNews = () => {
     await fetchUpdateNews(news, token, id)
       .then(async (res) => {
         console.log("xong update");
+        if(isChanged)
         await uploadImage(news, id).then(() => {
           notification.success({
             message: "Thêm bài viết thành công!",
@@ -308,6 +309,7 @@ const EditNews = () => {
   };
 
   const handleChange = ({ fileList: newFileList }) => {
+    setIsChanged(true);
     // Only keep the latest file in the list
     setFileList(newFileList.slice(-1));
     if (newFileList.length > 0) {
