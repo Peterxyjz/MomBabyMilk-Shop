@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { Toaster, toast } from "react-hot-toast";
 
-const ProductCard = ({ products, headline, viewAllLink }) => {
+const ProductCard = ({ products, headline }) => {
   const { cartItems, addCartItem } = useCartContext();
-
+  const productsToShow = products.slice(0, 12);
   const settings = {
     dots: true,
     infinite: true,
@@ -76,12 +76,16 @@ const ProductCard = ({ products, headline, viewAllLink }) => {
     <div className="h-full">
       <div className="flex justify-between items-center mb-2 mt-12">
         <h1 className="text-2xl font-bold">{headline}</h1>
-        <Link to={{ pathname: viewAllLink, state: { type: headline } }} className="text-blue-500 hover:underline" onClick={() => window.scrollTo(0, 0)}>
+        <Link 
+        to={"/list-products"}
+        state={{ products: products, headline: headline }}
+        className="text-blue-500 hover:underline" 
+        onClick={() => window.scrollTo(0, 0)}>
           Xem tất cả
         </Link>
       </div>
       <Slider {...settings}>
-        {products.map((product) => {
+        {productsToShow.map((product) => {
           if (product.isActive) {
             const discountedPrice =
               product.price - (product.price * product.discount) / 100;

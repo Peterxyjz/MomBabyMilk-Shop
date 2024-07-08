@@ -18,22 +18,35 @@ const Home = () => {
         <img src={Loader} alt="Loading..." />
       </div>
     );
-  const newProducts = products.slice(-10).reverse();
-
-  const bestSellers = products.slice().sort((a, b) => a.sales - b.sales).slice(0, 10);
-  return (
-    <div className="min-h-screen">
-      <Hero />
-      <ProductCard products={newProducts} headline={"Sản phẩm mới"} viewAllLink="/latest_product" />
-      <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} viewAllLink="/best_seller" />
-      <SecondHero />
-      <ProductCard products={products} headline={"Sữa dành cho mẹ bầu"} />
-      <ProductCard products={products} headline={"Sữa dành cho trẻ sơ sinh"} />
-      <HeroAtLast />
-      <CategoryGrid />
-      <NewsSection />
-    </div>
-  );
+  
+    const getCategoryProducts = (categoryName) => {
+      return products.filter((product) => product.category_name === categoryName);
+    };
+  
+    const newProducts = products.slice(-products.length).reverse();
+    const bestSellers = products.sort((a, b) => b.sales - a.sales);
+    const categoryProductsMomToBe = getCategoryProducts("Sữa cho mẹ bầu");
+    const categoryProductsInfantMilk = getCategoryProducts("Sữa bột");
+  
+    return (
+      <div className="min-h-screen">
+        <Hero />
+        <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
+        <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} />
+        <SecondHero />
+        <ProductCard
+          products={categoryProductsMomToBe}
+          headline={"Sữa dành cho mẹ bầu"}
+        />
+        <ProductCard
+          products={categoryProductsInfantMilk}
+          headline={"Sữa dành cho trẻ sơ sinh"}
+        />
+        <HeroAtLast />
+        <CategoryGrid />
+        <NewsSection />
+      </div>
+    );
 };
 
 export default Home;
