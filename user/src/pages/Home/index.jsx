@@ -23,7 +23,7 @@ const Home = () => {
       return products.filter((product) => product.category_name === categoryName);
     };
   
-    const newProducts = products.slice(-products.length).reverse();
+    const newProducts = products.slice(-(products.length - 1)).reverse();
     const bestSellers = products.sort((a, b) => b.sales - a.sales);
     const categoryProductsMomToBe = getCategoryProducts("Sữa cho mẹ bầu");
     const categoryProductsInfantMilk = getCategoryProducts("Sữa bột");
