@@ -13,6 +13,11 @@ const Feedback = () => {
   const [reviews, setReviews] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
+  const [filter, setFilter] = useState([]);
+  const [textFilter, setTextFilter] = useState("");
+  const [startFilter, setStartFilter] = useState("");
+  const [endFilter, setEndFilter] = useState("");
+
   const products = JSON.parse(localStorage.getItem("products"));
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = JSON.parse(localStorage.getItem("result"));
@@ -35,6 +40,7 @@ const Feedback = () => {
         );
 
         setReviews(updatedReviews);
+        setFilter(updatedReviews);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -43,7 +49,7 @@ const Feedback = () => {
     };
 
     getReviews();
-  }, [user._id, products]);
+  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -101,6 +107,31 @@ const Feedback = () => {
     closeFeedbackModal();
   };
 
+  const handleSubmitFilter = (e) => {
+    e.preventDefault();
+    let filteredReviews = reviews;
+
+    if (textFilter) {
+      filteredReviews = filteredReviews.filter((review) =>
+        review.description.toLowerCase().includes(textFilter.toLowerCase())
+      );
+    }
+
+    if (startFilter) {
+      filteredReviews = filteredReviews.filter(
+        (review) => new Date(review.created_at) >= new Date(startFilter)
+      );
+    }
+
+    if (endFilter) {
+      filteredReviews = filteredReviews.filter(
+        (review) => new Date(review.created_at) <= new Date(endFilter)
+      );
+    }
+
+    setFilter(filteredReviews);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center">
@@ -117,29 +148,36 @@ const Feedback = () => {
       </div>
       <hr className="my-4" />
       <div className="space-y-4">
-        <div className="flex space-x-4">
+        <form className="flex space-x-4" onSubmit={handleSubmitFilter}>
           <input
             type="text"
             placeholder="Nội dung đánh giá..."
+            value={textFilter}
+            onChange={(e) => setTextFilter(e.target.value)}
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-3/6"
           />
           <input
             type="date"
             placeholder="Từ ngày"
+            value={startFilter}
+            onChange={(e) => setStartFilter(e.target.value)}
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
           />
           <input
             type="date"
             placeholder="Đến ngày"
+            value={endFilter}
+            onChange={(e) => setEndFilter(e.target.value)}
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/6"
           />
           <button
+            type="submit"
             className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center"
           >
             <FaFilter className="mr-2" />
             Lọc
           </button>
-        </div>
+        </form>
         <div className="overflow-x-auto">
           <Table hoverable className="border">
             <Table.Head>
@@ -154,8 +192,8 @@ const Feedback = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {reviews.length > 0 ? (
-                reviews.map((item) => (
+              {filter.length > 0 ? (
+                filter.map((item) => (
                   <Table.Row key={item._id} className="bg-white border">
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.created_at)}
