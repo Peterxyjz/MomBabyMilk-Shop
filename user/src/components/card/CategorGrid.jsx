@@ -11,7 +11,7 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import './Swiper.css'; // Đảm bảo bạn import file CSS mới vào đây
+import './Swiper.css';
 
 const categories = [
     { icon: SportsEsportsIcon, title: 'Sữa tươi' },
