@@ -2,7 +2,7 @@ import React from 'react';
 import { AiOutlineShoppingCart, AiOutlineInbox } from 'react-icons/ai';
 import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers, FiUser } from 'react-icons/fi';
 import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsNewspaper } from 'react-icons/bs';
-import {  RiPriceTag3Line } from 'react-icons/ri';
+import { RiPriceTag3Line } from 'react-icons/ri';
 import { MdOutlineCategory, MdOutlineSupervisorAccount } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
@@ -515,16 +515,16 @@ export const employeesGrid = [
 ];
 
 export const stafflinks = [
-  {
-    title: 'Trang chủ',
-    links: [
-      {
-        name: 'Dashboard',
-        path: '/',
-        icon: <FiShoppingBag />,
-      },
-    ],
-  },
+  // {
+  //   title: 'Trang chủ',
+  //   links: [
+  //     {
+  //       name: 'Dashboard',
+  //       path: '/',
+  //       icon: <FiShoppingBag />,
+  //     },
+  //   ],
+  // },
   {
     title: 'Đơn hàng',
     links: [
@@ -563,29 +563,42 @@ export const stafflinks = [
         // path: 'products',
         subLinks: [
           { name: 'allFeedback', path: 'all-feedback', label: 'Tất cả đánh giá' },
-          { name: 'badFeedback', path: 'bad-feedback', label: 'Đánh giá tiêu cực' },
         ],
       },
-      {name: 'Quản lý kho',
+      {
+        name: 'Quản lý mã giảm giá',
+        icon: <RiPriceTag3Line />,
+        type: 'sub',
+        // path: '',
+        subLinks: [
+          { name: 'allVoucher', path: 'all-voucher', label: 'Tất cả mã giảm giá' },
+          { name: 'addVoucher', path: 'add-voucher', label: 'Thêm mã giảm giá' },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Kho',
+    links: [
+      {
+        name: 'Quản lý kho',
         icon: <BsBoxSeam />,
         type: 'sub',
         // path: '',
         subLinks: [
           { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
           { name: 'allBill', path: 'input-bills', label: 'Tất cả đơn nhập hàng' },
-        ]},
-      // {
-      //   name: 'Quản lý khách hàng',
-      //   icon: <RiContactsLine />,
-      //   type: 'sub',
-      //   path: 'customers',
-      //   subLinks: [
-      //     { name: 'allCustomer', path: 'customers', label: 'Tất cả khách hàng' },
-      //   ],
-      // },
+        ]
+      },
+    ],
+  },
+  {
+    title: 'Phân loại',
+    links: [
+
       {
         name: 'Quản lý phân loại',
-        icon: <MdOutlineCategory  />,
+        icon: <MdOutlineCategory />,
         type: 'sub',
         // path: 'categories',
         subLinks: [
@@ -604,16 +617,6 @@ export const stafflinks = [
 
         ],
       },
-      {
-        name: 'Quản lý mã giảm giá',
-        icon: <RiPriceTag3Line />,
-        type: 'sub',
-        // path: '',
-        subLinks: [
-          { name: 'allVoucher', path: 'all-voucher', label: 'Tất cả mã giảm giá' },
-          { name: 'addVoucher', path: 'add-voucher', label: 'Thêm mã giảm giá' },
-        ],
-      },
     ],
   },
   {
@@ -626,7 +629,7 @@ export const stafflinks = [
         // path: '',
         subLinks: [
           { name: 'customers', path: '', label: 'Tất cả khách hàng' },
-  
+
         ],
       },
     ]
@@ -636,13 +639,13 @@ export const stafflinks = [
     links: [
       {
         name: 'Quản lý bài viết',
-        icon: <BsNewspaper  />,
+        icon: <BsNewspaper />,
         type: 'sub',
         // path: '',
         subLinks: [
           { name: 'allBlog', path: 'all-blog', label: 'Tất cả bài viết' },
           { name: 'addBlog', path: 'add-news', label: 'Thêm bài viết' },
-  
+
         ],
       },
     ]
@@ -1045,14 +1048,14 @@ export const themeColors = [
 ];
 
 export const staffProfileData = [
-  {
-    icon: <FiUser />,
-    path: 'profile',
-    title: 'Hồ sơ',
-    desc: 'Cài đặt tài khoản',
-    iconColor: '#03C9D7',
-    iconBg: '#E5FAFB',
-  }
+  // {
+  //   icon: <FiUser />,
+  //   path: 'profile',
+  //   title: 'Hồ sơ',
+  //   desc: 'Cài đặt tài khoản',
+  //   iconColor: '#03C9D7',
+  //   iconBg: '#E5FAFB',
+  // }
 ];
 
 export const adminProfileData = [

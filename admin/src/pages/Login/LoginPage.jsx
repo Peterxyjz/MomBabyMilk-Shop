@@ -35,7 +35,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
-    await fetchLogin( email, password )
+    await fetchLogin(email, password)
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
@@ -77,9 +77,9 @@ const LoginPage = () => {
                   <label htmlFor="password" className="font-bold block mb-2 mt-4">
                     Mật khẩu
                   </label>
-                  <InputGroup>
+                  <InputGroup className="relative flex items-center w-full">
                     <Input
-                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)] rounded-xl"
+                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)] rounded-xl pr-16" // add padding to the right to make space for the button
                       type={show ? 'text' : 'password'}
                       id="password"
                       name="password"
@@ -87,16 +87,18 @@ const LoginPage = () => {
                       onChange={handleChange}
                       placeholder="Nhập mật khẩu"
                     />
-                    <InputRightElement width='4.5rem'>
-                  <Button h='2.5rem'
-                    size="sm"
-                    onClick={handleClick}
-                    fontSize={'1.5rem'}
-                  >
-                    {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                  </Button>
-                </InputRightElement>
+                    <InputRightElement className="absolute mr-3 h-full flex items-center justify-center pr-2">
+                      <Button
+                        h="2.5rem"
+                        size="sm"
+                        onClick={handleClick}
+                        fontSize={'1.5rem'}
+                      >
+                        {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                      </Button>
+                    </InputRightElement>
                   </InputGroup>
+
                   {errorList.length > 0 && (
                     <div className="error-list mt-3 mb-3">
                       {errorList.map((error, index) => (
@@ -107,9 +109,9 @@ const LoginPage = () => {
                     </div>
                   )}
                   <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-4">
-                    <div className="w-full flex items-center">
-                      <Checkbox defaultChecked />
-                      <p className="text-sm">Ghi nhớ mật khẩu!</p>
+                    <div className="w-full flex items-center space-x-2">
+                      <Checkbox />
+                      <p className="text-sm m-0">Ghi nhớ mật khẩu!</p>
                     </div>
                     <Link
                       to={"/forgot-password"}

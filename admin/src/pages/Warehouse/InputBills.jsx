@@ -98,6 +98,8 @@ const InputBills = () => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   };
+  const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
+
 
   const columns = [
     {
@@ -172,7 +174,8 @@ const InputBills = () => {
       >
         <div>
           <div className="flex justify-between items-center mb-4">
-            <Button
+            {isAuthenticatedStaff && (
+              <Button
               type="primary"
               size="large"
               style={{ backgroundColor: "#46B5C1", height: "100%" }}
@@ -180,6 +183,7 @@ const InputBills = () => {
             >
               Tạo đơn nhập hàng
             </Button>
+            )}
           </div>
           <Table
             dataSource={bills}
