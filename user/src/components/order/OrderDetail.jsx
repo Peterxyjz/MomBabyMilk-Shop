@@ -1,12 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
 import Breadcrumbs from "../elements/Breadcrumb";
-import { Button, Modal } from "flowbite-react";
+import { Button, Modal, Progress } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa6";
 import { FcFeedback } from "react-icons/fc";
 import { useState, useEffect } from "react";
 import RenderRating from "../elements/RenderRating";
 import { fetchGetFeedbackByUser, fetchUploadFeedback } from "../../data/api";
 import toast from "react-hot-toast";
+// import { AiOutlineFieldTime } from "react-icons/ai"; //chờ
+// import { IoIosCloseCircle } from "react-icons/io"; //hủy
+// import { FaTruckFast  } from "react-icons/fa6"; //ship xác
+// import { FaCheckCircle } from "react-icons/fa";
+// import { FaRegSmileBeam } from "react-icons/fa"; //hoàn thành
+
 const OrderDetail = () => {
   const location = useLocation();
   const order = location.state?.order || {};
@@ -24,6 +30,7 @@ const OrderDetail = () => {
   const user_id = user?._id;
   const member_id = order.order.member_id;
   const checkMember = user_id === member_id ? true : false;
+
   useEffect(() => {
     const findProductById = (product_id) => {
       return products.find((product) => product._id === product_id);
@@ -70,6 +77,14 @@ const OrderDetail = () => {
     return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
   };
 
+  const addMinutes = (date, minutes) => {
+    return new Date(date.getTime() + minutes * 60000);
+  };
+
+  const addDays = (date, days) => {
+    return new Date(date.getTime() + days * 86400000);
+  };
+
   const openFeedbackModal = (product_id) => {
     setFeedback({ ...feedback, product_id });
     setShowModal(true);
@@ -96,14 +111,59 @@ const OrderDetail = () => {
     }
     await fetchUploadFeedback(feedback, token)
       .then(() => {
-        toast.success("Đánh giá cho sản phẩm thành công!");
+        toast.success("Đánh giá cho sản phẩm thành công!");
         window.location.reload();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Đánh giá cho sản phẩm thất bại!");
+        toast.error("Đánh giá cho sản phẩm thất bại!");
       });
     closeFeedbackModal();
+  };
+
+  const calculateProgress = () => {
+    const status = order.order.status;
+    const requiredDate = new Date(order.order.required_date);
+    const currentDate = new Date();
+
+    if (status === 3) {
+      return 50;
+    }
+
+    let progress = 0;
+    if (status === 0) {
+      progress = 25;
+    } else if (status === 1) {
+      if (currentDate > addDays(requiredDate, 1)) {
+        progress = 75;
+      } else {
+        progress = 50;
+      }
+    } else if (status === 2) {
+      progress = 100;
+    }
+
+    return progress;
+  };
+
+  const statusColor = () => {
+    return order.order.status === 3 ? "red" : "blue";
+  };
+
+  const getTrackingStageColor = (stage) => {
+    const progress = calculateProgress();
+    switch (stage) {
+      case 25:
+        return progress >= 25 ? "text-blue-500" : "text-gray-500";
+      case 50:
+        return progress >= 50 ? "text-blue-500" : "text-gray-500";
+      case 75:
+        return progress >= 75 ? "text-blue-500" : "text-gray-500";
+      case 100:
+        return progress === 100 ? "text-blue-500" : "text-gray-500";
+      default:
+        return "text-gray-500";
+    }
   };
 
   return (
@@ -127,6 +187,44 @@ const OrderDetail = () => {
               </Button>
             </div>
           </div>
+          {/* order tracking */}
+          <div className="w-full border-b p-4 mb-4">
+            <div className="text-blue-500 p-6 rounded-lg">
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-center ">
+                  {/* <AiOutlineFieldTime className="text-center w-full"/> */}
+                  <div className="mb-1">{formatDate(order.order.required_date)}</div>
+                  <div className={`font-semibold ${getTrackingStageColor(25)}`}>Chờ xác nhận</div>
+                </div>
+                <div className="text-center">
+                  <div className="mb-1">
+                    {order.order.status >= 1
+                      ? formatDate(addMinutes(new Date(order.order.required_date), 15))
+                      : "-"}
+                  </div>
+                  <div className={`font-semibold ${order.order.status === 3 ? "text-red-500" : getTrackingStageColor(50)}`}>
+                    {order.order.status === 3 ? "Hủy đơn" : "Đã xác nhận"}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="mb-1">
+                    {order.order.status === 1 && new Date() > addDays(new Date(order.order.required_date), 1) || order.order.status === 2
+                      ? formatDate(addDays(new Date(order.order.required_date), 1.2))
+                      : "-"}
+                  </div>
+                  <div className={`font-semibold ${getTrackingStageColor(75)}`}>Đang giao hàng</div>
+                </div>
+                <div className="text-center">
+                  <div className="mb-1">
+                    {order.order.status === 2 ? formatDate(order.order.shipped_date) : "-"}
+                  </div>
+                  <div className={`font-semibold ${getTrackingStageColor(100)}`}>Hoàn thành</div>
+                </div>
+              </div>
+              <Progress progress={calculateProgress()} color={statusColor()} size="lg" />
+            </div>
+          </div>
+          {/* end order-tracking */}
           <div className="w-full flex items-start gap-10 border-b p-4 mb-4">
             <div>
               <h2 className="text-xl font-semibold">Thông tin khách hàng</h2>
