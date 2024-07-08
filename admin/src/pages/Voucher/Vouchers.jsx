@@ -5,6 +5,7 @@ import { fetchGetVoucherType, fetchUpdateVoucher } from "../../data/api";
 import { toast, Toaster } from "react-hot-toast";
 import Loading from "../../components/Loading";
 import { Card, Modal, notification, Table } from "antd";
+import { useNavigate } from "react-router-dom";
 
 
 const Vouchers = () => {
@@ -14,6 +15,8 @@ const Vouchers = () => {
   const [voucherTypes, setVoucherTypes] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const token = JSON.parse(localStorage.getItem("result"));
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const getVouchers = async () => {
@@ -137,6 +140,7 @@ const Vouchers = () => {
       title: 'Ngày hết hạn',
       dataIndex: 'expire_date',
       key: 'expire_date',
+      sorter: (a, b) => new Date(a.expire_date) - new Date(b.expire_date),
     },
     {
       title: 'Membership',
@@ -147,6 +151,7 @@ const Vouchers = () => {
           style: 'currency',
           currency: 'VND',
         }).format(value),
+      sorter: (a, b) => a.membership - b.membership,
     },
     {
       title: 'Mức giảm giá (VND)',
@@ -162,6 +167,7 @@ const Vouchers = () => {
       title: 'Số lượng',
       dataIndex: 'amount',
       key: 'amount',
+      sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: 'Loại Voucher',
@@ -209,6 +215,15 @@ const Vouchers = () => {
           title={<h2 className="text-2xl font-bold">Tất cả voucher</h2>}
           style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', minHeight: '70vh' }}
         >
+          <div className="flex justify-between items-center mb-4">
+            <Button
+              type="default"
+              onClick={() => navigate(`/add-voucher`)}
+              style={{ backgroundColor: "#55B6C3", fontSize: "10px" }}
+            >
+              Thêm voucher
+            </Button>
+          </div>
           <Table
             columns={columns}
             dataSource={vouchers}

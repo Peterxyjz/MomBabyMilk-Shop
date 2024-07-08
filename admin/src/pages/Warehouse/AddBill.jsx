@@ -276,7 +276,7 @@ const AddBill = () => {
                     {Number(calculateTotalDiscount()).toLocaleString("vi-VN", {
                       style: "currency",
                       currency: "VND",
-                    })},
+                    })}
                   </strong>
                 </div>
 

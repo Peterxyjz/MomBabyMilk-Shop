@@ -32,7 +32,7 @@ const StaffRouter = () => {
     const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
         <Routes>
-            <Route path="/" element={(<Dashboard isAuthenticatedStaff={isAuthenticatedStaff} />)} />
+            <Route path="/" element={(<AwaitOrder />)} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/profile" element={<UserSetting />} />
             {/* order */}

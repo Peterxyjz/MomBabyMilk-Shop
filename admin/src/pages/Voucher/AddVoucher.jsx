@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Datepicker, Label, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUploadVoucher } from "../../data/api";
 import { toast, Toaster } from "react-hot-toast";
-import { Card, Col, Row } from "antd";
+import { Card, Col, notification, Row } from "antd";
 import { HStack } from '@chakra-ui/react';
 import { useNavigate } from "react-router-dom";
 
@@ -64,14 +64,16 @@ const AddVoucher = () => {
     await fetchUploadVoucher(voucher, token)
       .then((res) => {
         console.log(res.data);
-        toast.success("Thêm thành công", {
-          position: "top-right",
-        });
+        notification.success({
+          message: "Thêm voucher thành công",
+          placement: "top",
+        })
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Thêm thất bại", {
-          position: "top-right",
+        notification.error({
+          message: "Thêm voucher thất bại",
+          placement: "top",
         });
       });
   };
