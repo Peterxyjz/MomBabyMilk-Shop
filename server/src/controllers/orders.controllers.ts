@@ -1,7 +1,7 @@
 import { result } from 'lodash'
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
-import { OrderStatus } from '~/constants/enums'
+import { OrderStatus, VoucherMode } from '~/constants/enums'
 import { USERS_MESSAGES } from '~/constants/messages'
 import Order from '~/model/schemas/Order.schema'
 import databaseService from '~/services/database.services'
@@ -181,6 +181,22 @@ export const updateStatusController = async (req: Request, res: Response) => {
     order_details.forEach(async (item) => {
       await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
     })
+
+    const order = await orderServices.getById(order_id)
+    if (order) {
+      const member_id = order.member_id
+      if (order.voucher_code && member_id) {
+        const member = await databaseService.users.findOne({ _id: new ObjectId(member_id) })
+        const voucher = await voucherServices.getById(order.voucher_code)
+        if(voucher.voucher_type === VoucherMode.Member) {
+          await databaseService.users.updateOne(
+            { _id: new ObjectId(member_id) },
+            { $inc: { member_ship: voucher.membership } }
+          )
+        }
+       
+      }
+    }
 
     return res.status(200).json({
       message: 'success',
