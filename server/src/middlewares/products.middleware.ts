@@ -25,7 +25,7 @@ export const productValidator = validate(
         },
         custom: {
           options: async (value, { req }) => {
-            console.log(req.body)
+      
 
             const brand = await databaseService.brands.findOne({
               _id: new ObjectId(value)
@@ -91,7 +91,7 @@ export const productValidator = validate(
               product_name: value
             })
             if (product) {
-              console.log(product)
+     
 
               throw new ErrorWithStatus({
                 message: PRODUCTS_MESSAGES.PRODUCT_HAS_BEEN_EXISTED,

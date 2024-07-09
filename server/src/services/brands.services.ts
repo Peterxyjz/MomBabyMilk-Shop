@@ -8,7 +8,7 @@ config()
 
 class BrandsService {
   async upload(brand: Brand) {
-    console.log('uoload: ', brand)
+
 
     const result = await databaseService.brands.insertOne(brand)
     return result
