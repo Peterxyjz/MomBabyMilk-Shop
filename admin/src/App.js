@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { FiSettings } from 'react-icons/fi';
-import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+// import { FiSettings } from 'react-icons/fi';
+// import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Sidebar, ThemeSettings } from './components';
 import './App.css';
@@ -19,7 +19,8 @@ import AdminRouter from './router/AdminRouter';
 import AuthRouter from './router/AuthRouter';
 
 const App = () => {
-  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
+  // const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
+  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, themeSettings } = useStateContext();
 
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
@@ -39,7 +40,7 @@ const App = () => {
         <div className="flex relative dark:bg-main-dark-bg">
           {isAuthenticatedStaff ? (
             <>
-              <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
+              {/* <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
                 <TooltipComponent
                   content="Settings"
                   position="Top"
@@ -54,7 +55,7 @@ const App = () => {
                   </button>
 
                 </TooltipComponent>
-              </div>
+              </div> */}
               {activeMenu ? (
                 <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
                   <Sidebar isAuthenticatedStaff={isAuthenticatedStaff} />
@@ -82,7 +83,7 @@ const App = () => {
             </>
           ) : isAuthenticatedAdmin ? (
             <>
-              <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
+              {/* <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
                 <TooltipComponent
                   content="Settings"
                   position="Top"
@@ -97,7 +98,7 @@ const App = () => {
                   </button>
 
                 </TooltipComponent>
-              </div>
+              </div> */}
               {activeMenu ? (
                 <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
                   <Sidebar isAuthenticatedAdmin={isAuthenticatedAdmin} />
