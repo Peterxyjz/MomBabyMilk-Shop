@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import RenderRating from "../elements/RenderRating";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
-import { toast, Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import {
   FaAngleDown,
   FaAngleUp,
@@ -18,7 +18,7 @@ import ProductCard from "../card/Card";
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state?.product || null;
-  const { cartItems, addCartItem } = useCartContext();
+  const { addCartItem } = useCartContext();
   const { checkWishlistItem, addWishlistItem, removeWishlistItem } =
     useWishlistContext();
   const [reviews, setReviews] = useState([]);
@@ -48,21 +48,6 @@ const ProductDetail = () => {
   if (!product) {
     return <div>Product not found</div>;
   }
-  const handleAddToCart = (product) => {
-    const currentCart = cartItems.find(
-      (cartItem) => cartItem._id === product._id
-    );
-    if (currentCart && currentCart.quantity >= product.amount) {
-      toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
-        position: "top-right",
-      });
-    } else {
-      addCartItem(product);
-      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-        position: "top-right",
-      });
-    }
-  };
 
   const formatDescription = (description) => {
     const parts = description.split("\n").filter((part) => part.trim() !== "");
@@ -91,6 +76,17 @@ const ProductDetail = () => {
   };
 
   const discountedPrice = getDiscountedPrice(product.price, product.discount);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+  };
 
   return (
     <section className="py-8 bg-white md:py-16 antialiased">
@@ -177,7 +173,7 @@ const ProductDetail = () => {
               {product.amount > 0 ? (
                 <button
                   className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
-                  onClick={() => handleAddToCart(product)}
+                  onClick={() => addCartItem(product)}
                 >
                   <FaCartPlus className="w-5 h-5 -ms-2 me-2" />
                   Thêm Vào Giỏ Hàng
@@ -240,9 +236,7 @@ const ProductDetail = () => {
                         {review.description}
                       </div>
                       <p className="text-gray-500 text-sm mt-2">
-                        {new Date(review.created_at).toLocaleDateString(
-                          "vi-VN"
-                        )}
+                        {formatDate(review.created_at)}
                       </p>
                       {review.reply_feedback && (
                         <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
@@ -258,6 +252,11 @@ const ProductDetail = () => {
                             <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
                             {review.reply_feedback.description}
                           </div>
+
+                          <div className="text-gray-500 text-sm mt-2">
+                            {formatDate(review.reply_feedback.created_at)}
+                          </div>
+                          
                         </div>
                       )}
                     </div>
@@ -283,9 +282,7 @@ const ProductDetail = () => {
                         {review.description}
                       </div>
                       <p className="text-gray-500 text-sm mt-2">
-                        {new Date(review.created_at).toLocaleDateString(
-                          "vi-VN"
-                        )}
+                        {formatDate(review.created_at)}
                       </p>
                       {review.reply_feedback && (
                         <div className="ml-10 mt-4 p-4 bg-gray-200 rounded-lg">
@@ -300,6 +297,10 @@ const ProductDetail = () => {
                           <div className="text-black mx-8 flex">
                             <FaReply className="mx-1 mt-1 text-sm transform rotate-180" />
                             {review.reply_feedback.description}
+                          </div>
+
+                          <div className="text-gray-500 text-sm mt-2">
+                            {formatDate(review.reply_feedback.created_at)}
                           </div>
                         </div>
                       )}
