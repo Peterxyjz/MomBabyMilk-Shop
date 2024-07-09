@@ -287,6 +287,10 @@ const OrderDetail = () => {
                   )}
                 </p>
               )}
+              <p className="text-md">
+                Phương thức thanh toán:{" "}
+                <span className="font-semibold">{order.order.payment_method === "COD" ? "Thanh toán khi nhận hàng" : "Thanh toán online (chuyển khoản)"}</span>
+              </p>
             </div>
           </div>
           <div className="w-full">
