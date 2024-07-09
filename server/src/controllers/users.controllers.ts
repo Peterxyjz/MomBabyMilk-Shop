@@ -27,10 +27,19 @@ import { forEach, forIn } from 'lodash'
 export const loginController = async (req: Request, res: Response) => {
   const user = req.user as User // lấy user từ req
   const user_id = user._id as ObjectId // lấy _id từ user
+
   if (user.isActive === UserAccountStatus.Blocked) {
     return res.status(400).json({
       errors: {
         message: USERS_MESSAGES.ACCOUNT_BANNED
+      }
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Member') {
+    return res.status(400).json({
+      errors: {
+        message: USERS_MESSAGES.ACCOUNT_CANNOT_LOGIN
       }
     })
   }
@@ -339,7 +348,7 @@ export const changeStatusUserController = async (
     })
   }
   const result = await usersService.changeStatus(req.params.id)
-  
+
   return res.json({
     message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
     result
@@ -356,7 +365,6 @@ export const refreshTokenController = async (
   //ta sẽ lấy user_id để tạo ra access_token và refresh_token mới
   const { user_id, exp } = req.decoded_refresh_token as TokenPayload //lấy refresh_token từ req.body
   const { refresh_token } = req.body
-  console.log(new Date(exp * 1000))
 
   const result = await usersService.refreshToken({ user_id, refresh_token, exp }) //refreshToken chưa code
   return res.json({

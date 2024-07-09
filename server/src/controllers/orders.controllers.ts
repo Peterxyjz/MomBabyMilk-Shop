@@ -82,7 +82,7 @@ export const uploadController = async (req: Request, res: Response) => {
   const voucher_code = req.body?.voucher_code || ''
   const voucher_fee = req.body?.voucher_fee || 0
   const orderDetails = req.body.cart_list
-  const user = req.body.user
+  const user = req.body.user || null
   const customer_infor = req.body.customer_infor
   const order_infor = new Order({
     _id: new ObjectId(),
@@ -101,6 +101,7 @@ export const uploadController = async (req: Request, res: Response) => {
   })
 
   const [order] = await Promise.all([orderServices.upload(order_infor, orderDetails)])
+
   if (voucher_code) {
     await Promise.all([
       voucherOrderServices.upload(
@@ -179,7 +180,10 @@ export const updateStatusController = async (req: Request, res: Response) => {
     const result = await orderServices.cancel(order_id, status, user_id)
     const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
     order_details.forEach(async (item) => {
-      await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
+      if (item.status === true){
+        await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
+      }
+       
     })
 
     const order = await orderServices.getById(order_id)
@@ -188,13 +192,12 @@ export const updateStatusController = async (req: Request, res: Response) => {
       if (order.voucher_code && member_id) {
         const member = await databaseService.users.findOne({ _id: new ObjectId(member_id) })
         const voucher = await voucherServices.getById(order.voucher_code)
-        if(voucher.voucher_type === VoucherMode.Member) {
+        if (voucher.voucher_type === VoucherMode.Member) {
           await databaseService.users.updateOne(
             { _id: new ObjectId(member_id) },
             { $inc: { member_ship: voucher.membership } }
           )
         }
-       
       }
     }
 

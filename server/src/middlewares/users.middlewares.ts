@@ -80,14 +80,14 @@ const confirmPasswordSchema: ParamSchema = {
   },
   custom: {
     options: (value, { req }) => {
-      console.log('mid-register confirm')
+      
       if (value !== req.body.password) {
         throw new ErrorWithStatus({
           message: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD,
           status: HTTP_STATUS.UNAUTHORIZED
         })
       }
-      console.log('mid-register confirm: ok')
+
       return true
     }
   }
@@ -106,7 +106,7 @@ const forgotPasswordTokenSchema: ParamSchema = {
       }
       //nếu có thì decode nó để lấy đc thông tin của người dùng
       try {
-        console.log('value: ' + value)
+  
         // const user = await databaseService.users.findOne({ forgot_password_token: value })
 
         const decoded_forgot_password_token = await verifyToken({
@@ -172,8 +172,7 @@ export const loginValidator = validate(
         trim: true,
         custom: {
           options: async (value, { req }) => {
-            console.log('do server')
-            console.log(req.body)
+            
 
             const user = await databaseService.users.findOne({
               email: value,
@@ -238,7 +237,7 @@ export const registerValidator = validate(
         trim: true,
         custom: {
           options: async (value) => {
-            console.log('dô mid register: emai;')
+            
             const isExistEmail = await usersService.checkEmailExist(value)
             if (isExistEmail) {
               throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS)
@@ -472,30 +471,21 @@ export const changePasswordValidator = validate(
 //vì đôi khi họ click vào link , chưa kịp đổi mk thì họ bận gì đó, họ click lại sau
 
 export const checkEmailToken = async (req: Request, res: Response, next: NextFunction) => {
-  console.log('mid-body: ' + req.body)
-  console.log('mid-query: ' + req.query)
-  console.log(JSON.stringify(req.query))
-  console.log(req.body.email_verify_token)
+
+
   const list = JSON.stringify(req.query)
-  console.log('email_verify: ', req.query.digit)
-  console.log('usser: ', req.query.user_id)
+
   req.body.email_verify_token = await usersService.signEmailVerifyToken(
     req.query.user_id as string,
     req.query.digit as string
   )
-  console.log(req.body.email_verify_token)
+
   next()
 }
 
 export const checkPasswordToken = async (req: Request, res: Response, next: NextFunction) => {
-  console.log('mid-body: ' + req.body)
-  console.log('mid-query: ' + req.query)
-  console.log(JSON.stringify(req.query))
-  console.log(req.body.forgot_password_token)
+
   const list = JSON.stringify(req.query)
-  console.log(req.query.forgot_password_token)
-  console.log(req.query.user_id)
-  console.log(req.query.digit)
 
   req.body.forgot_password_token = await usersService.signForgotPasswordToken(
     req.query.user_id as string,
