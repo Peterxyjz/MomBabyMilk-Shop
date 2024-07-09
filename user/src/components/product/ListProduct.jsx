@@ -112,18 +112,20 @@ const ListProduct = () => {
                     <div className="flex flex-col justify-between">
                       {product.discount > 0 ? (
                         <>
-                          <span className="text-xl font-bold text-gray-900 ">
+                          <div className="text-xl font-bold text-gray-900 ">
                             {formatCurrency(
                               product.price -
                                 (product.price * product.discount) / 100
                             )}
-                          </span>
-                          <span className="text-sm line-through text-gray-500">
-                            {formatCurrency(product.price)}
-                          </span>
-                          <span className="text-green-500 text-sm">
-                            Giảm {product.discount}%
-                          </span>
+                          </div>
+                          <div>
+                            <span className="text-sm line-through text-gray-500">
+                              {formatCurrency(product.price)}
+                            </span>
+                            <span className="font-semibold text-green-500 text-md ml-2">
+                              Giảm {product.discount}%
+                            </span>
+                          </div>
                         </>
                       ) : (
                         <span className="text-xl font-bold text-gray-900 mt-auto">
@@ -153,7 +155,9 @@ const ListProduct = () => {
               key={index + 1}
               onClick={() => handleClick(index + 1)}
               className={`px-4 py-2 mx-1 border rounded ${
-                index + 1 === currentPage ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'
+                index + 1 === currentPage
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500"
               }`}
             >
               {index + 1}
