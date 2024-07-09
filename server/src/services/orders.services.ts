@@ -20,18 +20,37 @@ class OrderServinces {
       ...order_infor
     })
 
-    orderDetails.forEach(async (item: any) => {
-      const order_detail = new OrderDetail({
-        _id: new ObjectId(),
-        order_id: order_infor._id?.toString() || '',
-        product_id: item._id,
-        amount: item.quantity,
-        price: item.price
-      })
+    for (const item of orderDetails) {
+      const productAmount = await wareHouseService.getById(item._id)
 
-      await wareHouseService.decreaseAmount({ product_id: item._id, amount: item.quantity })
-      databaseService.orderDetails.insertOne(order_detail)
-    })
+      if (Number(productAmount?.amount) < item.quantity) {
+        const order_detail = new OrderDetail({
+          _id: new ObjectId(),
+          order_id: order_infor._id?.toString() || '',
+          product_id: item._id,
+          amount: item.quantity,
+          price: item.price,
+          status: false
+        })
+        databaseService.orderDetails.insertOne(order_detail)
+      } else {
+        const order_detail = new OrderDetail({
+          _id: new ObjectId(),
+          order_id: order_infor._id?.toString() || '',
+          product_id: item._id,
+          amount: item.quantity,
+          price: item.price,
+          status: true
+        })
+
+        await wareHouseService.decreaseAmount({
+          product_id: item._id,
+          amount: Number(Number(productAmount?.amount) - Number(item.quantity))
+        })
+        databaseService.orderDetails.insertOne(order_detail)
+      }
+    }
+
     return await databaseService.orders.insertOne(order)
   }
   async getAll() {
