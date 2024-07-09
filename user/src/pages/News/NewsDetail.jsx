@@ -19,20 +19,21 @@ const NewsDetail = () => {
     <>
       <Breadcrumbs headline="Chi tiết bài viết" />
       <div className="p-4 max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">{news.news_name}</h1>
         <img
           src={news.img_url}
           alt={news.news_name}
-          className="w-70 h-auto mb-4 object-cover"
+          className="w-450 h-300 mb-4 object-cover mx-auto"
+          style={{ width: "550px", height: "300px" }}
         />
+        <h1 className="text-3xl font-bold mb-4 text-center">{news.news_name}</h1>
+        <p className="text-sm text-gray-600 text-center mb-4">
+          {new Date(news.created_at).toLocaleString()}
+        </p>
         <div
           dangerouslySetInnerHTML={{ __html: news.description }}
           className="text-gray-800 leading-7"
         />
-        <p className="text-sm text-gray-600 mt-4">
-          {new Date(news.created_at).toLocaleString()}
-        </p>
-        <div className="mt-4">
+        <div className="mt-4 text-center">
           <Link
             to="/product"
             state={{ product: product }}
