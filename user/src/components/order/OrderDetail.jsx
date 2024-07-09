@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import RenderRating from "../elements/RenderRating";
 import { fetchGetFeedbackByUser, fetchUploadFeedback } from "../../data/api";
 import toast from "react-hot-toast";
+import { useCartContext } from "../../context/CartContext";
 // import { AiOutlineFieldTime } from "react-icons/ai"; //chờ
 // import { IoIosCloseCircle } from "react-icons/io"; //hủy
 // import { FaTruckFast  } from "react-icons/fa6"; //ship xác
@@ -30,7 +31,7 @@ const OrderDetail = () => {
   const user_id = user?._id;
   const member_id = order.order.member_id;
   const checkMember = user_id === member_id ? true : false;
-
+  const { addCartItem } = useCartContext();
   useEffect(() => {
     const findProductById = (product_id) => {
       return products.find((product) => product._id === product_id);
@@ -47,7 +48,6 @@ const OrderDetail = () => {
       };
       updateOrderDetails();
     }
-
     if (checkMember) {
       const getReviews = async () => {
         await fetchGetFeedbackByUser(user_id)
@@ -102,6 +102,19 @@ const OrderDetail = () => {
 
   const handleRatingChange = (rating) => {
     setFeedback({ ...feedback, rating });
+  };
+  
+  const handleBuyBack = async () => {
+    orderDetails.forEach(async (item) => {
+      if (item.product.amount > 0) {
+        await addCartItem(item.product);
+      }else{
+        toast.error("Sản phẩm đã hết hàng", {
+          position: "top-right",
+          duration: 1000,
+        });
+      }
+    });
   };
 
   const submitFeedback = async () => {
@@ -182,7 +195,7 @@ const OrderDetail = () => {
               </p>
             </div>
             <div>
-              <Button color="light" size={"xl"} className="text-blue-500">
+              <Button color="light" size={"xl"} className="text-blue-500" onClick={handleBuyBack}>
                 <FaCartPlus className="text-xl mt-0.5 mx-2" /> Mua lại sản phẩm
               </Button>
             </div>
@@ -293,6 +306,7 @@ const OrderDetail = () => {
                       <Link
                         to={"/product"}
                         state={{ product: item.product }}
+                        onClick={() => window.scrollTo(0, 0)}
                         className="text-base font-medium text-gray-900 hover:underline dark:text-white"
                       >
                         {item.product.product_name}

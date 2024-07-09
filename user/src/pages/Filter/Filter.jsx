@@ -9,7 +9,6 @@ import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { fetchCategories } from "../../data/api";
-import toast from "react-hot-toast";
 import not_found from "../../assets/images/background/notFind.png"; // Import hình ảnh
 
 const Filter = () => {
@@ -21,7 +20,7 @@ const Filter = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortOption, setSortOption] = useState("");
   const { products, loading } = useProductContext();
-  const { addCartItem, cartItems } = useCartContext();
+  const { addCartItem } = useCartContext();
   const search_name = location.state?.product_name || "";
 
   useEffect(() => {
@@ -162,21 +161,6 @@ const Filter = () => {
     return pageNumbers;
   };
 
-  const handleAddToCart = (product) => {
-    const currentCart = cartItems.find(
-      (cartItem) => cartItem._id === product._id
-    );
-    if (currentCart && currentCart.quantity >= product.amount) {
-      toast.error("Số lượng mua vượt quá số lượng trong kho", {
-        position: "top-right",
-      });
-    } else {
-      addCartItem(product);
-      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-        position: "top-right",
-      });
-    }
-  };
   const formatCurrency = (amount) => {
     return Number(amount).toLocaleString("vi-VN", {
       style: "currency",
@@ -393,7 +377,7 @@ const Filter = () => {
                         )}
                       </div>
                       <button
-                        onClick={() => handleAddToCart(product)}
+                        onClick={() => addCartItem(product)}
                         disabled={product.amount === 0}
                         className={
                           product.amount === 0

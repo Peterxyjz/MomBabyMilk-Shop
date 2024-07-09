@@ -2,33 +2,17 @@ import { FaShoppingCart } from "react-icons/fa";
 import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import banner from "../../assets/images/body/babyDrinkMilk.png";
 
 const ListProduct = () => {
-  const { addCartItem, cartItems } = useCartContext();
+  const { addCartItem } = useCartContext();
   const location = useLocation();
   const products = location.state?.products || [];
   const headline = location.state?.headline;
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
-
-  const handleAddToCart = (product) => {
-    const currentCart = cartItems.find(
-      (cartItem) => cartItem._id === product._id
-    );
-    if (currentCart && currentCart.quantity >= product.amount) {
-      toast.error("Số lượng mua vượt quá số lượng trong kho", {
-        position: "top-right",
-      });
-    } else {
-      addCartItem(product);
-      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-        position: "top-right",
-      });
-    }
-  };
 
   const formatCurrency = (amount) => {
     return Number(amount).toLocaleString("vi-VN", {
@@ -134,7 +118,7 @@ const ListProduct = () => {
                       )}
                     </div>
                     <button
-                      onClick={() => handleAddToCart(product)}
+                      onClick={() => addCartItem(product)}
                       disabled={product.amount === 0}
                       className={
                         product.amount === 0
