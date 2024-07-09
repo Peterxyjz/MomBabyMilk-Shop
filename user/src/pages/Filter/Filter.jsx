@@ -9,14 +9,14 @@ import Breadcrumbs from "../../components/elements/Breadcrumb";
 import { Link, useLocation } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { fetchCategories } from "../../data/api";
-import toast from "react-hot-toast";
-import not_found from '../../assets/images/background/notFind.png'; // Import hình ảnh
+import not_found from "../../assets/images/background/notFind.png"; // Import hình ảnh
 
 const Filter = () => {
   const location = useLocation();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortOption, setSortOption] = useState("");
   const { products, loading } = useProductContext();
@@ -53,6 +53,17 @@ const Filter = () => {
           product.price >= priceRange[0] && product.price <= priceRange[1]
       );
 
+      if (selectedDiscounts.length > 0) {
+        updatedProducts = updatedProducts.filter((product) => {
+          return selectedDiscounts.some((discountRange) => {
+            const [min, max] = discountRange.split("-").map(Number);
+            return max
+              ? product.discount >= min && product.discount <= max
+              : product.discount >= min;
+          });
+        });
+      }
+
       if (sortOption === "price-asc") {
         updatedProducts = updatedProducts.sort((a, b) => a.price - b.price);
       } else if (sortOption === "price-desc") {
@@ -65,7 +76,14 @@ const Filter = () => {
     };
 
     filterProducts();
-  }, [products, search_name, selectedCategory, priceRange, sortOption]);
+  }, [
+    products,
+    search_name,
+    selectedCategory,
+    priceRange,
+    selectedDiscounts,
+    sortOption,
+  ]);
 
   const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -84,6 +102,15 @@ const Filter = () => {
 
   const handleSliderChange = (value) => {
     setPriceRange(value);
+  };
+
+  const handleDiscountSelect = (event) => {
+    const { value } = event.target;
+    setSelectedDiscounts((prevSelectedDiscounts) =>
+      prevSelectedDiscounts.includes(value)
+        ? prevSelectedDiscounts.filter((discount) => discount !== value)
+        : [...prevSelectedDiscounts, value]
+    );
   };
 
   const handleNextPage = () => {
@@ -105,8 +132,10 @@ const Filter = () => {
   const handleResetFilters = () => {
     setSelectedCategory("");
     setPriceRange([0, 1000000]);
+    setSelectedDiscounts([]);
     setSortOption("");
     setCurrentPage(1);
+    setFilteredProducts(products);
   };
 
   const handleSortChange = (option) => {
@@ -121,13 +150,22 @@ const Filter = () => {
         <button
           key={i}
           onClick={() => handlePageClick(i)}
-          className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          className={`px-4 py-2 mx-1 rounded-lg ${
+            currentPage === i ? "bg-blue-500 text-white" : "bg-gray-300"
+          }`}
         >
           {i}
         </button>
       );
     }
     return pageNumbers;
+  };
+
+  const formatCurrency = (amount) => {
+    return Number(amount).toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
   };
 
   if (loading)
@@ -155,7 +193,8 @@ const Filter = () => {
                     type="radio"
                     name="category"
                     value={category.category_name}
-                    onClick={handleCategorySelect}
+                    checked={selectedCategory === category.category_name}
+                    onChange={handleCategorySelect}
                   />{" "}
                   {category.category_name}
                 </li>
@@ -163,13 +202,52 @@ const Filter = () => {
             </ul>
           </div>
           <div className="mt-4 mb-4">
-            <h2 className="font-bold text-lg mb-2">Loại</h2>
+            <h2 className="font-bold text-lg mb-2">Giảm giá</h2>
             <ul className="text-gray-500">
               <li>
-                <input type="checkbox" /> Sữa bột
+                <input
+                  type="checkbox"
+                  value="0-5"
+                  checked={selectedDiscounts.includes("0-5")}
+                  onChange={handleDiscountSelect}
+                />{" "}
+                0 - 5%
               </li>
               <li>
-                <input type="checkbox" /> Sữa pha sẵn
+                <input
+                  type="checkbox"
+                  value="5-10"
+                  checked={selectedDiscounts.includes("5-10")}
+                  onChange={handleDiscountSelect}
+                />{" "}
+                5% - 10%
+              </li>
+              <li>
+                <input
+                  type="checkbox"
+                  value="10-15"
+                  checked={selectedDiscounts.includes("10-15")}
+                  onChange={handleDiscountSelect}
+                />{" "}
+                10% - 15%
+              </li>
+              <li>
+                <input
+                  type="checkbox"
+                  value="15-25"
+                  checked={selectedDiscounts.includes("15-25")}
+                  onChange={handleDiscountSelect}
+                />{" "}
+                15% - 25%
+              </li>
+              <li>
+                <input
+                  type="checkbox"
+                  value="25-"
+                  checked={selectedDiscounts.includes("25-")}
+                  onChange={handleDiscountSelect}
+                />{" "}
+                Hơn 25%
               </li>
             </ul>
           </div>
@@ -197,7 +275,8 @@ const Filter = () => {
                 onClick={handleResetFilters}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg flex"
               >
-                <MdOutlineRestore className="mr-2 my-auto w-5 h-5"/>Khôi phục bộ lọc
+                <MdOutlineRestore className="mr-2 my-auto w-5 h-5" />
+                Khôi phục bộ lọc
               </button>
             </Link>
             <div className="relative">
@@ -273,19 +352,32 @@ const Filter = () => {
                       </div>
                     </Link>
                     <div className="flex justify-between items-center w-full">
-                      <span>
-                        {Number(product.price).toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </span>
+                      <div className="flex flex-col justify-between">
+                        {product.discount > 0 ? (
+                          <>
+                            <div className="text-xl font-bold text-gray-900 ">
+                              {formatCurrency(
+                                product.price -
+                                  (product.price * product.discount) / 100
+                              )}
+                            </div>
+                            <div>
+                              <span className="text-sm line-through text-gray-500">
+                                {formatCurrency(product.price)}
+                              </span>
+                              <span className="font-semibold text-green-500 text-md ml-2">
+                                Giảm {product.discount}%
+                              </span>
+                            </div>
+                          </>
+                        ) : (
+                          <span className="text-xl font-bold text-gray-900 mt-auto">
+                            {formatCurrency(product.price)}
+                          </span>
+                        )}
+                      </div>
                       <button
-                        onClick={() => {
-                          addCartItem(product)
-                          toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-                            position: "top-right",
-                          });
-                        }}
+                        onClick={() => addCartItem(product)}
                         disabled={product.amount === 0}
                         className={
                           product.amount === 0
@@ -319,8 +411,15 @@ const Filter = () => {
             </>
           ) : (
             <div className="flex flex-col items-center mt-6">
-              <img src={not_found} alt="No products found" className="w-128 h-64 mb-4" /> {/* Thêm hình ảnh */}
-              <p className="text-lg font-semibold">Không có sản phẩm phù hợp với tìm kiếm!</p>
+              <img
+                src={not_found}
+                alt="No products found"
+                className="w-128 h-64 mb-4"
+              />{" "}
+              {/* Thêm hình ảnh */}
+              <p className="text-lg font-semibold">
+                Không có sản phẩm phù hợp với tìm kiếm!
+              </p>
             </div>
           )}
         </div>

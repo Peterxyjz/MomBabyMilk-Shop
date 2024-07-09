@@ -8,10 +8,10 @@ import "./Swiper.css";
 import RenderRating from "../elements/RenderRating";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 const ProductCard = ({ products, headline }) => {
-  const { cartItems, addCartItem } = useCartContext();
+  const { addCartItem } = useCartContext();
   const productsToShow = products.slice(0, 12);
   const settings = {
     dots: true,
@@ -48,22 +48,6 @@ const ProductCard = ({ products, headline }) => {
       </div>
     );
   }
-
-  const handleAddToCart = (product) => {
-    const currentCart = cartItems.find(
-      (cartItem) => cartItem._id === product._id
-    );
-    if (currentCart && currentCart.quantity >= product.amount) {
-      toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
-        position: "top-right",
-      });
-    } else {
-      addCartItem(product);
-      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-        position: "top-right",
-      });
-    }
-  };
 
   const formatCurrency = (amount) => {
     return Number(amount).toLocaleString("vi-VN", {
@@ -150,7 +134,7 @@ const ProductCard = ({ products, headline }) => {
                     </div>
                     {product.amount > 0 && (
                       <button
-                        onClick={() => handleAddToCart(product)}
+                        onClick={() => addCartItem(product)}
                         className="rounded-lg bg-cyan-700 p-3 text-center text-base font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 flex items-center justify-center"
                       >
                         <span className="mr-1">Thêm</span>
