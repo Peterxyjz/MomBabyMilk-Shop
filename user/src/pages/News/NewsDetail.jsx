@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { IoIosArrowForward } from "react-icons/io";
 import Breadcrumbs from "../../components/elements/Breadcrumb";
 
 const NewsDetail = () => {
@@ -23,9 +23,9 @@ const NewsDetail = () => {
           src={news.img_url}
           alt={news.news_name}
           className="w-450 h-300 mb-4 object-cover mx-auto"
-          style={{ width: "550px", height: "300px" }}
+          style={{ width: "450px", height: "300px" }}
         />
-        <h1 className="text-3xl font-bold mb-4 text-center">{news.news_name}</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center">{news.news_name}</h1>
         <p className="text-sm text-gray-600 text-center mb-4">
           {new Date(news.created_at).toLocaleString()}
         </p>
@@ -38,9 +38,9 @@ const NewsDetail = () => {
             to="/product"
             state={{ product: product }}
             onClick={() => window.scrollTo(0, 0)}
-            className="text-blue-500 text-sm underline"
+            className="text-blue-700 font-medium text-lg flex items-center justify-center hover:underline"
           >
-            {">> "} Tìm hiểu thêm về sản phẩm
+            Tìm hiểu thêm về sản phẩm <IoIosArrowForward className="ml-2" />
           </Link>
         </div>
       </div>
