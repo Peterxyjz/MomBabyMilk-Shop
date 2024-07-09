@@ -197,7 +197,7 @@ const Filter = () => {
                 onClick={handleResetFilters}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg flex"
               >
-                <MdOutlineRestore className="mr-2 my-auto w-5 h-5"/>Khôi phục bộ lọc
+                <MdOutlineRestore className="mr-2 my-auto w-5 h-5" />Khôi phục bộ lọc
               </button>
             </Link>
             <div className="relative">
@@ -273,12 +273,32 @@ const Filter = () => {
                       </div>
                     </Link>
                     <div className="flex justify-between items-center w-full">
-                      <span>
-                        {Number(product.price).toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </span>
+                      {product.discount > 0 ? (
+                        <div className="flex items-center">
+                          <span className="text-black-500 font-bold">
+                            {Number(product.price - (product.price * product.discount / 100)).toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </span>
+                          <span className="line-through text-gray-500 ml-2">
+                            {Number(product.price).toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </span>
+                          <span className="text-green-500 ml-2">
+                            Giảm {product.discount}%
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-black-500 font-bold">
+                          {Number(product.price).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </span>
+                      )}
                       <button
                         onClick={() => {
                           addCartItem(product)
@@ -296,6 +316,7 @@ const Filter = () => {
                         Thêm <FaShoppingCart className="ml-2" />
                       </button>
                     </div>
+
                   </div>
                 ))}
               </div>
