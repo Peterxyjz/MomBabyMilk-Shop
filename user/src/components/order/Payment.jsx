@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
@@ -16,10 +16,11 @@ const Payment = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
+  const [countdown, setCountdown] = useState(null);
   const ship = location.state?.ship;
   const discount = location.state?.discount;
   const voucher_code = location.state?.voucherCode;
-  const callTime = 300000;
+  const callTime = 300000; // 5 minutes
 
   const handlePaymentChange = (e) => {
     setPaymentMethod(e.target.value);
@@ -34,12 +35,14 @@ const Payment = () => {
 
     if (!paymentMethod) {
       setErrorMessage("Vui lòng chọn một phương thức thanh toán.");
-    } else if (!termsAccepted) {
-      setErrorMessage("Vui lòng đồng ý với các điều khoản và điều kiện.");
-    } else {
-      console.log(totalPrice);
+      return;
     }
     
+    if (!termsAccepted) {
+      setErrorMessage("Vui lòng đồng ý với các điều khoản và điều kiện.");
+      return;
+    }
+
     const order_infor = {
       customer_infor: customer_infor,
       cart_list: cartItems,
@@ -50,10 +53,10 @@ const Payment = () => {
       voucher_code: voucher_code,
       voucher_fee: discount
     };
+
     await fetchCreateOrder(order_infor)
       .then((res) => {
         const membership = res.data.point;
-        console.log(membership);
         const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
           const price = totalPrice + ship - discount;
@@ -91,6 +94,8 @@ const Payment = () => {
               });
             }
           }, callTime);
+
+          setCountdown(callTime / 1000);
         } else {
           clearCart();
           toast.success("Đặt Hàng Thành Công");
@@ -110,7 +115,18 @@ const Payment = () => {
         console.log(err);
       });
   };
-  // Dữ liệu người dùng
+
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+    } else if (countdown === 0) {
+      setShowQR(false);
+    }
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   return (
     <>
@@ -242,44 +258,44 @@ const Payment = () => {
                     <table className="w-full text-left font-medium text-gray-900 dark:text-white md:table-fixed">
                       <tbody className="divide-y divide-gray-200">
                         {cartItems.map((product) => (
-                          <>
-                            <div className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6">
-                              <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                                <img
-                                  className="h-20 w-20 dark:hidden"
-                                  src={product.imgUrl}
-                                />
-                                <img
-                                  className="hidden h-20 w-20 dark:block"
-                                  src={product.imgUrl}
-                                />
-                                <div className="flex items-center justify-between md:order-3 md:justify-end">
-                                  <div className="text-end md:order-4 md:w-32">
-                                    <p className="text-base font-bold text-gray-900 dark:text-white">
-                                      {Number(product.price).toLocaleString(
-                                        "vi-VN",
-                                        {
-                                          style: "currency",
-                                          currency: "VND",
-                                        }
-                                      )}
-                                    </p>
-                                  </div>
+                          <div className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6" key={product.id}>
+                            <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
+                              <img
+                                className="h-20 w-20 dark:hidden"
+                                src={product.imgUrl}
+                                alt={product.product_name}
+                              />
+                              <img
+                                className="hidden h-20 w-20 dark:block"
+                                src={product.imgUrl}
+                                alt={product.product_name}
+                              />
+                              <div className="flex items-center justify-between md:order-3 md:justify-end">
+                                <div className="text-end md:order-4 md:w-32">
+                                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                                    {Number(product.price).toLocaleString(
+                                      "vi-VN",
+                                      {
+                                        style: "currency",
+                                        currency: "VND",
+                                      }
+                                    )}
+                                  </p>
                                 </div>
-                                <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                                  <a
-                                    href="#"
-                                    className="text-base font-medium text-gray-900 hover:underline dark:text-white"
-                                  >
-                                    {product.product_name}
-                                  </a>
-                                  <div className="flex items-center gap-4">
-                                    x{product.quantity} sản phẩm
-                                  </div>
+                              </div>
+                              <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
+                                <a
+                                  href="#"
+                                  className="text-base font-medium text-gray-900 hover:underline dark:text-white"
+                                >
+                                  {product.product_name}
+                                </a>
+                                <div className="flex items-center gap-4">
+                                  x{product.quantity} sản phẩm
                                 </div>
                               </div>
                             </div>
-                          </>
+                          </div>
                         ))}
                       </tbody>
                     </table>
@@ -340,14 +356,13 @@ const Payment = () => {
                 </div>
                 <div className="w-full border-b border-[rgba(0,0,0,0.2)] py-2">
                   <h4 className="text-lg font-bold text-gray-900 dark:text-white">
-                    Phương Thức Toán
+                    Phương Thức Thanh Toán
                   </h4>
                   <div>
                     <input
                       id="payment-radio-1"
                       type="radio"
                       name="payment-method"
-                      defaultValue=""
                       value="COD"
                       onChange={handlePaymentChange}
                       className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
@@ -356,7 +371,7 @@ const Payment = () => {
                       htmlFor="payment-radio-1"
                       className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
-                      Thanh Toán Khi Nhập Hàng (COD)
+                      Thanh Toán Khi Nhận Hàng (COD)
                     </label>
                   </div>
                   <div>
@@ -364,7 +379,6 @@ const Payment = () => {
                       id="payment-radio-2"
                       type="radio"
                       name="payment-method"
-                      defaultValue=""
                       value="Online"
                       onChange={handlePaymentChange}
                       className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
@@ -382,7 +396,7 @@ const Payment = () => {
                   <input
                     id="terms-checkbox-2"
                     type="checkbox"
-                    defaultValue=""
+                    required
                     name="terms-checkbox"
                     onChange={handleTermsChange}
                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
@@ -391,7 +405,6 @@ const Payment = () => {
                     htmlFor="terms-checkbox-2"
                     className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    {" "}
                     Tôi đồng ý với{" "}
                     <Link
                       to={"/exchange_policy"}
@@ -426,6 +439,11 @@ const Payment = () => {
                       Quét Mã QR Để Thanh Toán
                     </h4>
                     <img src={QR} alt="QR Code" className="mx-auto" />
+                    {countdown && (
+                      <p className="text-center text-red-500">
+                        Thời gian còn lại: {Math.floor(countdown / 60)}:{('0' + (countdown % 60)).slice(-2)}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
