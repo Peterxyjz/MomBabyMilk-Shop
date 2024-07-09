@@ -132,15 +132,14 @@ const ProductCard = ({ products, headline }) => {
                         </span>
                       )}
                     </div>
-                    {product.amount > 0 && (
-                      <button
+                    <button
                         onClick={() => addCartItem(product)}
+                        disabled={product.amount === 0}
                         className="rounded-lg bg-cyan-700 p-3 text-center text-base font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 flex items-center justify-center"
                       >
                         <span className="mr-1">Thêm</span>
                         <FaShoppingCart />
                       </button>
-                    )}
                   </div>
                 </Card>
               </div>
