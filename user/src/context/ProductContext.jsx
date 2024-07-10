@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { fetchProducts, fetchRefreshToken } from "../data/api.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ProductContext = createContext();
 
@@ -20,7 +21,8 @@ export const ProductProvider = ({ children }) => {
           }).catch(() => {
             localStorage.removeItem("user");
             localStorage.removeItem("result");
-            window.location.reload();
+            localStorage.removeItem("products");
+            window.location.href("/");
           });
         }
         const localProducts = localStorage.getItem("products");

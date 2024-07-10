@@ -392,7 +392,8 @@ const EditProfile = () => {
         </>
       ) : (
         <>
-          <h1 className="text-2xl font-semibold mb-3">Tổng Quan</h1>
+          <h1 className="text-2xl font-semibold">Tổng quan</h1>
+          <hr className="my-3"/>
           <div className="w-full mx-auto">
             <div className="w-full grid grid-cols-4">
               <div>

@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 
 const SidebarNews = ({ posts }) => {
-
+  const recent = posts.slice(-5).reverse()
+  const getRandomPosts = (posts, count) => {
+    const shuffled = posts.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+  
+  const random = getRandomPosts(posts, 3);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -23,7 +29,7 @@ const SidebarNews = ({ posts }) => {
       </div>
       <div className="mb-4 border rounded-lg p-4">
         <h2 className="text-xl font-bold mb-2">Bài đăng gần đây</h2>
-        {posts.map((item) => (
+        {recent.map((item) => (
           <div key={item._id} className="flex items-center mb-4">
             <img
               src={item.img_url}
@@ -45,29 +51,27 @@ const SidebarNews = ({ posts }) => {
         ))}
       </div>
       <div className="border rounded-lg p-4">
-        <h2 className="text-xl font-bold mb-2">Loại tin tức</h2>
-        <ul>
-          <li className="mb-2">
-            <a href="#" className="block">
-              Latest Recipes (10)
-            </a>
-          </li>
-          <li className="mb-2">
-            <a href="#" className="block">
-              Diet Food (6)
-            </a>
-          </li>
-          <li className="mb-2">
-            <a href="#" className="block">
-              Low calorie Items (8)
-            </a>
-          </li>
-          <li className="mb-2">
-            <a href="#" className="block">
-              Cooking Method (9)
-            </a>
-          </li>
-        </ul>
+        <h2 className="text-xl font-bold mb-2">Bài viết đề xuất</h2>
+        {random.map((item) => (
+          <div key={item._id} className="flex items-center mb-4">
+            <img
+              src={item.img_url}
+              alt={item.news_name}
+              className="w-16 h-16 rounded-lg mr-4"
+            />
+            <div className="flex-1 min-w-0">
+              <Link
+                to={"/news-detail"}
+                state={{news: item}}
+                onClick={() => window.scrollTo(0, 0)}
+                className="block font-bold truncate w-full overflow-hidden whitespace-nowrap"
+              >
+                {item.news_name}
+              </Link>
+              <p className="text-sm text-gray-600">{formatDate(item.created_at)}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

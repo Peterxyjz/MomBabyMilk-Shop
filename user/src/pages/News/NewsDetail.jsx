@@ -15,6 +15,17 @@ const NewsDetail = () => {
     return <div>No news item selected.</div>;
   }
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
+};
+
   return (
     <>
       <Breadcrumbs headline="Chi tiết bài viết" />
@@ -27,7 +38,7 @@ const NewsDetail = () => {
         />
         <h1 className="text-3xl font-bold mb-2 text-center">{news.news_name}</h1>
         <p className="text-sm text-gray-600 text-center mb-4">
-          {new Date(news.created_at).toLocaleString()}
+          {formatDate(news.created_at)}
         </p>
         <div
           dangerouslySetInnerHTML={{ __html: news.description }}

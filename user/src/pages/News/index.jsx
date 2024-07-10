@@ -28,12 +28,11 @@ const News = () => {
       </div>
     );
   }
-  const recent = posts.slice(-5).reverse();
   return (
     <>
       <Breadcrumbs headline="Tin tức" />
       <div className="container mx-auto p-4 flex flex-wrap md:flex-nowrap">
-        <SidebarNews posts={recent} />
+        <SidebarNews posts={posts} />
         <PostListNews posts={posts} />
       </div>
     </>

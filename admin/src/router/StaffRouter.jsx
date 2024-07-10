@@ -8,7 +8,6 @@ import Categories from '../pages/Category/Categories';
 import Brands from '../pages/Brand/Brands';
 import AddCategory from '../pages/Category/AddCategory';
 import AddBrands from '../pages/Brand/AddBrands';
-import Dashboard from '../pages/Dashboard';
 import { Customers } from '../pages';
 import UserSetting from '../pages/UserSetting';
 import AddBill from '../pages/Warehouse/AddBill';
@@ -25,11 +24,10 @@ import AddVoucher from '../pages/Voucher/AddVoucher';
 import AllFeedback from '../pages/Feedback/AllFeedback';
 import BadFeedback from '../pages/Feedback/BadFeedback';
 import Vouchers from '../pages/Voucher/Vouchers';
-import Blogs from '../pages/Blog/Blogs';
 import AddNews from '../pages/News/AddNews';
 import EditNews from '../pages/News/EditNews';
+import AllNews from '../pages/News/AllNews';
 const StaffRouter = () => {
-    const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
     return (
         <Routes>
             <Route path="/" element={(<AwaitOrder />)} />
@@ -66,8 +64,8 @@ const StaffRouter = () => {
             {/* feedback */}
             <Route path="/all-feedback" element={<AllFeedback />} />
             <Route path="/bad-feedback" element={<BadFeedback />} />
-            {/* blog */}
-            <Route path="/all-blog" element={<Blogs />} />
+            {/* news */}
+            <Route path="/all-blog" element={<AllNews />} />
             <Route path="/add-news" element={<AddNews />} />
             <Route path="/edit-news" element={<EditNews />} />
         </Routes>

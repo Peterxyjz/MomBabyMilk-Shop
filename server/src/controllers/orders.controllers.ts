@@ -82,7 +82,7 @@ export const uploadController = async (req: Request, res: Response) => {
   const voucher_code = req.body?.voucher_code || ''
   const voucher_fee = req.body?.voucher_fee || 0
   const orderDetails = req.body.cart_list
-  const user = req.body.user || null
+  const user = req.body.user
   const customer_infor = req.body.customer_infor
   const order_infor = new Order({
     _id: new ObjectId(),
@@ -101,7 +101,6 @@ export const uploadController = async (req: Request, res: Response) => {
   })
 
   const [order] = await Promise.all([orderServices.upload(order_infor, orderDetails)])
-
   if (voucher_code) {
     await Promise.all([
       voucherOrderServices.upload(
@@ -180,10 +179,7 @@ export const updateStatusController = async (req: Request, res: Response) => {
     const result = await orderServices.cancel(order_id, status, user_id)
     const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
     order_details.forEach(async (item) => {
-      if (item.status === true){
-        await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
-      }
-       
+      await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
     })
 
     const order = await orderServices.getById(order_id)

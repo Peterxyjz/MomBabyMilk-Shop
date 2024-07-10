@@ -66,7 +66,6 @@ const AwaitOrderDetail = () => {
       // Tải lại trang
       window.location.reload();
     } catch (error) {
-      console.log(error.response);
       notification.error({
         message: "Lỗi",
         description: "Đơn hàng không thể huỷ!",
