@@ -79,7 +79,7 @@ const LoginPage = () => {
                   </label>
                   <InputGroup className="relative flex items-center w-full">
                     <Input
-                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)] rounded-xl pr-16" // add padding to the right to make space for the button
+                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)] rounded-xl pr-16" 
                       type={show ? 'text' : 'password'}
                       id="password"
                       name="password"

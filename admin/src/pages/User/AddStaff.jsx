@@ -76,16 +76,12 @@ const AddStaff = () => {
 
     // Send data to the database:
     await fetchUploadStaff(staff, token)
-      .then(async (res) => {
-        const id = res.data.result.insertedId;
-        // You can add more actions here if needed, e.g., upload avatar image
-      })
       .then(() => {
+        console.log("thanh cong");
         notification.success({
           message: "Thêm nhân viên thành công!",
           placement: "top",
         });
-        // form.reset();
       })
       .catch((error) => {
         console.log(error.response);
@@ -174,236 +170,271 @@ const AddStaff = () => {
     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
       <Card
         title="Thêm nhân viên mới"
-        style={{ width: '90%', maxWidth: '800px', margin: '30px auto', minHeight: '70vh' }}
+        style={{ width: '90%', maxWidth: '1200px', margin: '30px auto'}}
+        className='h-full'
       >
         <form onSubmit={handleSubmit}>
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="fullname" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Họ và tên</label>
+          {/* Row with 3 cols */}
+          <Row justify="space-between" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }} gutter={[40, 8]} >
+            <Col span={8}>
+              <Row align="middle">
+                <Col span={6}>
+                  <label htmlFor="fullname" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Họ và tên</label>
+                </Col>
+                <Col span={18}>
+                  <InputText
+                    id="fullname"
+                    type="text"
+                    className="w-full"
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                    name="fullname"
+                    placeholder="Nhập họ và tên"
+                    value={fullname}
+                    onChange={(e) => setFullname(e.target.value)}
+                    required />
+                </Col>
+              </Row>
             </Col>
-            <Col span={18}>
-              <InputText
-                id="fullname"
-                type="text"
-                className="w-full"
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                name="fullname"
-                placeholder="Nhập họ và tên"
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
-                required />
+
+            <Col span={8}>
+              <Row align={'middle'}>
+                <Col span={6}>
+                  <label htmlFor="" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Username</label>
+                </Col>
+                <Col span={18}>
+                  <InputText
+                    id="username"
+                    type="text"
+                    className="w-full"
+                    style={{ width: '100%', height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                    name="username"
+                    placeholder="Nhập tên người dùng"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </Col>
+              </Row>
+            </Col>
+
+            <Col span={8}>
+              <Row align="middle">
+                <Col span={6}>
+                  <label htmlFor="phone" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold', width: '100%' }}>Số điện thoại</label>
+                </Col>
+                <Col span={18}>
+                  <InputMask
+                    id="phone"
+                    mask="999-999-9999"
+                    placeholder="Nhập số điện thoại"
+                    className="w-full border border-gray-300 rounded-md"
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem', width: '100%' }}
+                    name="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                  />
+                </Col>
+              </Row>
             </Col>
           </Row>
 
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="username" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Tên người dùng</label>
+          {/* Row with 2 cols */}
+          <Row justify="space-between" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }} gutter={[40, 8]}>
+            <Col span={12}>
+              <Row align="middle">
+                <Col span={4}>
+                  <label htmlFor="email" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Email</label>
+                </Col>
+                <Col span={20}>
+                  <InputText
+                    id="email"
+                    type="text"
+                    className="w-full border"
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem', width: '100%' }}
+                    name="email"
+                    placeholder="Nhập email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required />
+                </Col>
+              </Row>
             </Col>
-            <Col span={18}>
-              <InputText
-                id="username"
-                type="text"
-                className="w-full"
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                name="username"
-                placeholder="Nhập tên người dùng"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required />
+
+
+            <Col span={12}>
+              <Row align="middle">
+                <Col span={4}>
+                  <label htmlFor="" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Ngày sinh</label>
+                </Col>
+                <Col span={20}>
+                  <DatePicker
+                    value={date}
+                    placeholder="Nhập ngày sinh"
+                    format="DD/MM/YYYY"
+                    onChange={handleDateChange}
+                    style={{ width: '100%', height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                    required
+                  />
+                </Col>
+              </Row>
             </Col>
           </Row>
 
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="password" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Mật khẩu</label>
+          {/* Row with 2 cols */}
+          <Row justify="space-between" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }} gutter={[40, 8]}>
+            <Col span={12}>
+              <Row align={'middle'}>
+                <Col span={4}>
+                  <label htmlFor="email" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Mật khẩu</label>
+                </Col>
+                <Col span={20} style={{ display: 'flex' }}>
+                  <InputGroup className="relative flex items-center w-full">
+                    <Input
+                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)]"
+                      style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem', width: '100%' }}
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Nhập mật khẩu"
+                    />
+                    <InputRightElement className="absolute mr-3 h-full flex items-center justify-center">
+                      <Button
+                        h="2.5rem"
+                        size="sm"
+                        onClick={handleShowPasswordClick}
+                        fontSize={'1.5rem'}
+                      >
+                        {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                </Col>
+              </Row>
             </Col>
-            <Col span={18}>
-              <InputGroup>
-                <Input
-                  className='w-full'
-                  style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Nhập mật khẩu"
-                />
-                <InputRightElement width='4.5rem'>
-                  <Button h='3rem'
-                    size="sm"
-                    onClick={handleShowPasswordClick}
-                    fontSize={'1.5rem'}
+            <Col span={12}>
+              <Row align={'middle'}>
+                <Col span={4}>
+                  <label htmlFor="confirm_password" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Xác nhận mật khẩu</label>
+                </Col>
+                <Col span={20} style={{ display: 'flex' }}>
+                  <InputGroup className="relative flex items-center w-full">
+                    <Input
+                      className="w-full h-12 border-2 border-[rgba(0,0,0,0.2)]"
+                      style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="confirm_password"
+                      name="confirm_password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Xác nhận mật khẩu"
+                    />
+                    <InputRightElement className="absolute mr-3 h-full flex items-center justify-center">
+                      <Button h='3rem'
+                        onClick={handleShowConfirmPasswordClick}
+                        fontSize={'1.5rem'}
+                      >
+                        {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          {/* Row with 3 cols */}
+          <Row justify="space-between" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }} gutter={[40, 8]} >
+            <Col span={8}>
+              <Row align="middle">
+                <Col span={6}>
+                  <label htmlFor="province" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Tỉnh <br/> (Thành phố)</label>
+                </Col>
+                <Col span={18}>
+                  <select
+                    id="province"
+                    onChange={handleProvinceSelect}
+                    className='w-full'
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                    required
                   >
-                    {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
+                    <option value="">Chọn tỉnh/thành phố</option>
+                    {provinces.map((province) => (
+                      <option key={province.id} value={province.id}>
+                        {province.name}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
             </Col>
-          </Row>
 
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="confirm_password" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Xác nhận mật khẩu</label>
-            </Col>
-            <Col span={18}>
-              <InputGroup>
-                <Input
-                  className='w-full'
-                  style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id="confirm_password"
-                  name="confirm_password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Xác nhận mật khẩu"
-                />
-                <InputRightElement width='4.5rem'>
-                  <Button h='3rem'
-                    onClick={handleShowConfirmPasswordClick}
-                    fontSize={'1.5rem'}
+            <Col span={8}>
+              <Row align={'middle'}>
+                <Col span={6}>
+                  <label htmlFor="district" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Quận <br/>(Huyện)</label>
+                </Col>
+                <Col span={18}>
+                  <select
+                    id="district"
+                    className=" w-full"
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                    onChange={handleDistrictSelect}
+                    required
                   >
-                    {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
+                    <option value="">Chọn Quận/Huyện</option>
+                    {districts.map((district) => (
+                      <option key={district.id} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
+            </Col>
+
+            <Col span={8}>
+              <Row align="middle">
+                <Col span={6}>
+                  <label htmlFor="ward" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Phường <br/>(Xã)</label>
+                </Col>
+                <Col span={18}>
+                  <select
+                    id="ward"
+                    className="w-full"
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem'}}
+                    onChange={handleWardSelect}
+                    required
+                  >
+                    <option value="">Chọn Phường/Xã</option>
+                    {wards.map((ward) => (
+                      <option key={ward.id} value={ward.id}>
+                        {ward.name}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
             </Col>
           </Row>
 
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="email" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Địa chỉ email</label>
-            </Col>
-            <Col span={18}>
-              <InputText
-                id="email"
-                type="text"
-                className="w-full border"
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                name="email"
-                placeholder="Nhập email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required />
-            </Col>
-          </Row>
-
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="phone" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Số điện thoại</label>
-            </Col>
-            <Col span={18}>
-              <InputMask
-                id="phone"
-                mask="999-999-9999"
-                placeholder="Nhập số điện thoại"
-                className="w-full border border-gray-300 rounded-md"
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                name="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required />
-            </Col>
-          </Row>
-
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Ngày sinh</label>
-            </Col>
-            <Col span={18}>
-              <DatePicker
-                value={date}
-                placeholder="Nhập ngày sinh"
-                format="DD/MM/YYYY"
-                onChange={handleDateChange}
-                style={{ width: '100%', height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                required
-              />
-            </Col>
-          </Row>
-
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="province" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Tỉnh/Thành phố</label>
-            </Col>
-            <Col span={18}>
-              <select
-                id="province"
-                onChange={handleProvinceSelect}
-                className='w-full'
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                required
-              >
-                <option value="">Chọn tỉnh/thành phố</option>
-                {provinces.map((province) => (
-                  <option key={province.id} value={province.id}>
-                    {province.name}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="district" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Quận/Huyện</label>
-            </Col>
-            <Col span={18}>
-              <select
-                id="district"
-                className=" w-full"
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                onChange={handleDistrictSelect}
-                required
-              >
-                <option value="">Chọn Quận/Huyện</option>
-                {districts.map((district) => (
-                  <option key={district.id} value={district.id}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px', marginTop: '20px' }}>
-            <Col span={4}>
-              <label htmlFor="ward" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Xã/Phường</label>
-            </Col>
-            <Col span={18}>
-              <select
-                id="ward"
-                className="w-full"
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
-                onChange={handleWardSelect}
-                required
-              >
-                <option value="">Chọn Phường/Xã</option>
-                {wards.map((ward) => (
-                  <option key={ward.id} value={ward.id}>
-                    {ward.name}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-
-          <Row justify="space-around" align="middle" style={{ marginBottom: '40px' }}>
-            <Col span={4}>
+          <Row justify="space-between" align="middle" style={{ marginBottom: '40px' }}>
+            <Col span={2}>
               <label htmlFor="address" style={{ fontSize: '17px', color: '#1F5070', fontWeight: 'bold' }}>Địa chỉ cụ thể</label>
             </Col>
-            <Col span={18}>
+            <Col span={22}>
               <Textarea
                 id="address"
                 placeholder="Nhập địa chỉ cụ thể"
                 onChange={(e) => setAddress(e.target.value)}
-                style={{ width: '100%', border: '1px solid #6b7280', borderRadius: '0.375rem', height: '100px', fontSize: '15px', backgroundColor: '#F9F9F6' }}
+                style={{ width: '100%', border: '1px solid #6b7280', borderRadius: '0.375rem',  fontSize: '15px'}}
                 required
                 value={address}
               />
             </Col>
           </Row>
-          <br />
           <Row justify="end" align="middle">
             <HStack spacing={10}>
               <Button

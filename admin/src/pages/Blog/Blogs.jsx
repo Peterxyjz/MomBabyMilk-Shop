@@ -116,7 +116,7 @@ const Blogs = () => {
 
     const currentNews = news.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    const formatDate = (dateString) => {
+    const Date = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -138,7 +138,7 @@ const Blogs = () => {
                         <Col span={8} key={n._id} style={{ marginBottom: '30px' }}>
                             <Card
                                 title={<h5 className="truncate">{n.news_name}</h5>}
-                                subTitle={<span>{formatDate(n.created_at)}</span>}
+                                subTitle={<span>{Date(n.created_at)}</span>}
                                 header={header(n.img_url)}
                                 footer={footer(n._id)}
                             >
