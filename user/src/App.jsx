@@ -31,8 +31,7 @@ import Contact from "./pages/InformationPage/Contact";
 import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
 import NewsDetail from "./pages/News/NewsDetail";
 import ListProduct from "./components/product/ListProduct";
-import NotFound from "./pages/InformationPage/NotFound";
-
+import NotFound from "./pages/Error/NotFound";
 
 function App() {
     return (

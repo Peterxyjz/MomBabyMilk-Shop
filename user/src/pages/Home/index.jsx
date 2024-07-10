@@ -6,7 +6,6 @@ import ProductCard from "../../components/card/Card";
 import { useProductContext } from "../../context/ProductContext";
 import Loader from "../../assets/loading.gif";
 import NewsSection from "../../components/news/NewsSection";
-
 const Home = () => {
   const { products, loading } = useProductContext();
   if (loading)
@@ -29,7 +28,7 @@ const Home = () => {
     const categoryProductsInfantMilk = getCategoryProducts("Sữa bột");
   
     return (
-      <div className="min-h-screen">
+      <div className="container mx-auto min-h-screen">
         <Hero />
         <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
         <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} />

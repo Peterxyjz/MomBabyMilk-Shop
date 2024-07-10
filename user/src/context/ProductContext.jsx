@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { fetchProducts, fetchRefreshToken } from "../data/api.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ProductContext = createContext();
 
@@ -11,6 +12,7 @@ export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const result = JSON.parse(localStorage.getItem("result")) || null;
+  const navigate = useNavigate();
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -20,6 +22,8 @@ export const ProductProvider = ({ children }) => {
           }).catch(() => {
             localStorage.removeItem("user");
             localStorage.removeItem("result");
+            localStorage.removeItem("products");
+            navigate("/");
             window.location.reload();
           });
         }

@@ -109,7 +109,7 @@ const ProductCard = ({ products, headline }) => {
                   <div className="mb-2 mt-1 flex items-center">
                     <RenderRating rating={product.rating} />
                     <span className="ml-2 mr-1 rounded bg-cyan-100 px-2 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-cyan-200 dark:text-cyan-800">
-                      {product.rating}
+                      {product.rating.toFixed(1)}
                     </span>
                   </div>
                   <div className="flex justify-between items-end w-full h-20">
