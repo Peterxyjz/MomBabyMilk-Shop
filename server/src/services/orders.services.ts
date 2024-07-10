@@ -82,6 +82,11 @@ class OrderServinces {
         status: 400
       })
     }
+    if (OrderStatus[status as keyof typeof OrderStatus] === OrderStatus.Processing) {
+      return await databaseService.orders.updateOne(filter, {
+        $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id, accepted_date: new Date() }
+      })
+    }
     return await databaseService.orders.updateOne(filter, {
       $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id }
     })
@@ -107,7 +112,7 @@ class OrderServinces {
     const orders = await databaseService.orders
       .find({
         status: OrderStatus.Processing,
-        required_date: { $lte: twelveHoursAgo }
+        accepted_date: { $lte: twelveHoursAgo }
       })
       .toArray()
     orders.forEach(async (order) => {
