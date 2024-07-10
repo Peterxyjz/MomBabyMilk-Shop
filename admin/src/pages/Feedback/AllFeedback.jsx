@@ -69,6 +69,7 @@ const AllFeedback = () => {
             });
 
             setProducts(mergedProducts);
+            console.log("products", products);
         }
     }, [feedback, users]);
 
@@ -194,6 +195,7 @@ const AllFeedback = () => {
         feedbackRows.forEach(fb => {
             fb.replies = record.feedback.filter(reply => reply.user && reply.user.role_name === 'Staff' && reply._id === fb._id);
         });
+        console.log("Feedback ne:",feedbackRows);
 
         return (
             <div>
@@ -207,7 +209,7 @@ const AllFeedback = () => {
     const { Text } = Typography;
 
     const filteredProducts = products.filter(product => product.feedback && product.feedback.length > 0);
-    console.log(filteredProducts);
+    console.log("Product ne:",filteredProducts);
 
 
     return (
