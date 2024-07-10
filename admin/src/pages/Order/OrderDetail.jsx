@@ -57,7 +57,7 @@ const OrderDetail = () => {
   }, [products, order]);
 
   if (loading) {
-    return <Loading/>
+    return <Loading />
   }
 
   const formatDate = (dateString) => {
@@ -75,15 +75,18 @@ const OrderDetail = () => {
     if (!dateString) return "";
     const date = new Date(dateString);
     date.setDate(date.getDate() + 1);
+    date.setHours(date.getHours() + 2);
+    date.setMinutes(date.getMinutes() + 30);
     return date.toISOString();
   };
 
-  // const addThreeDay = (dateString) => {
-  //   if (!dateString) return "";
-  //   const date = new Date(dateString);
-  //   date.setDate(date.getDate() + 3);
-  //   return date.toISOString();
-  // };
+  const add15Min = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    date.setMinutes(date.getMinutes() + 15);
+    return date.toISOString();
+  };
+
 
   const { Text } = Typography;
 
@@ -115,6 +118,7 @@ const OrderDetail = () => {
                       {
                         title: "Đã xác nhận",
                         status: "finish",
+                        description: formatDate(add15Min(order.order.required_date)),
                         icon: <CheckCircleOutlined />,
                       },
                       {
@@ -147,6 +151,7 @@ const OrderDetail = () => {
                       {
                         title: "Đã xác nhận",
                         status: "process",
+                        description: formatDate(add15Min(order.order.required_date)),
                         icon: <CheckCircleOutlined />,
                       },
                       {
@@ -164,34 +169,6 @@ const OrderDetail = () => {
                 )}
 
                 {order.order.status === 3 && (
-                  <Steps
-                    items={[
-                      {
-                        title: "Chờ xác nhận",
-                        status: "finish",
-                        description: formatDate(order.order.required_date),
-                        icon: <FieldTimeOutlined />,
-                      },
-                      {
-                        title: "Đã hủy",
-                        status: "error",
-                        icon: <CloseCircleOutlined />,
-                      },
-                      {
-                        title: "Đã giao cho ĐVVC",
-                        status: "wait",
-                        icon: <TruckOutlined />,
-                      },
-                      {
-                        title: "Đã hoàn thành",
-                        status: "wait",
-                        icon: <SmileOutlined />,
-                      },
-                    ]}
-                  />
-                )}
-
-                {order.order.status === 4 && (
                   <Steps
                     items={[
                       {
@@ -287,8 +264,8 @@ const OrderDetail = () => {
                             <p className="text-base font-bold text-gray-900 dark:text-white">
                               {Number(
                                 item.product.price -
-                                  (item.product.price * item.product.discount) /
-                                    100
+                                (item.product.price * item.product.discount) /
+                                100
                               ).toLocaleString("vi-VN", {
                                 style: "currency",
                                 currency: "VND",
@@ -498,8 +475,8 @@ const OrderDetail = () => {
                       {" "}
                       {Number(
                         order.order.total_price -
-                          order.order.ship_fee +
-                          order.order.voucher_fee
+                        order.order.ship_fee +
+                        order.order.voucher_fee
                       ).toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",

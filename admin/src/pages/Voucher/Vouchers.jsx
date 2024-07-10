@@ -16,7 +16,9 @@ const Vouchers = () => {
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const token = JSON.parse(localStorage.getItem("result"));
   const navigate = useNavigate();
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  
 
   useEffect(() => {
     const getVouchers = async () => {
@@ -225,7 +227,7 @@ const Vouchers = () => {
       <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
         <Card
           title={<h2 className="text-2xl font-bold">Tất cả voucher</h2>}
-          style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', minHeight: '70vh' }}
+          style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', height: 'full'}}
         >
           <div className="flex justify-between items-center mb-4">
             <Button
@@ -240,7 +242,15 @@ const Vouchers = () => {
             columns={columns}
             dataSource={vouchers}
             rowKey={(record) => record._id}
-            pagination={false}
+            pagination={{
+              current: currentPage,
+              pageSize: pageSize,
+              total: vouchers.length,
+              onChange: (page, pageSize) => {
+                setCurrentPage(page);
+                setPageSize(pageSize);
+              },
+            }}
             className="w-full text-sm text-left rtl:text-right text-gray-500"
           />
         </Card>
