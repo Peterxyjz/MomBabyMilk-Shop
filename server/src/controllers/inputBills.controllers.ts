@@ -43,7 +43,7 @@ export const uploadController = async (req: Request, res: Response) => {
         await databaseService.warehouse.insertOne(newWarehouseEntry)
       }
     }
-    console.log(inputBillId)
+   
     const date = new Date()
     await databaseService.revenue.insertOne({
       _id: inputBillId,
@@ -117,7 +117,6 @@ export const updateController = async (req: Request, res: Response) => {
   )
 
   for (const detail of inputBillDetails) {
-    console.log(detail)
 
     const input_bill_detail = await databaseService.inputBillDetails.findOne({ _id: detail._id })
     if (!input_bill_detail) {

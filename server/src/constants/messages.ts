@@ -76,7 +76,8 @@ export const USERS_MESSAGES = {
   PERMISSION_DENIED: 'Từ Chối Quyền Truy Cập',
   NEWS_NOT_FOUND: 'Không Tìm Thấy Tin Tức',
   FEEDBACK_IS_HAS_BEEN_REPLYED: 'Phản Hồi Đã Được Trả Lời',
-  NEWS_EXIST:'NEWS_EXIST'
+  NEWS_EXIST: 'NEWS_EXIST',
+  ACCOUNT_CANNOT_LOGIN: 'Bạn không thể đăng nhập bằng tài khoản này'
 } as const
 
 export const PRODUCTS_MESSAGES = {

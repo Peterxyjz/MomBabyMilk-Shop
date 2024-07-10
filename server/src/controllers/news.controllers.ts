@@ -98,7 +98,7 @@ export const deteleController = async (req: Request, res: Response) => {
 }
 
 export const updateNewsController = async (req: Request, res: Response) => {
-  console.log('update: ', req.body)
+ 
 
   const id = req.params.id
   const { user_id } = req.decoded_authorization as TokenPayload // Lấy user_id từ decoded_authorization
@@ -126,12 +126,10 @@ export const updateNewsController = async (req: Request, res: Response) => {
     description: req.body.description,
     img_url: req.body.img_url
   }
-  console.log('news: ', id)
-
-  console.log('news_update: ', news_update)
+  
 
   const result = await databaseService.news.updateOne({ _id: new ObjectId(id) }, { $set: news_update })
-  console.log('xong update')
+
 
   return res.status(200).json({
     message: USERS_MESSAGES.UPDATE_SUCCESS,

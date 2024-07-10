@@ -3,8 +3,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { Button } from ".";
 import { adminProfileData, staffProfileData } from "../data/dummy";
 import Buttonlogout from "@mui/material/Button";
-import axios from "axios";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Modal } from "antd";
 import { fetchLogout, fetchRefreshToken } from "../data/api";
 const UserProfile = ({ isAdmin }) => {

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { TiStarFullOutline , TiStarHalfOutline } from "react-icons/ti";
+import { TiStarFullOutline, TiStarHalfOutline } from "react-icons/ti";
+
 const RenderRating = ({ rating, onRatingChange }) => {
   const [hoverRating, setHoverRating] = useState(0);
 
@@ -16,11 +17,17 @@ const RenderRating = ({ rating, onRatingChange }) => {
   };
 
   const renderStar = (i) => {
-    const filled = hoverRating > i || rating > i;
-    const halfFilled = (hoverRating || rating) === i + 0.5;
+    const filled = Math.floor(hoverRating || rating) > i;
+    const fractionalPart = (hoverRating || rating) - Math.floor(hoverRating || rating);
+    const halfFilled = fractionalPart > 0 && Math.floor(hoverRating || rating) === i;
 
     if (halfFilled) {
-      return <TiStarHalfOutline key={i} className="text-yellow-300 h-5 w-5 cursor-pointer" />;
+      return (
+        <TiStarHalfOutline
+          key={i}
+          className="text-yellow-300 h-5 w-5 cursor-pointer"
+        />
+      );
     }
 
     return (

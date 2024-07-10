@@ -14,6 +14,7 @@ interface OrderType {
   email: string
   payment_method: string
   required_date?: Date
+  accepted_date?: Date
   shipped_date?: Date
   total_price?: number
 }
@@ -32,6 +33,7 @@ export default class Order {
   email: string
   payment_method: string
   required_date?: Date
+  accepted_date?: Date
   shipped_date?: Date
   total_price?: number
   constructor(order: OrderType) {
@@ -49,6 +51,7 @@ export default class Order {
     this.email = order.email
     this.payment_method = order.payment_method
     this.required_date = order.required_date || date
+    this.accepted_date = order.accepted_date || undefined
     this.shipped_date = order.shipped_date || undefined
     this.total_price = order.total_price || 0
   }

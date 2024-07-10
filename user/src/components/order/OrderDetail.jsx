@@ -77,9 +77,6 @@ const OrderDetail = () => {
     return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
   };
 
-  const addMinutes = (date, minutes) => {
-    return new Date(date.getTime() + minutes * 60000);
-  };
 
   const addDays = (date, days) => {
     return new Date(date.getTime() + days * 86400000);
@@ -105,17 +102,18 @@ const OrderDetail = () => {
   };
   
   const handleBuyBack = async () => {
-    orderDetails.forEach(async (item) => {
+    for (const item of orderDetails) {
       if (item.product.amount > 0) {
-        await addCartItem(item.product);
-      }else{
-        toast.error("Sản phẩm đã hết hàng", {
+        addCartItem(item.product);
+      } else {
+        toast.error(`Sản phẩm "${item.product.product_name}" đã hết hàng`, {
           position: "top-right",
           duration: 1000,
         });
       }
-    });
+    }
   };
+  
 
   const submitFeedback = async () => {
     if (feedback.rating === 0 || feedback.description.trim() === "") {
@@ -212,7 +210,7 @@ const OrderDetail = () => {
                 <div className="text-center">
                   <div className="mb-1">
                     {order.order.status >= 1
-                      ? formatDate(addMinutes(new Date(order.order.required_date), 15))
+                      ? formatDate(order.order.accepted_date)
                       : "-"}
                   </div>
                   <div className={`font-semibold ${order.order.status === 3 ? "text-red-500" : getTrackingStageColor(50)}`}>
@@ -221,8 +219,8 @@ const OrderDetail = () => {
                 </div>
                 <div className="text-center">
                   <div className="mb-1">
-                    {order.order.status === 1 && new Date() > addDays(new Date(order.order.required_date), 1) || order.order.status === 2
-                      ? formatDate(addDays(new Date(order.order.required_date), 1.2))
+                    {order.order.status === 1 && new Date() > addDays(new Date(order.order.accepted_date), 1) || order.order.status === 2
+                      ? formatDate(addDays(new Date(order.order.accepted_date), 1.2))
                       : "-"}
                   </div>
                   <div className={`font-semibold ${getTrackingStageColor(75)}`}>Đang giao hàng</div>
@@ -287,6 +285,10 @@ const OrderDetail = () => {
                   )}
                 </p>
               )}
+              <p className="text-md">
+                Phương thức thanh toán:{" "}
+                <span className="font-semibold">{order.order.payment_method === "COD" ? "Thanh toán khi nhận hàng" : "Thanh toán online (chuyển khoản)"}</span>
+              </p>
             </div>
           </div>
           <div className="w-full">

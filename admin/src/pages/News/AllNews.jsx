@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import blogimg from "../../assets/images/cover_imgedit.png";
 import { Col, Modal, notification, Pagination, Row } from 'antd';
 import { Card } from 'primereact/card';
-import { blogData } from '../../data/dummy';
 import { Button } from "flowbite-react";
-import { fetchAllNews, deleteNews, fetchDeleteNews } from '../../data/api'; // Import hàm deleteNews
+import { fetchAllNews, fetchDeleteNews } from '../../data/api'; // Import hàm deleteNews
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../components/Loading';
 
-const Blogs = () => {
+const AllNews = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [news, setNews] = useState([]);
@@ -40,7 +39,9 @@ const Blogs = () => {
         getNews();
     }, []);
 
-    console.log(news);
+    if(loading){
+        <Loading />
+    }
 
     const showDeleteConfirm = (Id) => {
         Modal.confirm({
@@ -161,4 +162,4 @@ const Blogs = () => {
     );
 }
 
-export default Blogs;
+export default AllNews;

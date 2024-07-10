@@ -49,7 +49,9 @@ class OrderServinces {
   }
   async cancel(id: string, status: string, user_id: string) {
     const filter = { _id: new ObjectId(id) }
-    const update = { $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id } }
+    const update = {
+      $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id, accepted_date: new Date() }
+    }
 
     return await databaseService.orders.updateOne(filter, update)
   }
@@ -61,6 +63,11 @@ class OrderServinces {
       throw new ErrorWithStatus({
         message: 'Không tìm thấy đơn hàng',
         status: 400
+      })
+    }
+    if (OrderStatus[status as keyof typeof OrderStatus] === OrderStatus.Processing) {
+      return await databaseService.orders.updateOne(filter, {
+        $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id, accepted_date: new Date() }
       })
     }
     return await databaseService.orders.updateOne(filter, {
@@ -88,7 +95,7 @@ class OrderServinces {
     const orders = await databaseService.orders
       .find({
         status: OrderStatus.Processing,
-        required_date: { $lte: twelveHoursAgo }
+        accepted_date: { $lte: twelveHoursAgo }
       })
       .toArray()
     orders.forEach(async (order) => {
