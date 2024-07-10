@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import blogimg from "../../assets/images/cover_imgedit.png";
 import { Col, Modal, notification, Pagination, Row } from 'antd';
 import { Card } from 'primereact/card';
-import { blogData } from '../../data/dummy';
 import { Button } from "flowbite-react";
-import { fetchAllNews, deleteNews, fetchDeleteNews } from '../../data/api'; // Import hàm deleteNews
+import { fetchAllNews, fetchDeleteNews } from '../../data/api'; // Import hàm deleteNews
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../components/Loading';
 
-const Blogs = () => {
+const AllNews = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [news, setNews] = useState([]);
@@ -40,7 +39,9 @@ const Blogs = () => {
         getNews();
     }, []);
 
-    console.log(news);
+    if(loading){
+        <Loading />
+    }
 
     const showDeleteConfirm = (Id) => {
         Modal.confirm({
@@ -116,7 +117,7 @@ const Blogs = () => {
 
     const currentNews = news.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    const Date = (dateString) => {
+    const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -138,7 +139,7 @@ const Blogs = () => {
                         <Col span={8} key={n._id} style={{ marginBottom: '30px' }}>
                             <Card
                                 title={<h5 className="truncate">{n.news_name}</h5>}
-                                subTitle={<span>{Date(n.created_at)}</span>}
+                                subTitle={<span>{formatDate(n.created_at)}</span>}
                                 header={header(n.img_url)}
                                 footer={footer(n._id)}
                             >
@@ -161,4 +162,4 @@ const Blogs = () => {
     );
 }
 
-export default Blogs;
+export default AllNews;

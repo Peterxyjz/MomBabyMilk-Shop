@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, FileInput, Label, TextInput } from "flowbite-react";
+import { Button, TextInput } from "flowbite-react";
 import { imageDb } from "../../data/firebase.config";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";

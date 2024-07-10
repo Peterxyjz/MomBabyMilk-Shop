@@ -15,7 +15,6 @@ const Customers = () => {
     };
     useEffect(() => {
         const fetchUsers = async () => {
-
             try {
                 const result = JSON.parse(localStorage.getItem("result"))
                 const res = await fetchAllUsers(result);
@@ -25,12 +24,10 @@ const Customers = () => {
                 }));
 
                 setUsers(formattedUsers);
-                console.log(formattedUsers);
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
         };
-        console.log(Users);
         fetchUsers();
     }, []);
 

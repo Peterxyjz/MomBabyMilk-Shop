@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const CartContext = createContext();
 
@@ -40,33 +40,33 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const addCartItem = (product) => {
-    const currentCart = cartItems.find((cartItem) => cartItem._id === product._id);
-    if (currentCart) {
-      if (currentCart.quantity >= product.amount) {
-        toast.error("Số lượng mua vượt quá số lượng trong kho", {
-          position: "top-right",
-          duration: 1000,
-        });
-      } else {
-        setCartItems(
-          cartItems.map((cartItem) =>
+    setCartItems((prevCartItems) => {
+      const currentCart = prevCartItems.find(
+        (cartItem) => cartItem._id === product._id
+      );
+      if (currentCart) {
+        if (currentCart.quantity >= product.amount) {
+          toast.error("Số lượng mua vượt quá số lượng trong kho", {
+            position: "top-right",
+            duration: 1000,
+          });
+          return prevCartItems;
+        } else {
+          return prevCartItems.map((cartItem) =>
             cartItem._id === product._id
               ? { ...currentCart, quantity: currentCart.quantity + 1 }
               : cartItem
-          )
-        );
-        toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-          position: "top-right",
-          duration: 1000,
-        });
+          );
+        }
+      } else {
+        return [...prevCartItems, { ...product, quantity: 1 }];
       }
-    } else {
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
-      toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-        position: "top-right",
-        duration: 1000,
-      });
-    }
+    });
+
+    toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+      position: "top-right",
+      duration: 1000,
+    });
   };
 
   const clearCart = () => {
@@ -74,15 +74,15 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const increaseAmount = (product) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
         item._id === product._id && item.quantity < product.amount
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
     );
 
-    const currentCart = cartItems.find(item => item._id === product._id);
+    const currentCart = cartItems.find((item) => item._id === product._id);
     if (currentCart && currentCart.quantity >= product.amount) {
       toast.error(`Số lượng mua vượt quá số lượng trong kho`, {
         position: "top-right",
@@ -92,17 +92,15 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const decreaseAmount = (id) => {
-    setCartItems(prevItems => {
-      const currentCart = prevItems.find(item => item._id === id);
+    setCartItems((prevItems) => {
+      const currentCart = prevItems.find((item) => item._id === id);
       if (currentCart) {
         if (currentCart.quantity > 1) {
-          return prevItems.map(item =>
-            item._id === id
-              ? { ...item, quantity: item.quantity - 1 }
-              : item
+          return prevItems.map((item) =>
+            item._id === id ? { ...item, quantity: item.quantity - 1 } : item
           );
         } else {
-          return prevItems.filter(item => item._id !== id);
+          return prevItems.filter((item) => item._id !== id);
         }
       }
       return prevItems;

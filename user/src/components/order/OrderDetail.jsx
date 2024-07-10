@@ -105,17 +105,18 @@ const OrderDetail = () => {
   };
   
   const handleBuyBack = async () => {
-    orderDetails.forEach(async (item) => {
+    for (const item of orderDetails) {
       if (item.product.amount > 0) {
-        await addCartItem(item.product);
-      }else{
-        toast.error("Sản phẩm đã hết hàng", {
+        addCartItem(item.product);
+      } else {
+        toast.error(`Sản phẩm "${item.product.product_name}" đã hết hàng`, {
           position: "top-right",
           duration: 1000,
         });
       }
-    });
+    }
   };
+  
 
   const submitFeedback = async () => {
     if (feedback.rating === 0 || feedback.description.trim() === "") {
