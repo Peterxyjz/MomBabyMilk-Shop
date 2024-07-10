@@ -77,9 +77,6 @@ const OrderDetail = () => {
     return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
   };
 
-  const addMinutes = (date, minutes) => {
-    return new Date(date.getTime() + minutes * 60000);
-  };
 
   const addDays = (date, days) => {
     return new Date(date.getTime() + days * 86400000);
@@ -213,7 +210,7 @@ const OrderDetail = () => {
                 <div className="text-center">
                   <div className="mb-1">
                     {order.order.status >= 1
-                      ? formatDate(addMinutes(new Date(order.order.required_date), 15))
+                      ? formatDate(order.order.accepted_date)
                       : "-"}
                   </div>
                   <div className={`font-semibold ${order.order.status === 3 ? "text-red-500" : getTrackingStageColor(50)}`}>
@@ -222,8 +219,8 @@ const OrderDetail = () => {
                 </div>
                 <div className="text-center">
                   <div className="mb-1">
-                    {order.order.status === 1 && new Date() > addDays(new Date(order.order.required_date), 1) || order.order.status === 2
-                      ? formatDate(addDays(new Date(order.order.required_date), 1.2))
+                    {order.order.status === 1 && new Date() > addDays(new Date(order.order.accepted_date), 1) || order.order.status === 2
+                      ? formatDate(addDays(new Date(order.order.accepted_date), 1.2))
                       : "-"}
                   </div>
                   <div className={`font-semibold ${getTrackingStageColor(75)}`}>Đang giao hàng</div>
