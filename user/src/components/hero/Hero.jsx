@@ -3,7 +3,7 @@ import hero_img from '../../assets/images/body/hero_img.jpg';
 
 function Hero() {
     return (
-        <div className="bg-gray-900 py-20 mt-5">
+        <div className="bg-blue-300 py-20 mt-5">
             <div className="container mx-auto px-6 md:px-12">
                 <div className="flex flex-col md:flex-row items-center">
                     <div className="md:w-1/2 lg:w-2/3">
@@ -11,7 +11,7 @@ function Hero() {
                             Chào mừng đến với <br className="hidden md:block" />
                             <span className="text-indigo-500">MomBabyMilk</span> Website
                         </h1>
-                        <p className="text-lg md:text-xl lg:text-2xl text-gray-400 mb-8">
+                        <p className="text-lg md:text-xl lg:text-2xl text-gray-800 mb-8">
                             Nơi cung cấp tất cả loại sữa dinh dưỡng cho mẹ và bé.
                         </p>
                         <div className="flex gap-2">

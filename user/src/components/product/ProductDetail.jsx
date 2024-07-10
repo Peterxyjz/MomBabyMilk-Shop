@@ -143,7 +143,7 @@ const ProductDetail = () => {
                   <RenderRating rating={product.rating} />
                 </div>
                 <p className="text-sm font-medium leading-none text-gray-500">
-                  ({product.rating})
+                  ({product.rating.toFixed(1)})
                 </p>
                 <a className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline">
                   {product.reviewer} Đánh Giá

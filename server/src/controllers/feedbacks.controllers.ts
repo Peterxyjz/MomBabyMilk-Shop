@@ -13,7 +13,7 @@ import feedBackService from '~/services/feedbacks.services'
 import replyFeedBackService from '~/services/replyFeedbacks.services'
 
 export const uploadController = async (req: Request, res: Response) => {
-  console.log(req.body)
+
   const { user_id } = req.decoded_authorization as TokenPayload // Lấy user_id từ decoded_authorization
   const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
   if (!user) {
@@ -40,7 +40,7 @@ export const uploadController = async (req: Request, res: Response) => {
   })
 }
 export const replyUploadController = async (req: Request, res: Response) => {
-  console.log(req.body)
+
   const { user_id } = req.decoded_authorization as TokenPayload // Lấy user_id từ decoded_authorization
 
   const feedback_id = req.body.feedback_id
@@ -135,7 +135,7 @@ export const updateFeedBackController = async (req: Request, res: Response) => {
   const id = req.params.id
 
   const { _id, ...feedback } = req.body
-  log('upload: ', feedback)
+  
   const result = await databaseService.feedbacks.updateOne({ _id: new ObjectId(id) }, { $set: feedback })
   return res.status(200).json({
     message: USERS_MESSAGES.UPDATE_SUCCESS,
