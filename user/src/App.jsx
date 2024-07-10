@@ -31,6 +31,7 @@ import Contact from "./pages/InformationPage/Contact";
 import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
 import NewsDetail from "./pages/News/NewsDetail";
 import ListProduct from "./components/product/ListProduct";
+import NotFound from "./pages/InformationPage/NotFound";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
                         <Route path="change-password" element={<ChangePassword />} />
                         <Route path="accumulated-points" element={<Accumulate />} />
                     </Route>
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
                 <MainFooter />
             </Router>
