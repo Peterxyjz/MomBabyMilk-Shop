@@ -49,7 +49,9 @@ class OrderServinces {
   }
   async cancel(id: string, status: string, user_id: string) {
     const filter = { _id: new ObjectId(id) }
-    const update = { $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id } }
+    const update = {
+      $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id, accepted_date: new Date() }
+    }
 
     return await databaseService.orders.updateOne(filter, update)
   }
