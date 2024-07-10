@@ -56,18 +56,18 @@ export const getOrderByIdController = async (req: Request, res: Response) => {
     result: { order, order_detail }
   })
 
-  const user_id = req.body.user_id
-  const orders = await orderServices.getByUserId(user_id)
-  const result = await Promise.all(
-    orders.map(async (order) => {
-      const order_detail = await databaseService.orderDetails.find({ order_id: order._id?.toString() }).toArray()
-      return { order, order_detail }
-    })
-  )
-  return res.status(200).json({
-    message: USERS_MESSAGES.GET_SUCCESS,
-    result: result
-  })
+  // const user_id = req.body.user_id
+  // const orders = await orderServices.getByUserId(user_id)
+  // const result = await Promise.all(
+  //   orders.map(async (order) => {
+  //     const order_detail = await databaseService.orderDetails.find({ order_id: order._id?.toString() }).toArray()
+  //     return { order, order_detail }
+  //   })
+  // )
+  // return res.status(200).json({
+  //   message: USERS_MESSAGES.GET_SUCCESS,
+  //   result: result
+  // })
 }
 
 export const deleteController = async (req: Request, res: Response) => {
@@ -147,7 +147,7 @@ export const uploadController = async (req: Request, res: Response) => {
 
   const emailHtml = generateInvoiceHTML(order_infor, orderDetails)
   sendMail({
-    email: user.email,
+    email: customer_infor.email,
     subject: 'Email Verification Mail',
     html: emailHtml
   })

@@ -54,6 +54,8 @@ const Payment = () => {
       voucher_fee: discount
     };
 
+    console.log(order_infor);
+
     await fetchCreateOrder(order_infor)
       .then((res) => {
         const membership = res.data.point;
