@@ -18,6 +18,7 @@ import product9 from "../data/product9.jpg";
 import {
   fetchAllUsers,
   fetchCategories,
+  fetchOrder,
   fetchProducts,
   fetchRefreshToken,
   fetchRevenue,
@@ -25,7 +26,7 @@ import {
 import { MdOutlineSupervisorAccount } from "react-icons/md";
 import { FiBarChart } from "react-icons/fi";
 import { HiOutlineRefresh } from "react-icons/hi";
-import { Col, Row } from "antd";
+import { Col, Row, Select } from "antd";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import RevenueMixCost from "../components/Dashboard/RevenueMixCost";
@@ -70,6 +71,12 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const [totalSales, setTotalSales] = useState(0);
   const [categories, setCategories] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Sắp hết");
+  const [revenueTimeRange, setRevenueTimeRange] = useState('today');
+  const [profitTimeRange, setProfitTimeRange] = useState('today');
+  const [salesTimeRange, setSalesTimeRange] = useState('today');
+  const [order, setOrder] = useState([]);
+  const { Option } = Select;
+
   const result = JSON.parse(localStorage.getItem("result")) || null;
   useEffect(() => {
     const checkToken = async () => {
@@ -85,19 +92,20 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             localStorage.removeItem("result");
             localStorage.removeItem("isAuthenticatedStaff");
             window.location.reload();
-           
+
           });
       }
     };
     checkToken();
-  },[])
+  }, [])
+  {/* fetch revenue */ }
   useEffect(() => {
     const getRevenue = async () => {
       try {
         const data = await fetchRevenue();
         setRevenues(data);
-        calculateTotalRevenue(data);
-        calculateTotalProfit(data);
+        calculateTotalRevenue(data, revenueTimeRange);
+        calculateTotalProfit(data, profitTimeRange);
         setLoading(false);
       } catch (error) {
         console.log("Error fetching revenue:", error);
@@ -106,8 +114,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     };
 
     getRevenue();
-  }, []);
+  }, [revenueTimeRange, profitTimeRange]);
 
+  {/* fetch customer */ }
   useEffect(() => {
     const getCustomer = async () => {
       try {
@@ -126,13 +135,13 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getCustomer();
   }, []);
 
+  {/* fetch product */ }
   useEffect(() => {
     const getProducts = async () => {
       try {
         const data = await fetchProducts();
         setProducts(data);
         calculateProduct(data);
-        calculateSales(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -143,9 +152,40 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getProducts();
   }, []);
 
-  const calculateTotalProfit = (data) => {
+  {/* fetch order */ }
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const orderData = await fetchOrder();
+        setOrder(orderData);
+        calculateTotalSales(orderData, salesTimeRange);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setLoading(false);
+      }
+    };
+
+    getOrders();
+    console.log(order);
+  }, [salesTimeRange]);
+
+  const calculateTotalProfit = (data, timeRange) => {
+    const now = new Date();
+    let filteredData = [];
+
+    if (timeRange === 'today') {
+      filteredData = data.filter(item => new Date(item.completed_date).toDateString() === now.toDateString());
+    } else if (timeRange === 'thisWeek') {
+      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+      filteredData = data.filter(item => new Date(item.completed_date) >= startOfWeek);
+    } else if (timeRange === 'thisMonth') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      filteredData = data.filter(item => new Date(item.completed_date) >= startOfMonth);
+    }
+
     let total = 0;
-    data.forEach((item) => {
+    filteredData.forEach(item => {
       if (item.type === 1) {
         total += item.total;
       } else {
@@ -155,9 +195,22 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     setTotalProfit(total);
   };
 
-  const calculateTotalRevenue = (data) => {
+  const calculateTotalRevenue = (data, timeRange) => {
+    const now = new Date();
+    let filteredData = [];
+
+    if (timeRange === 'today') {
+      filteredData = data.filter(item => new Date(item.completed_date).toDateString() === now.toDateString());
+    } else if (timeRange === 'thisWeek') {
+      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+      filteredData = data.filter(item => new Date(item.completed_date) >= startOfWeek);
+    } else if (timeRange === 'thisMonth') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      filteredData = data.filter(item => new Date(item.completed_date) >= startOfMonth);
+    }
+
     let total = 0;
-    data.forEach((item) => {
+    filteredData.forEach(item => {
       if (item.type === 1) {
         total += item.total;
       }
@@ -183,13 +236,27 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     setTotalProduct(total);
   };
 
-  const calculateSales = (data) => {
+  const calculateTotalSales = (data, timeRange) => {
+    const now = new Date();
+    let filteredData = [];
+
+    if (timeRange === 'today') {
+      filteredData = data.filter(order => new Date(order.order.shipped_date).toDateString() === now.toDateString() && order.order.status === 2);
+    } else if (timeRange === 'thisWeek') {
+      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+      filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfWeek && order.order.status === 2);
+    } else if (timeRange === 'thisMonth') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfMonth && order.order.status === 2);
+    }
+
     let total = 0;
-    data.forEach((item) => {
-      total += item.sales;
+    filteredData.forEach(order => {
+      total += order.order_detail.reduce((acc, item) => acc + item.amount, 0);
     });
     setTotalSales(total);
   };
+
 
   const earningData = [
     {
@@ -203,6 +270,13 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       iconColor: "rgb(0, 194, 146)",
       iconBg: "rgb(235, 250, 242)",
       pcColor: "green-600",
+      dropdown: (
+        <Select defaultValue="today" onChange={(value) => setRevenueTimeRange(value)}>
+          <Option value="today">Hôm nay</Option>
+          <Option value="thisWeek">Tuần này</Option>
+          <Option value="thisMonth">Tháng này</Option>
+        </Select>
+      )
     },
     {
       icon: <BsCurrencyDollar />,
@@ -215,6 +289,13 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       iconColor: "#03C9D7",
       iconBg: "#E5FAFB",
       pcColor: "red-600",
+      dropdown: (
+        <Select defaultValue="today" onChange={(value) => setProfitTimeRange(value)}>
+          <Option value="today">Hôm nay</Option>
+          <Option value="thisWeek">Tuần này</Option>
+          <Option value="thisMonth">Tháng này</Option>
+        </Select>
+      )
     },
     {
       icon: <MdOutlineSupervisorAccount />,
@@ -243,6 +324,13 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       iconBg: "rgb(255, 244, 229)",
 
       pcColor: "green-600",
+      dropdown: (
+        <Select defaultValue="today" onChange={(value) => setSalesTimeRange(value)}>
+          <Option value="today">Hôm nay</Option>
+          <Option value="thisWeek">Tuần này</Option>
+          <Option value="thisMonth">Tháng này</Option>
+        </Select>
+      )
     },
   ];
 
@@ -251,6 +339,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   }
   return (
     <div className="mt-24">
+
       {isAuthenticatedAdmin && (
         <div>
           {/*Row 1*/}
@@ -258,7 +347,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
             <Row justify="space-between" gutter={[16, 16]}>
               {earningData.map((item) => (
                 <Col key={item.title} span={4}>
-                  <div className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 p-4 pt-9 rounded-2xl">
+                  <div style={{ position: 'relative' }} className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 p-4 pt-9 rounded-2xl">
+                    <div style={{ position: 'absolute', right: '10px', top: '10px' }}>
+                      {item.dropdown}
+                    </div>
+
                     <button
                       type="button"
                       style={{
@@ -291,54 +384,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 <p className="font-semibold text-xl">
                   Bảng tương quan giữa doanh thu và vốn
                 </p>
-                {/* <div className="flex items-center gap-4">
-                  <p className="flex items-center gap-2 text-gray-600 hover:drop-shadow-xl">
-                    <span>
-                      <GoPrimitiveDot />
-                    </span>
-                    <span>Expense</span>
-                  </p>
-                  <p className="flex items-center gap-2 text-green-400 hover:drop-shadow-xl">
-                    <span>
-                      <GoPrimitiveDot />
-                    </span>
-                    <span>Budget</span>
-                  </p>
-                </div> */}
               </div>
-              {/* <div className="mt-10 flex gap-10 flex-wrap justify-center">
-                <div className=" border-r-1 border-color m-4 pr-10">
-                  <div>
-                    <p>
-                      <span className="text-3xl font-semibold">$93,438</span>
-                      <span className="p-1.5 hover:drop-shadow-xl cursor-pointer rounded-full text-white bg-green-400 ml-3 text-xs">
-                        23%
-                      </span>
-                    </p>
-                    <p className="text-gray-500 mt-1">Budget</p>
-                  </div>
-                  <div className="mt-8">
-                    <p className="text-3xl font-semibold">$48,487</p>
-
-                    <p className="text-gray-500 mt-1">Expense</p>
-                  </div>
-
-                  <div className="mt-5">
-                    <SparkLine currentColor={currentColor} id="line-sparkLine" type="Line" height="80px" width="250px" data={SparklineAreaData} color={currentColor} />
-                  </div>
-                  <div className="mt-10">
-                    <Button
-                      color="white"
-                      bgColor={currentColor}
-                      text="Download Report"
-                      borderRadius="10px"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Stacked currentMode={currentMode} width="320px" height="360px" />
-                </div>
-              </div> */}
               <div>
                 <RevenueMixCost />
               </div>
@@ -352,11 +398,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                   <p className="font-semibold text-white text-xl">
                     Lợi nhuận theo tháng
                   </p>
-
-                  {/* <div>
-                    <p className="text-xl text-white font-semibold mt-8">$63,448.78</p>
-                    <p className="text-gray-200">Trung bình doanh thu môi</p>
-                  </div> */}
                 </div>
 
                 <div className="mt-4">
@@ -389,41 +430,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                 />
               </div>
               <div className="mt-2 w-72 md:w-400">
-                {/* {recentTransactions.map((item) => (
-                  <div key={item.title} className="flex justify-between mt-4">
-                    <div className="flex gap-4">
-                      <button
-                        type="button"
-                        style={{
-                          color: item.iconColor,
-                          backgroundColor: item.iconBg,
-                        }}
-                        className="text-2xl rounded-lg p-4 hover:drop-shadow-xl"
-                      >
-                        {item.icon}
-                      </button>
-                      <div>
-                        <p className="text-md font-semibold">{item.title}</p>
-                        <p className="text-sm text-gray-400">{item.desc}</p>
-                      </div>
-                    </div>
-                    <p className={`text-${item.pcColor}`}>{item.amount}</p>
-                  </div>
-                ))} */}
                 <ProductStock selectedOption={selectedOption} />
               </div>
-              {/* <div className="flex justify-between items-center mt-5 border-t-1 border-color">
-                <div className="mt-3">
-                  <Button
-                    color="white"
-                    bgColor={currentColor}
-                    text="Add"
-                    borderRadius="10px"
-                  />
-                </div>
-
-                <p className="text-gray-400 text-sm">36 Recent Transactions</p>
-              </div> */}
             </div>
             <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
               <div className="flex justify-between items-center gap-2 mb-10">
