@@ -225,7 +225,7 @@ const AddStaff = () => {
                 <Col span={18}>
                   <InputMask
                     id="phone"
-                    mask="999-999-9999"
+                    mask="9999999999"
                     placeholder="Nhập số điện thoại"
                     className="w-full border border-gray-300 rounded-md"
                     style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem', width: '100%' }}

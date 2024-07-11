@@ -84,6 +84,11 @@ const Customers = () => {
             dataIndex: 'member_ship',
             key: 'member_ship',
             width: '10%',
+            render: (value) =>
+                new Intl.NumberFormat('vi-VN', {
+                  style: 'currency',
+                  currency: 'VND',
+                }).format(value),
             sorter: (a, b) => a.member_ship - b.member_ship,
 
         },

@@ -3,14 +3,18 @@ import RenderRating from "../../components/Element/RenderRating";
 import { useNavigate } from "react-router-dom";
 import { fetchProducts, fetchUpdateProduct } from "../../data/api";
 import { Card } from "primereact/card";
-import { Button, Image, Modal, Switch, Table, notification } from "antd";
+import { Button, Image, Modal, Rate, Switch, Table, notification } from "antd";
 import Loading from "../../components/Loading";
+import Search from "antd/es/input/Search";
 const Product = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(7);
   const navigate = useNavigate();
+  const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
+  const [searchText, setSearchText] = useState('');
+
 
   useEffect(() => {
     const getProducts = async () => {
@@ -36,18 +40,16 @@ const Product = () => {
   const handleSwitchChange = (checked, product) => {
     Modal.confirm({
       title: "Xác nhận thay đổi trạng thái sản phẩm",
-      content: `Bạn có muốn thay đổi trạng thái sản phẩm? Hiện đang ${
-        checked ? "tắt" : "bật"
-      }`,
+      content: `Bạn có muốn thay đổi trạng thái sản phẩm? Hiện đang ${checked ? "tắt" : "bật"
+        }`,
       onOk: async () => {
         product.isActive = checked;
         await updateProduct(product);
         setProducts([...products]);
         notification.success({
           message: "Thành công",
-          description: `Thay đổi thành công! Sản phẩm hiện đang ${
-            checked ? "bật" : "tắt"
-          }`,
+          description: `Thay đổi thành công! Sản phẩm hiện đang ${checked ? "bật" : "tắt"
+            }`,
           placement: "top",
         });
       },
@@ -77,35 +79,35 @@ const Product = () => {
       title: "Hình Ảnh",
       dataIndex: "imgUrl",
       key: "imgUrl",
-      width: 100,
+      width: "10%",
       render: (text) => <Image src={text} alt="Product Image" width={50} />,
     },
     {
       title: "Sản Phẩm",
       dataIndex: "product_name",
       key: "product_name",
-      width: 150,
+      width: "20%",
       render: (text) => <span>{text}</span>,
     },
     {
       title: "Loại Sản Phẩm",
       dataIndex: "category_name",
       key: "category_name",
-      width: 150,
+      width: "10%",
       sorter: (a, b) => a.category_name.localeCompare(b.category_name),
     },
     {
       title: "Thương Hiệu",
       dataIndex: "brand_name",
       key: "brand_name",
-      width: 150,
+      width: "10%",
       sorter: (a, b) => a.brand_name.localeCompare(b.brand_name),
     },
     {
       title: "Số Lượng",
       dataIndex: "amount",
       key: "amount",
-      width: 100,
+      width: "10%",
       sorter: (a, b) => a.amount - b.amount,
     },
     {
@@ -114,12 +116,15 @@ const Product = () => {
       key: "rating",
       width: 100,
       sorter: (a, b) => a.rating - b.rating,
-      render: (text) => (
-        <div className="flex items-center">
-          <RenderRating rating={text} />
-          <span className="ml-1 text-gray-500">{text}</span>
-        </div>
-      ),
+      render: (text) => {
+        const roundedRating = parseFloat(text).toFixed(1);
+        return (
+          <div className="flex items-center">
+            <Rate allowHalf disabled value={parseFloat(roundedRating)} style={{ fontSize: '12px' }} />
+            <span className="ml-1 text-gray-500">{roundedRating}</span>
+          </div>
+        );
+      },
     },
     {
       title: "Lượng Bán",
@@ -154,31 +159,42 @@ const Product = () => {
         }).format(revenue);
       },
     },
-    {
-      title: "Trạng Thái",
-      dataIndex: "isActive",
-      key: "isActive",
-      width: 100,
-      sorter: (a, b) => a.isActive - b.isActive,
-      render: (text, record) => (
-        <Switch
-          checked={record.isActive}
-          onChange={(checked) => handleSwitchChange(checked, record)}
-          style={{ backgroundColor: record.isActive ? "#4A99FF" : "#898989" }}
-        />
-      ),
-    },
-    {
-      title: "Chi Tiết",
-      dataIndex: "_id",
-      key: "_id",
-      width: 100,
-      render: (text) => <a href={`/edit-product?id=${text}`}>Chi Tiết</a>,
-    },
+    ...(isAuthenticatedStaff
+      ? [
+        {
+          title: "Trạng Thái",
+          dataIndex: "isActive",
+          key: "isActive",
+          width: 100,
+          sorter: (a, b) => a.isActive - b.isActive,
+          render: (text, record) => (
+            <Switch
+              checked={record.isActive}
+              onChange={(checked) => handleSwitchChange(checked, record)}
+              style={{ backgroundColor: record.isActive ? "#4A99FF" : "#898989" }}
+            />
+          ),
+        },
+        {
+          title: "Chi Tiết",
+          dataIndex: "_id",
+          key: "_id",
+          width: 100,
+          render: (text) => <a href={`/edit-product?id=${text}`}>Chi Tiết</a>,
+        },
+      ]
+      : []),
   ];
 
+  const onSearch = (value) => {
+    setSearchText(value);
+  };
+  const filteredProducts = products.filter(product =>
+    product.product_name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   if (loading) {
-    return <Loading/>
+    return <Loading />
   }
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "auto" }}>
@@ -188,14 +204,23 @@ const Product = () => {
       >
         <div>
           <div className="flex justify-between items-center mb-4">
-            <Button
-              type="primary"
+            <Search
+              placeholder="Nhập tên sản phẩm"
+              allowClear
+              enterButton={<Button style={{ backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
               size="large"
-              style={{ backgroundColor: "#46B5C1", height: "100%" }}
-              onClick={() => navigate("/add-product")}
-            >
-              Thêm sản phẩm mới
-            </Button>
+              onSearch={onSearch}
+              style={{ width: '40%' }}
+            />
+            {isAuthenticatedStaff &&
+              <Button
+                type="primary"
+                size="large"
+                style={{ backgroundColor: "#46B5C1", height: "100%" }}
+                onClick={() => navigate("/add-product")}
+              >
+                Thêm sản phẩm mới
+              </Button>}
             <div>
               <h5 className="text-sm sm:text-base flex justify-between">
                 <span className="text-gray-500">Tổng sản phẩm: </span>
@@ -218,12 +243,12 @@ const Product = () => {
             </div>
           </div>
           <Table
-            dataSource={products}
+            dataSource={filteredProducts}
             columns={columns}
             pagination={{
               current: currentPage,
               pageSize: pageSize,
-              total: products.length,
+              total: filteredProducts.length,
               onChange: (page, pageSize) => {
                 setCurrentPage(page);
                 setPageSize(pageSize);
