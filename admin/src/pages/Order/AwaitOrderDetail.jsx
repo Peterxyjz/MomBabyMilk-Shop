@@ -8,7 +8,7 @@ import {
 import { Button } from "flowbite-react";
 import { Card, Col, Divider, Row, Steps, Typography, notification } from "antd";
 import Loading from "../../components/Loading";
-import { CheckCircleOutlined, CloseCircleOutlined, FieldTimeOutlined, SmileOutlined, TruckOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, FieldTimeOutlined, SmileOutlined, TruckOutlined } from "@ant-design/icons";
 
 const AwaitOrderDetail = () => {
   const location = useLocation();
