@@ -417,11 +417,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
               >
                 <div className="flex justify-between items-center ">
                   <p className="font-semibold text-white text-xl">
-                    Lợi nhuận theo tháng
+                    Thống kê lợi nhuận
                   </p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-0">
                   <MonthlyProfit />
                 </div>
               </div>
