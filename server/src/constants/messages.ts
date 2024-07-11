@@ -1,5 +1,5 @@
 export const USERS_MESSAGES = {
-  UPDATE_ME_SUCCESS: 'Cap nhatt thanh cong',
+  UPDATE_ME_SUCCESS: 'Cập nhật thành công',
   VALIDATION_ERROR: 'Lỗi xác thực',
   //name
   NAME_IS_REQUIRED: 'Tên là bắt buộc',
@@ -44,6 +44,7 @@ export const USERS_MESSAGES = {
   DATE_OF_BIRTH_BE_ISO8601: 'Ngày sinh phải theo định dạng ISO8601',
   //user
   EMAIL_OR_PASSWORD_IS_INCORRECT: 'Email hoặc mật khẩu không đúng',
+  ADD_USER_SUCCESS: 'Thêm nhân viên thành công',
   //login:
   LOGIN_SUCCESS: 'Đăng nhập thành công',
   REGISTER_SUCCESS: 'Đăng ký thành công',

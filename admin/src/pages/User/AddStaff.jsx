@@ -63,7 +63,6 @@ const AddStaff = () => {
       updated_at: new Date().toISOString(),
     };
 
-    // Ensure passwords match before submitting
     if (password !== confirmPassword) {
       notification.error({
         message: "Mật khẩu và xác nhận mật khẩu không khớp!",
@@ -72,19 +71,31 @@ const AddStaff = () => {
       return;
     }
 
-    console.log(staff);
-
-    // Send data to the database:
     await fetchUploadStaff(staff, token)
-      .then(() => {
-        console.log("thanh cong");
+      .then((res) => {
         notification.success({
-          message: "Thêm nhân viên thành công!",
+          message: res.data.message,
           placement: "top",
         });
+        //reset form:
+        setFullname('');
+        setEmail('');
+        setPhone('');
+        setDate(null);
+        setAddress('');
+        setPassword('');
+        setConfirmPassword('');
+        setUsername('');
+        setSelectedProvince({ id: "", name: "" });
+        setSelectedDistrict({ id: "", name: "" });
+        setSelectedWard({ id: "", name: "" });
       })
       .catch((error) => {
-        console.log(error.response);
+        console.log(error);
+        notification.success({
+          message: "Thêm nhân viên thất bại",
+          placement: "top",
+        });
       });
   };
 
@@ -225,7 +236,7 @@ const AddStaff = () => {
                 <Col span={18}>
                   <InputMask
                     id="phone"
-                    mask="999-999-9999"
+                    mask="9999999999"
                     placeholder="Nhập số điện thoại"
                     className="w-full border border-gray-300 rounded-md"
                     style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem', width: '100%' }}

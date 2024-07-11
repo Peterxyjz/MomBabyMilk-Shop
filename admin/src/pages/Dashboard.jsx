@@ -182,6 +182,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     } else if (timeRange === 'thisMonth') {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       filteredData = data.filter(item => new Date(item.completed_date) >= startOfMonth);
+    } else if (timeRange === 'thisYear') {
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      filteredData = data.filter(item => new Date(item.completed_date) >= startOfYear);
+    } else if (timeRange === 'all') {
+      filteredData = data;
     }
 
     let total = 0;
@@ -207,6 +212,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     } else if (timeRange === 'thisMonth') {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       filteredData = data.filter(item => new Date(item.completed_date) >= startOfMonth);
+    } else if (timeRange === 'thisYear') {
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      filteredData = data.filter(item => new Date(item.completed_date) >= startOfYear);
+    } else if (timeRange === 'all') {
+      filteredData = data;
     }
 
     let total = 0;
@@ -248,6 +258,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     } else if (timeRange === 'thisMonth') {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfMonth && order.order.status === 2);
+    } else if (timeRange === 'thisYear') {
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfYear && order.order.status === 2);
+    } else if (timeRange === 'all') {
+      filteredData = data.filter(order => order.order.status === 2);
     }
 
     let total = 0;
@@ -275,6 +290,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
           <Option value="today">Hôm nay</Option>
           <Option value="thisWeek">Tuần này</Option>
           <Option value="thisMonth">Tháng này</Option>
+          <Option value="thisYear">Năm nay</Option>
+          <Option value="all">Tất cả</Option>
         </Select>
       )
     },
@@ -294,6 +311,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
           <Option value="today">Hôm nay</Option>
           <Option value="thisWeek">Tuần này</Option>
           <Option value="thisMonth">Tháng này</Option>
+          <Option value="thisYear">Năm nay</Option>
+          <Option value="all">Tất cả</Option>
         </Select>
       )
     },
@@ -329,6 +348,8 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
           <Option value="today">Hôm nay</Option>
           <Option value="thisWeek">Tuần này</Option>
           <Option value="thisMonth">Tháng này</Option>
+          <Option value="thisYear">Năm nay</Option>
+          <Option value="all">Tất cả</Option>
         </Select>
       )
     },
@@ -396,11 +417,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
               >
                 <div className="flex justify-between items-center ">
                   <p className="font-semibold text-white text-xl">
-                    Lợi nhuận theo tháng
+                    Thống kê lợi nhuận
                   </p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-0">
                   <MonthlyProfit />
                 </div>
               </div>

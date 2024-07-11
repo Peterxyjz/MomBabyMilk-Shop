@@ -11,7 +11,7 @@ const ApprovedOrder = () => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(7);
+  const [pageSize, setPageSize] = useState(8);
 
   useEffect(() => {
     const getOrders = async () => {
@@ -59,7 +59,7 @@ const ApprovedOrder = () => {
     };
   return (
     <div style={{ display: 'flex', justifyContent: 'center', height: '80vh' }}>
-      <Card title="Tất cả đơn hàng" style={{ width: '90%', marginTop: '50px', height: '75vh' }}>
+      <Card title="Tất cả đơn hàng" style={{ width: '90%', marginTop: '50px', height: 'full' }}>
         <div>
           <Table
             dataSource={orders}
@@ -72,6 +72,7 @@ const ApprovedOrder = () => {
                 setCurrentPage(page);
                 setPageSize(pageSize);
               },
+              showSizeChanger: false,
             }}
             bordered
           >
