@@ -9,16 +9,18 @@ import { Comment } from '@ant-design/compatible';
 const AllFeedback = () => {
     const [products, setProducts] = useState([]);
     const [feedback, setFeedback] = useState([]);
+    const [users, setUsers] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedFeedback, setSelectedFeedback] = useState(null);
     const [response, setResponse] = useState('');
     const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-    const [users, setUsers] = useState([]);
+    
 
 
     const handleExpand = (expanded, record) => {
-        setExpandedRowKeys(expanded ? [record._id] : []); // Expand only the selected row
+        setExpandedRowKeys(expanded ? [record._id] : []);
     };
 
     useEffect(() => {
@@ -32,7 +34,6 @@ const AllFeedback = () => {
 
                 setProducts(productData);
                 setFeedback(feedbackData.data.result);
-                console.log(feedbackData.data.result);
                 setUsers(usersData.data.users);
                 setLoading(false);
             } catch (error) {
@@ -43,7 +44,7 @@ const AllFeedback = () => {
 
         fetchData();
     }, []);
-
+    
     useEffect(() => {
         if (products.length > 0 && feedback.length > 0 && users.length > 0) {
             const mergedProducts = products.map(product => {
@@ -54,25 +55,17 @@ const AllFeedback = () => {
                     }
                     return { ...fb, user };
                 });
-                const memberFeedback = productFeedback.filter(fb => fb.user?.role_name === 'Member');
-                const averageRating = memberFeedback.length > 0
-                    ? memberFeedback.reduce((sum, fb) => sum + (fb.rating || 0), 0) / memberFeedback.length
-                    : 0;
 
                 return {
                     ...product,
                     feedback: productFeedback,
-                    averageRating,
-                    averageRating,
-                    memberFeedbackCount: memberFeedback.length,
                 };
             });
 
             setProducts(mergedProducts);
-            console.log("products", products);
+            
         }
     }, [feedback, users]);
-
 
     if (loading) {
         return <Loading />
@@ -100,12 +93,12 @@ const AllFeedback = () => {
         },
         {
             title: 'Đánh Giá',
-            dataIndex: 'averageRating',
-            key: 'averageRating',
+            dataIndex: 'rating',
+            key: 'rating',
             render: (text, record) => (
                 <div>
-                    <Rate allowHalf disabled value={record.averageRating} />
-                    <div>{record.averageRating.toFixed(1)} / 5 ({record.memberFeedbackCount} đánh giá)</div>
+                    <Rate allowHalf disabled value={record.rating} />
+                    <div>{record.rating.toFixed(1)} / 5 ({record.memberFeedbackCount} đánh giá)</div>
                 </div>
             ),
             width: "30%",

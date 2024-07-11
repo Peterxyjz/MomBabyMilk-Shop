@@ -415,7 +415,6 @@ export const fetchDeleteVoucher = async (voucherId, token) => {
 //feedback
 export const fetchAllFeedback = async () => {
   return await axios.get(`${SCHEMA_HOSTNAME}/feedbacks/all-feedback`);
-
 };
 
 //API province, district, ward
