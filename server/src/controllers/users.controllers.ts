@@ -57,7 +57,7 @@ export const loginForAdminOrStaffController = async (req: Request, res: Response
   const user = req.user as User // lấy user từ req
   const user_id = user._id as ObjectId // lấy _id từ user
   const checkRole = await usersService.checkRole(user)
-  if (checkRole === 'Member') {
+  if (checkRole === 'Member' || user.isActive === UserAccountStatus.Blocked) {
     return res.status(400).json({
       errors: {
         message: USERS_MESSAGES.LOGIN_FAIL
