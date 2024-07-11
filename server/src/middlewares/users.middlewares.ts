@@ -80,7 +80,6 @@ const confirmPasswordSchema: ParamSchema = {
   },
   custom: {
     options: (value, { req }) => {
-      
       if (value !== req.body.password) {
         throw new ErrorWithStatus({
           message: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD,
@@ -106,7 +105,6 @@ const forgotPasswordTokenSchema: ParamSchema = {
       }
       //nếu có thì decode nó để lấy đc thông tin của người dùng
       try {
-  
         // const user = await databaseService.users.findOne({ forgot_password_token: value })
 
         const decoded_forgot_password_token = await verifyToken({
@@ -172,8 +170,6 @@ export const loginValidator = validate(
         trim: true,
         custom: {
           options: async (value, { req }) => {
-            
-
             const user = await databaseService.users.findOne({
               email: value,
               password: hashPassword(req.body.password)
@@ -237,7 +233,6 @@ export const registerValidator = validate(
         trim: true,
         custom: {
           options: async (value) => {
-            
             const isExistEmail = await usersService.checkEmailExist(value)
             if (isExistEmail) {
               throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS)
@@ -471,8 +466,6 @@ export const changePasswordValidator = validate(
 //vì đôi khi họ click vào link , chưa kịp đổi mk thì họ bận gì đó, họ click lại sau
 
 export const checkEmailToken = async (req: Request, res: Response, next: NextFunction) => {
-
-
   const list = JSON.stringify(req.query)
 
   req.body.email_verify_token = await usersService.signEmailVerifyToken(
@@ -484,7 +477,6 @@ export const checkEmailToken = async (req: Request, res: Response, next: NextFun
 }
 
 export const checkPasswordToken = async (req: Request, res: Response, next: NextFunction) => {
-
   const list = JSON.stringify(req.query)
 
   req.body.forgot_password_token = await usersService.signForgotPasswordToken(
