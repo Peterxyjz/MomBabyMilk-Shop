@@ -326,7 +326,10 @@ export const addUserController = async (
     })
   }
 
-  return await usersService.addUserByAdmin(req.body)
+  await usersService.addUserByAdmin(req.body)
+  return res.json({
+    message: USERS_MESSAGES.ADD_USER_SUCCESS
+  })
 }
 
 export const changeStatusUserController = async (
