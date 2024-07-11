@@ -80,13 +80,6 @@ const OrderDetail = () => {
     return date.toISOString();
   };
 
-  const add15Min = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    date.setMinutes(date.getMinutes() + 15);
-    return date.toISOString();
-  };
-
 
   const { Text } = Typography;
 
@@ -100,6 +93,7 @@ const OrderDetail = () => {
         }}
       >
         <Row justify="center" style={{ width: "100%", marginTop: "50px" }}>
+          {/*start tracking order*/}
           <Col span={22} style={{ display: "flex", justifyContent: "center" }}>
             <Card
               style={{ width: "100%" }}
@@ -118,7 +112,7 @@ const OrderDetail = () => {
                       {
                         title: "Đã xác nhận",
                         status: "finish",
-                        description: formatDate(add15Min(order.order.required_date)),
+                        description: formatDate(order.order.accepted_date),
                         icon: <CheckCircleOutlined />,
                       },
                       {
@@ -151,7 +145,7 @@ const OrderDetail = () => {
                       {
                         title: "Đã xác nhận",
                         status: "process",
-                        description: formatDate(add15Min(order.order.required_date)),
+                        description: formatDate(order.order.accepted_date),
                         icon: <CheckCircleOutlined />,
                       },
                       {
@@ -180,6 +174,7 @@ const OrderDetail = () => {
                       {
                         title: "Đã hủy",
                         status: "error",
+                        description: formatDate(order.order.accepted_date),
                         icon: <CloseCircleOutlined />,
                       },
                       {
@@ -198,6 +193,8 @@ const OrderDetail = () => {
               </div>
             </Card>
           </Col>
+          {/*end tracking order*/}
+
         </Row>
       </div>
 

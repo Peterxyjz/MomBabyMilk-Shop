@@ -650,66 +650,6 @@ export const stafflinks = [
       },
     ]
   },
-
-  // {
-  //   title: 'Apps',
-  //   links: [
-  //     {
-  //       name: 'calendar',
-  //       icon: <AiOutlineCalendar />,
-  //     },
-  //     {
-  //       name: 'kanban',
-  //       icon: <BsKanban />,
-  //     },
-  //     {
-  //       name: 'editor',
-  //       icon: <FiEdit />,
-  //     },
-  //     {
-  //       name: 'color-picker',
-  //       icon: <BiColorFill />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: 'Charts',
-  //   links: [
-  //     {
-  //       name: 'line',
-  //       icon: <AiOutlineStock />,
-  //     },
-  //     {
-  //       name: 'area',
-  //       icon: <AiOutlineAreaChart />,
-  //     },
-
-  //     {
-  //       name: 'bar',
-  //       icon: <AiOutlineBarChart />,
-  //     },
-  //     {
-  //       name: 'pie',
-  //       icon: <FiPieChart />,
-  //     },
-  //     {
-  //       name: 'financial',
-  //       icon: <RiStockLine />,
-  //     },
-  //     {
-  //       name: 'color-mapping',
-  //       icon: <BsBarChart />,
-  //     },
-  //     {
-  //       name: 'pyramid',
-  //       icon: <GiLouvrePyramid />,
-  //     },
-  //     {
-  //       name: 'stacked',
-  //       icon: <AiOutlineBarChart />,
-  //     },
-  //   ],
-  // },
 ];
 
 export const adminlinks = [
@@ -745,6 +685,34 @@ export const adminlinks = [
       //   ],
       // },
     ],
+  },
+  {
+    title: 'Đơn hàng',
+    links: [
+      {
+        name: 'Quản lý đơn hàng',
+        icon: <AiOutlineShoppingCart />,
+        type: 'sub',
+        // path: 'orders',
+        subLinks: [
+          { name: 'orders', path: '', label: 'Tất cả đơn hàng' },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Sản phẩm',
+    links: [
+      {
+        name: 'Quản lý sản phẩm',
+        icon: <AiOutlineInbox />,
+        type: 'sub',
+        // path: 'products',
+        subLinks: [
+          { name: 'allProduct', path: 'products', label: 'Tất cả sản phẩm' },        
+        ],
+      },
+    ]
   },
   {
     title: 'Kho',
