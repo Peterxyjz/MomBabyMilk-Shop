@@ -107,14 +107,14 @@ const Product = () => {
       title: "Số Lượng",
       dataIndex: "amount",
       key: "amount",
-      width: "10%",
+      width: "8%",
       sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: "Đánh Giá",
       dataIndex: "rating",
       key: "rating",
-      width: 100,
+      width: "12%",
       sorter: (a, b) => a.rating - b.rating,
       render: (text) => {
         const roundedRating = parseFloat(text).toFixed(1);
@@ -212,7 +212,7 @@ const Product = () => {
               onSearch={onSearch}
               style={{ width: '40%' }}
             />
-            {isAuthenticatedStaff &&
+            {/* {isAuthenticatedStaff &&
               <Button
                 type="primary"
                 size="large"
@@ -220,15 +220,15 @@ const Product = () => {
                 onClick={() => navigate("/add-product")}
               >
                 Thêm sản phẩm mới
-              </Button>}
+              </Button>} */}
             <div>
               <h5 className="text-sm sm:text-base flex justify-between">
-                <span className="text-gray-500">Tổng sản phẩm: </span>
-                <span className="dark:text-white">{products.length}</span>
+                <div className="text-gray-500">Tổng sản phẩm: </div>
+                <div className="dark:text-white">{products.length}</div>
               </h5>
               <h5 className="text-sm sm:text-base flex justify-between">
-                <span className="text-gray-500">Tổng doanh thu: </span>
-                <span className="dark:text-white">
+                <div className="text-gray-500 mr-1">Tổng doanh thu: </div>
+                <div className="dark:text-white ml-1">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
@@ -238,7 +238,7 @@ const Product = () => {
                       0
                     )
                   )}
-                </span>
+                </div>
               </h5>
             </div>
           </div>
