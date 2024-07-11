@@ -211,6 +211,10 @@ const AddBill = () => {
     }
   };
 
+  if (loading) {
+    return <Loading />
+  }
+
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Toaster />

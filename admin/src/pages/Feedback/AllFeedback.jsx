@@ -16,11 +16,12 @@ const AllFeedback = () => {
     const [selectedFeedback, setSelectedFeedback] = useState(null);
     const [response, setResponse] = useState('');
     const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-    
 
+    const { Text } = Typography;
 
     const handleExpand = (expanded, record) => {
-        setExpandedRowKeys(expanded ? [record._id] : []);
+        const keys = expanded ? [record._id] : [];
+        setExpandedRowKeys(keys);
     };
 
     useEffect(() => {
@@ -44,33 +45,52 @@ const AllFeedback = () => {
 
         fetchData();
     }, []);
-    
+
     useEffect(() => {
         if (products.length > 0 && feedback.length > 0 && users.length > 0) {
-            const mergedProducts = products.map(product => {
-                const productFeedback = feedback.filter(item => item.product_id === product._id).map(fb => {
-                    const user = users.find(user => user._id === fb.user_id);
-                    if (!user) {
-                        console.warn(`No user found for user_id: ${fb.user_id}`);
-                    }
-                    return { ...fb, user };
-                });
+            const mergedProducts = products
+                .map(product => {
+                    const productFeedback = feedback
+                        .filter(item => item.product_id === product._id)
+                        .map(fb => {
+                            const user = users.find(user => user._id === fb.user_id);
+                            if (!user) {
+                                console.warn(`No user found for user_id: ${fb.user_id}`);
+                            }
+                            let replyFeedbackWithUsername = null;
+                            if (fb.reply_feedback) {
+                                const replyUser = users.find(user => user._id === fb.reply_feedback.user_id);
+                                replyFeedbackWithUsername = {
+                                    ...fb.reply_feedback,
+                                    username: replyUser ? replyUser.username : 'Unknown'
+                                };
+                            }
 
-                return {
-                    ...product,
-                    feedback: productFeedback,
-                };
-            });
+                            return {
+                                ...fb,
+                                username: user ? user.username : 'Unknown',
+                                reply_feedback: replyFeedbackWithUsername
+                            };
+                        });
+                    if (productFeedback.length > 0) {
+                        return {
+                            ...product,
+                            feedback: productFeedback,
+                        };
+                    } else {
+                        return null;
+                    }
+                })
+                .filter(product => product !== null); // Filter out null entries
 
             setProducts(mergedProducts);
-            
         }
     }, [feedback, users]);
+    console.log("hihi", products);
 
     if (loading) {
         return <Loading />
     }
-
 
     const columns = [
         {
@@ -89,7 +109,20 @@ const AllFeedback = () => {
             render: (text, record) => (
                 <span style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{record.product_name}</span>
             ),
-            width: "50%",
+            width: "40%",
+        },
+        {
+            title: 'Đánh Giá Mới Nhất',
+            dataIndex: 'latestFeedbackDate',
+            key: 'latestFeedbackDate',
+            render: (text, record) => {
+                const sortedFeedback = record.feedback.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                const latestFeedbackDate = new Date(sortedFeedback[0].created_at);
+                return (
+                    <span>{formatDate(latestFeedbackDate)}</span>
+                );
+            },
+            width: "20%",
         },
         {
             title: 'Đánh Giá',
@@ -98,13 +131,14 @@ const AllFeedback = () => {
             render: (text, record) => (
                 <div>
                     <Rate allowHalf disabled value={record.rating} />
-                    <div>{record.rating.toFixed(1)} / 5 ({record.memberFeedbackCount} đánh giá)</div>
+                    <div>{record.rating.toFixed(1)} / 5 ({record.reviewer} đánh giá)</div>
                 </div>
             ),
-            width: "30%",
+            width: "20%",
             fontSize: "20px",
         }
     ];
+
 
     const renderComments = (feedback) => {
         return (
@@ -113,61 +147,51 @@ const AllFeedback = () => {
                 itemLayout="horizontal"
                 renderItem={item => (
                     <Comment
-                        author={<Text type="secondary" style={{ fontSize: '15px' }}>{item.user?.username || 'Không xác định'}</Text>}
-                        avatar={<Avatar>{item.user?.username?.charAt(0) || '?'}</Avatar>}
+                        author={<Text type="secondary" style={{ fontSize: '15px' }}>{item.username || 'Không xác định'}</Text>}
+                        avatar={<Avatar>{item.username.charAt(0) || '?'}</Avatar>}
                         content={
                             <>
                                 <span style={{ fontSize: '15px', display: 'flex', justifyContent: 'space-between' }}>
                                     <p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{item.description}</p>
-                                    {item.user?.role_name === 'Member' && (
-                                        <div style={{ marginRight: '10%' }}>
-                                            <Rate style={{ fontSize: '20px' }} disabled defaultValue={item.rating} />
-                                        </div>
-                                    )}
+                                    <div style={{ marginRight: '10%' }}>
+                                        <Rate style={{ fontSize: '20px' }} disabled defaultValue={item.rating} />
+                                    </div>
                                 </span>
                             </>
                         }
                         datetime={formatDate(item.created_at)}
                         actions={[
-                            item.user?.role_name === 'Member' && (
-                                <Button
-                                    type="default"
-                                    onClick={() => {
-                                        setSelectedFeedback(item);
-                                        setModalOpen(true);
-                                    }}
-                                    style={{
-                                        backgroundColor: "#55B6C3",
-                                        fontSize: "15px",
-                                        color: 'white'
-                                    }}
-                                    disabled={item.replies && item.replies.length > 0}
-                                >
-                                    Trả lời
-                                </Button>
-                            )
+                            <Button
+                                type="default"
+                                onClick={() => {
+                                    setSelectedFeedback(item);
+                                    setModalOpen(true);
+                                }}
+                                style={{
+                                    backgroundColor: "#55B6C3",
+                                    fontSize: "15px",
+                                    color: 'white'
+                                }}
+                                disabled={item.reply_feedback}
+                            >
+                                Trả lời
+                            </Button>
                         ]}
                     >
-                        {item.replies && item.replies.length > 0 && renderReplies(item.replies)}
+                        {item.reply_feedback && renderReplies(item.reply_feedback)}
                     </Comment>
                 )}
             />
         );
     };
 
-    const renderReplies = (replies) => {
+    const renderReplies = (reply) => {
         return (
-            <List
-                dataSource={replies}
-                itemLayout="horizontal"
-                renderItem={reply => (
-                    <Comment
-                        author={<Text type="secondary" style={{ fontSize: '15px' }}>{reply.user?.username || 'Không xác định'}</Text>}
-                        avatar={<Avatar>{reply.user?.username?.charAt(0) || '?'}</Avatar>}
-                        content={<p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{reply.description}</p>}
-                        datetime={formatDate(reply.created_at)}
-                    />
-                )}
+            <Comment
+                author={<Text type="secondary" style={{ fontSize: '15px' }}>{reply.username || 'Không xác định'}</Text>}
+                avatar={<Avatar>{reply.username?.charAt(0) || '?'}</Avatar>}
+                content={<p style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{reply.description}</p>}
+                datetime={formatDate(reply.created_at)}
             />
         );
     };
@@ -184,25 +208,12 @@ const AllFeedback = () => {
     };
 
     const expandedRowRender = (record) => {
-        const feedbackRows = record.feedback.filter(fb => fb.user && fb.user.role_name === 'Member');
-        feedbackRows.forEach(fb => {
-            fb.replies = record.feedback.filter(reply => reply.user && reply.user.role_name === 'Staff' && reply._id === fb._id);
-        });
-        console.log("Feedback ne:",feedbackRows);
-
         return (
             <div>
-                {renderComments(feedbackRows)}
+                {renderComments(record.feedback)}
             </div>
         );
     };
-
-
-
-    const { Text } = Typography;
-
-    const filteredProducts = products.filter(product => product.feedback && product.feedback.length > 0);
-    console.log("Product ne:",filteredProducts);
 
 
     return (
@@ -213,7 +224,7 @@ const AllFeedback = () => {
             >
                 <Table
                     columns={columns}
-                    dataSource={filteredProducts}
+                    dataSource={products}
                     expandable={{
                         expandedRowRender,
                         rowExpandable: record => record.feedback && record.feedback.length > 0,

@@ -86,7 +86,7 @@ const Product = () => {
       title: "Sản Phẩm",
       dataIndex: "product_name",
       key: "product_name",
-      width: "20%",
+      width: "15%",
       render: (text) => <span>{text}</span>,
     },
     {
@@ -107,14 +107,14 @@ const Product = () => {
       title: "Số Lượng",
       dataIndex: "amount",
       key: "amount",
-      width: "10%",
+      width: "5%",
       sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: "Đánh Giá",
       dataIndex: "rating",
       key: "rating",
-      width: 100,
+      width: "15%",
       sorter: (a, b) => a.rating - b.rating,
       render: (text) => {
         const roundedRating = parseFloat(text).toFixed(1);
@@ -210,17 +210,8 @@ const Product = () => {
               enterButton={<Button style={{ backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
               size="large"
               onSearch={onSearch}
-              style={{ width: '40%' }}
+              style={{ width: '40%', }}
             />
-            {isAuthenticatedStaff &&
-              <Button
-                type="primary"
-                size="large"
-                style={{ backgroundColor: "#46B5C1", height: "100%" }}
-                onClick={() => navigate("/add-product")}
-              >
-                Thêm sản phẩm mới
-              </Button>}
             <div>
               <h5 className="text-sm sm:text-base flex justify-between">
                 <span className="text-gray-500">Tổng sản phẩm: </span>
