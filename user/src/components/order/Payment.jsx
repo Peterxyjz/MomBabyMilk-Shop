@@ -253,6 +253,7 @@ const Payment = () => {
                   </div>
                   <Link
                     to={"/order"}
+                    state={{ship: ship, discount: discount, voucherCode: voucher_code}}
                     data-modal-target="billingInformationModal"
                     data-modal-toggle="billingInformationModal"
                     className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
