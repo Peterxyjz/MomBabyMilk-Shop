@@ -203,6 +203,7 @@ const AddBill = () => {
       });
       setBillProducts([]); //reset 
       setFormState({}); //reset
+      window.location.reload();
     } catch (error) {
       console.error('Lỗi từ server:', error.response.data);
       toast.error(`Lỗi khi tạo đơn: ${error.response.data.message}`, {
