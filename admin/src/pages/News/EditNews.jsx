@@ -310,7 +310,6 @@ const EditNews = () => {
 
   const handleChange = ({ fileList: newFileList }) => {
     setIsChanged(true);
-    // Only keep the latest file in the list
     setFileList(newFileList.slice(-1));
     if (newFileList.length > 0) {
       setImg(newFileList[0].originFileObj);

@@ -65,7 +65,7 @@ const ReplyFeedback = ({
         },
       }}
     >
-      <p>Trả lời đánh giá của: {selectedFeedback.user.username}</p>
+      <p>Trả lời đánh giá của: {selectedFeedback.username}</p>
       <TextArea
         value={response}
         onChange={(e) => setResponse(e.target.value)}

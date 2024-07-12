@@ -3,11 +3,13 @@ import { format } from 'date-fns';
 import { fetchAllUsers } from '../../data/api';
 import { Button, Input, Table } from 'antd';
 import { Card } from 'primereact/card';
+import Loading from '../../components/Loading';
 
 
 const Customers = () => {
     const [Users, setUsers] = useState([]);
     const [searchText, setSearchText] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const { Search } = Input;
     const formatDate = (dateString) => {
@@ -24,6 +26,7 @@ const Customers = () => {
                 }));
 
                 setUsers(formattedUsers);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
@@ -104,6 +107,10 @@ const Customers = () => {
         user.full_name.toLowerCase().includes(searchText.toLowerCase()) &&
         user.role_name === "Member"
     );
+
+    if (loading) {
+        return <Loading />
+    }
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>
             <Card title="Tất cả khách hàng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: '90vh', marginTop: '50px' }}>
