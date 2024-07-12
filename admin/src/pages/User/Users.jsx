@@ -4,12 +4,14 @@ import { Card } from 'primereact/card';
 import { format } from 'date-fns';
 import { Button, Table, Switch, Modal, notification } from 'antd';
 import { fetchAllUsers, fetchUpdateUser } from '../../data/api';
+import Loading from '../../components/Loading';
 
 const Users = () => {
 
     const [Users, setUsers] = useState([]);
     const navigate = useNavigate();
     const token = JSON.parse(localStorage.getItem("result"));
+    const [loading, setLoading] = useState(true);
 
     const formatDate = (dateString) => {
         return format(new Date(dateString), 'dd-MM-yyyy');
@@ -27,6 +29,7 @@ const Users = () => {
 
                 setUsers(formattedUsers);
                 console.log(formattedUsers);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
@@ -156,6 +159,8 @@ const Users = () => {
 
         },
     ];
+
+    if(loading) return <Loading/>
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>

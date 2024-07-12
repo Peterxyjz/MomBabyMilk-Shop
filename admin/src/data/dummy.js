@@ -563,6 +563,7 @@ export const stafflinks = [
         // path: 'products',
         subLinks: [
           { name: 'allFeedback', path: 'all-feedback', label: 'Tất cả đánh giá' },
+          { name: 'badFeedback', path: 'bad-feedback', label: 'Đánh giá tiêu cực' },
         ],
       },
       {
@@ -676,14 +677,7 @@ export const adminlinks = [
           { name: 'addStaff', path: 'add-staff', label: 'Thêm nhân viên' },
         ],
       },
-      // {
-      //   name: 'Quản lý kho',
-      //   icon: <BsBoxSeam />,
-      //   type: 'sub',
-      //   subLinks: [
-      //     { name: 'addBill', path: 'add-inputbill', label: 'Thêm đơn nhập hàng' },
-      //   ],
-      // },
+
     ],
   },
   {
@@ -729,65 +723,7 @@ export const adminlinks = [
     ]
   },
 
-  // {
-  //   title: 'Apps',
-  //   links: [
-  //     {
-  //       name: 'calendar',
-  //       icon: <AiOutlineCalendar />,
-  //     },
-  //     {
-  //       name: 'kanban',
-  //       icon: <BsKanban />,
-  //     },
-  //     {
-  //       name: 'editor',
-  //       icon: <FiEdit />,
-  //     },
-  //     {
-  //       name: 'color-picker',
-  //       icon: <BiColorFill />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: 'Charts',
-  //   links: [
-  //     {
-  //       name: 'line',
-  //       icon: <AiOutlineStock />,
-  //     },
-  //     {
-  //       name: 'area',
-  //       icon: <AiOutlineAreaChart />,
-  //     },
-
-  //     {
-  //       name: 'bar',
-  //       icon: <AiOutlineBarChart />,
-  //     },
-  //     {
-  //       name: 'pie',
-  //       icon: <FiPieChart />,
-  //     },
-  //     {
-  //       name: 'financial',
-  //       icon: <RiStockLine />,
-  //     },
-  //     {
-  //       name: 'color-mapping',
-  //       icon: <BsBarChart />,
-  //     },
-  //     {
-  //       name: 'pyramid',
-  //       icon: <GiLouvrePyramid />,
-  //     },
-  //     {
-  //       name: 'stacked',
-  //       icon: <AiOutlineBarChart />,
-  //     },
-  //   ],
-  // },
+  
 ];
 
 export const chatData = [

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchCategories, fetchProducts } from '../../data/api';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { Spin } from 'antd';
 
 const BestCategory = () => {
     const [products, setProducts] = useState([]);
@@ -23,6 +24,8 @@ const BestCategory = () => {
 
         getProducts();
     }, []);
+
+
 
     useEffect(() => {
         fetchCategories()
@@ -92,7 +95,9 @@ const BestCategory = () => {
             },
         },
     };
-
+    if (loading) {
+        return <Spin tip="Loading..." />
+    }
     return (
         <div>
             <Pie data={chartData} options={chartOptions} />
