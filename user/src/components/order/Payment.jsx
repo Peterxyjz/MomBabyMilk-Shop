@@ -106,9 +106,12 @@ const Payment = () => {
         } else {
           clearCart();
           toast.success("Đặt Hàng Thành Công");
-          if (membership !== undefined) {
-            user.member_ship = membership;
-            localStorage.setItem("user", JSON.stringify(user));
+          if(user){
+            console.log("tru ne");
+            if (membership !== undefined) {
+              user.member_ship = membership;
+              localStorage.setItem("user", JSON.stringify(user));
+            }
           }
           navigate("/thanks", {
             state: {
