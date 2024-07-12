@@ -207,7 +207,7 @@ const Product = () => {
             <Search
               placeholder="Nhập tên sản phẩm"
               allowClear
-              enterButton={<Button style={{ backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
+              enterButton={<Button style={  { backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
               size="large"
               onSearch={onSearch}
               style={{ width: '40%', }}
