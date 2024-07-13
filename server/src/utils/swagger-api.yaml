@@ -30,6 +30,196 @@ tags:
   - name: products
     description: Các API liên quan đến user
 paths:
+  /brands/upload:
+    post:
+      tags:
+        - brands
+      summary: Upload thương hiệu 
+      description: Upload thương hiệu 
+      operationId: uploadBrands
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Upload thương hiệu 
+        content:
+         application/json:
+            schema:
+              type: object
+              properties:
+                brand_name: 
+                  type: string
+                  example: Nutifood
+                address: 
+                    type: string
+                    example: Hanoi
+                country:
+                    type: string
+                    example: Vietnam
+                phone: 
+                    type: string
+                    example: 0987654321
+      responses:
+        '200':
+          description: Successful operation
+          
+        '422':
+          description: Invalid email/password supplied
+  /brands/all-brands:
+    get: 
+      tags:
+        - brands
+      summary: Lấy tất cả thương hiệu
+      description: Lấy tất cả thương hiệu
+      operationId: getAllBrands
+      
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lấy thành công
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: 665ade9946daaa0a00f4d859
+                        brand_name:
+                          type: string
+                          example: Nutifood
+                        address:
+                          type: string
+                          example: Hanoi
+                        country:
+                          type: string
+                          example: Vietnam
+                        phone:
+                          type: string
+                          example: 0987654321
+        '500':
+          description: Internal server error
+  /brands/brand/:id:
+    get:
+      tags:
+        - brands
+      summary: Lọc thuong hiệu
+      description: Lọc thuong hiệu
+      operationId: getBrand
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID thuong hiệu
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 6661fbdf02a3c02580d9c00b
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lọc thuong hiệu
+                  result:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 665ade9946daaa0a00f4d859
+                      brand_name:
+                        type: string
+                        example: Nutifood
+                      address:
+                        type: string
+                        example: Hanoi
+                      country:
+                        type: string
+                        example: Vietnam
+                      phone:
+                        type: string
+                        example: 0987654321
+        '500':
+          description: Internal server error
+  
+  /categories/upload:
+    post:
+      tags:
+        - categories
+      summary: Upload Loại sản phẩm
+      description: Upload Loại sản phẩm
+      operationId: uploadCategories
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Upload thuong hiệu 
+        content:
+         application/json:
+            schema:
+              type: object
+              properties:
+                category_name: 
+                  type: string
+                  example: Thuong Hieu
+                description:
+                    type: string
+                    example: Thuong Hieu
+      responses:
+        '200':  
+          description: Successful operation
+            
+        '422':    
+          description: Invalid email/password supplied
+
+  /feedbacks/feedback/upload:
+    post:
+      tags:
+        - feedbacks
+      summary: Upload Feedback
+      description: Upload Feedback
+      operationId: uploadFeedback
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Upload Feedback
+        content:
+         application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  example: 665ade9946daaa0a00f4d859
+                description: 
+                  type: string
+                  example: Thuong Hieu
+                rating:
+                  type: number
+                  example: 5
+                user_id:
+                  type: string
+                  example: 665ade9946daaa0a00f4d859           
+      responses:
+        '200':  
+          description: Successful operation
+            
+        '422':    
+          description: Invalid email/password supplied  
+
+
   /users/login:
     post:
       tags:
