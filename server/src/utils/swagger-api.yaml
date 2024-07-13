@@ -1,0 +1,355 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: users
+    description: Các API liên quan đến user
+  - name: products
+    description: Các API liên quan đến user
+paths:
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Đăng nhập
+      description: Logs user into the system
+      operationId: login
+      requestBody:
+        description: Thông tin đăng nhập
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/LoginBody'
+        required: true     
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Đăng nhập thành công
+                  result:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY2YTlhMWE2MWNkYjhhMjQ4YWUzZTI1IiwidG9rZW5fdHlwZSI6MCwiaWF0IjoxNzIwNjg4ODQ0LCJleHAiOjE3MjA3NzUyNDR9.sG9LT8ezoDerVGTXXo71yOaHKyEOXvWynFAeCvK0JwA
+                      refresh_token:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY2YTlhMWE2MWNkYjhhMjQ4YWUzZTI1IiwidG9rZW5fdHlwZSI6MSwiaWF0IjoxNzIwNjg4ODQ0LCJleHAiOjE3MjA3NzUyNDR9.nuO3u0H89icbfxuxCa-CyvDDawqc1DV0T0n-NdYbBNY
+                  user: 
+                    $ref: '#/components/schemas/User'
+        '422':
+          description: Invalid email/password supplied
+  /users/me:
+    get:
+      tags:
+        - users
+      summary: Lấy thông tin user
+      description: Lấy thông tin user
+      operationId: getMe
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lấy thông tin thành công
+                  result:
+                    $ref: '#/components/schemas/User'
+        '422':
+          description: Invalid email/password supplied
+  
+
+  /products/all-products:
+    get:
+      tags:
+        - products
+      summary: Lấy tất cả sản phẩm
+      description: Lấy tất cả sản phẩm
+      operationId: getAllProducts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lấy thành công
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: 666868ec9610a540155120e0 
+                        brand_id:
+                          type: string
+                          example: 665ade9946daaa0a00f4d859
+                        category_id:
+                          type: string
+                          example: 66600156c5477af75504134f
+                        product_name:
+                          type: string
+                          example: Sữa Pha Sẵn GrowPlus+ Colos Immunel HG 180ml
+                        price:  
+                          type: string
+                          example: 80000
+                        description:
+                          type: string
+                          example: Phong Siêu Đẹp Traii
+                        age:
+                          type: string
+                          example: Không dùng cho trẻ dưới 1 tuổi
+                        discount:
+                          type: number
+                          example: 10
+                        img_url:
+                          type: string
+                          example: https://firebasestorage.googleapis.com/v0/b/mombabymilk-inventory.appspot.com/o/product_img%2Fdcd2e7f1-4f9f-4974-be50-f2fac887bbba?alt=media&token=04c6c8cd-5a92-49f7-90a6-2e01e5758330
+                        isActive:
+                          type: boolean
+                          example: true
+                        brand_name:
+                          type: string
+                          example: Nutifood
+                        category_name:
+                          type: string
+                          example: Sữa pha sẵn
+                        amount: 
+                          type: number
+                          example: 100
+                        reviewer: 
+                          type: number  
+                          example: 4
+                        rating: 
+                          type: number
+                          example: 4.5
+                        sales: 
+                          type: number
+                          example: 11
+     
+        '422':
+          description: Invalid 
+  /products/product/${id}:
+    patch: 
+      tags:
+        - products
+      summary: Cập nhật sản phẩm
+      description: Cập nhật sản phẩm
+      operationId: patchProduct
+      parameters:
+        - name: id
+          in: path
+          description: ID của sản phẩm
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 666868ec9610a540155120e0
+      requestBody:
+        description: Thong tin cập nhật
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand_id: 
+                  type: string
+                  example: 665ade9946daaa0a00f4d859
+                category_id: 
+                  type: string
+                  example: 66600156c5477af75504134f
+                product_name:
+                  type: string
+                  example: Sữa Pha Sẵn GrowPlus+ Colos Immunel HG 180ml
+                price:
+                  type: string
+                  example: 80000
+                description:
+                  type: string
+                  example: Phong Siêu Đẹp Traii
+                age:
+                  type: string
+                  example: Không dùng cho trẻ dưới 1 tuổi
+                discount:
+                  type: number
+                  example: 10
+                product_img_url:
+                  type: string
+                  example: https://image.com
+                isActive:
+                  type: boolean
+                  example: true
+
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+        '422':
+          description: Invalid email/password supplied
+
+  /revenue/all-revenue:
+    get:
+      tags:
+        - revenue
+      summary: Lọc doanh thu
+      description: Lọc doanh thu
+      operationId: getAllRevenue
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lọc doanh thu
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: 666a9a1a61cdb8a248ae3e25
+                        type:
+                          type: number 
+                          example: 0
+                        total:
+                          type: number
+                          example: 100000
+                        completed_date:
+                          type: string
+                          example: 2022-06-21T06:15:10.118Z
+        '500':
+          description: Internal server error
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 666a9a1a61cdb8a248ae3e25
+        role_id: 
+          type: string
+          example: 6649cbd320733271d0ff89a5
+        full_name: 
+          type: string
+          example: Phong Siêu Đẹp Traii
+        email:
+          type: string
+          example: phong@gmail.com
+        date_of_birth:
+          type: string
+          example: 2022-06-21T06:15:10.118Z
+        password:
+          type: string
+          example: 6a9cd97a489ad946e48590c9f7248390129d7211260627874bac56372be0629c
+        country:
+          type: string
+          example: ""
+        province:
+          type: string
+          example: 11
+        district:
+          type: string
+          example: 101
+        ward:
+          type: string
+          example: 3376
+        address:
+          type: string
+          example: 132/1212 Phan Lâm1, Xã Định Hiệp, Huyện Dựng Tiếng, Bình Dương
+        phone:
+          type: string
+          example: 0907089079
+        username:
+          type: string  
+          example: Phong Siêu Đẹp Traii
+        email_verify_token:
+          type: string
+          example: ""
+        forgot_password_token:
+          type: string
+          example: ""
+        verify:
+          $ref: '#/components/schemas/UserVerifyStatus'
+          example: 1
+        isActive:
+          type: integer
+          example: 1
+        updated_at:
+          type: string
+          example: 2024-06-21T06:15:10.118Z
+        member_ship:
+          type: integer
+          example: 861210
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: phong@gmail.com
+        password:
+          type: string
+          example: Admin12345@
+    UserVerifyStatus:
+      type: number
+      enum:
+        - Unverified
+        - Verified
+        - Banned
+   
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -212,14 +212,23 @@ const Product = () => {
               onSearch={onSearch}
               style={{ width: '40%', }}
             />
+            {/* {isAuthenticatedStaff &&
+              <Button
+                type="primary"
+                size="large"
+                style={{ backgroundColor: "#46B5C1", height: "100%" }}
+                onClick={() => navigate("/add-product")}
+              >
+                Thêm sản phẩm mới
+              </Button>} */}
             <div>
               <h5 className="text-sm sm:text-base flex justify-between">
-                <span className="text-gray-500">Tổng sản phẩm: </span>
-                <span className="dark:text-white">{products.length}</span>
+                <div className="text-gray-500">Tổng sản phẩm: </div>
+                <div className="dark:text-white">{products.length}</div>
               </h5>
               <h5 className="text-sm sm:text-base flex justify-between">
-                <span className="text-gray-500">Tổng doanh thu: </span>
-                <span className="dark:text-white">
+                <div className="text-gray-500 mr-1">Tổng doanh thu: </div>
+                <div className="dark:text-white ml-1">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
@@ -229,7 +238,7 @@ const Product = () => {
                       0
                     )
                   )}
-                </span>
+                </div>
               </h5>
             </div>
           </div>

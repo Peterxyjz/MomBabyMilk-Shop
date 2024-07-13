@@ -102,6 +102,12 @@ export const uploadController = async (req: Request, res: Response) => {
 
   const [order] = await Promise.all([orderServices.upload(order_infor, orderDetails)])
   if (voucher_code) {
+    const voucher = await voucherServices.getById(voucher_code)
+    if (voucher) {
+      if (voucher.voucher_type === VoucherMode.User && user) {
+        user.member_ship = user.member_ship - (voucher.membership as number)
+      }
+    }
     await Promise.all([
       voucherOrderServices.upload(
         new VoucherOrder({
@@ -112,10 +118,6 @@ export const uploadController = async (req: Request, res: Response) => {
       ),
       voucherServices.decreaseAmount(voucher_code)
     ])
-    const voucher = await voucherServices.getById(voucher_code)
-    if (voucher) {
-      user.member_ship = user.member_ship - (voucher.membership as number)
-    }
 
     if (user) {
       await databaseService.users.updateOne(

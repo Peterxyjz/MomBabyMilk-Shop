@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 import Breadcrumbs from "../elements/Breadcrumb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
-import { checkQRPaymet, deleteOrder, fetchCreateOrder } from "../../data/api.jsx";
-import toast, { Toaster } from 'react-hot-toast';
+import {
+  checkQRPaymet,
+  deleteOrder,
+  fetchCreateOrder,
+} from "../../data/api.jsx";
+import toast, { Toaster } from "react-hot-toast";
 
 const Payment = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -37,7 +41,7 @@ const Payment = () => {
       setErrorMessage("Vui lòng chọn một phương thức thanh toán.");
       return;
     }
-    
+
     if (!termsAccepted) {
       setErrorMessage("Vui lòng đồng ý với các điều khoản và điều kiện.");
       return;
@@ -47,11 +51,12 @@ const Payment = () => {
       customer_infor: customer_infor,
       cart_list: cartItems,
       user: user,
-      total_price: (totalPrice + ship - discount) > 0 ? totalPrice + ship - discount : 0,
+      total_price:
+        totalPrice + ship - discount > 0 ? totalPrice + ship - discount : 0,
       payment_method: paymentMethod,
       ship_fee: ship,
       voucher_code: voucher_code,
-      voucher_fee: discount
+      voucher_fee: discount,
     };
 
     console.log(order_infor);
@@ -74,12 +79,12 @@ const Payment = () => {
               ischeck = true;
               clearCart();
               toast.success("Thanh Toán Thành Công");
-              if(membership !== undefined) {
+              if (membership !== undefined) {
                 user.member_ship = membership;
                 localStorage.setItem("user", JSON.stringify(user));
               }
               navigate("/thanks", {
-                state: { order_id: content, isCheck: true  },
+                state: { order_id: content, isCheck: true },
               });
             }
           }, 1000);
@@ -101,9 +106,12 @@ const Payment = () => {
         } else {
           clearCart();
           toast.success("Đặt Hàng Thành Công");
-          if(membership !== undefined) {
-            user.member_ship = membership;
-            localStorage.setItem("user", JSON.stringify(user));
+          if(user){
+            console.log("tru ne");
+            if (membership !== undefined) {
+              user.member_ship = membership;
+              localStorage.setItem("user", JSON.stringify(user));
+            }
           }
           navigate("/thanks", {
             state: {
@@ -122,7 +130,7 @@ const Payment = () => {
     let timer;
     if (countdown > 0) {
       timer = setInterval(() => {
-        setCountdown(prev => prev - 1);
+        setCountdown((prev) => prev - 1);
       }, 1000);
     } else if (countdown === 0) {
       setShowQR(false);
@@ -245,6 +253,7 @@ const Payment = () => {
                   </div>
                   <Link
                     to={"/order"}
+                    state={{ship: ship, discount: discount, voucherCode: voucher_code}}
                     data-modal-target="billingInformationModal"
                     data-modal-toggle="billingInformationModal"
                     className="text-base font-medium text-primary-700 hover:underline dark:text-primary-500"
@@ -260,7 +269,10 @@ const Payment = () => {
                     <table className="w-full text-left font-medium text-gray-900 dark:text-white md:table-fixed">
                       <tbody className="divide-y divide-gray-200">
                         {cartItems.map((product) => (
-                          <div className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6" key={product.id}>
+                          <div
+                            className="mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white p-4 shadow-sm md:p-6"
+                            key={product.id}
+                          >
                             <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
                               <img
                                 className="h-20 w-20 dark:hidden"
@@ -286,12 +298,14 @@ const Payment = () => {
                                 </div>
                               </div>
                               <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                                <a
-                                  href="#"
+                                <Link
+                                  to={"/product"}
+                                  state={{ product: product }}
+                                  onClick={() => window.scrollTo(0, 0)}
                                   className="text-base font-medium text-gray-900 hover:underline dark:text-white"
                                 >
                                   {product.product_name}
-                                </a>
+                                </Link>
                                 <div className="flex items-center gap-4">
                                   x{product.quantity} sản phẩm
                                 </div>
@@ -337,7 +351,8 @@ const Payment = () => {
                         Mã giảm giá
                       </dt>
                       <dd className="text-base font-medium text-gray-900 dark:text-white">
-                        -{Number(discount).toLocaleString("vi-VN", {
+                        -
+                        {Number(discount).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
                         })}
@@ -349,10 +364,13 @@ const Payment = () => {
                       Tổng Giá Trị
                     </dt>
                     <dd className="text-lg font-bold text-gray-900 dark:text-white">
-                      {Number(totalPrice + ship - discount).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {Number(totalPrice + ship - discount).toLocaleString(
+                        "vi-VN",
+                        {
+                          style: "currency",
+                          currency: "VND",
+                        }
+                      )}
                     </dd>
                   </dl>
                 </div>
@@ -421,12 +439,13 @@ const Payment = () => {
                   <div className="error text-red-500 mb-4">*{errorMessage}</div>
                 )}
                 <div className="gap-4 sm:flex sm:items-center">
-                  <button
-                    type="button"
-                    className="w-full rounded-lg  border border-[rgba(0,0,0,0.2)] bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+                  <Link
+                    to={"/cart"}
+                    onClick={() => window.scrollTo(0, 0)}
+                    className="w-full text-center rounded-lg  border border-[rgba(0,0,0,0.2)] bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
                   >
                     Tiếp Tục Mua
-                  </button>
+                  </Link>
                   <button
                     type="submit"
                     className="mt-4 flex w-full items-center justify-center rounded-lg bg-primary-700  px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300  dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:mt-0"
@@ -443,7 +462,8 @@ const Payment = () => {
                     <img src={QR} alt="QR Code" className="mx-auto" />
                     {countdown && (
                       <p className="text-center text-red-500">
-                        Thời gian còn lại: {Math.floor(countdown / 60)}:{('0' + (countdown % 60)).slice(-2)}
+                        Thời gian còn lại: {Math.floor(countdown / 60)}:
+                        {("0" + (countdown % 60)).slice(-2)}
                       </p>
                     )}
                   </div>

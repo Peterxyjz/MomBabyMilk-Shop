@@ -15,11 +15,27 @@ import revenueRouter from './routes/revenue.routes'
 import './utils/automatic'
 import voucherRouter from './routes/vouchers.routes'
 import newsRouter from './routes/news.routes'
+import swaggerUi from 'swagger-ui-express'
+import swaggerJsdoc from 'swagger-jsdoc'
+
+const options: swaggerJsdoc.Options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'MomBabyMilk-Shop Document API',
+      version: '1.0.0'
+    }
+  },
+  apis: ['./src/routes/*.ts'] // files containing annotations as above
+}
+
+const openapiSpecification = swaggerJsdoc(options)
 //https://localhost:4000/
 databaseService.connect()
 app.use(cors({ origin: true }))
 
 app.use(express.json())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 app.get('/', (req, res) => {
   res.send('hello world')
 })
