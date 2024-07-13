@@ -200,8 +200,6 @@ export function generateEmailPassword(username: string, verificationLink: string
 }
 
 export function generateInvoiceHTML(order: any, orderDetail: any) {
-  const shippedDate = new Date(order.shipped_date)
-  shippedDate.setDate(shippedDate.getDate() + 3)
   return `
     <!DOCTYPE html>
     <html lang="vi">
@@ -267,6 +265,7 @@ export function generateInvoiceHTML(order: any, orderDetail: any) {
                 <p><strong>Email:</strong> ${order.email}</p>
                 <p><strong>Phương thức thanh toán:</strong> ${order.payment_method}</p>
                 <p><strong>Ngày đặt:</strong> ${new Date(order.required_date).toLocaleDateString()}</p>
+                <p><strong>Ngày xác nhận:</strong> ${new Date(order.accepted_date).toLocaleDateString()}</p>
             </div>
             <table>
                 <thead>

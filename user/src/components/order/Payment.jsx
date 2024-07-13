@@ -59,8 +59,6 @@ const Payment = () => {
       voucher_fee: discount,
     };
 
-    console.log(order_infor);
-
     await fetchCreateOrder(order_infor)
       .then((res) => {
         const membership = res.data.point;
@@ -459,13 +457,13 @@ const Payment = () => {
                     <h4 className="text-lg font-bold text-gray-900 dark:text-white">
                       Quét Mã QR Để Thanh Toán
                     </h4>
-                    <img src={QR} alt="QR Code" className="mx-auto" />
                     {countdown && (
-                      <p className="text-center text-red-500">
+                      <p className="text-lg text-center font-semibold text-red-500 my-2">
                         Thời gian còn lại: {Math.floor(countdown / 60)}:
                         {("0" + (countdown % 60)).slice(-2)}
                       </p>
                     )}
+                    <img src={QR} alt="QR Code" className="mx-auto" />
                   </div>
                 )}
               </div>

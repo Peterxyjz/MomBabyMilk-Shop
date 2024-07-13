@@ -52,20 +52,25 @@ export const CartContextProvider = ({ children }) => {
           });
           return prevCartItems;
         } else {
-          return prevCartItems.map((cartItem) =>
+          const updatedCart = prevCartItems.map((cartItem) =>
             cartItem._id === product._id
               ? { ...currentCart, quantity: currentCart.quantity + 1 }
               : cartItem
           );
+          toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+            position: "top-right",
+            duration: 1000,
+          });
+          return updatedCart;
         }
       } else {
-        return [...prevCartItems, { ...product, quantity: 1 }];
+        const newCart = [...prevCartItems, { ...product, quantity: 1 }];
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
+          position: "top-right",
+          duration: 1000,
+        });
+        return newCart;
       }
-    });
-
-    toast.success("Sản phẩm đã được thêm vào giỏ hàng", {
-      position: "top-right",
-      duration: 1000,
     });
   };
 
