@@ -1,13 +1,39 @@
 import { useEffect, useState } from "react";
 import Loader from "../../assets/loading2.gif";
-import { fetchGetAllVoucher } from "../../data/api";
+import { fetchGetAllVoucher, fetchGetMe, fetchRefreshToken } from "../../data/api";
 import { Button } from "flowbite-react";
 import { ImGift } from "react-icons/im";
 
 const Accumulate = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const [point, setPoint] = useState(0);
+  const token = JSON.parse(localStorage.getItem("result"));
+  const getMeProfile = async () => {
+    await fetchGetMe(token)
+      .then((res) => {
+        setPoint(res.data.result.member_ship);
+      })
+      .catch(async (error) => {
+        if (error.response.status === 401) {
+          await fetchRefreshToken(token)
+            .then(async (res) => {
+              localStorage.setItem("result", JSON.stringify(res.data.result));
+              await getMeProfile();
+            })
+            .catch((error) => {
+              if (error.response.status === 401) {
+                localStorage.removeItem("user");
+                localStorage.removeItem("result");
+              }
+            });
+        }
+      });
+  };
+
+  useEffect(() => {
+    getMeProfile();
+  }, []);
 
   useEffect(() => {
     const getVouchers = async () => {
@@ -18,7 +44,7 @@ const Accumulate = () => {
           .filter((voucher) => voucher.voucher_type === 1)
           .filter((voucher) => new Date(voucher.expire_date) > currentDate) // Filter vouchers that have not expired
           .sort((a, b) => {
-            const userMembership = Number(user.member_ship);
+            const userMembership = Number(point);
             if (
               userMembership >= a.membership &&
               userMembership < b.membership
@@ -67,7 +93,7 @@ const Accumulate = () => {
           >
             <ImGift className="mr-2 h-5 w-5" />
             Điểm tích lũy:{" "}
-            {Number(user.member_ship).toLocaleString("vi-VN", {
+            {Number(point).toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })}
@@ -84,7 +110,7 @@ const Accumulate = () => {
             >
               <div
                 className={`h-20 flex items-center justify-between ${
-                  Number(user.member_ship) < voucher.membership
+                  Number(point) < voucher.membership
                     ? "bg-red-500"
                     : "bg-green-500"
                 }`}

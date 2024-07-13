@@ -93,7 +93,7 @@ class OrderServinces {
   }
   async updateOrderStatus() {
     const twelveHoursAgo = new Date()
-    twelveHoursAgo.setDate(twelveHoursAgo.getDate() - 3) // Lấy thời gian 3 Ngày trước
+    twelveHoursAgo.setDate(twelveHoursAgo.getDate() - 3)
 
     const orders = await databaseService.orders
       .find({
@@ -123,7 +123,7 @@ class OrderServinces {
         const incrementValue = Number(Number(order.total_price) / 100)
         await databaseService.users.updateOne(
           { _id: new ObjectId(order.member_id) },
-          { $inc: { menber_ship: incrementValue } }
+          { $inc: { member_ship: incrementValue } }
         )
       }
     })
