@@ -3,7 +3,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { useCartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchGetAllVoucher, fetchGetVoucher } from "../../data/api";
+import { fetchGetAllVoucher, fetchGetMe, fetchGetVoucher, fetchRefreshToken } from "../../data/api";
 import { Button } from "flowbite-react";
 import { ImGift } from "react-icons/im";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
@@ -27,6 +27,34 @@ const ShoppingCart = () => {
   const [errorList, setErrorList] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [voucherList, setVoucherList] = useState([]);
+  const token = JSON.parse(localStorage.getItem("result"));
+  const getMeProfile = async () => {
+    await fetchGetMe(token)
+      .then((res) => {
+        const point = res.data.result.member_ship;
+        user.member_ship = point
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch(async (error) => {
+        if (error.response.status === 401) {
+          await fetchRefreshToken(token)
+            .then(async (res) => {
+              localStorage.setItem("result", JSON.stringify(res.data.result));
+              await getMeProfile();
+            })
+            .catch((error) => {
+              if (error.response.status === 401) {
+                localStorage.removeItem("user");
+                localStorage.removeItem("result");
+              }
+            });
+        }
+      });
+  };
+
+  useEffect(() => {
+    if(user) getMeProfile();
+  }, []);
 
   useEffect(() => {
     const getVouchers = async () => {
