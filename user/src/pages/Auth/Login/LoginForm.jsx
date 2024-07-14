@@ -29,13 +29,23 @@ const LoginForm = () => {
       password,
     })
       .then((res) => {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        const user = res.data.user;
+        localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
-        toast.success(`${res.data.message}`, {
-          position: "top-right",
+          
+        if(user.verify === 0){
+          toast.error("Vui lòng xác nhận email!", {
+            duration: 5000,
+          });
+          navigate("/otp", {
+            state: { navigateTo: "/profile", email: user.email, user_id: user._id }
+          });
+          return;
+        }
+        toast.success("Đăng nhập thành công!", {
+          duration: 3000,
         });
         navigate("/");
-        window.location.reload();
       })
       .catch((error) => {
         let errorList = [];

@@ -58,18 +58,6 @@ const Brands = () => {
       key: 'phone',
       width: 150,
     },
-    {
-      title: 'Trạng Thái',
-      dataIndex: 'isActive',
-      key: 'isActive',
-      width: 100,
-      sorter: (a, b) => a.isActive - b.isActive,
-      render: (text, record) => (
-        <Switch
-          checked={record.isActive}
-        />
-      ),
-    },
   ];
 
   if (loading) {

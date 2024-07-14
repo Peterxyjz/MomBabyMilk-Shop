@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongodb'
 
-
 interface VoucherOrderType {
   _id?: ObjectId
   voucher_id: string

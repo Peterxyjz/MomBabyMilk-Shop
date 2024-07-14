@@ -104,7 +104,7 @@ export const uploadController = async (req: Request, res: Response) => {
   if (voucher_code) {
     const voucher = await voucherServices.getById(voucher_code)
     if (voucher) {
-      if (voucher.voucher_type === VoucherMode.User && user) {
+      if (voucher.voucher_type === VoucherMode.Member && user) {
         user.member_ship = user.member_ship - (voucher.membership as number)
       }
     }

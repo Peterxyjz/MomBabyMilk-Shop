@@ -22,7 +22,7 @@ export const ProductProvider = ({ children }) => {
             localStorage.removeItem("user");
             localStorage.removeItem("result");
             localStorage.removeItem("products");
-            window.location.href("/");
+            window.location.href="/";
           });
         }
         const localProducts = localStorage.getItem("products");
@@ -31,7 +31,6 @@ export const ProductProvider = ({ children }) => {
           setLoading(false);
           setTimeout(async () => {
             const productData = await fetchProducts();
-
             setProducts(productData);
             localStorage.setItem("products", JSON.stringify(productData));
           }, 1000);
@@ -50,6 +49,7 @@ export const ProductProvider = ({ children }) => {
 
     getProducts();
   }, []);
+
   return (
     <ProductContext.Provider value={{ products, loading }}>
       {children}

@@ -35,6 +35,7 @@ const EditProfile = () => {
   const getMeProfile = async () => {
     await fetchGetMe(token)
       .then((res) => {
+        console.log(res.data.result);
         setProfile({
           username: res.data.result.username || "",
           name: res.data.result.full_name || "",
@@ -181,6 +182,10 @@ const EditProfile = () => {
       username: profile.username,
       full_name: profile.name,
       phone: profile.phone,
+      country: "Việt Nam",
+      province: selectedProvince.name,
+      district: selectedDistrict.name,
+      ward: selectedWard.name,
       address: `${addressInput}, ${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`,
       date_of_birth: date_input.toISOString(),
     };
@@ -198,6 +203,10 @@ const EditProfile = () => {
           username: data.username,
           full_name: data.full_name,
           phone: data.phone,
+          country: "Việt Nam",
+          province: data.province,
+          district: data.district,
+          ward: data.ward,
           address: data.address,
           date_of_birth: data.date_of_birth,
         };
@@ -393,7 +402,7 @@ const EditProfile = () => {
       ) : (
         <>
           <h1 className="text-2xl font-semibold">Tổng quan</h1>
-          <hr className="my-3"/>
+          <hr className="my-3" />
           <div className="w-full mx-auto">
             <div className="w-full grid grid-cols-4">
               <div>

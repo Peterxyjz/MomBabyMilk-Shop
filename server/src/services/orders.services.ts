@@ -120,8 +120,8 @@ class OrderServinces {
       ])
 
       if (order.member_id) {
-        const incrementValue = Number(Number(order.total_price) / 100)
-        await databaseService.users.updateOne(
+        const incrementValue = Number(order.total_price) / 100
+        const result = await databaseService.users.updateOne(
           { _id: new ObjectId(order.member_id) },
           { $inc: { member_ship: incrementValue } }
         )

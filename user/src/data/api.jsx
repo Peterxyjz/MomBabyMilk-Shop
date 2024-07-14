@@ -216,7 +216,6 @@ export const fetchOrder = async (user_id) => {
 
 export const fetchProducts = async () => {
   try {
-    console.log("dang lay products");
     const res = await axios.get(`${SCHEMA_HOSTNAME}/products/all-products`);
     return res.data.result;
   } catch (error) {
