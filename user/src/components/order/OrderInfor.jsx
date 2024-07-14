@@ -12,48 +12,8 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
   });
 
   const [provinces, setProvinces] = useState([]);
-  useEffect(() => {
-    const getProvince = async () => {
-      try {
-        const provinceList = await getProvinces();
-        setProvinces(provinceList);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    getProvince();
-  }, []);
-
   const [districts, setDistricts] = useState([]);
-
-  useEffect(() => {
-    const getDistrict = async (id) => {
-      try {
-        const districtList = await getDistricts(id);
-        setDistricts(districtList);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    getDistrict();
-  }, []);
-
   const [wards, setWards] = useState([]);
-  useEffect(() => {
-    const getWard = async () => {
-      try {
-        const wardList = await getWards();
-        setWards(wardList);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    getWard();
-  }, []);
-
   const [selectedProvince, setSelectedProvince] = useState({
     id: "",
     name: "",
@@ -63,13 +23,80 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
     name: "",
   });
   const [selectedWard, setSelectedWard] = useState({ id: "", name: "" });
+  const [useSavedInfo, setUseSavedInfo] = useState(false);
+  const [isUserInfoAvailable, setIsUserInfoAvailable] = useState(false);
+
+  useEffect(() => {
+    const getProvince = async () => {
+      try {
+        const provinceList = await getProvinces();
+        setProvinces(provinceList);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
+    };
+
+    getProvince();
+  }, []);
+
+  useEffect(() => {
+    if (selectedProvince.id) {
+      const getDistrict = async () => {
+        try {
+          const districtList = await getDistricts(selectedProvince.id);
+          setDistricts(districtList);
+        } catch (error) {
+          console.error("Error fetching districts:", error);
+        }
+      };
+
+      getDistrict();
+    }
+  }, [selectedProvince.id]);
+
+  useEffect(() => {
+    if (selectedDistrict.id) {
+      const getWard = async () => {
+        try {
+          const wardList = await getWards(selectedDistrict.id);
+          setWards(wardList);
+        } catch (error) {
+          console.error("Error fetching wards:", error);
+        }
+      };
+
+      getWard();
+    }
+  }, [selectedDistrict.id]);
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem("user");
+    if (userInfo) {
+      const user = JSON.parse(userInfo);
+      if (
+        user.full_name &&
+        user.email &&
+        user.phone &&
+        user.province &&
+        user.district &&
+        user.ward &&
+        user.address
+      ) {
+        setIsUserInfoAvailable(true);
+      }
+    }
+  }, []);
 
   const handleProvinceSelect = async (item) => {
     const id = item.target.value;
     const name = item.target.options[item.target.selectedIndex].text;
     setSelectedProvince({ id, name });
 
-    setDistricts(await getDistricts(Number(id)));
+    const districtList = await getDistricts(Number(id));
+    setDistricts(districtList);
+    setSelectedDistrict({ id: "", name: "" });
+    setWards([]);
+    setSelectedWard({ id: "", name: "" });
   };
 
   const handleDistrictSelect = async (item) => {
@@ -77,10 +104,12 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
     const name = item.target.options[item.target.selectedIndex].text;
 
     setSelectedDistrict({ id, name });
-    setWards(await getWards(Number(id)));
+    const wardList = await getWards(Number(id));
+    setWards(wardList);
+    setSelectedWard({ id: "", name: "" });
   };
 
-  const handleWardSelect = async (item) => {
+  const handleWardSelect = (item) => {
     const id = item.target.value;
     const name = item.target.options[item.target.selectedIndex].text;
     setSelectedWard({ id, name });
@@ -99,22 +128,64 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
     const customer_infor = {
       full_name: formValues.name,
       email: formValues.email,
-
       phone: formValues.phone,
-      address:
-        formValues.address +
-        ", " +
-        selectedWard.name +
-        ", " +
-        selectedDistrict.name +
-        ", " +
-        selectedProvince.name,
+      address: useSavedInfo
+        ? formValues.address
+        : formValues.address +
+          ", " +
+          selectedWard.name +
+          ", " +
+          selectedDistrict.name +
+          ", " +
+          selectedProvince.name,
     };
 
     navigate("/payment", {
       state: { customer_infor, discount, ship, voucherCode },
     });
   };
+
+  const handleCheckboxChange = (event) => {
+    setUseSavedInfo(event.target.checked);
+    if (event.target.checked) {
+      const userInfo = localStorage.getItem("user");
+      if (userInfo) {
+        const user = JSON.parse(userInfo);
+        setFormValues({
+          name: user.full_name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+        });
+        setSelectedProvince({
+          id: user.province_id,
+          name: user.province,
+        });
+        setSelectedDistrict({
+          id: user.district_id,
+          name: user.district,
+        });
+        setSelectedWard({
+          id: user.ward_id,
+          name: user.ward,
+        });
+
+        getDistricts(user.province_id).then(setDistricts);
+        getWards(user.district_id).then(setWards);
+      }
+    } else {
+      setFormValues({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+      });
+      setSelectedProvince({ id: "", name: "" });
+      setSelectedDistrict({ id: "", name: "" });
+      setSelectedWard({ id: "", name: "" });
+    }
+  };
+
   return (
     <>
       <ol className="flex items-center justify-center w-full px-24 text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
@@ -258,77 +329,139 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
                     </div>
                     <div className="sm:col-span-2 ">
                       <div className="flex flex-wrap gap-4">
-                        <div className="flex-1">
-                          <div className="mb-2 flex items-center gap-2">
-                            <label
-                              htmlFor="select-city-input-3"
-                              className="block text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                              Thành phố
-                            </label>
-                          </div>
-                          <select
-                            id="select-city-input-3"
-                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                            onChange={handleProvinceSelect}
-                            required
-                          >
-                            <option value="">Chọn tỉnh/thành phố</option>
-                            {provinces.map((province) => (
-                              <option key={province.id} value={province.id}>
-                                {province.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div className="flex-1">
-                          <div className="mb-2 flex items-center gap-2">
-                            <label
-                              htmlFor="select-city-input-3"
-                              className="block text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                              Quận/Huyện*
-                            </label>
-                          </div>
-                          <select
-                            id="select-city-input-3"
-                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                            onChange={handleDistrictSelect}
-                            required
-                          >
-                            <option value="">Chọn Quận/Huyện</option>
-                            {districts.map((district) => (
-                              <option key={district.id} value={district.id}>
-                                {district.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div className="flex-1">
-                          <div className="mb-2 flex items-center gap-2">
-                            <label
-                              htmlFor="select-city-input-3"
-                              className="block text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                              Phường/Xã
-                            </label>
-                          </div>
-                          <select
-                            id="select-city-input-3"
-                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                            onChange={handleWardSelect}
-                            required
-                          >
-                            <option value="">Chọn Phường/Xã</option>
-                            {wards.map((ward) => (
-                              <option key={ward.id} value={ward.id}>
-                                {ward.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                        {useSavedInfo ? (
+                          <>
+                            <div className="flex-1">
+                              <div className="mb-2 flex items-center gap-2">
+                                <label
+                                  htmlFor="province"
+                                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                  Thành phố
+                                </label>
+                              </div>
+                              <input
+                                type="text"
+                                id="province"
+                                name="province"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                value={selectedProvince.name}
+                                disabled
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <div className="mb-2 flex items-center gap-2">
+                                <label
+                                  htmlFor="district"
+                                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                  Quận/Huyện*
+                                </label>
+                              </div>
+                              <input
+                                type="text"
+                                id="district"
+                                name="district"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                value={selectedDistrict.name}
+                                disabled
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <div className="mb-2 flex items-center gap-2">
+                                <label
+                                  htmlFor="ward"
+                                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                  Phường/Xã
+                                </label>
+                              </div>
+                              <input
+                                type="text"
+                                id="ward"
+                                name="ward"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                value={selectedWard.name}
+                                disabled
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex-1">
+                              <div className="mb-2 flex items-center gap-2">
+                                <label
+                                  htmlFor="select-city-input-3"
+                                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                  Thành phố
+                                </label>
+                              </div>
+                              <select
+                                id="select-city-input-3"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                onChange={handleProvinceSelect}
+                                value={selectedProvince.id}
+                                required
+                              >
+                                <option value="">Chọn tỉnh/thành phố</option>
+                                {provinces.map((province) => (
+                                  <option key={province.id} value={province.id}>
+                                    {province.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="flex-1">
+                              <div className="mb-2 flex items-center gap-2">
+                                <label
+                                  htmlFor="select-city-input-3"
+                                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                  Quận/Huyện*
+                                </label>
+                              </div>
+                              <select
+                                id="select-city-input-3"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                onChange={handleDistrictSelect}
+                                value={selectedDistrict.id}
+                                required
+                              >
+                                <option value="">Chọn Quận/Huyện</option>
+                                {districts.map((district) => (
+                                  <option key={district.id} value={district.id}>
+                                    {district.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="flex-1">
+                              <div className="mb-2 flex items-center gap-2">
+                                <label
+                                  htmlFor="select-city-input-3"
+                                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                  Phường/Xã
+                                </label>
+                              </div>
+                              <select
+                                id="select-city-input-3"
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                onChange={handleWardSelect}
+                                value={selectedWard.id}
+                                required
+                              >
+                                <option value="">Chọn Phường/Xã</option>
+                                {wards.map((ward) => (
+                                  <option key={ward.id} value={ward.id}>
+                                    {ward.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div>
@@ -371,6 +504,21 @@ const OrderInfor = ({ discount, ship, voucherCode }) => {
                         required
                       />
                     </div>
+                    {isUserInfoAvailable && (
+                      <div className="sm:col-span-2">
+                        <label className="flex items-center space-x-3 mb-3">
+                          <input
+                            type="checkbox"
+                            checked={useSavedInfo}
+                            onChange={handleCheckboxChange}
+                            className="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none"
+                          />
+                          <span className="ml-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Sử dụng thông tin đã lưu từ tài khoản
+                          </span>
+                        </label>
+                      </div>
+                    )}
                     <div className="space-y-3 sm:col-span-2">
                       <button
                         type="submit"
