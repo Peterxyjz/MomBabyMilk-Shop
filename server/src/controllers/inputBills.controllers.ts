@@ -93,7 +93,7 @@ export const updateController = async (req: Request, res: Response) => {
   const role_name = await usersService.checkRole(user)
   if (role_name !== 'Staff') {
     return res.status(400).json({
-      message: 'Bạn không có quyền chỉnh sửa voucher'
+      message: 'Bạn không có quyền chỉnh sửa input bill'
     })
   }
 
