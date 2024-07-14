@@ -192,8 +192,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     } else if (timeRange === 'thisWeek') {
       filteredData = data.filter(item => {
         const completedDate = convertToVietnamTime(new Date(item.completed_date));
-        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - now.getDay())));
-        return completedDate >= startOfWeek;
+        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - (now.getDay() + 6) % 7)));
+        const endOfWeek = convertToVietnamTime(new Date(now.setDate(startOfWeek.getDate() + 6)));
+        return completedDate >= startOfWeek && completedDate <= endOfWeek;
       });
     } else if (timeRange === 'thisMonth') {
       filteredData = data.filter(item => {
@@ -236,8 +237,9 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     } else if (timeRange === 'thisWeek') {
       filteredData = data.filter(item => {
         const completedDate = convertToVietnamTime(new Date(item.completed_date));
-        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - now.getDay())));
-        return completedDate >= startOfWeek;
+        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - (now.getDay() + 6) % 7)));
+        const endOfWeek = convertToVietnamTime(new Date(now.setDate(startOfWeek.getDate() + 6)));
+        return completedDate >= startOfWeek && completedDate <= endOfWeek;
       });
     } else if (timeRange === 'thisMonth') {
       filteredData = data.filter(item => {
@@ -295,9 +297,11 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     } else if (timeRange === 'thisWeek') {
       filteredData = data.filter(item => {
         const completedDate = convertToVietnamTime(new Date(item.order.shipped_date));
-        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - now.getDay())));
-        return completedDate >= startOfWeek && item.order.status === 2;
+        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - (now.getDay() + 6) % 7)));
+        const endOfWeek = convertToVietnamTime(new Date(now.setDate(startOfWeek.getDate() + 6)));
+        return completedDate >= startOfWeek && completedDate <= endOfWeek && item.order.status === 2;
       });
+      console.log("sales:",filteredData);
     } else if (timeRange === 'thisMonth') {
       filteredData = data.filter(item => {
         const completedDate = convertToVietnamTime(new Date(item.order.shipped_date));
