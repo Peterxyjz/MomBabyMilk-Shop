@@ -150,8 +150,7 @@ class UsersService {
         {
           $set: {
             email_verify_token: '',
-            verify: UserVerifyStatus.Verified,
-            updated_at: '$$NOW'
+            verify: UserVerifyStatus.Verified
           }
         }
         //set email_verify_token thành rỗng,và cập nhật ngày cập nhật, cập nhật status của verify
@@ -184,8 +183,7 @@ class UsersService {
     await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
       {
         $set: {
-          email_verify_token,
-          updated_at: '$$NOW'
+          email_verify_token
         }
       }
     ])
@@ -214,16 +212,10 @@ class UsersService {
     console.log('user_id: ', user_id)
 
     const forgot_password_token = await this.signForgotPasswordToken(user_id, digit)
-    //cập nhật vào forgot_password_token và user_id
-    // await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
-    //   {
-    //     $set: { forgot_password_token: forgot_password_token, updated_at: '$$NOW' }
-    //   }
-    // ])
 
     await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
       {
-        $set: { forgot_password_token: forgot_password_token, updated_at: '$$NOW' }
+        $set: { forgot_password_token: forgot_password_token }
       }
     ])
 

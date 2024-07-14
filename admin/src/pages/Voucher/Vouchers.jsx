@@ -7,7 +7,6 @@ import Loading from "../../components/Loading";
 import { Card, Modal, notification, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 
-
 const Vouchers = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +17,6 @@ const Vouchers = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  
 
   useEffect(() => {
     const getVouchers = async () => {
@@ -43,8 +41,8 @@ const Vouchers = () => {
 
   const showDeleteConfirm = (voucherId) => {
     Modal.confirm({
-      title: 'Bạn có chắc chắn muốn xóa voucher này?',
-      content: 'Hành động này không thể hoàn tác.',
+      title: "Bạn có chắc chắn muốn xóa voucher này?",
+      content: "Hành động này không thể hoàn tác.",
       onOk: async () => {
         try {
           handleDelete(voucherId);
@@ -139,64 +137,66 @@ const Vouchers = () => {
   };
 
   if (loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   const columns = [
     {
-      title: 'Mã Voucher',
-      dataIndex: '_id',
-      key: '_id',
+      title: "Mã Voucher",
+      dataIndex: "_id",
+      key: "_id",
       render: (text) => <div className="text-base font-semibold">{text}</div>,
     },
     {
-      title: 'Ngày hết hạn',
-      dataIndex: 'expire_date',
-      key: 'expire_date',
+      title: "Ngày hết hạn",
+      dataIndex: "expire_date",
+      key: "expire_date",
       render: (text) => formatDate(text),
       sorter: (a, b) => new Date(a.expire_date) - new Date(b.expire_date),
     },
     {
-      title: 'Membership',
-      dataIndex: 'membership',
-      key: 'membership',
+      title: "Membership",
+      dataIndex: "membership",
+      key: "membership",
       render: (value) =>
-        new Intl.NumberFormat('vi-VN', {
-          style: 'currency',
-          currency: 'VND',
+        new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
         }).format(value),
       sorter: (a, b) => a.membership - b.membership,
     },
     {
-      title: 'Mức giảm giá (VND)',
-      dataIndex: 'discount',
-      key: 'discount',
+      title: "Mức giảm giá (VND)",
+      dataIndex: "discount",
+      key: "discount",
       render: (value) =>
-        new Intl.NumberFormat('vi-VN', {
-          style: 'currency',
-          currency: 'VND',
+        new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
         }).format(value),
     },
     {
-      title: 'Số lượng',
-      dataIndex: 'amount',
-      key: 'amount',
+      title: "Số lượng",
+      dataIndex: "amount",
+      key: "amount",
       sorter: (a, b) => a.amount - b.amount,
     },
     {
-      title: 'Loại Voucher',
-      dataIndex: 'voucher_type',
-      key: 'voucher_type',
-      render: (type) => (type === 0 ? 'User' : 'Member'),
+      title: "Loại Voucher",
+      dataIndex: "voucher_type",
+      key: "voucher_type",
+      render: (type) => (type === 0 ? "User" : "Member"),
     },
     {
-      title: 'Hành động',
-      key: 'action',
+      title: "Hành động",
+      key: "action",
       render: (text, record) => (
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <Button
             type="link"
             onClick={() => toggleModal(record)}
@@ -224,10 +224,21 @@ const Vouchers = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          minHeight: "100vh",
+        }}
+      >
         <Card
           title={<h2 className="text-2xl font-bold">Tất cả voucher</h2>}
-          style={{ width: '90%', maxWidth: '70wh', margin: '30px auto', height: 'full'}}
+          style={{
+            width: "90%",
+            maxWidth: "70wh",
+            margin: "30px auto",
+            height: "full",
+          }}
         >
           <div className="flex justify-between items-center mb-4">
             <Button
@@ -264,7 +275,10 @@ const Vouchers = () => {
           >
             <div className="relative w-full max-w-2xl max-h-full">
               {/* Modal content */}
-              <form className="relative bg-white rounded-lg shadow " onSubmit={handleSubmit}>
+              <form
+                className="relative bg-white rounded-lg shadow "
+                onSubmit={handleSubmit}
+              >
                 {/* Modal header */}
                 <div className="flex items-start justify-between p-4 border-b rounded-t ">
                   <h3 className="text-xl font-semibold text-gray-900 ">
@@ -417,7 +431,10 @@ const Vouchers = () => {
                 </div>
                 {/* Modal footer */}
                 <div className="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b ">
-                  <Button type="submit" className="text-white bg-blue-700 hover:bg-blue-800">
+                  <Button
+                    type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800"
+                  >
                     Lưu thay đổi
                   </Button>
                 </div>

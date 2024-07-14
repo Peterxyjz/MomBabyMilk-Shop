@@ -104,7 +104,7 @@ export const uploadController = async (req: Request, res: Response) => {
   if (voucher_code) {
     const voucher = await voucherServices.getById(voucher_code)
     if (voucher) {
-      if (voucher.voucher_type === VoucherMode.User && user) {
+      if (voucher.voucher_type === VoucherMode.Member && user) {
         user.member_ship = user.member_ship - (voucher.membership as number)
       }
     }
@@ -146,13 +146,6 @@ export const uploadController = async (req: Request, res: Response) => {
       )
     }
   }
-
-  const emailHtml = generateInvoiceHTML(order_infor, orderDetails)
-  sendMail({
-    email: customer_infor.email,
-    subject: 'Email Verification Mail',
-    html: emailHtml
-  })
 
   return res.status(200).json({
     message: USERS_MESSAGES.GET_SUCCESS,
@@ -205,8 +198,22 @@ export const updateStatusController = async (req: Request, res: Response) => {
     })
   }
   const result = await orderServices.updateStatus(order_id, status, user_id)
-  return res.status(200).json({
-    message: 'success',
-    result
-  })
+  const order = await orderServices.getById(order_id)
+  const orderDetails = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
+  if (order) {
+    const emailHtml = generateInvoiceHTML(order, orderDetails)
+    sendMail({
+      email: order.email,
+      subject: 'Email Verification Mail',
+      html: emailHtml
+    })
+    return res.status(200).json({
+      message: 'success',
+      result
+    })
+  } else {
+    return res.status(400).json({
+      message: 'Order not found'
+    })
+  }
 }

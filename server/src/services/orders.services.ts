@@ -29,7 +29,6 @@ class OrderServinces {
         price: item.price
       })
 
-      await wareHouseService.decreaseAmount({ product_id: item._id, amount: item.quantity })
       databaseService.orderDetails.insertOne(order_detail)
     })
     return await databaseService.orders.insertOne(order)
@@ -66,6 +65,10 @@ class OrderServinces {
       })
     }
     if (OrderStatus[status as keyof typeof OrderStatus] === OrderStatus.Processing) {
+      const OrderDetail = await databaseService.orderDetails.find({ order_id: id }).toArray()
+      for (const item of OrderDetail) {
+        await wareHouseService.decreaseAmount({ product_id: item.product_id, amount: item.amount })
+      }
       return await databaseService.orders.updateOne(filter, {
         $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id, accepted_date: new Date() }
       })
@@ -90,7 +93,7 @@ class OrderServinces {
   }
   async updateOrderStatus() {
     const twelveHoursAgo = new Date()
-    twelveHoursAgo.setDate(twelveHoursAgo.getDate() - 3) // Lấy thời gian 3 Ngày trước
+    twelveHoursAgo.setDate(twelveHoursAgo.getDate() - 3)
 
     const orders = await databaseService.orders
       .find({
@@ -117,10 +120,10 @@ class OrderServinces {
       ])
 
       if (order.member_id) {
-        const incrementValue = Number(Number(order.total_price) / 100)
-        await databaseService.users.updateOne(
+        const incrementValue = Number(order.total_price) / 100
+        const result = await databaseService.users.updateOne(
           { _id: new ObjectId(order.member_id) },
-          { $inc: { menber_ship: incrementValue } }
+          { $inc: { member_ship: incrementValue } }
         )
       }
     })

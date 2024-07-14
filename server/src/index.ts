@@ -26,16 +26,15 @@ const options: swaggerJsdoc.Options = {
       version: '1.0.0'
     }
   },
-  apis: ['./src/routes/*.ts'] // files containing annotations as above
+  apis: ['./src/routes/*.ts']
 }
 
 const openapiSpecification = swaggerJsdoc(options)
-//https://localhost:4000/
 databaseService.connect()
 app.use(cors({ origin: true }))
 
 app.use(express.json())
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 app.get('/', (req, res) => {
   res.send('hello world')
 })

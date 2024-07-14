@@ -77,7 +77,6 @@ const usersRouter = Router()
  *         description: Invalid email/password supplied
  */
 usersRouter.post('/login', loginValidator, wrapAsync(loginController))
-
 /**
  * @swagger
  * /users/register:
@@ -138,7 +137,6 @@ usersRouter.post('/login', loginValidator, wrapAsync(loginController))
  *       '500':
  *         description: Internal server error
  */
-
 usersRouter.post('/register', registerValidator, wrapAsync(registerController))
 
 /**
@@ -550,35 +548,6 @@ usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
 
 /**
- * @openapi
- * /users/me:
- *   get:
- *     tags:
- *       - users
- *     summary: Lấy thông tin user
- *     description: Lấy thông tin user
- *     operationId: getMe
- *     security:
- *       - BearerAuth: []
- *     responses:
- *       '200':
- *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Lấy thông tin thành công
- *                 result:
- *                   $ref: '#/components/schemas/User'
- *       '422':
- *         description: Invalid email/password supplied
- */
-usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
-
-/**
  * @swagger
  * /users/me:
  *   patch:
@@ -869,8 +838,6 @@ usersRouter.post('/change-status/:id', accessTokenValidator, wrapAsync(changeSta
 
 usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshTokenController))
 
-//todo========================schema===========================openapi=======================
-
 /** get-me
  *
  * @openapi
@@ -931,9 +898,6 @@ usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshToken
  *         isActive:
  *           type: integer
  *           example: 1
- *         updated_at:
- *           type: string
- *           example: 2024-06-21T06:15:10.118Z
  *         member_ship:
  *           type: integer
  *           example: 861210

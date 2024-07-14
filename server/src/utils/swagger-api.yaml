@@ -516,9 +516,6 @@ components:
         isActive:
           type: integer
           example: 1
-        updated_at:
-          type: string
-          example: 2024-06-21T06:15:10.118Z
         member_ship:
           type: integer
           example: 861210

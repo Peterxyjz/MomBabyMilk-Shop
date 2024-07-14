@@ -34,6 +34,7 @@ import MonthlyProfit from "../components/Dashboard/MonthlyProfit";
 import BestCategory from "../components/Dashboard/BestCategory";
 import ProductStock from "../components/Dashboard/ProductStock";
 import MonthlyOrder from "../components/Dashboard/MonthlyOrder";
+import { ConsoleSqlOutlined } from "@ant-design/icons";
 
 const DropDown = ({ currentMode, onSelect }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -170,21 +171,42 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     console.log(order);
   }, [salesTimeRange]);
 
+  //time in Vietnam
+  const timezoneOffset = 7 * 60; // GMT+7 in minutes
+  const convertToVietnamTime = (date) => {
+    const utcDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    const vietnamDate = new Date(utcDate.getTime() + (timezoneOffset * 60000));
+    return vietnamDate;
+  };
+
   const calculateTotalProfit = (data, timeRange) => {
     const now = new Date();
+    const nowVietnamTime = convertToVietnamTime(now).toISOString();
     let filteredData = [];
 
     if (timeRange === 'today') {
-      filteredData = data.filter(item => new Date(item.completed_date).toDateString() === now.toDateString());
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        return completedDate === nowVietnamTime;
+      });
     } else if (timeRange === 'thisWeek') {
-      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-      filteredData = data.filter(item => new Date(item.completed_date) >= startOfWeek);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - now.getDay())));
+        return completedDate >= startOfWeek;
+      });
     } else if (timeRange === 'thisMonth') {
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      filteredData = data.filter(item => new Date(item.completed_date) >= startOfMonth);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        const startOfMonth = convertToVietnamTime(new Date(now.getFullYear(), now.getMonth(), 1));
+        return completedDate >= startOfMonth;
+      });
     } else if (timeRange === 'thisYear') {
-      const startOfYear = new Date(now.getFullYear(), 0, 1);
-      filteredData = data.filter(item => new Date(item.completed_date) >= startOfYear);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        const startOfYear = convertToVietnamTime(new Date(now.getFullYear(), 0, 1));
+        return completedDate >= startOfYear;
+      });
     } else if (timeRange === 'all') {
       filteredData = data;
     }
@@ -200,21 +222,35 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     setTotalProfit(total);
   };
 
+  //tinh doanh thu
   const calculateTotalRevenue = (data, timeRange) => {
     const now = new Date();
+    const nowVietnamTime = convertToVietnamTime(now).toISOString();
     let filteredData = [];
 
     if (timeRange === 'today') {
-      filteredData = data.filter(item => new Date(item.completed_date).toDateString() === now.toDateString());
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        return completedDate === nowVietnamTime;
+      });
     } else if (timeRange === 'thisWeek') {
-      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-      filteredData = data.filter(item => new Date(item.completed_date) >= startOfWeek);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - now.getDay())));
+        return completedDate >= startOfWeek;
+      });
     } else if (timeRange === 'thisMonth') {
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      filteredData = data.filter(item => new Date(item.completed_date) >= startOfMonth);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        const startOfMonth = convertToVietnamTime(new Date(now.getFullYear(), now.getMonth(), 1));
+        return completedDate >= startOfMonth;
+      });
     } else if (timeRange === 'thisYear') {
-      const startOfYear = new Date(now.getFullYear(), 0, 1);
-      filteredData = data.filter(item => new Date(item.completed_date) >= startOfYear);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.completed_date));
+        const startOfYear = convertToVietnamTime(new Date(now.getFullYear(), 0, 1));
+        return completedDate >= startOfYear;
+      });
     } else if (timeRange === 'all') {
       filteredData = data;
     }
@@ -248,21 +284,34 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
 
   const calculateTotalSales = (data, timeRange) => {
     const now = new Date();
+    const nowVietnamTime = convertToVietnamTime(now).toISOString();
     let filteredData = [];
 
     if (timeRange === 'today') {
-      filteredData = data.filter(order => new Date(order.order.shipped_date).toDateString() === now.toDateString() && order.order.status === 2);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.order.shipped_date));
+        return completedDate === nowVietnamTime && item.order.status === 2;
+      });
     } else if (timeRange === 'thisWeek') {
-      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
-      filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfWeek && order.order.status === 2);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.order.shipped_date));
+        const startOfWeek = convertToVietnamTime(new Date(now.setDate(now.getDate() - now.getDay())));
+        return completedDate >= startOfWeek && item.order.status === 2;
+      });
     } else if (timeRange === 'thisMonth') {
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfMonth && order.order.status === 2);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.order.shipped_date));
+        const startOfMonth = convertToVietnamTime(new Date(now.getFullYear(), now.getMonth(), 1));
+        return completedDate >= startOfMonth && item.order.status === 2;
+      });
     } else if (timeRange === 'thisYear') {
-      const startOfYear = new Date(now.getFullYear(), 0, 1);
-      filteredData = data.filter(order => new Date(order.order.shipped_date) >= startOfYear && order.order.status === 2);
+      filteredData = data.filter(item => {
+        const completedDate = convertToVietnamTime(new Date(item.order.shipped_date));
+        const startOfYear = convertToVietnamTime(new Date(now.getFullYear(), 0, 1));
+        return completedDate >= startOfYear && item.order.status === 2;
+      });
     } else if (timeRange === 'all') {
-      filteredData = data.filter(order => order.order.status === 2);
+      filteredData = data;
     }
 
     let total = 0;
@@ -271,6 +320,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     });
     setTotalSales(total);
   };
+
 
 
   const earningData = [
@@ -286,7 +336,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       iconBg: "rgb(235, 250, 242)",
       pcColor: "green-600",
       dropdown: (
-        <Select defaultValue="today" onChange={(value) => setRevenueTimeRange(value)}>
+        <Select defaultValue="today" style={{ width: '110px' }} onChange={(value) => setRevenueTimeRange(value)}>
           <Option value="today">Hôm nay</Option>
           <Option value="thisWeek">Tuần này</Option>
           <Option value="thisMonth">Tháng này</Option>
@@ -307,7 +357,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
       iconBg: "#E5FAFB",
       pcColor: "red-600",
       dropdown: (
-        <Select defaultValue="today" onChange={(value) => setProfitTimeRange(value)}>
+        <Select defaultValue="today" style={{ width: '110px' }} onChange={(value) => setProfitTimeRange(value)}>
           <Option value="today">Hôm nay</Option>
           <Option value="thisWeek">Tuần này</Option>
           <Option value="thisMonth">Tháng này</Option>
@@ -344,7 +394,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
 
       pcColor: "green-600",
       dropdown: (
-        <Select defaultValue="today" onChange={(value) => setSalesTimeRange(value)}>
+        <Select defaultValue="today" style={{ width: '110px' }} onChange={(value) => setSalesTimeRange(value)}>
           <Option value="today">Hôm nay</Option>
           <Option value="thisWeek">Tuần này</Option>
           <Option value="thisMonth">Tháng này</Option>
@@ -372,7 +422,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                     <div style={{ position: 'absolute', right: '10px', top: '10px' }}>
                       {item.dropdown}
                     </div>
-
                     <button
                       type="button"
                       style={{
