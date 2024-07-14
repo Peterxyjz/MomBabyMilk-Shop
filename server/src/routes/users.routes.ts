@@ -77,11 +77,7 @@ const usersRouter = Router()
  *         description: Invalid email/password supplied
  */
 
-
 usersRouter.post('/login', loginValidator, wrapAsync(loginController))
-
-
-
 usersRouter.post('/register', registerValidator, wrapAsync(registerController))
 usersRouter.post('/login-admin-staff', loginValidator, wrapAsync(loginForAdminOrStaffController))
 usersRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapAsync(logoutController))
@@ -130,8 +126,6 @@ usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 
 usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
 
-
-
 /**
  * @openapi
  * /users/me:
@@ -161,19 +155,16 @@ usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserContr
  */
 usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
 
-
 usersRouter.patch('/me', accessTokenValidator, updateMeValidator, wrapAsync(updateMeController))
-
 
 usersRouter.post('/add-user', accessTokenValidator, registerValidator, wrapAsync(addUserController))
 usersRouter.post('/change-status/:id', accessTokenValidator, wrapAsync(changeStatusUserController))
 usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshTokenController))
 
-
 //todo========================schema===========================openapi=======================
 
 /** get-me
- * 
+ *
  * @openapi
  * components:
  *   schemas:
@@ -184,10 +175,10 @@ usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshToken
  *           type: string
  *           format: MongoId
  *           example: 666a9a1a61cdb8a248ae3e25
- *         role_id: 
+ *         role_id:
  *           type: string
  *           example: 6649cbd320733271d0ff89a5
- *         full_name: 
+ *         full_name:
  *           type: string
  *           example: Phong Siêu Đẹp Traii
  *         email:
@@ -218,7 +209,7 @@ usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshToken
  *           type: string
  *           example: 0907089079
  *         username:
- *           type: string  
+ *           type: string
  *           example: Phong Siêu Đẹp Traii
  *         email_verify_token:
  *           type: string
@@ -232,9 +223,6 @@ usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshToken
  *         isActive:
  *           type: integer
  *           example: 1
- *         updated_at:
- *           type: string
- *           example: 2024-06-21T06:15:10.118Z
  *         member_ship:
  *           type: integer
  *           example: 861210

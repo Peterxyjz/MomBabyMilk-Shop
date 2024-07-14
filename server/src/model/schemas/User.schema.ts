@@ -43,7 +43,6 @@ export default class User {
   verify: UserVerifyStatus
   isActive: UserAccountStatus
   constructor(user: UserType) {
-    const date = new Date() //tạo này cho ngày created_at updated_at bằng nhau
     this._id = user._id || new ObjectId() // tự tạo id
     this.role_id = user.role_id
     this.full_name = user.full_name || ''

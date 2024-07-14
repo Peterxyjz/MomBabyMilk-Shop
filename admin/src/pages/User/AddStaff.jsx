@@ -59,8 +59,6 @@ const AddStaff = () => {
       phone: phone,
       membership: 0,
       username: username,
-
-      updated_at: new Date().toISOString(),
     };
 
     if (password !== confirmPassword) {
