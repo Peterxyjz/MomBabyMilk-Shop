@@ -27,7 +27,6 @@ const RegisterForm = () => {
     event.preventDefault();
 
     const { username, email, password, confirm_password } = formValues;
-    console.log(username, email, password, confirm_password);
     await fetchRegister({
       username,
       email,
@@ -36,7 +35,6 @@ const RegisterForm = () => {
     })
       .then((res) => {
         toast.success(`${res.data.message}`);
-        console.log(res.data);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
         navigate("/otp", {

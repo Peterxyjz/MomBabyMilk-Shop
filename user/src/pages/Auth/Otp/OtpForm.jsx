@@ -51,7 +51,6 @@ const OtpForm = () => {
     })
       .then((res) => {
         toast.success(`${res.data.message}`);
-        console.log(res.data);
         navigate(`${navigateTo}`, { state: { user_id, digit: otpValue, newAccount: true } });
         if (navigateTo !== "/reset-password") {
           localStorage.setItem("user", JSON.stringify(res.data.user));

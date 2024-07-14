@@ -548,6 +548,35 @@ usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserController))
 
 /**
+ * @openapi
+ * /users/me:
+ *   get:
+ *     tags:
+ *       - users
+ *     summary: Lấy thông tin user
+ *     description: Lấy thông tin user
+ *     operationId: getMe
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Lấy thông tin thành công
+ *                 result:
+ *                   $ref: '#/components/schemas/User'
+ *       '422':
+ *         description: Invalid email/password supplied
+ */
+usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
+
+/**
  * @swagger
  * /users/me:
  *   patch:
@@ -749,7 +778,7 @@ usersRouter.post('/add-user', accessTokenValidator, registerValidator, wrapAsync
  *   post:
  *     tags:
  *       - users
- *     summary:  Thay đổi trạng thái tài khoản 
+ *     summary:  Thay đổi trạng thái tài khoản
  *     description: Allows updating the status of a user based on their ID.
  *     operationId: changeUserStatus
  *     parameters:
@@ -839,7 +868,6 @@ usersRouter.post('/change-status/:id', accessTokenValidator, wrapAsync(changeSta
 usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshTokenController))
 
 /** get-me
- *
  * @openapi
  * components:
  *   schemas:
@@ -922,4 +950,5 @@ usersRouter.post('/refresh-token', refreshTokenValidator, wrapAsync(refreshToken
  *       scheme: bearer
  *       bearerFormat: JWT
  */
+
 export default usersRouter
