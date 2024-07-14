@@ -35,6 +35,7 @@ const EditProfile = () => {
   const getMeProfile = async () => {
     await fetchGetMe(token)
       .then((res) => {
+        console.log(res.data.result);
         setProfile({
           username: res.data.result.username || "",
           name: res.data.result.full_name || "",
