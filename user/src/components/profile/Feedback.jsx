@@ -6,17 +6,21 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { RxUpdate } from "react-icons/rx";
 import { fetchDeleteFeedback, fetchGetFeedbackByUser, fetchUpdateFeedback } from "../../data/api";
 import RenderRating from "../elements/RenderRating";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import toast from "react-hot-toast";
 
 const Feedback = () => {
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
   const [filter, setFilter] = useState([]);
   const [textFilter, setTextFilter] = useState("");
   const [startFilter, setStartFilter] = useState("");
   const [endFilter, setEndFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const products = JSON.parse(localStorage.getItem("products"));
   const user = JSON.parse(localStorage.getItem("user")) || null;
@@ -69,6 +73,14 @@ const Feedback = () => {
     setCurrentFeedback(null);
   };
 
+  const openDeleteModal = () => {
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+
   const handleFeedbackChange = (e) => {
     setCurrentFeedback({ ...currentFeedback, [e.target.name]: e.target.value });
   };
@@ -100,10 +112,10 @@ const Feedback = () => {
         toast.success("Xóa đánh giá thành công");
         window.location.reload();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         toast.error("Xóa đánh giá thất bại");
       });
+    closeDeleteModal();
     closeFeedbackModal();
   };
 
@@ -130,6 +142,29 @@ const Feedback = () => {
     }
 
     setFilter(filteredReviews);
+    setCurrentPage(1); // Reset to first page when applying filters
+  };
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filter.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filter.length / itemsPerPage);
+
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   if (loading) {
@@ -192,8 +227,8 @@ const Feedback = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {filter.length > 0 ? (
-                filter.map((item) => (
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
                   <Table.Row key={item._id} className="bg-white border">
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.created_at)}
@@ -228,6 +263,39 @@ const Feedback = () => {
               )}
             </Table.Body>
           </Table>
+        </div>
+        <div className="flex justify-end items-center mt-6 mx-4 space-x-1">
+          <button
+            onClick={handlePrevClick}
+            className={`px-2 py-1 border rounded ${
+              currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-white text-blue-500"
+            }`}
+            disabled={currentPage === 1}
+          >
+            <FaChevronLeft className="h-6"/>
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handleClick(index + 1)}
+              className={`px-3 py-1 border rounded ${
+                index + 1 === currentPage
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={handleNextClick}
+            className={`px-2 py-1 border rounded ${
+              currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-white text-blue-500"
+            }`}
+            disabled={currentPage === totalPages}
+          >
+            <FaChevronRight className="h-6"/>
+          </button>
         </div>
       </div>
 
@@ -283,12 +351,29 @@ const Feedback = () => {
             <Button color="blue" size={"md"} onClick={submitFeedback}>
               <RxUpdate className="text-lg mr-1" /> Cập nhật
             </Button>
-            <Button color="failure" size={"md"} onClick={deleteFeedback}>
+            <Button color="failure" size={"md"} onClick={openDeleteModal}>
               <AiOutlineDelete className="text-lg mr-1" /> Xóa
             </Button>
           </Modal.Footer>
         </Modal>
       )}
+
+      <Modal show={showDeleteModal} onClose={closeDeleteModal}>
+        <Modal.Header className="text-xl font-semibold">
+          Xác nhận xóa đánh giá
+        </Modal.Header>
+        <Modal.Body>
+          <p>Bạn có chắc chắn muốn xóa đánh giá này không?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="failure" size={"md"} onClick={deleteFeedback}>
+            Xóa
+          </Button>
+          <Button color="gray" size={"md"} onClick={closeDeleteModal}>
+            Hủy bỏ
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

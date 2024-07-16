@@ -1,3 +1,4 @@
+import {useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./pages/Header";
 import Home from "./pages/Home";
@@ -31,50 +32,69 @@ import Contact from "./pages/InformationPage/Contact";
 import PrivacyPolicy from "./pages/InformationPage/PrivacyPolicy";
 import NewsDetail from "./pages/News/NewsDetail";
 import ListProduct from "./components/product/ListProduct";
-
+import { fetchRefreshToken } from "./data/api";
 
 function App() {
-    return (
-        <div className="container mx-auto px-2 py-4">
-            <Router>
-                <Header />
-                <TapToTop />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<SiginIn />} />
-                    <Route path="/login/oauth" element={<LoginGoogle />} />
-                    <Route path="/register" element={<SiginUp />} />
-                    <Route path="/otp" element={<Otp />} />
-                    <Route path="/reset-password" element={<ResetPassord />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/product" element={<Product />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/order" element={<Order />} />
-                    <Route path="/payment" element={<Payment />} />
-                    <Route path="/thanks" element={<Thanks />} />
-                    <Route path="/filter" element={<Filter />} />
-                    <Route path="/list-products" element={<ListProduct />} />
-                    <Route path="/wishlist" element={<WishList />} />
-                    <Route path="/news" element={<News />} />
-                    <Route path="/news-detail" element={<NewsDetail />} />
-                    <Route path="/about_us" element={<AboutUs />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/exchange_policy" element={<ExchangePolicy />} />
-                    <Route path="/privacy_policy" element={<PrivacyPolicy />} />
-                    <Route path="/order-detail" element={<OrderDetail />} />
-                    <Route path="/order-tracking" element={<OrderTracking />} />
-                    <Route path="/profile" element={<Profile />}>
-                        <Route path="" element={<EditProfile />} />
-                        <Route path="history-order" element={<HistoryOrder />} />
-                        <Route path="my-feedback" element={<Feedback />} />
-                        <Route path="change-password" element={<ChangePassword />} />
-                        <Route path="accumulated-points" element={<Accumulate />} />
-                    </Route>
-                </Routes>
-                <MainFooter />
-            </Router>
-        </div>
-    );
+  const result = JSON.parse(localStorage.getItem("result")) || null;
+  useEffect(() => {
+    const checkToken = async () => {
+      if (result !== null) {
+        await fetchRefreshToken(result)
+          .then((res) => {
+            localStorage.setItem("result", JSON.stringify(res.data.result));
+          })
+          .catch(() => {
+            localStorage.removeItem("user");
+            localStorage.removeItem("result");
+            localStorage.removeItem("products");
+            window.location.href = "/";
+          });
+      }
+    };
+    checkToken();
+  }, [result]);
+  
+  return (
+    <div className="container mx-auto px-2 py-4">
+      <Router>
+        <Header />
+        <TapToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<SiginIn />} />
+          <Route path="/login/oauth" element={<LoginGoogle />} />
+          <Route path="/register" element={<SiginUp />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/reset-password" element={<ResetPassord />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/thanks" element={<Thanks />} />
+          <Route path="/filter" element={<Filter />} />
+          <Route path="/list-products" element={<ListProduct />} />
+          <Route path="/wishlist" element={<WishList />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/news-detail" element={<NewsDetail />} />
+          <Route path="/about_us" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/exchange_policy" element={<ExchangePolicy />} />
+          <Route path="/privacy_policy" element={<PrivacyPolicy />} />
+          <Route path="/order-detail" element={<OrderDetail />} />
+          <Route path="/order-tracking" element={<OrderTracking />} />
+          <Route path="/profile" element={<Profile />}>
+            <Route path="" element={<EditProfile />} />
+            <Route path="history-order" element={<HistoryOrder />} />
+            <Route path="my-feedback" element={<Feedback />} />
+            <Route path="change-password" element={<ChangePassword />} />
+            <Route path="accumulated-points" element={<Accumulate />} />
+          </Route>
+        </Routes>
+        <MainFooter />
+      </Router>
+    </div>
+  );
 }
 
 export default App;
