@@ -1,4 +1,4 @@
-import { FaFilter } from "react-icons/fa";
+import { FaFilter, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Table } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { fetchOrder } from "../../data/api";
@@ -17,6 +17,9 @@ const HistoryOrder = () => {
     fromDate: "",
     toDate: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+
   const products = JSON.parse(localStorage.getItem("products")) || [];
 
   const formatDate = (dateString) => {
@@ -91,6 +94,29 @@ const HistoryOrder = () => {
     }
 
     setFilteredOrders(updatedOrders);
+    setCurrentPage(1); // Reset to first page when applying filters
+  };
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   if (loading) {
@@ -181,8 +207,8 @@ const HistoryOrder = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {filteredOrders.length > 0 ? (
-                filteredOrders.map((item) => (
+              {currentItems.length > 0 ? (
+                currentItems.map((item) => (
                   <Table.Row key={item.order._id} className="bg-white  border">
                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 border">
                       {formatDate(item.order.required_date)}
@@ -217,6 +243,7 @@ const HistoryOrder = () => {
                       <Link
                         to="/order-detail"
                         state={{ order: item }}
+                        onClick={() => window.scrollTo(0, 0)}
                         className="font-medium text-cyan-600 hover:underline"
                       >
                         Chi tiết
@@ -233,6 +260,39 @@ const HistoryOrder = () => {
               )}
             </Table.Body>
           </Table>
+        </div>
+        <div className="flex justify-end items-center mt-6 mx-4 space-x-1">
+          <button
+            onClick={handlePrevClick}
+            className={`px-2 py-1 border rounded ${
+              currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-white text-blue-500"
+            }`}
+            disabled={currentPage === 1}
+          >
+            <FaChevronLeft className="h-6"/>
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handleClick(index + 1)}
+              className={`px-3 py-1 border rounded ${
+                index + 1 === currentPage
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={handleNextClick}
+            className={`px-2 py-1 border rounded ${
+              currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-white text-blue-500"
+            }`}
+            disabled={currentPage === totalPages}
+          >
+            <FaChevronRight className="h-6"/>
+          </button>
         </div>
       </div>
     </div>

@@ -74,6 +74,48 @@ export const CartContextProvider = ({ children }) => {
     });
   };
 
+  const addCartItems = (products) => {
+    setCartItems((prevCartItems) => {
+      let updatedCartItems = [...prevCartItems];
+      let exceededQuantityProducts = [];
+  
+      products.forEach((product) => {
+        const currentCart = updatedCartItems.find(
+          (cartItem) => cartItem._id === product._id
+        );
+  
+        if (currentCart) {
+          if (currentCart.quantity >= product.amount) {
+            exceededQuantityProducts.push(product.product_name);
+          } else {
+            updatedCartItems = updatedCartItems.map((cartItem) =>
+              cartItem._id === product._id
+                ? { ...currentCart, quantity: currentCart.quantity + 1 }
+                : cartItem
+            );
+          }
+        } else {
+          updatedCartItems.push({ ...product, quantity: 1 });
+        }
+      });
+  
+      if (exceededQuantityProducts.length > 0) {
+        toast.error(`Số lượng mua vượt quá số lượng trong kho cho các sản phẩm: ${exceededQuantityProducts.join(', ')}`, {
+          position: "top-right",
+          duration: 1000,
+        });
+      } else {
+        toast.success(`Đã thêm ${products.length} sản phẩm vào giỏ hàng`, {
+          position: "top-right",
+          duration: 1000,
+        });
+      }
+  
+      return updatedCartItems;
+    });
+  };
+  
+
   const clearCart = () => {
     setCartItems([]);
   };
@@ -121,6 +163,7 @@ export const CartContextProvider = ({ children }) => {
         increaseAmount,
         decreaseAmount,
         addCartItem,
+        addCartItems,
         removeCartItem,
         clearCart,
       }}
