@@ -8,6 +8,7 @@ import RenderRating from "../elements/RenderRating";
 import { fetchGetFeedbackByUser, fetchUploadFeedback } from "../../data/api";
 import toast from "react-hot-toast";
 import { useCartContext } from "../../context/CartContext";
+import Loader from "../../assets/loading2.gif";
 // import { AiOutlineFieldTime } from "react-icons/ai"; //chờ
 // import { IoIosCloseCircle } from "react-icons/io"; //hủy
 // import { FaTruckFast  } from "react-icons/fa6"; //ship xác
@@ -20,6 +21,7 @@ const OrderDetail = () => {
   const [orderDetails, setOrderDetails] = useState([]);
   const products = JSON.parse(localStorage.getItem("products")) || [];
   const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [feedback, setFeedback] = useState({
     rating: 0,
@@ -32,6 +34,7 @@ const OrderDetail = () => {
   const member_id = order.order.member_id;
   const checkMember = user_id === member_id ? true : false;
   const { addCartItem } = useCartContext();
+
   useEffect(() => {
     const findProductById = (product_id) => {
       return products.find((product) => product._id === product_id);
@@ -56,9 +59,14 @@ const OrderDetail = () => {
           })
           .catch((err) => {
             console.log(err);
+          })
+          .finally(() => {
+            setLoadingReviews(false);
           });
       };
       getReviews();
+    } else {
+      setLoadingReviews(false);
     }
   }, []);
 
@@ -76,7 +84,6 @@ const OrderDetail = () => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
     return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`;
   };
-
 
   const addDays = (date, days) => {
     return new Date(date.getTime() + days * 86400000);
@@ -100,7 +107,7 @@ const OrderDetail = () => {
   const handleRatingChange = (rating) => {
     setFeedback({ ...feedback, rating });
   };
-  
+
   const handleBuyBack = async () => {
     for (const item of orderDetails) {
       if (item.product.amount > 0) {
@@ -113,7 +120,6 @@ const OrderDetail = () => {
       }
     }
   };
-  
 
   const submitFeedback = async () => {
     if (feedback.rating === 0 || feedback.description.trim() === "") {
@@ -193,7 +199,12 @@ const OrderDetail = () => {
               </p>
             </div>
             <div>
-              <Button color="light" size={"xl"} className="text-blue-500" onClick={handleBuyBack}>
+              <Button
+                color="light"
+                size={"xl"}
+                className="text-blue-500"
+                onClick={handleBuyBack}
+              >
                 <FaCartPlus className="text-xl mt-0.5 mx-2" /> Mua lại sản phẩm
               </Button>
             </div>
@@ -204,8 +215,12 @@ const OrderDetail = () => {
               <div className="flex justify-between items-center mb-4">
                 <div className="text-center ">
                   {/* <AiOutlineFieldTime className="text-center w-full"/> */}
-                  <div className="mb-1">{formatDate(order.order.required_date)}</div>
-                  <div className={`font-semibold ${getTrackingStageColor(25)}`}>Chờ xác nhận</div>
+                  <div className="mb-1">
+                    {formatDate(order.order.required_date)}
+                  </div>
+                  <div className={`font-semibold ${getTrackingStageColor(25)}`}>
+                    Chờ xác nhận
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="mb-1">
@@ -213,26 +228,49 @@ const OrderDetail = () => {
                       ? formatDate(order.order.accepted_date)
                       : "-"}
                   </div>
-                  <div className={`font-semibold ${order.order.status === 3 ? "text-red-500" : getTrackingStageColor(50)}`}>
+                  <div
+                    className={`font-semibold ${
+                      order.order.status === 3
+                        ? "text-red-500"
+                        : getTrackingStageColor(50)
+                    }`}
+                  >
                     {order.order.status === 3 ? "Hủy đơn" : "Đã xác nhận"}
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="mb-1">
-                    {order.order.status === 1 && new Date() > addDays(new Date(order.order.accepted_date), 1) || order.order.status === 2
-                      ? formatDate(addDays(new Date(order.order.accepted_date), 1.2))
+                    {(order.order.status === 1 &&
+                      new Date() >
+                        addDays(new Date(order.order.accepted_date), 1)) ||
+                    order.order.status === 2
+                      ? formatDate(
+                          addDays(new Date(order.order.accepted_date), 1.2)
+                        )
                       : "-"}
                   </div>
-                  <div className={`font-semibold ${getTrackingStageColor(75)}`}>Đang giao hàng</div>
+                  <div className={`font-semibold ${getTrackingStageColor(75)}`}>
+                    Đang giao hàng
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="mb-1">
-                    {order.order.status === 2 ? formatDate(order.order.shipped_date) : "-"}
+                    {order.order.status === 2
+                      ? formatDate(order.order.shipped_date)
+                      : "-"}
                   </div>
-                  <div className={`font-semibold ${getTrackingStageColor(100)}`}>Hoàn thành</div>
+                  <div
+                    className={`font-semibold ${getTrackingStageColor(100)}`}
+                  >
+                    Hoàn thành
+                  </div>
                 </div>
               </div>
-              <Progress progress={calculateProgress()} color={statusColor()} size="lg" />
+              <Progress
+                progress={calculateProgress()}
+                color={statusColor()}
+                size="lg"
+              />
             </div>
           </div>
           {/* end order-tracking */}
@@ -287,72 +325,82 @@ const OrderDetail = () => {
               )}
               <p className="text-md">
                 Phương thức thanh toán:{" "}
-                <span className="font-semibold">{order.order.payment_method === "COD" ? "Thanh toán khi nhận hàng" : "Thanh toán online (chuyển khoản)"}</span>
+                <span className="font-semibold">
+                  {order.order.payment_method === "COD"
+                    ? "Thanh toán khi nhận hàng"
+                    : "Thanh toán online (chuyển khoản)"}
+                </span>
               </p>
             </div>
           </div>
           <div className="w-full">
-            {orderDetails.map((item) => (
-              <div
-                key={item.product_id}
-                className="w-full flex flex-col md:flex-row rounded-lg border border-gray-200 bg-white p-4 shadow-sm mb-4 md:p-6"
-              >
-                <img
-                  className="h-20 w-20 mr-4"
-                  src={item.product.imgUrl}
-                  alt={item.product.product_name}
-                />
-                <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-center">
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between">
-                      <Link
-                        to={"/product"}
-                        state={{ product: item.product }}
-                        onClick={() => window.scrollTo(0, 0)}
-                        className="text-base font-medium text-gray-900 hover:underline dark:text-white"
-                      >
-                        {item.product.product_name}
-                      </Link>
-                      <input
-                        type="text"
-                        className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
-                        value={`x${item.amount}`}
-                        readOnly
-                      />
-                    </div>
-                    <p className="text-base font-bold text-gray-900 dark:text-white mt-2">
-                      {Number(item.price).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </p>
-                  </div>
-                  {checkMember &&
-                    order.order.status === 2 &&
-                    (!checkFeedbacked(item.product_id) ? (
-                      <Button
-                        color="light"
-                        size={"xl"}
-                        className="text-blue-500 ml-auto mt-4 md:mt-0"
-                        onClick={() => openFeedbackModal(item.product_id)}
-                      >
-                        <FcFeedback className="text-xl mt-0.5 mx-2" /> Đánh giá
-                        sản phẩm
-                      </Button>
-                    ) : (
-                      <Button
-                        color="light"
-                        size={"xl"}
-                        className="text-screen-500 ml-auto mt-4 md:mt-0"
-                        disabled
-                      >
-                        <FcFeedback className="text-xl mt-0.5 mx-2" /> Đã đánh
-                        giá sản phẩm
-                      </Button>
-                    ))}
-                </div>
+            {loadingReviews ? ( // Display loading state while fetching reviews
+              <div className="flex justify-center items-center my-10">
+                <img src={Loader} alt="loading" />
               </div>
-            ))}
+            ) : (
+              orderDetails.map((item) => (
+                <div
+                  key={item.product_id}
+                  className="w-full flex flex-col md:flex-row rounded-lg border border-gray-200 bg-white p-4 shadow-sm mb-4 md:p-6"
+                >
+                  <img
+                    className="h-20 w-20 mr-4"
+                    src={item.product.imgUrl}
+                    alt={item.product.product_name}
+                  />
+                  <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div className="flex flex-col">
+                      <div className="flex items-center justify-between">
+                        <Link
+                          to={"/product"}
+                          state={{ product: item.product }}
+                          onClick={() => window.scrollTo(0, 0)}
+                          className="text-base font-medium text-gray-900 hover:underline dark:text-white"
+                        >
+                          {item.product.product_name}
+                        </Link>
+                        <input
+                          type="text"
+                          className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
+                          value={`x${item.amount}`}
+                          readOnly
+                        />
+                      </div>
+                      <p className="text-base font-bold text-gray-900 dark:text-white mt-2">
+                        {Number(item.price).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </p>
+                    </div>
+                    {checkMember &&
+                      order.order.status === 2 &&
+                      (!checkFeedbacked(item.product_id) ? (
+                        <Button
+                          color="light"
+                          size={"xl"}
+                          className="text-blue-500 ml-auto mt-4 md:mt-0"
+                          onClick={() => openFeedbackModal(item.product_id)}
+                        >
+                          <FcFeedback className="text-xl mt-0.5 mx-2" /> Đánh
+                          giá sản phẩm
+                        </Button>
+                      ) : (
+                        <Button
+                          color="light"
+                          size={"xl"}
+                          className="text-screen-500 ml-auto mt-4 md:mt-0"
+                          disabled
+                        >
+                          <FcFeedback className="text-xl mt-0.5 mx-2" /> Đã đánh
+                          giá sản phẩm
+                        </Button>
+                      ))}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

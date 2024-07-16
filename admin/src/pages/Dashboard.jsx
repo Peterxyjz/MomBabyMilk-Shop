@@ -130,7 +130,6 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     };
 
     getOrders();
-    console.log(order);
   }, [salesTimeRange]);
 
   //time in Vietnam
