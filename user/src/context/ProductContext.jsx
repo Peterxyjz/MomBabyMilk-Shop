@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { fetchProducts, fetchRefreshToken } from "../data/api.jsx";
-import { useNavigate } from "react-router-dom";
+import { fetchProducts } from "../data/api.jsx";
 
 const ProductContext = createContext();
 
@@ -11,20 +10,9 @@ export const useProductContext = () => {
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const result = JSON.parse(localStorage.getItem("result")) || null;
   useEffect(() => {
     const getProducts = async () => {
       try {
-        if(result !== null){
-          await fetchRefreshToken(result).then((res) => {
-            localStorage.setItem("result", JSON.stringify(res.data.result));
-          }).catch(() => {
-            localStorage.removeItem("user");
-            localStorage.removeItem("result");
-            localStorage.removeItem("products");
-            window.location.href="/";
-          });
-        }
         const localProducts = localStorage.getItem("products");
         if (localProducts) {
           setProducts(JSON.parse(localProducts));
