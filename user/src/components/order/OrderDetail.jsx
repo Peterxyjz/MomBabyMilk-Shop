@@ -9,11 +9,11 @@ import { fetchGetFeedbackByUser, fetchUploadFeedback } from "../../data/api";
 import toast from "react-hot-toast";
 import { useCartContext } from "../../context/CartContext";
 import Loader from "../../assets/loading2.gif";
-// import { AiOutlineFieldTime } from "react-icons/ai"; //chờ
-// import { IoIosCloseCircle } from "react-icons/io"; //hủy
-// import { FaTruckFast  } from "react-icons/fa6"; //ship xác
-// import { FaCheckCircle } from "react-icons/fa";
-// import { FaRegSmileBeam } from "react-icons/fa"; //hoàn thành
+import { AiOutlineFieldTime } from "react-icons/ai"; 
+import { IoIosCloseCircle } from "react-icons/io"; 
+import { FaTruckFast  } from "react-icons/fa6"; 
+import { FaCheckCircle } from "react-icons/fa";
+import { FaRegSmileBeam } from "react-icons/fa";
 
 const OrderDetail = () => {
   const location = useLocation();
@@ -230,8 +230,8 @@ const OrderDetail = () => {
                   <div className="mb-1">
                     {formatDate(order.order.required_date)}
                   </div>
-                  <div className={`font-semibold ${getTrackingStageColor(25)}`}>
-                    Chờ xác nhận
+                  <div className={`font-semibold ${getTrackingStageColor(25)} flex items-center gap-2`}>
+                    <AiOutlineFieldTime className="w-6 h-6"/> Chờ xác nhận
                   </div>
                 </div>
                 <div className="text-center">
@@ -247,7 +247,15 @@ const OrderDetail = () => {
                         : getTrackingStageColor(50)
                     }`}
                   >
-                    {order.order.status === 3 ? "Hủy đơn" : "Đã xác nhận"}
+                    {order.order.status === 3 ? (
+                      <div className="flex items-center gap-2">
+                        <IoIosCloseCircle className="w-6 h-6"/> Hủy đơn
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <FaCheckCircle className="w-5 h-5"/> Đã xác nhận 
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="text-center">
@@ -261,8 +269,8 @@ const OrderDetail = () => {
                         )
                       : "-"}
                   </div>
-                  <div className={`font-semibold ${getTrackingStageColor(75)}`}>
-                    Đang giao hàng
+                  <div className={`font-semibold ${getTrackingStageColor(75)} flex items-center gap-2`}>
+                    <FaTruckFast className="w-5 h-5"/> Đang giao hàng
                   </div>
                 </div>
                 <div className="text-center">
@@ -272,9 +280,9 @@ const OrderDetail = () => {
                       : "-"}
                   </div>
                   <div
-                    className={`font-semibold ${getTrackingStageColor(100)}`}
+                    className={`font-semibold ${getTrackingStageColor(100)} flex items-center gap-2`}
                   >
-                    Hoàn thành
+                    <FaRegSmileBeam className="w-5 h-5"/>Hoàn thành
                   </div>
                 </div>
               </div>
