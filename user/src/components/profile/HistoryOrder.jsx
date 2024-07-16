@@ -217,6 +217,7 @@ const HistoryOrder = () => {
                       <Link
                         to="/order-detail"
                         state={{ order: item }}
+                        onClick={() => window.scrollTo(0, 0)}
                         className="font-medium text-cyan-600 hover:underline"
                       >
                         Chi tiết

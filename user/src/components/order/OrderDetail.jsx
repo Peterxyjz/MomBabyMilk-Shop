@@ -33,7 +33,7 @@ const OrderDetail = () => {
   const user_id = user?._id;
   const member_id = order.order.member_id;
   const checkMember = user_id === member_id ? true : false;
-  const { addCartItem } = useCartContext();
+  const { addCartItems } = useCartContext();
 
   useEffect(() => {
     const findProductById = (product_id) => {
@@ -109,17 +109,29 @@ const OrderDetail = () => {
   };
 
   const handleBuyBack = async () => {
+    let productsToAdd = [];
+    let outOfStockProducts = [];
+  
     for (const item of orderDetails) {
       if (item.product.amount > 0) {
-        addCartItem(item.product);
+        productsToAdd.push(item.product);
       } else {
-        toast.error(`Sản phẩm "${item.product.product_name}" đã hết hàng`, {
-          position: "top-right",
-          duration: 1000,
-        });
+        outOfStockProducts.push(item.product.product_name);
       }
     }
+  
+    if (productsToAdd.length > 0) {
+      addCartItems(productsToAdd);
+    }
+  
+    if (outOfStockProducts.length > 0) {
+      toast.error(`Các sản phẩm sau đã hết hàng: ${outOfStockProducts.join(', ')}`, {
+        position: "top-right",
+        duration: 1000,
+      });
+    }
   };
+  
 
   const submitFeedback = async () => {
     if (feedback.rating === 0 || feedback.description.trim() === "") {
