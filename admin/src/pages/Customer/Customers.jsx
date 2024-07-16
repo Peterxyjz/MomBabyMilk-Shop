@@ -5,7 +5,6 @@ import { Button, Input, Table } from 'antd';
 import { Card } from 'primereact/card';
 import Loading from '../../components/Loading';
 
-
 const Customers = () => {
     const [Users, setUsers] = useState([]);
     const [searchText, setSearchText] = useState('');
@@ -13,27 +12,30 @@ const Customers = () => {
 
     const { Search } = Input;
     const formatDate = (dateString) => {
-        return format(new Date(dateString), 'dd-MM-yyyy');
+        return dateString ? format(new Date(dateString), 'dd-MM-yyyy') : "Chưa có thông tin";
     };
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const result = JSON.parse(localStorage.getItem("result"))
+                const result = JSON.parse(localStorage.getItem("result"));
                 const res = await fetchAllUsers(result);
                 const formattedUsers = res.data.users.map(user => ({
                     ...user,
-                    date_of_birth: formatDate(user.date_of_birth)
+                    full_name: user.full_name || "Chưa có thông tin",
+                    date_of_birth: formatDate(user.date_of_birth),
+                    phone: user.phone || "Chưa có thông tin",
+                    address: user.address || "Chưa có thông tin"
                 }));
 
                 setUsers(formattedUsers);
                 setLoading(false);
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("Error fetching users:", error);
             }
         };
         fetchUsers();
     }, []);
-
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -43,22 +45,21 @@ const Customers = () => {
         setPageSize(pagination.pageSize);
     };
 
-
     const columns = [
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            width: '15%',
+        },
         {
             title: 'Họ và tên',
             dataIndex: 'full_name',
             key: 'full_name',
             ellipsis: true,
-            width: '12%',
+            width: '22%',
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.full_name.localeCompare(b.full_name),
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-            width: '25%',
         },
         {
             title: 'Ngày sinh',
@@ -81,6 +82,7 @@ const Customers = () => {
             key: 'address',
             ellipsis: true,
             width: '20%',
+            render: text => <div style={{whiteSpace: 'normal', wordBreak: 'break-word'}}>{text}</div>
         },
         {
             title: 'Điểm thành viên',
@@ -93,11 +95,8 @@ const Customers = () => {
                   currency: 'VND',
                 }).format(value),
             sorter: (a, b) => a.member_ship - b.member_ship,
-
         },
     ];
-
-
 
     const onSearch = (value) => {
         setSearchText(value);
@@ -109,8 +108,9 @@ const Customers = () => {
     );
 
     if (loading) {
-        return <Loading />
+        return <Loading />;
     }
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>
             <Card title="Tất cả khách hàng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: '90vh', marginTop: '50px' }}>
@@ -136,10 +136,9 @@ const Customers = () => {
                     style={{ overflowX: 'auto', flexGrow: 1 }}
                     rowKey="email"
                 />
-
             </Card>
         </div>
-    )
+    );
 };
 
 export default Customers;
