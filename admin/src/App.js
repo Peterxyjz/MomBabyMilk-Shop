@@ -17,19 +17,37 @@ import 'antd/dist/reset.css';
 import StaffRouter from './router/StaffRouter';
 import AdminRouter from './router/AdminRouter';
 import AuthRouter from './router/AuthRouter';
+import { fetchRefreshToken } from './data/api';
 
 const App = () => {
   // const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
-  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, themeSettings } = useStateContext();
+  const { currentMode, activeMenu, themeSettings } = useStateContext();
 
+  // useEffect(() => {
+  //   const currentThemeColor = localStorage.getItem('colorMode');
+  //   const currentThemeMode = localStorage.getItem('themeMode');
+  //   if (currentThemeColor && currentThemeMode) {
+  //     setCurrentColor(currentThemeColor);
+  //     setCurrentMode(currentThemeMode);
+  //   }
+  // }, []);
+
+  const result = JSON.parse(localStorage.getItem("result")) || null;
   useEffect(() => {
-    const currentThemeColor = localStorage.getItem('colorMode');
-    const currentThemeMode = localStorage.getItem('themeMode');
-    if (currentThemeColor && currentThemeMode) {
-      setCurrentColor(currentThemeColor);
-      setCurrentMode(currentThemeMode);
-    }
-  }, []);
+    const checkToken = async () => {
+      if (result !== null) {
+        await fetchRefreshToken(result)
+          .then((res) => {
+            localStorage.setItem("result", JSON.stringify(res.data.result));
+          })
+          .catch((error) => {
+            localStorage.clear();
+            window.location.reload();
+          });
+      }
+    };
+    checkToken();
+  }, [ result ]);
 
   const isAuthenticatedAdmin = localStorage.getItem('isAuthenticatedAdmin') === 'true';
   const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';

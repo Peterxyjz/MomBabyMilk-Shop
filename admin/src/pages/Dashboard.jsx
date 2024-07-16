@@ -1,40 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { BsBoxSeam, BsCurrencyDollar } from "react-icons/bs";
-import { GoPrimitiveDot } from "react-icons/go";
-import { IoIosMore } from "react-icons/io";
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 
-import { Stacked, Pie, Button, LineChart, SparkLine } from "../components";
-import {
-  medicalproBranding,
-  recentTransactions,
-  weeklyStats,
-  dropdownData,
-  SparklineAreaData,
-  ecomPieChartData,
-} from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
-import product9 from "../data/product9.jpg";
 import {
   fetchAllUsers,
-  fetchCategories,
   fetchOrder,
   fetchProducts,
-  fetchRefreshToken,
   fetchRevenue,
 } from "../data/api";
 import { MdOutlineSupervisorAccount } from "react-icons/md";
 import { FiBarChart } from "react-icons/fi";
-import { HiOutlineRefresh } from "react-icons/hi";
 import { Col, Row, Select } from "antd";
-import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import RevenueMixCost from "../components/Dashboard/RevenueMixCost";
 import MonthlyProfit from "../components/Dashboard/MonthlyProfit";
 import BestCategory from "../components/Dashboard/BestCategory";
 import ProductStock from "../components/Dashboard/ProductStock";
 import MonthlyOrder from "../components/Dashboard/MonthlyOrder";
-import { ConsoleSqlOutlined } from "@ant-design/icons";
 
 const DropDown = ({ currentMode, onSelect }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -61,7 +44,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const { currentColor, currentMode } = useStateContext();
   const [loading, setLoading] = useState(true);
   const [revenues, setRevenues] = useState([]);
-  const [profit, setProfit] = useState([]);
+  // const [profit, setProfit] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
 
@@ -70,7 +53,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const [totalCustomer, setTotalCustomer] = useState(0);
   const [totalProduct, setTotalProduct] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Sắp hết");
   const [revenueTimeRange, setRevenueTimeRange] = useState('today');
   const [profitTimeRange, setProfitTimeRange] = useState('today');
@@ -78,28 +61,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const [order, setOrder] = useState([]);
   const { Option } = Select;
 
-  const result = JSON.parse(localStorage.getItem("result")) || null;
-  useEffect(() => {
-    const checkToken = async () => {
-      if (result !== null) {
-        console.log("result: ", result);
-        await fetchRefreshToken(result)
-          .then((res) => {
-            localStorage.setItem("result", JSON.stringify(res.data.result));
-          })
-          .catch((error) => {
-            console.log("Error refreshing token:", error);
-            localStorage.removeItem("user");
-            localStorage.removeItem("result");
-            localStorage.removeItem("isAuthenticatedStaff");
-            window.location.reload();
-
-          });
-      }
-    };
-    checkToken();
-  }, [])
-  {/* fetch revenue */ }
+  //fetch revenue
   useEffect(() => {
     const getRevenue = async () => {
       try {
@@ -117,7 +79,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getRevenue();
   }, [revenueTimeRange, profitTimeRange]);
 
-  {/* fetch customer */ }
+  //fetch customer
   useEffect(() => {
     const getCustomer = async () => {
       try {
@@ -136,7 +98,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getCustomer();
   }, []);
 
-  {/* fetch product */ }
+  //fetch product
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -153,7 +115,7 @@ const Dashboard = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getProducts();
   }, []);
 
-  {/* fetch order */ }
+  //fetch order
   useEffect(() => {
     const getOrders = async () => {
       try {
