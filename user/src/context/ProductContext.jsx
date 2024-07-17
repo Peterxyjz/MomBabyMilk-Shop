@@ -3,6 +3,7 @@ import { fetchProducts } from "../data/api.jsx";
 
 const ProductContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useProductContext = () => {
   return useContext(ProductContext);
 };

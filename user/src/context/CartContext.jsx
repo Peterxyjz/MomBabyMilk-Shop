@@ -3,6 +3,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 const CartContext = createContext();
 
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCartContext = () => {
   return useContext(CartContext);
 };
