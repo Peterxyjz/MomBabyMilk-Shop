@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
-  FileInput,
-  Label,
   Select,
   TextInput,
   Textarea,
@@ -92,7 +90,6 @@ const AddProduct = () => {
   };
 
   const handleChangeSelectedBrand = (event) => {
-    console.log(event.target.value);
     const selectedBrandName = event.target.value;
     const selectedBrand = brands.find(
       (brand) => brand.brand_name === selectedBrandName
@@ -125,10 +122,7 @@ const AddProduct = () => {
       const url = await getDownloadURL(snapshot.ref);
 
       product.imgUrl = url;
-      console.log("product: ", product);
       await sendURL(product, id);
-    } else {
-      console.log("null");
     }
   }
   const sendURL = async (product, id) => {
@@ -331,7 +325,7 @@ const AddProduct = () => {
                 name="description"
                 placeholder="Mô Tả Sản Phẩm"
                 required
-                style={{ height: '50px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
+                style={{ height: '200px', fontSize: '15px', backgroundColor: '#F9F9F6', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
                 className="w-full"
                 onChange={handleChangeDescription}
                 rows={6}

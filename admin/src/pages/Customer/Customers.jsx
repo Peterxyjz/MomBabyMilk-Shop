@@ -112,8 +112,8 @@ const Customers = () => {
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', height: '120vh' }}>
-            <Card title="Tất cả khách hàng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: '90vh', marginTop: '50px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', height: 'auto' }}>
+            <Card title="Tất cả khách hàng" subTitle="" footer="" header="" className="" style={{ width: '90%', height: 'auto', marginTop: '50px' }}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
                     <Search
                         placeholder="Nhập tên khách hàng"
