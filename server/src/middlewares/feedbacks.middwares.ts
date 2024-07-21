@@ -87,3 +87,75 @@ export const updateFeedBackValidator =
       ['body']
     )
   )
+
+export const updateReplyFeedBackValidator =
+  // Validator for the body
+  validate(
+    checkSchema(
+      {
+        user_id: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Mã không được bỏ trống'
+          },
+          isString: {
+            errorMessage: 'Mã phải là chữ'
+          },
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Mã phải là 1 ObjectId'
+          },
+          custom: {
+            options: async (value, { req }) => {
+              const user = await usersService.getById(value)
+              if (!user) {
+                throw new ErrorWithStatus({
+                  message: USERS_MESSAGES.USER_NOT_FOUND,
+                  status: HTTP_STATUS.UNPROCESSABLE_ENTITY
+                })
+              }
+              return true
+            }
+          },
+          trim: true
+        },
+        product_id: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Mã sản phẩm không được bỏ trống'
+          },
+          isString: {
+            errorMessage: 'Mã phải là chữ'
+          },
+          custom: {
+            options: async (value, { req }) => {
+              const product = await productsService.getById(value)
+              if (!product) {
+                throw new Error('Mã hãng không tìm thấy')
+              }
+              return true
+            }
+          }
+        },
+        description: {
+          optional: true,
+          notEmpty: {
+            errorMessage: 'Mô tả không được bỏ trống'
+          },
+          isString: {
+            errorMessage: 'Mô tả phải là chữ'
+          },
+          trim: true,
+          isLength: {
+            options: {
+              min: 3
+            },
+            errorMessage: 'Mô tả ít nhất 3 ký tự'
+          }
+        }
+      },
+      ['body']
+    )
+  )
