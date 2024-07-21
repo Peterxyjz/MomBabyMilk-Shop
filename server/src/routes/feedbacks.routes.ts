@@ -203,7 +203,7 @@ feedbacksRouter.delete(
  *         description: ID của phản hồi trả lời
  *         schema:
  *           type: string
- *           format: MongoId  
+ *           format: MongoId
  *           example: 665ada275c99a85ebe472888
  *     responses:
  *       '200':

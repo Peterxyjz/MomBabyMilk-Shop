@@ -1,6 +1,6 @@
 import Hero from "../../components/hero/Hero";
 import SecondHero from "../../components/hero/SecondHero";
-import CategoryGrid from "../../components/card/CategorGrid";
+// import CategoryGrid from "../../components/card/CategorGrid";
 import HeroAtLast from "../../components/hero/HeroAtLast";
 import ProductCard from "../../components/card/Card";
 import { useProductContext } from "../../context/ProductContext";
@@ -42,7 +42,7 @@ const Home = () => {
           headline={"Sữa dành cho trẻ sơ sinh"}
         />
         <HeroAtLast />
-        <CategoryGrid />
+        {/* <CategoryGrid /> */}
         <NewsSection />
       </div>
     );
