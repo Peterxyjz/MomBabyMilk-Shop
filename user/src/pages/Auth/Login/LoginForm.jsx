@@ -7,10 +7,11 @@ import { toast, Toaster } from "react-hot-toast";
 const LoginForm = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
+    email: sessionStorage.getItem('email') || "",
+    password: sessionStorage.getItem('password') || "",
   });
   const [errorList, setErrorList] = useState([]);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -18,6 +19,10 @@ const LoginForm = () => {
       ...formValues,
       [name]: value,
     });
+  };
+
+  const handleRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
   };
 
   const handleSubmit = async (event) => {
@@ -42,10 +47,19 @@ const LoginForm = () => {
           });
           return;
         }
+        if(rememberMe){
+          sessionStorage.setItem('email', email);
+          sessionStorage.setItem('password', password);
+        } else {
+          sessionStorage.removeItem('email');
+          sessionStorage.removeItem('password');
+        }
+
         toast.success("Đăng nhập thành công!", {
-          duration: 3000,
+          duration: 2000,
         });
         navigate("/");
+        window.scrollTo(0, 0);
       })
       .catch((error) => {
         let errorList = [];
@@ -55,6 +69,7 @@ const LoginForm = () => {
         }
         toast.error("Có lỗi xảy ra, vui lòng thử lại!", {
           position: "top-right",
+          duration: 3000,
         });
       });
   };
@@ -94,8 +109,8 @@ const LoginForm = () => {
           </div>
           <div className="mt-8 flex justify-between items-center">
             <div>
-              <input type="checkbox" id="remember" />
-              <label className="ml-2 font-medium text-base">Lưu mật khẩu</label>
+              <input type="checkbox" id="remember" checked={rememberMe} onChange={handleRememberMeChange}/>
+              <label className="ml-2 font-medium text-base" htmlFor="remember">Lưu mật khẩu</label>
             </div>
             <a
               className="font-medium text-base text-violet-500"

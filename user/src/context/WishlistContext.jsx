@@ -29,10 +29,12 @@ export const WishlistContextProvider = ({ children }) => {
       setWishlistItems([...wishlistItems, product]);
       toast.success(`Sản phẩm này đã được thêm vào danh sách yêu thích`, {
         position: "top-right",
+        duration: 1000,
       });
     } else {
       toast.error(`Sản phẩm này đã có trong danh sách yêu thích của bạn`, {
         position: "top-right",
+        duration: 1000,
       });
     }
   };
