@@ -86,7 +86,6 @@ const BadFeedback = () => {
           setProducts(mergedProducts);
       }
   }, [feedback, users]);
-  console.log("hihi", products);
 
     if (loading) {
         return <Loading />
