@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import cover_imgedit from "../../assets/images/cover_imgedit.png";
 import { Card } from 'primereact/card';
-import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Checkbox } from "@mui/material";
 import { fetchLogin } from "../../data/api";
 
-
-
-
-
 const LoginPage = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
+    email: sessionStorage.getItem('email') || "",
+    password: sessionStorage.getItem('password') || "",
   });
   const [errorList, setErrorList] = useState([]);
-  const [show, setShow] = React.useState(false)
-  const handleClick = () => setShow(!show)
+  const [show, setShow] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleClick = () => setShow(!show);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -30,17 +27,29 @@ const LoginPage = () => {
     });
   };
 
-  const [checked, setChecked] = useState(false);
+  const handleRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = formValues;
+
     await fetchLogin(email, password)
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("result", JSON.stringify(res.data.result));
         const isAdmin = res.data.isAdmin;
         isAdmin ? localStorage.setItem('isAuthenticatedAdmin', 'true') : localStorage.setItem('isAuthenticatedStaff', 'true');
+        
+        if (rememberMe) {
+          sessionStorage.setItem('email', email);
+          sessionStorage.setItem('password', password);
+        } else {
+          sessionStorage.removeItem('email');
+          sessionStorage.removeItem('password');
+        }
+
         navigate("/");
         window.location.reload();
       })
@@ -52,6 +61,7 @@ const LoginPage = () => {
         }
       });
   };
+
   return (
     <>
       <div className="w-full min-h-screen flex items-center justify-center relative">
@@ -110,7 +120,7 @@ const LoginPage = () => {
                   )}
                   <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-4">
                     <div className="w-full flex items-center space-x-2">
-                      <Checkbox />
+                      <Checkbox checked={rememberMe} onChange={handleRememberMeChange} />
                       <p className="text-sm m-0">Ghi nhớ mật khẩu!</p>
                     </div>
                     <Link
