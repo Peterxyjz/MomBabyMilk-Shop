@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   deteleFeebBackController,
+  deteleReplyFeebBackController,
   getAllController,
   getFeedbackByProIdController,
   getFeedBackByUserIdController,
@@ -223,7 +224,7 @@ feedbacksRouter.delete(
   '/reply/delete/:id',
   accessTokenValidator,
   isParamsIdValidator,
-  wrapAsync(deteleFeebBackController)
+  wrapAsync(deteleReplyFeebBackController)
 )
 /**
  * @swagger
