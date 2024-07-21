@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   deteleFeebBackController,
+  deteleReplyFeebBackController,
   getAllController,
   getFeedbackByProIdController,
   getFeedBackByUserIdController,
@@ -10,7 +11,7 @@ import {
   uploadController
 } from '~/controllers/feedbacks.controllers'
 import { updateController } from '~/controllers/products.controllers'
-import { updateFeedBackValidator } from '~/middlewares/feedbacks.middwares'
+import { updateFeedBackValidator, updateReplyFeedBackValidator } from '~/middlewares/feedbacks.middwares'
 import { isParamsIdValidator } from '~/middlewares/products.middleware'
 import { accessTokenValidator } from '~/middlewares/users.middlewares'
 import { wrapAsync } from '~/utils/handlers'
@@ -223,7 +224,7 @@ feedbacksRouter.delete(
   '/reply/delete/:id',
   accessTokenValidator,
   isParamsIdValidator,
-  wrapAsync(deteleFeebBackController)
+  wrapAsync(deteleReplyFeebBackController)
 )
 /**
  * @swagger
@@ -389,7 +390,7 @@ feedbacksRouter.post(
   '/reply/:id',
   accessTokenValidator,
   isParamsIdValidator,
-  updateFeedBackValidator,
+  updateReplyFeedBackValidator,
   wrapAsync(updateReplyFeedBackController)
 )
 /**
