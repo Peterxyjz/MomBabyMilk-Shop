@@ -38,7 +38,9 @@ const Filter = () => {
 
   useEffect(() => {
     const filterProducts = () => {
-      let updatedProducts = products.filter((product) =>
+      let updatedProducts = products.filter((product) => product.isActive);
+
+      updatedProducts = updatedProducts.filter((product) =>
         product.product_name.toLowerCase().includes(search_name.toLowerCase())
       );
 
@@ -150,8 +152,9 @@ const Filter = () => {
         <button
           key={i}
           onClick={() => handlePageClick(i)}
-          className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i ? "bg-blue-500 text-white" : "bg-gray-300"
-            }`}
+          className={`px-4 py-2 mx-1 rounded-lg ${
+            currentPage === i ? "bg-blue-500 text-white" : "bg-gray-300"
+          }`}
         >
           {i}
         </button>
@@ -357,7 +360,7 @@ const Filter = () => {
                             <div className="text-xl font-bold text-gray-900 ">
                               {formatCurrency(
                                 product.price -
-                                (product.price * product.discount) / 100
+                                  (product.price * product.discount) / 100
                               )}
                             </div>
                             <div>
