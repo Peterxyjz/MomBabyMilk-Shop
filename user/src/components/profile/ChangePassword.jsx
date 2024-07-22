@@ -1,6 +1,7 @@
 import { Button, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { fetchChangePassword } from "../../data/api";
+import toast from "react-hot-toast";
 const ChangePassword = () => {
   const token = JSON.parse(localStorage.getItem("result"));
   const [formValues, setFormValues] = useState({
@@ -24,11 +25,10 @@ const ChangePassword = () => {
       confirm_password: confirm_password,
     };
     await fetchChangePassword(token, data)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        toast.success("Thay đổi password thành công!");
       })
       .catch((error) => {
-        console.log(error);
         let errorList = [];
         for (let [key, value] of Object.entries(error.response.data.errors)) {
           errorList.push(value);
