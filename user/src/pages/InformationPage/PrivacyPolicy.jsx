@@ -67,7 +67,7 @@ const PrivacyPolicy = () => {
                     </p>
                     <h2 className="text-xl font-semibold">6. Cam kết bảo mật thông tin cá nhân khách hàng</h2>
                     <p>
-                        Thông tin cá nhân của khách hàng trên website <strong>MomBabyMilk</strong> được chúng tôi cam kết bảo mật tuyệt đối theo chính sách bảo vệ thông tin cá nhân của <strong>Thế Giới Sữa</strong>. Việc thu thập và sử dụng thông tin của mỗi khách hàng chỉ được thực hiện khi có sự đồng ý của khách hàng đó, trừ những trường hợp pháp luật có quy định khác. Trong một số trường hợp, chúng tôi có thể thuê một đơn vị độc lập để tiến hành các dự án nghiên cứu thị trường và khi đó thông tin của khách hàng sẽ được cung cấp cho đơn vị này để tiến hành dự án. Bên thứ ba này sẽ bị ràng buộc bởi một thỏa thuận về bảo mật mà theo đó họ chỉ được phép sử dụng những thông tin được cung cấp cho mục đích hoàn thành dự án. Không có thông tin cá nhân nào của khách hàng bị tiết lộ cho bên thứ ba, tất cả đều là khách hàng ẩn danh.
+                        Thông tin cá nhân của khách hàng trên website <strong>MomBabyMilk</strong> được chúng tôi cam kết bảo mật tuyệt đối theo chính sách bảo vệ thông tin cá nhân của <strong>MOMBABYMILK</strong>. Việc thu thập và sử dụng thông tin của mỗi khách hàng chỉ được thực hiện khi có sự đồng ý của khách hàng đó, trừ những trường hợp pháp luật có quy định khác. Trong một số trường hợp, chúng tôi có thể thuê một đơn vị độc lập để tiến hành các dự án nghiên cứu thị trường và khi đó thông tin của khách hàng sẽ được cung cấp cho đơn vị này để tiến hành dự án. Bên thứ ba này sẽ bị ràng buộc bởi một thỏa thuận về bảo mật mà theo đó họ chỉ được phép sử dụng những thông tin được cung cấp cho mục đích hoàn thành dự án. Không có thông tin cá nhân nào của khách hàng bị tiết lộ cho bên thứ ba, tất cả đều là khách hàng ẩn danh.
                     </p>
                     <p>
                         <strong>MomBabyMilk</strong> cam kết:
@@ -75,14 +75,14 @@ const PrivacyPolicy = () => {
                     <ul className="list-disc list-inside">
                         <li>Không sử dụng, không chuyển giao, cung cấp hay tiết lộ cho bên thứ ba nào về thông tin cá nhân của khách hàng khi không có sự cho phép hoặc đồng ý từ khách hàng, trừ những trường hợp pháp luật có quy định khác.</li>
                         <li>Trong trường hợp máy chủ lưu trữ thông tin bị tấn công dẫn đến mất mát dữ liệu cá nhân khách hàng, <strong>MomBabyMilk</strong> sẽ có trách nhiệm thông báo vụ việc cho cơ quan chức năng điều tra xử lý kịp thời và thông báo cho khách hàng được biết.</li>
-                        <li>Bảo mật tuyệt đối mọi thông tin giao dịch trực tuyến của khách hàng bao gồm thông tin hóa đơn, chứng từ kế toán số hóa tại khu vực dữ liệu trung tâm an toàn của <strong>Thế Giới Sữa</strong>.</li>
+                        <li>Bảo mật tuyệt đối mọi thông tin giao dịch trực tuyến của khách hàng bao gồm thông tin hóa đơn, chứng từ kế toán số hóa tại khu vực dữ liệu trung tâm an toàn của <strong>MOMBABYMILK</strong>.</li>
                     </ul>
                     <h2 className="text-xl font-semibold">7. Thay đổi về chính sách</h2>
                     <p>
                         Nội dung của “Chính sách bảo mật” này có thể thay đổi để phù hợp với các nhu cầu của <strong>MomBabyMilk</strong> cũng như nhu cầu và sự phản hồi từ khách hàng nếu có. Khi cập nhật nội dung chính sách này, chúng tôi sẽ chỉnh sửa lại thời gian “Cập nhật lần cuối” bên trên.
                     </p>
                     <p>
-                        Nội dung “Chính sách bảo mật” này chỉ được áp dụng tại <strong>MomBabyMilk</strong>, không bao gồm hoặc liên quan đến các bên thứ ba đặt quảng cáo hay có đường link trên website <strong>mombabymilk.com</strong>.
+                        Nội dung “Chính sách bảo mật” này chỉ được áp dụng tại <strong>MomBabyMilk</strong>, không bao gồm hoặc liên quan đến các bên thứ ba đặt quảng cáo hay có đường link trên website <strong>https://www.mombabymilk.xyz/</strong>.
                     </p>
                     <h2 className="text-xl font-semibold">8. Thông tin liên hệ</h2>
                     <p>
