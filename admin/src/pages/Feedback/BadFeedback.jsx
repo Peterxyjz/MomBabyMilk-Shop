@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, List, Rate, Table, Typography } from 'antd';
+import { Avatar, Badge, Button, Card, List, Rate, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { fetchAllFeedback, fetchAllUsers, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
@@ -47,45 +47,51 @@ const BadFeedback = () => {
     }, []);
 
     useEffect(() => {
-      if (products.length > 0 && feedback.length > 0 && users.length > 0) {
-          const mergedProducts = products
-              .map(product => {
-                  const productFeedback = feedback
-                      .filter(item => item.product_id === product._id)
-                      .map(fb => {
-                          const user = users.find(user => user._id === fb.user_id);
-                          if (!user) {
-                              console.warn(`No user found for user_id: ${fb.user_id}`);
-                          }
-                          let replyFeedbackWithUsername = null;
-                          if (fb.reply_feedback) {
-                              const replyUser = users.find(user => user._id === fb.reply_feedback.user_id);
-                              replyFeedbackWithUsername = {
-                                  ...fb.reply_feedback,
-                                  username: replyUser ? replyUser.username : 'Unknown'
-                              };
-                          }
+        if (products.length > 0 && feedback.length > 0 && users.length > 0) {
+            const mergedProducts = products
+                .map(product => {
+                    const productFeedback = feedback
+                        .filter(item => item.product_id === product._id)
+                        .map(fb => {
+                            const user = users.find(user => user._id === fb.user_id);
+                            if (!user) {
+                                console.warn(`No user found for user_id: ${fb.user_id}`);
+                            }
+                            let replyFeedbackWithUsername = null;
+                            if (fb.reply_feedback) {
+                                const replyUser = users.find(user => user._id === fb.reply_feedback.user_id);
+                                replyFeedbackWithUsername = {
+                                    ...fb.reply_feedback,
+                                    username: replyUser ? replyUser.username : 'Unknown'
+                                };
+                            }
 
-                          return {
-                              ...fb,
-                              username: user ? user.username : 'Unknown',
-                              reply_feedback: replyFeedbackWithUsername
-                          };
-                      });
-                  if (productFeedback.length > 0) {
-                      return {
-                          ...product,
-                          feedback: productFeedback,
-                      };
-                  } else {
-                      return null;
-                  }
-              })
-              .filter(product => product !== null);
+                            return {
+                                ...fb,
+                                username: user ? user.username : 'Unknown',
+                                reply_feedback: replyFeedbackWithUsername
+                            };
+                        });
+                    if (productFeedback.length > 0) {
+                        const latestFeedback = productFeedback.reduce((latest, current) => {
+                            return new Date(latest.created_at) > new Date(current.created_at) ? latest : current;
+                        }, productFeedback[0]);
 
-          setProducts(mergedProducts);
-      }
-  }, [feedback, users]);
+                        const latestFeedbackDate = new Date(latestFeedback.created_at).toISOString()
+                        return {
+                            ...product,
+                            feedback: productFeedback,
+                            latestFeedbackDate,
+                        };
+                    } else {
+                        return null;
+                    }
+                })
+                .filter(product => product !== null);
+
+            setProducts(mergedProducts);
+        }
+    }, [feedback, users]);
 
     if (loading) {
         return <Loading />
@@ -115,36 +121,40 @@ const BadFeedback = () => {
             dataIndex: 'latestFeedbackDate',
             key: 'latestFeedbackDate',
             render: (text, record) => {
-                const sortedFeedback = record.feedback.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                const latestFeedbackDate = new Date(sortedFeedback[0].created_at);
                 return (
-                    <span>{formatDate(latestFeedbackDate)}</span>
+                    <span>{formatDate(record.latestFeedbackDate)}</span>
                 );
             },
+            sorter: (a, b) => new Date(a.latestFeedbackDate) - new Date(b.latestFeedbackDate),
             width: "20%",
         },
         {
             title: 'Đánh Giá',
             dataIndex: 'rating',
             key: 'rating',
-            render: (text, record) => (
-                <div>
-                    <Rate allowHalf disabled value={record.rating} />
-                    <div>{record.rating.toFixed(1)} / 5 ({record.reviewer} đánh giá)</div>
-                </div>
-            ),
+            render: (text, record) => {
+                const noReply = record.feedback ? record.feedback.filter(fb => !fb.reply_feedback).length : 0;
+                return (
+                    <div>
+                        <Rate allowHalf disabled value={record.rating} />
+                        <div>{record.rating.toFixed(1)} / 5 ({record.reviewer} đánh giá)</div>
+                        {noReply > 0 && (
+                            <Badge count={noReply} style={{ backgroundColor: '#f5222d' }} />
+                        )}
+                    </div>);
+            },
             width: "20%",
             fontSize: "20px",
         }
     ];
 
     const expandedRowRender = (record) => {
-      return (
-          <div>
-              {renderComments(record.feedback)}
-          </div>
-      );
-  };
+        return (
+            <div>
+                {renderComments(record.feedback)}
+            </div>
+        );
+    };
     const renderComments = (feedback) => {
         return (
             <List
@@ -212,7 +222,7 @@ const BadFeedback = () => {
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
     };
 
-    
+
 
 
     return (

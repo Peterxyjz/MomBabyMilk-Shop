@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, List, Rate, Table, Typography } from 'antd';
+import { Avatar, Badge, Button, Card, List, Rate, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { fetchAllFeedback, fetchAllUsers, fetchProducts } from '../../data/api';
 import ReplyFeedback from '../../components/Feedback/ReplyFeedback';
@@ -73,15 +73,21 @@ const AllFeedback = () => {
                             };
                         });
                     if (productFeedback.length > 0) {
+                        const latestFeedback = productFeedback.reduce((latest, current) => {
+                            return new Date(latest.created_at) > new Date(current.created_at) ? latest : current;
+                        }, productFeedback[0]);
+
+                        const latestFeedbackDate = new Date(latestFeedback.created_at).toISOString()
                         return {
                             ...product,
                             feedback: productFeedback,
+                            latestFeedbackDate,
                         };
                     } else {
                         return null;
                     }
                 })
-                .filter(product => product !== null); // Filter out null entries
+                .filter(product => product !== null);
 
             setProducts(mergedProducts);
         }
@@ -115,24 +121,28 @@ const AllFeedback = () => {
             dataIndex: 'latestFeedbackDate',
             key: 'latestFeedbackDate',
             render: (text, record) => {
-                const sortedFeedback = record.feedback.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                const latestFeedbackDate = new Date(sortedFeedback[0].created_at);
                 return (
-                    <span>{formatDate(latestFeedbackDate)}</span>
+                    <span>{formatDate(record.latestFeedbackDate)}</span>
                 );
             },
+            sorter: (a, b) => new Date(a.latestFeedbackDate) - new Date(b.latestFeedbackDate),
             width: "20%",
         },
         {
             title: 'Đánh Giá',
             dataIndex: 'rating',
             key: 'rating',
-            render: (text, record) => (
-                <div>
-                    <Rate allowHalf disabled value={record.rating} />
-                    <div>{record.rating.toFixed(1)} / 5 ({record.reviewer} đánh giá)</div>
-                </div>
-            ),
+            render: (text, record) => {
+                const noReply = record.feedback ? record.feedback.filter(fb => !fb.reply_feedback).length : 0;
+                return (
+                    <div>
+                        <Rate allowHalf disabled value={record.rating} />
+                        <div>{record.rating.toFixed(1)} / 5 ({record.reviewer} đánh giá)</div>
+                        {noReply > 0 && (
+                            <Badge count={noReply} style={{ backgroundColor: '#f5222d' }} />
+                        )}
+                    </div>);
+            },
             width: "20%",
             fontSize: "20px",
         }
