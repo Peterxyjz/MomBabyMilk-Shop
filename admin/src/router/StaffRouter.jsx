@@ -8,7 +8,6 @@ import Categories from '../pages/Category/Categories';
 import Brands from '../pages/Brand/Brands';
 import AddCategory from '../pages/Category/AddCategory';
 import AddBrands from '../pages/Brand/AddBrands';
-import { Customers } from '../pages';
 import UserSetting from '../pages/UserSetting';
 import AddBill from '../pages/Warehouse/AddBill';
 import AwaitOrder from '../pages/Order/AwaitOrder';
@@ -27,6 +26,7 @@ import Vouchers from '../pages/Voucher/Vouchers';
 import AddNews from '../pages/News/AddNews';
 import EditNews from '../pages/News/EditNews';
 import AllNews from '../pages/News/AllNews';
+import Customers from '../pages/Customer/Customers';
 const StaffRouter = () => {
     return (
         <Routes>
@@ -45,8 +45,6 @@ const StaffRouter = () => {
             <Route path="/products" element={<Products />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/edit-product" element={<EditProduct />} />
-            {/* user */}
-            <Route path="/customers" element={<Customers />} />
             {/* brand */}
             <Route path="/brands" element={<Brands />} />
             <Route path="/add-brand" element={<AddBrands />} />

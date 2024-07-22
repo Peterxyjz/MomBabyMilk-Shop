@@ -214,9 +214,9 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                               className={({ isActive }) => (isActive ? activeLink : normalLink)}
                             >
                               {(subLink.name === 'await-order' ) || (subLink.name === 'allFeedback' ) ||  (subLink.name === 'badFeedback') ? (
-                                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%'  }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'  }}>
                                   <span className="capitalize" >{subLink.label}</span>
-                                  <Badge 
+                                  <Badge style={{ marginRight: '10px' }}
                                   count={subLink.name === 'await-order' ? awaitOrderCount : subLink.name === 'allFeedback' ? feedbackCount : badFeedbackCount} 
                                   />
                                 </div>
