@@ -18,7 +18,7 @@ const AddBill = () => {
   const [billProducts, setBillProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
-  const [formState, setFormState] = useState({}); // Thêm state để quản lý form
+  const [ setFormState] = useState({}); // Thêm state để quản lý form
   const [sorter, setSorter] = useState({});
 
 
