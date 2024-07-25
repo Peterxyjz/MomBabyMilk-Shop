@@ -313,7 +313,7 @@ const AwaitOrderDetail = () => {
                 title={
                   <h1 className="text-2xl font-bold">Thông tin đơn hàng:</h1>
                 }
-                style={{ width: "90%", marginTop: "50px" }}
+                style={{ width: "90%", marginTop: "50px", height: "auto" }}
               >
                 <div>
                   <div

@@ -47,7 +47,7 @@ const App = () => {
       }
     };
     checkToken();
-  }, [ result ]);
+  }, []);
 
   const isAuthenticatedAdmin = localStorage.getItem('isAuthenticatedAdmin') === 'true';
   const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';

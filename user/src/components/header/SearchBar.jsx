@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchCategories, fetchProducts } from "../../data/api.jsx";
+import { fetchCategories } from "../../data/api.jsx";
+import { useProductContext } from "../../context/ProductContext.jsx";
 
 const SearchBar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -10,21 +11,8 @@ const SearchBar = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
+  const { products } = useProductContext();
   const searchBarRef = useRef(null);
-
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const productData = await fetchProducts();
-        setProducts(productData);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    getProducts();
-  }, []);
 
   let sampleProducts = [];
   if (selectedCategory === "Tất Cả Sản Phẩm") {
