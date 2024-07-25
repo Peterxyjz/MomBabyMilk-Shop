@@ -15,6 +15,7 @@ import {
   fetchProducts,
   fetchUpdateNews,
   fetchUploadNews,
+  fetchUserById,
 } from "../../data/api";
 import { Col, Input, notification, Row, Select, Upload } from "antd";
 import { Card } from "primereact/card";
@@ -223,6 +224,7 @@ const EditNews = () => {
             },
           ]);
         }
+        staffNews(newsData.staff_id) 
 
       } catch (error) {
         console.error("Error fetching news:", error);
@@ -247,18 +249,25 @@ const EditNews = () => {
     fetchUsers();
   }, [token]);
 
-  useEffect(() => {
-    if (users.length > 0 && news) {
-      const staff = users.find((user) => user._id === news.staff_id);
-      if (staff) {
-        setUsername(staff.username);
-        setUser_id(staff._id);
-      } else {
-        console.warn("No staff found for news:", news);
-      }
-    }
 
-  }, [news, users]);
+    const staffNews = async ( staff_id) => {
+      await fetchUserById(staff_id, token).then((res) => {
+        setUsername(res.data.result.username); 
+        setUser_id(res.data.result._id);
+      });
+    }
+    
+    // if (users.length > 0 && news) {
+    //   const staff = users.find((user) => user._id === news.staff_id);
+    //   if (staff) {
+    //     setUsername(staff.username);
+    //     setUser_id(staff._id);
+    //   } else {
+    //     console.warn("No staff found for news:", news);
+    //   }
+    // }
+
+
 
   async function uploadImage(news, id) {
 

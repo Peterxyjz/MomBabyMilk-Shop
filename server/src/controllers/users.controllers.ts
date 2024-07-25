@@ -276,6 +276,32 @@ export const getAllUserController = async (
   })
 }
 
+export const getOneUserController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  // vào database tìm userr có user_d đó và đưa cho client
+
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    return res.status(400).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  const role_name = await usersService.checkRole(user)
+  if (role_name !== 'Admin' && role_name !== 'Staff') {
+    return res.status(400).json({
+      message: 'Bạn không có quyền truy cập'
+    })
+  }
+
+  
+  const result = await usersService.getMe(req.params.id)
+  console.log(result);
+  return res.json({
+    message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result
+  })
+}
+
 export const getMeController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
   // vào database tìm userr có user_d đó và đưa cho client
