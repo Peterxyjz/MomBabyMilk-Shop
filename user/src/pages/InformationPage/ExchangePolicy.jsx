@@ -72,9 +72,9 @@ const ExchangePolicy = () => {
             <div className="text-left mb-8">
                 <ul className="list-disc list-inside">
                     <li>HÀNG ĐẢM BẢO CÒN MỚI NGUYÊN VẸN TRANG THÁI BAN ĐẦU KHI MUA, CÒN NGUYÊN NHÃN MÁC, NGUYÊN HỘP, PHỤ KIỆN...</li>
-                    <li>KHÁCH HÀNG CẦN GIỮ LẠI HÓA ĐƠN MUA HÀNG TẠI THẾ GIỚI SỮA.</li>
+                    <li>KHÁCH HÀNG CẦN GIỮ LẠI HÓA ĐƠN MUA HÀNG TẠI MOMBABYMILK.</li>
                     <li>HÀNG CÒN HẠN SỬ DỤNG.</li>
-                    <li>HÀNG ĐƯỢC ĐỔI ĐÚNG CỬA HÀNG THẾ GIỚI SỮA ĐÃ MUA TRƯỚC ĐÓ.</li>
+                    <li>HÀNG ĐƯỢC ĐỔI ĐÚNG CỬA HÀNG MOMBABYMILK ĐÃ MUA TRƯỚC ĐÓ.</li>
                 </ul>
             </div>
 
@@ -93,20 +93,20 @@ const ExchangePolicy = () => {
             </h1>
             <div className="text-left mb-8">
                 <p>- BƯỚC 1: KHÁCH HÀNG GỌI HOTLINE <span className="text-yellow-500">0986777514</span> HOẶC EMAIL TỚI ĐỊA CHỈ <span className="text-yellow-500">pass10diemswp391@gmail.com</span> ĐỂ YÊU CẦU VIỆC ĐỔI SẢN PHẨM. THẾ GIỚI SỮA SẼ HƯỚNG DẪN CÁC BƯỚC ĐỂ KHÁCH ĐỔI SẢN PHẨM.</p>
-                <p>- BƯỚC 2: KHÁCH HÀNG GỬI SẢN PHẨM TỚI THẾ GIỚI SỮA (KHÁCH TRỰC TIẾP TỚI CỬA HÀNG THẾ GIỚI SỮA HOẶC CHUYỂN PHÁT TRONG TRƯỜNG HỢP KHÁCH MUA HÀNG QUA CÁC KÊNH ONLINE).</p>
-                <p>- BƯỚC 3: <span className="text-yellow-500">THẾ GIỚI SỮA</span> NHẬN VÀ KIỂM TRA SẢN PHẨM, SAU ĐÓ CHÚNG TÔI SẼ TIẾN HÀNH HỖ TRỢ KHÁCH HÀNG TÙY TRƯỜNG HỢP CỤ THỂ THEO ĐÚNG QUY ĐỊNH.</p>
-                <p>- BƯỚC 4: KHÁCH HÀNG NHẬN SẢN PHẨM 1 ĐỔI 1 HOẶC SẢN PHẨM THAY THẾ MÀ KHÁCH LỰA CHỌN THEO CÁC QUY ĐỊNH NÊU TRÊN CỦA <span className="text-yellow-500">THẾ GIỚI SỮA</span>.</p>
-                <p className="mt-4">Quý khách vui lòng gửi sản phẩm qua chuyển phát về Thế Giới Sữa trong vòng 03 ngày làm việc kể từ khi thông báo với bộ phận chăm sóc khách hàng.</p>
+                <p>- BƯỚC 2: KHÁCH HÀNG GỬI SẢN PHẨM TỚI MOMBABYMILK (KHÁCH TRỰC TIẾP TỚI CỬA HÀNG MOMBABYMILK HOẶC CHUYỂN PHÁT TRONG TRƯỜNG HỢP KHÁCH MUA HÀNG QUA CÁC KÊNH ONLINE).</p>
+                <p>- BƯỚC 3: <span className="text-yellow-500">MOMBABYMILK</span> NHẬN VÀ KIỂM TRA SẢN PHẨM, SAU ĐÓ CHÚNG TÔI SẼ TIẾN HÀNH HỖ TRỢ KHÁCH HÀNG TÙY TRƯỜNG HỢP CỤ THỂ THEO ĐÚNG QUY ĐỊNH.</p>
+                <p>- BƯỚC 4: KHÁCH HÀNG NHẬN SẢN PHẨM 1 ĐỔI 1 HOẶC SẢN PHẨM THAY THẾ MÀ KHÁCH LỰA CHỌN THEO CÁC QUY ĐỊNH NÊU TRÊN CỦA <span className="text-yellow-500">MOMBABYMILK</span>.</p>
+                <p className="mt-4">Quý khách vui lòng gửi sản phẩm qua chuyển phát về MOMBABYMILK trong vòng 03 ngày làm việc kể từ khi thông báo với bộ phận chăm sóc khách hàng.</p>
                 <p className="mt-2">Quý khách vui lòng gửi kèm:</p>
                 <ul className="list-disc list-inside pl-4">
                     <li>Hóa đơn bán hàng.</li>
                     <li>Phụ kiện, quà tặng khuyến mãi kèm theo nếu có.</li>
                 </ul>
-                <p className="mt-2">Khách hàng chịu toàn bộ trách nhiệm về trạng thái nguyên vẹn của sản phẩm khi gửi tới Thế Giới Sữa.</p>
+                <p className="mt-2">Khách hàng chịu toàn bộ trách nhiệm về trạng thái nguyên vẹn của sản phẩm khi gửi tới MOMBABYMILK.</p>
             </div>
 
             <div className="bg-blue-700 text-white text-center py-2">
-                <p>HOTLINE: 090 7089078 | WWW.MOMBABYMILK.COM</p>
+                <p>HOTLINE: 090 7089078 | https://www.mombabymilk.xyz/</p>
             </div>
         </div>
     );

@@ -20,12 +20,12 @@ export const ProductProvider = ({ children }) => {
           setLoading(false);
           setTimeout(async () => {
             const productData = await fetchProducts();
+            localStorage.removeItem("products");
             setProducts(productData);
             localStorage.setItem("products", JSON.stringify(productData));
-          }, 1000);
+          }, 500);
         } else {
           const productData = await fetchProducts();
-
           setProducts(productData);
           localStorage.setItem("products", JSON.stringify(productData));
           setLoading(false);

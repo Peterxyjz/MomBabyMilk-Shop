@@ -3,11 +3,13 @@ import { InputText } from 'primereact/inputtext';
 import { Textarea } from 'flowbite-react';
 import { InputMask } from 'primereact/inputmask';
 import { Card } from 'primereact/card';
-import { Col, DatePicker, Row, notification, } from 'antd';
+import { Col, DatePicker, Row, message, notification, } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { fetchUploadStaff, getDistricts, getProvinces, getWards } from '../../data/api';
 import { Button, HStack, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import moment from 'moment';
+
 
 
 
@@ -169,17 +171,26 @@ const AddStaff = () => {
 
 
   const handleDateChange = (date, dateString) => {
-    console.log(date, dateString);
-    setDate(date); // Cập nhật trạng thái với giá trị mới
+    const selectedDate = moment(dateString, 'DD/MM/YYYY');
+    const currentDate = moment();
+    const age = currentDate.diff(selectedDate, 'years');
 
+    if (age < 18) {
+      message.error('Tuổi phải trên 18.');
+      setDate(null); // Reset the date
+    } else {
+      console.log(date, dateString);
+      setDate(date); // Update the state with the new value
+    }
   };
+
 
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
       <Card
         title="Thêm nhân viên mới"
-        style={{ width: '90%', maxWidth: '1200px', margin: '30px auto'}}
+        style={{ width: '90%', maxWidth: '1200px', margin: '30px auto' }}
         className='h-full'
       >
         <form onSubmit={handleSubmit}>
@@ -359,7 +370,7 @@ const AddStaff = () => {
             <Col span={8}>
               <Row align="middle">
                 <Col span={6}>
-                  <label htmlFor="province" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Tỉnh <br/> (Thành phố)</label>
+                  <label htmlFor="province" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Tỉnh <br /> (Thành phố)</label>
                 </Col>
                 <Col span={18}>
                   <select
@@ -383,7 +394,7 @@ const AddStaff = () => {
             <Col span={8}>
               <Row align={'middle'}>
                 <Col span={6}>
-                  <label htmlFor="district" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Quận <br/>(Huyện)</label>
+                  <label htmlFor="district" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Quận <br />(Huyện)</label>
                 </Col>
                 <Col span={18}>
                   <select
@@ -407,13 +418,13 @@ const AddStaff = () => {
             <Col span={8}>
               <Row align="middle">
                 <Col span={6}>
-                  <label htmlFor="ward" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Phường <br/>(Xã)</label>
+                  <label htmlFor="ward" style={{ fontSize: '15px', color: '#1F5070', fontWeight: 'bold' }}>Phường <br />(Xã)</label>
                 </Col>
                 <Col span={18}>
                   <select
                     id="ward"
                     className="w-full"
-                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem'}}
+                    style={{ height: '50px', fontSize: '15px', border: '1px solid #6b7280', borderRadius: '0.375rem' }}
                     onChange={handleWardSelect}
                     required
                   >
@@ -438,7 +449,7 @@ const AddStaff = () => {
                 id="address"
                 placeholder="Nhập địa chỉ cụ thể"
                 onChange={(e) => setAddress(e.target.value)}
-                style={{ width: '100%', border: '1px solid #6b7280', borderRadius: '0.375rem',  fontSize: '15px'}}
+                style={{ width: '100%', border: '1px solid #6b7280', borderRadius: '0.375rem', fontSize: '15px' }}
                 required
                 value={address}
               />

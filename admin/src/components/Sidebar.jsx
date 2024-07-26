@@ -6,7 +6,7 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { adminlinks, stafflinks } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import logoImg from '../assets/images/logo/Logo.png';
-import { fetchOrder } from '../data/api';
+import { fetchAllFeedback, fetchOrder } from '../data/api';
 import { Badge } from 'antd';
 
 
@@ -14,6 +14,7 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
   const [activeSubmenu, setActiveSubmenu] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
 
 
   const handleCloseSideBar = () => {
@@ -60,6 +61,22 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
     getOrders();
   }, []);
 
+  useEffect(() => {
+    const getFeedbacks = async () => {
+      try {
+        const feedbackData = await fetchAllFeedback();
+        setFeedbacks(feedbackData.data.result);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
+    };
+
+    getFeedbacks();
+    console.log(feedbacks);
+  }, []);
+
+  const feedbackCount = feedbacks.filter(fb => !fb.reply_feedback).length;
+  const badFeedbackCount = feedbacks.filter(fb => !fb.reply_feedback && fb.rating < 3).length;
   const awaitOrderCount = orders.filter(order => order.order.status === 0).length;
 
 
@@ -172,11 +189,12 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                         })}
                         className={({ isActive }) => (isActive ? activeLink : normalLink)}
                       >
-                        {(link.name === 'Quản lý đơn hàng' && awaitOrderCount > 0)?(
+                        {(link.name === 'Quản lý đơn hàng' && awaitOrderCount > 0) || (link.name === 'Quản lý đánh giá' && feedbackCount > 0) ? (
                           <Badge dot>
                             {link.icon}
                           </Badge>
-                        ): link.icon}
+                        ) : link.icon}
+
                         <span className="capitalize">{link.name}</span>
                         {link.type === 'sub' && (
                           activeSubmenu === link.name ? <MdKeyboardArrowDown className="ml-auto" style={{ fontSize: '24px' }} /> :
@@ -195,10 +213,12 @@ const Sidebar = ({ isAuthenticatedAdmin, isAuthenticatedStaff }) => {
                               })}
                               className={({ isActive }) => (isActive ? activeLink : normalLink)}
                             >
-                              {subLink.name === 'await-order' ? (
-                                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center'  }}>
+                              {(subLink.name === 'await-order' ) || (subLink.name === 'allFeedback' ) ||  (subLink.name === 'badFeedback') ? (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'  }}>
                                   <span className="capitalize" >{subLink.label}</span>
-                                  <Badge style={{ marginLeft: '30px' }} count={awaitOrderCount} />
+                                  <Badge style={{ marginRight: '10px' }}
+                                  count={subLink.name === 'await-order' ? awaitOrderCount : subLink.name === 'allFeedback' ? feedbackCount : badFeedbackCount} 
+                                  />
                                 </div>
                               ) : (
                                 <>

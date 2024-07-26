@@ -136,6 +136,7 @@ const Payment = () => {
     return () => clearInterval(timer);
   }, [countdown]);
 
+  const total = totalPrice + ship - discount > 0 ? totalPrice + ship - discount : 0;
   return (
     <>
       <Breadcrumbs headline="Thanh toán" />
@@ -362,7 +363,7 @@ const Payment = () => {
                       Tổng Giá Trị
                     </dt>
                     <dd className="text-lg font-bold text-gray-900 dark:text-white">
-                      {Number(totalPrice + ship - discount).toLocaleString(
+                      {Number(total).toLocaleString(
                         "vi-VN",
                         {
                           style: "currency",

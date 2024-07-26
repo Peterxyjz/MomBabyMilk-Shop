@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, FileInput, Label, TextInput, Textarea } from "flowbite-react";
+import { Button} from "flowbite-react";
 import { imageDb } from "../../data/firebase.config";
 import {
   deleteObject,
@@ -15,7 +15,7 @@ import {
   fetchProducts,
   fetchUpdateNews,
   fetchUploadNews,
-  fetchUserById,
+  fetchUserById
 } from "../../data/api";
 import { Col, Input, notification, Row, Select, Upload } from "antd";
 import { Card } from "primereact/card";
@@ -305,11 +305,11 @@ const EditNews = () => {
         console.log("xong update");
         if(isChanged)
         await uploadImage(news, id).then(() => {
+          navigate("/all-blog");
           notification.success({
             message: "Thêm bài viết thành công!",
             placement: "top",
           });
-          navigate("/all-blog");
         });
       })
       .catch((error) => {
