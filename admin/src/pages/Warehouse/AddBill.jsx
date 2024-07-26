@@ -17,7 +17,7 @@ const AddBill = () => {
   const [billProducts, setBillProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
-  const [formState, setFormState] = useState({});
+  const [, setFormState] = useState({});
   const [sorter, setSorter] = useState({});
   const [expandedRowKeys, setExpandedRowKeys] = useState([]); // Thêm trạng thái này
 
@@ -191,14 +191,13 @@ const AddBill = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const inputBill = {
       input_date: moment().toISOString(),
       inputBillDetailList: billProducts.map(product => ({
         product_id: product._id,
         amount: product.amount,
-        production_date: product.production_date,
-        expiration_date: product.expiration_date
+        created_at: new Date(product.production_date).setDate(new Date(product.production_date).getDate() + 1),
+        expired_at: new Date(product.expiration_date).setDate(new Date(product.expiration_date).getDate() + 1)
       })),
       total: calculateTotal()
     };

@@ -5,15 +5,23 @@ import { Link } from "react-router-dom";
 import { useCartContext } from "../../context/CartContext";
 import { useWishlistContext } from "../../context/WishlistContext";
 const NavBar = () => {
-  const {cartAmount} = useCartContext();
-  const {wishlistAmount} = useWishlistContext();
+  const { cartAmount } = useCartContext();
+  const { wishlistAmount } = useWishlistContext();
   return (
     <>
       <header className="min-h-16">
         <div className="flex items-center">
           {/* logo */}
           <div className="mr-auto md:w-48 flex-shrink-0">
-            <Link to="/" onClick={() => window.scrollTo(0, 0)}>
+            <Link
+              to="/"
+              onClick={() => {
+                window.scrollTo(0, 0);
+                setTimeout(() => {
+                  window.location.reload();
+                }, 100);
+              }}
+            >
               <img className="h-8 md:h-10" src={LogoImg} alt="" />
             </Link>
           </div>
