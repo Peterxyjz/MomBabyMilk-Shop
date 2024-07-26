@@ -13,7 +13,9 @@ import {
   fetchAllUsers,
   fetchNewsByID,
   fetchProducts,
-  fetchUpdateNews
+  fetchUpdateNews,
+  fetchUploadNews,
+  fetchUserById
 } from "../../data/api";
 import { Col, Input, notification, Row, Select, Upload } from "antd";
 import { Card } from "primereact/card";

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   fetchCancelOrder,
@@ -8,7 +8,7 @@ import {
 import { Button } from "flowbite-react";
 import { Card, Col, Divider, Row, Steps, Typography, notification } from "antd";
 import Loading from "../../components/Loading";
-import { CheckCircleOutlined, FieldTimeOutlined, SmileOutlined, TruckOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, FieldTimeOutlined, SmileOutlined, TruckOutlined } from "@ant-design/icons";
 
 const AwaitOrderDetail = () => {
   const location = useLocation();
@@ -17,7 +17,6 @@ const AwaitOrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  const [disabled, setDisabled] = useState(false);
   const token = JSON.parse(localStorage.getItem("result"));
   const isAuthenticatedStaff = localStorage.getItem('isAuthenticatedStaff') === 'true';
 
@@ -54,23 +53,6 @@ const AwaitOrderDetail = () => {
       updateOrderDetails();
     }
   }, [products, order]);
-
-  //kiểm tra số lượng sản phẩm:
-  const checkAmount = useCallback((item) => {
-    const thisProduct = products.find((p) => p._id === item.product_id);
-    if(thisProduct) {
-      return thisProduct.amount >= item.amount;
-    }
-    return false;
-  }, [products]);
-
-  useEffect(() => {
-    for (const item of orderDetails) {
-      if(!checkAmount(item)) {
-        setDisabled(true)
-      }
-    }
-  }, [orderDetails, checkAmount])
 
   if (loading) {
     return <Loading />
@@ -251,7 +233,7 @@ const AwaitOrderDetail = () => {
                     <Card
                       type="inner"
                       key={item.product_id}
-                      className={`mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white shadow-sm ${checkAmount(item) ? "" : "bg-red-500"}`}
+                      className={`mb-4 rounded-lg border border-[rgba(0,0,0,0.2)] bg-white shadow-sm`}
 
                       style={{ marginBottom: "10px", padding: "10px" }}
                     >
@@ -287,12 +269,6 @@ const AwaitOrderDetail = () => {
                           <div className="flex items-start gap-4 text-lg">
                             x{item.amount} sản phẩm
                           </div>
-                          {!checkAmount(item) && (
-                              <div className="font-semibold">
-                                <WarningOutlined className="mr-2"/>
-                                Trong kho không đủ sản phẩm!
-                              </div>
-                            )}
                         </div>
                       </div>
                     </Card>
@@ -594,7 +570,6 @@ const AwaitOrderDetail = () => {
                     <Button
                       type="default"
                       onClick={handleConfirmOrder}
-                      disabled={disabled}
                       style={{
                         backgroundColor: "#55B6C3",
                         fontSize: "15px",
