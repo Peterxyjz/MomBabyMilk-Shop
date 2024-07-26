@@ -15,21 +15,22 @@ config()
 
 class OrderServinces {
   async upload(order_infor: Order, orderDetails: any) {
-    const order = new Order({
-      _id: new ObjectId(order_infor._id?.toString()),
-      ...order_infor
-    })
-
-    orderDetails.forEach(async (item: any) => {
+    for (const item of orderDetails) {
+      const list = await wareHouseService.decreaseAmount(item._id, item.quantity)
       const order_detail = new OrderDetail({
         _id: new ObjectId(),
         order_id: order_infor._id?.toString() || '',
         product_id: item._id,
+        input_bill_id: list,
         amount: item.quantity,
         price: item.price
       })
 
       databaseService.orderDetails.insertOne(order_detail)
+    }
+    const order = new Order({
+      _id: new ObjectId(order_infor._id?.toString()),
+      ...order_infor
     })
     return await databaseService.orders.insertOne(order)
   }
@@ -65,10 +66,10 @@ class OrderServinces {
       })
     }
     if (OrderStatus[status as keyof typeof OrderStatus] === OrderStatus.Processing) {
-      const OrderDetail = await databaseService.orderDetails.find({ order_id: id }).toArray()
-      for (const item of OrderDetail) {
-        await wareHouseService.decreaseAmount({ product_id: item.product_id, amount: item.amount })
-      }
+      // const OrderDetail = await databaseService.orderDetails.find({ order_id: id }).toArray()
+      // for (const item of OrderDetail) {
+      //   await wareHouseService.decreaseAmount(item.product_id, item.input_bill_id, item.amount)
+      // }
       return await databaseService.orders.updateOne(filter, {
         $set: { status: OrderStatus[status as keyof typeof OrderStatus], staff_id: user_id, accepted_date: new Date() }
       })

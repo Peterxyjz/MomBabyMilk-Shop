@@ -13,6 +13,10 @@ class FeedBackService {
     const result = await databaseService.feedbacks.insertOne(feeback)
     return result
   }
+  async getByProductId(id: string) {
+    const filter = { product_id: id }
+    return await databaseService.feedbacks.find(filter).toArray()
+  }
 }
 const feedBackService = new FeedBackService()
 export default feedBackService

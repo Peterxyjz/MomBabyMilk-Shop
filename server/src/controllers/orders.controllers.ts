@@ -74,7 +74,7 @@ export const deleteController = async (req: Request, res: Response) => {
   const order_id = req.body.order_id
   const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
   order_details.forEach(async (item) => {
-    await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
+    await wareHouseService.increaseAmount(item.product_id, item.input_bill_id, item.amount)
   })
   const order = await orderServices.delete(order_id)
 }
@@ -173,9 +173,9 @@ export const updateStatusController = async (req: Request, res: Response) => {
   if (OrderStatus[status as keyof typeof OrderStatus] === OrderStatus.Cancel) {
     const result = await orderServices.cancel(order_id, status, user_id)
     const order_details = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
-    order_details.forEach(async (item) => {
-      await wareHouseService.increaseAmount({ product_id: item.product_id, amount: item.amount })
-    })
+    for (const detail of order_details) {
+      await wareHouseService.increaseAmount(detail.product_id, detail.input_bill_id, detail.amount)
+    }
 
     const order = await orderServices.getById(order_id)
     if (order) {
@@ -200,8 +200,8 @@ export const updateStatusController = async (req: Request, res: Response) => {
   const result = await orderServices.updateStatus(order_id, status, user_id)
   const order = await orderServices.getById(order_id)
   const orderDetails = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
-  console.log(orderDetails);
-  
+  console.log(orderDetails)
+
   if (order) {
     const emailHtml = generateInvoiceHTML(order, orderDetails)
     sendMail({
