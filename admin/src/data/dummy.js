@@ -1,6 +1,6 @@
 import React from 'react';
 import { AiOutlineShoppingCart, AiOutlineInbox } from 'react-icons/ai';
-import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers, FiUser } from 'react-icons/fi';
+import { FiShoppingBag, FiBarChart, FiCreditCard, FiStar, FiShoppingCart, FiUsers } from 'react-icons/fi';
 import { BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsNewspaper } from 'react-icons/bs';
 import { RiPriceTag3Line } from 'react-icons/ri';
 import { MdOutlineCategory, MdOutlineSupervisorAccount } from 'react-icons/md';
@@ -587,8 +587,9 @@ export const stafflinks = [
         type: 'sub',
         // path: '',
         subLinks: [
-          { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
+          { name: 'ProductInWarehouse', path: 'products-warehouse', label: 'Sản phẩm trong kho' },
           { name: 'allBill', path: 'input-bills', label: 'Tất cả đơn nhập hàng' },
+          { name: 'addBill', path: 'add-inputbill', label: 'Tạo đơn nhập hàng' },
         ]
       },
     ],
