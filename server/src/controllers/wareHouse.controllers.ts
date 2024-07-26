@@ -10,11 +10,18 @@ export const getAllController = async (req: Request, res: Response) => {
   for (const item of warehouse) {
     const product = await productsService.getById(item._id.toString())
     if (product != null) {
+      let amount = 0
+      if (item.shipments) {
+        for (const shipment of item.shipments) {
+          amount += shipment.amount
+        }
+      }
       result.push({
         ...item,
         product_name: product.product_name,
         imgUrl: product.imgUrl,
-        amount_shipment: item.shipments?.length
+        amount_shipment: item.shipments?.length,
+        amount: amount
       })
     }
   }
