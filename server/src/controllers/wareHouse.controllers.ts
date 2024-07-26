@@ -13,7 +13,9 @@ export const getAllController = async (req: Request, res: Response) => {
       let amount = 0
       if (item.shipments) {
         for (const shipment of item.shipments) {
-          amount += shipment.amount
+          if (shipment.amount_selled !== undefined) {
+            amount += shipment.amount - shipment.amount_selled
+          }
         }
       }
       result.push({
