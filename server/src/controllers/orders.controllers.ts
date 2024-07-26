@@ -200,6 +200,8 @@ export const updateStatusController = async (req: Request, res: Response) => {
   const result = await orderServices.updateStatus(order_id, status, user_id)
   const order = await orderServices.getById(order_id)
   const orderDetails = await databaseService.orderDetails.find({ order_id: order_id }).toArray()
+  console.log(orderDetails);
+  
   if (order) {
     const emailHtml = generateInvoiceHTML(order, orderDetails)
     sendMail({

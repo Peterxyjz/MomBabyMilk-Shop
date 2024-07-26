@@ -192,6 +192,15 @@ export const fetchAllUsers = async (result) => {
   });
 };
 
+//get-user-by-id
+export const fetchUserById = async (id, token) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/users/user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },  
+  });
+};
+
 //update-user
 export const fetchUpdateUser = async (user, token, id) => {
   return await axios.post(

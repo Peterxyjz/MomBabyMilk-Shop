@@ -21,6 +21,7 @@ import {
   forgotPasswordController,
   getAllUserController,
   getMeController,
+  getOneUserController,
   loginController,
   loginForAdminOrStaffController,
   logoutController,
@@ -33,6 +34,7 @@ import {
   verifyForgotPasswordTokenController
 } from '~/controllers/users.controllers'
 import { wrapAsync } from '~/utils/handlers'
+import { isParamsIdValidator } from '~/middlewares/products.middleware'
 const usersRouter = Router()
 //user:
 /**
@@ -575,6 +577,8 @@ usersRouter.get('/get-all-user', accessTokenValidator, wrapAsync(getAllUserContr
  *         description: Invalid email/password supplied
  */
 usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
+
+usersRouter.get('/user/:id', accessTokenValidator, isParamsIdValidator, wrapAsync(getOneUserController))
 
 /**
  * @swagger
