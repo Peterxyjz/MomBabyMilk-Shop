@@ -281,7 +281,7 @@ export function generateInvoiceHTML(order: any, orderDetail: any) {
                       .map(
                         (item: any) => `
                     <tr>
-                        <td>${item.product_name}</td>
+                        <td>${item._id}</td>
                         <td>${item.amount}</td>
                         <td>${Number(item.price).toLocaleString()} VND</td>
                         <td>${(Number(item.price) * item.amount).toLocaleString()} VND</td>
