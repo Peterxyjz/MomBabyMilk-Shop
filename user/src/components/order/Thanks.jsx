@@ -7,7 +7,6 @@ const Thanks = () => {
   const location = useLocation();
   const isCheck = location.state?.isCheck || false;
   const order_id = location.state?.order_id || null;
-
   return (
     <div>
       <Breadcrumbs
