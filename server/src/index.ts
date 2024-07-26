@@ -17,6 +17,7 @@ import voucherRouter from './routes/vouchers.routes'
 import newsRouter from './routes/news.routes'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
+import wareHouseRouter from './routes/wareHouse.routes'
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -49,6 +50,7 @@ app.use('/orders', ordersRouter)
 app.use('/revenue', revenueRouter)
 app.use('/vouchers', voucherRouter)
 app.use('/news', newsRouter)
+app.use('/warehouse', wareHouseRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Project MomBabyMilk này đang chạy trên post ${port}`)

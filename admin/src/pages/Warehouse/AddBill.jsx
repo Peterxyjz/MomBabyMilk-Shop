@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { fetchProducts, fetchUploadBill } from "../../data/api";
 import { Button } from "flowbite-react";
 import { Card } from "primereact/card";
-import { Col, InputNumber, Row, Table } from 'antd';
+import { Col, InputNumber, Row, Table, DatePicker } from 'antd';
 import moment from 'moment';
 import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { toast, Toaster } from "react-hot-toast";
-
 
 const AddBill = () => {
   const [loading, setLoading] = useState(true);
@@ -18,11 +17,10 @@ const AddBill = () => {
   const [billProducts, setBillProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const token = JSON.parse(localStorage.getItem("result"));
-  const [formState, setFormState] = useState({}); // Thêm state để quản lý form
+  const [, setFormState] = useState({});
   const [sorter, setSorter] = useState({});
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]); // Thêm trạng thái này
 
-
-  //ham phan chia trang
   const handleTableChange = (pagination, filters, sorter) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
@@ -40,11 +38,8 @@ const AddBill = () => {
         setLoading(false);
       }
     };
-
     getProducts();
   }, []);
-
-
 
   const productTable = [
     {
@@ -85,7 +80,6 @@ const AddBill = () => {
     },
   ];
 
-  //chon san pham
   const onSelectChange = (newSelectedRowKeys, selectedRows) => {
     setSelectedRowKeys(newSelectedRowKeys);
     setSelectedProducts(selectedRows);
@@ -129,7 +123,6 @@ const AddBill = () => {
     },
   ];
 
-  //thay doi so luong trong bill
   const handleQuantityChange = (value, record) => {
     const newData = billProducts.map((item) => {
       if (item._id === record._id) {
@@ -140,16 +133,27 @@ const AddBill = () => {
     setBillProducts(newData);
   };
 
-  //tinh tong tien goc
+  const handleDateChange = (date, record, dateType) => {
+    const newData = billProducts.map((item) => {
+      if (item._id === record._id) {
+        return { ...item, [dateType]: date.toISOString() };
+      }
+      return item;
+    });
+    setBillProducts(newData);
+  };
+
   const calculatePrice = () => {
     return billProducts.reduce((total, product) => total + product.price * product.amount, 0);
   };
+
   const getDiscountPercentage = (amount) => {
     if (amount > 20) return 60;
     if (amount >= 10) return 40;
     if (amount >= 1) return 20;
     return 0;
   };
+
   const calculateTotalDiscount = () => {
     const totalAmount = billProducts.reduce((total, product) => total + product.amount, 0);
     const discountPercentage = getDiscountPercentage(totalAmount);
@@ -157,20 +161,21 @@ const AddBill = () => {
     return originalTotal * (discountPercentage / 100);
   };
 
-  //tinh tong tien
   const calculateTotal = () => {
     return calculatePrice() - calculateTotalDiscount();
   };
 
-  //them vao bill
   const handleAddToBill = () => {
     const newBillProducts = [...billProducts];
+    const newExpandedRowKeys = [...expandedRowKeys]; // Khởi tạo danh sách expandedRowKeys mới
     selectedProducts.forEach(product => {
       if (!newBillProducts.some(item => item._id === product._id)) {
-        newBillProducts.push({ ...product, amount: 1 });
+        newBillProducts.push({ ...product, amount: 1, production_date: null, expiration_date: null });
+        newExpandedRowKeys.push(product._id); // Thêm id của sản phẩm mới vào expandedRowKeys
       }
     });
     setBillProducts(newBillProducts);
+    setExpandedRowKeys(newExpandedRowKeys); // Cập nhật trạng thái expandedRowKeys
     setSelectedRowKeys([]);
     setSelectedProducts([]);
   };
@@ -178,6 +183,7 @@ const AddBill = () => {
   const handleDeleteFromBill = (record) => {
     const newBillProducts = billProducts.filter(item => item._id !== record._id);
     setBillProducts(newBillProducts);
+    setExpandedRowKeys(expandedRowKeys.filter(key => key !== record._id)); // Cập nhật trạng thái expandedRowKeys khi xóa sản phẩm
     toast.success('Xóa sản phẩm khỏi đơn nhập hàng thành công', {
       position: 'top-right',
     });
@@ -185,14 +191,14 @@ const AddBill = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const inputBill = {
       input_date: moment().toISOString(),
       inputBillDetailList: billProducts.map(product => ({
         product_id: product._id,
-        amount: product.amount
-      })
-      ),
+        amount: product.amount,
+        created_at: new Date(product.production_date).setDate(new Date(product.production_date).getDate() + 1),
+        expired_at: new Date(product.expiration_date).setDate(new Date(product.expiration_date).getDate() + 1)
+      })),
       total: calculateTotal()
     };
 
@@ -201,8 +207,8 @@ const AddBill = () => {
       toast.success('Tạo đơn nhập hàng thành công', {
         position: 'top-right',
       });
-      setBillProducts([]); //reset 
-      setFormState({}); //reset
+      setBillProducts([]);
+      setFormState({});
       window.location.reload();
     } catch (error) {
       console.error('Lỗi từ server:', error.response.data);
@@ -217,14 +223,14 @@ const AddBill = () => {
   }
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <Toaster />
       <Row justify="space-between" style={{ flexGrow: 1 }}>
         <Col span={13}>
-          <div style={{ display: 'flex', justifyContent: 'center', height: '100vh' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Card
               title="Chọn sản phẩm"
-              style={{ width: '90%', marginTop: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '90vh' }}
+              style={{ width: '90%', marginTop: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
             >
               <div style={{ marginBottom: 16, textAlign: 'right' }} onClick={() => Navigate('/add-brand')}>
                 <Button type="primary" style={{ backgroundColor: '#46B5C1' }} disabled={selectedRowKeys.length === 0} onClick={handleAddToBill}>Nhập Hàng</Button>
@@ -249,8 +255,8 @@ const AddBill = () => {
           </div>
         </Col>
         <Col span={11}>
-          <div style={{ display: 'flex', justifyContent: 'center', height: '90vh' }}>
-            <Card title="Đơn nhập hàng" style={{ width: '90%', marginTop: '50px', height: '90vh' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Card title="Đơn nhập hàng" style={{ width: '90%', marginTop: '50px' }}>
               <div style={{ marginBottom: 16, textAlign: 'right' }}>
                 <Button type="primary" style={{ backgroundColor: '#46B5C1' }} disabled={billProducts.length === 0} onClick={handleSubmit}>Tạo đơn</Button>
               </div>
@@ -262,6 +268,33 @@ const AddBill = () => {
                   pagination={false}
                   rowKey={(record) => record.key || record._id}
                   scroll={{ y: "50vh" }}
+                  expandable={{
+                    expandedRowRender: (record) => (
+                      <div style={{ margin: 0 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>Ngày Sản Xuất:</span>
+                          <DatePicker
+                            value={record.production_date ? moment(record.production_date) : null}
+                            onChange={(date) => handleDateChange(date, record, 'production_date')}
+                            format="DD/MM/YYYY"
+                          />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                          <span>Hạn Sử Dụng:</span>
+                          <DatePicker
+                            value={record.expiration_date ? moment(record.expiration_date) : null}
+                            onChange={(date) => handleDateChange(date, record, 'expiration_date')}
+                            format="DD/MM/YYYY"
+                          />
+                        </div>
+                      </div>
+                    ),
+                    expandRowByClick: true, // Mở rộng dòng bằng cách nhấp
+                  }}
+                  expandedRowKeys={expandedRowKeys} // Thiết lập expandedRowKeys
+                  onExpand={(expanded, record) => {
+                    setExpandedRowKeys(expanded ? [...expandedRowKeys, record._id] : expandedRowKeys.filter(id => id !== record._id));
+                  }}
                 />
               </div>
               <div style={{ marginTop: 16, textAlign: 'right' }}>

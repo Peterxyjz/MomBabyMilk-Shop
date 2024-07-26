@@ -260,10 +260,10 @@ productsRouter.get('/product/:id', isParamsIdValidator, wrapAsync(getController)
  *           schema:
  *             type: object
  *             properties:
- *               brand_id: 
+ *               brand_id:
  *                 type: string
  *                 example: 665ade9946daaa0a00f4d859
- *               category_id: 
+ *               category_id:
  *                 type: string
  *                 example: 66600156c5477af75504134f
  *               product_name:
@@ -294,7 +294,7 @@ productsRouter.get('/product/:id', isParamsIdValidator, wrapAsync(getController)
  *         description: Successful operation
  *       '422':
  *         description: Invalid email/password supplied
- *       
+ *
  */
 productsRouter.patch(
   '/product/:id',

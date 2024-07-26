@@ -30,6 +30,7 @@ export const uploadController = async (req: Request, res: Response) => {
   const product = new Product(req.body)
 
   const result = await productsService.upload(product)
+
   return res.status(200).json({
     message: USERS_MESSAGES.UPLOAD_SUCCESS,
     result: result,
@@ -44,25 +45,14 @@ export const getAllController = async (req: Request, res: Response) => {
     databaseService.feedbacks.find({}).toArray()
   ])
 
-  // Fetch brands, categories, and warehouses concurrently
-  const [brands, categories, warehouses] = await Promise.all([
-    brandsService.getAll(),
-    categoriesService.getAll(),
-    wareHouseService.getAll()
-  ])
-
-  // Convert to Maps for quick lookup
-  const brandMap = new Map(brands.map((brand) => [brand._id.toString(), brand]))
-  const categoryMap = new Map(categories.map((category) => [category._id.toString(), category]))
-  const warehouseMap = new Map(warehouses.map((warehouse) => [warehouse._id.toString(), warehouse]))
-
   // Process products
   const result = await Promise.all(
     products.map(async (product) => {
-      const brand = brandMap.get(product.brand_id)
-      const category = categoryMap.get(product.category_id)
-      const warehouse = warehouseMap.get(product._id?.toString())
-
+      const [brand, category, warehouse] = await Promise.all([
+        brandsService.getById(product.brand_id),
+        categoriesService.getById(product.category_id),
+        wareHouseService.getAmoutAvailableById(product._id?.toString())
+      ])
       const productFeedbacks = feedbacks.filter((feedback) => feedback.product_id === product._id?.toString())
       const rating =
         productFeedbacks.length > 0
@@ -75,7 +65,7 @@ export const getAllController = async (req: Request, res: Response) => {
         ...product,
         brand_name: brand?.brand_name || '',
         category_name: category?.category_name || '',
-        amount: warehouse?.amount || 0,
+        amount: warehouse || 0,
         reviewer: productFeedbacks.length,
         rating: rating,
         sales: sales

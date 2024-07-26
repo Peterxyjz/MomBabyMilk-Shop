@@ -24,7 +24,7 @@ export const fetchUpdateNews = async (data, token, id) => {
 //fetchNewsByID
 export const fetchNewsByID = async (id) => {
   return await axios.get(`${SCHEMA_HOSTNAME}/news/news/${id}`);
-} 
+}
 
 
 //fetchUploadNews
@@ -52,7 +52,7 @@ export const fetchUploadFeedback = async (feedback, token) => {
 //fetchRefreshToken
 export const fetchRefreshToken = async (token) => {
   return await axios.post(`${SCHEMA_HOSTNAME}/users/refresh-token`, {
-   refresh_token: token.refresh_token
+    refresh_token: token.refresh_token
   });
 };
 
@@ -183,11 +183,25 @@ export const fetchAllBills = async () => {
   }
 };
 
+//get-all-warehouse:
+export const fetchProductInWarehouse = async () => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/warehouse/all-warehouse`);
+}
+
 //get-all-user
 export const fetchAllUsers = async (result) => {
   return await axios.get(`${SCHEMA_HOSTNAME}/users/get-all-user`, {
     headers: {
       Authorization: `Bearer ${result.access_token}`,
+    },
+  });
+};
+
+//get-user-by-id
+export const fetchUserById = async (id, token) => {
+  return await axios.get(`${SCHEMA_HOSTNAME}/users/user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
     },
   });
 };
@@ -396,7 +410,7 @@ export const fetchUpdateVoucher = async (voucher, token, id) => {
 export const fetchDeleteVoucher = async (voucherId, token) => {
   try {
     const response = await axios.post(
-      `${SCHEMA_HOSTNAME}/vouchers/delete`, 
+      `${SCHEMA_HOSTNAME}/vouchers/delete`,
       {
         id: voucherId
       },

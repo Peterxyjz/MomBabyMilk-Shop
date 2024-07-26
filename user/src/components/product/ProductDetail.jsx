@@ -105,7 +105,6 @@ const ProductDetail = () => {
               </div>
             )}
           </div>
-
           <div className="mt-6 sm:mt-8 lg:mt-0">
             <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
               {product.product_name}
@@ -150,6 +149,7 @@ const ProductDetail = () => {
                 </a>
               </div>
             </div>
+            
 
             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
               {checkWishlistItem(product) ? (

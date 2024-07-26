@@ -23,27 +23,32 @@ export const uploadController = async (req: Request, res: Response) => {
         new InputBillDetail({
           input_bill_id: inputBillId.toString(),
           product_id: detail.product_id,
-          amount: detail.amount
+          amount: detail.amount,
+          expired_at: new Date(detail.expired_at),
+          created_at: new Date(detail.created_at)
         })
     )
 
     await databaseService.inputBillDetails.insertMany(inputBillDetails)
 
     for (const detail of inputBillDetails) {
-      const { product_id, amount } = detail
+      const { product_id } = detail
       const existingProduct = await databaseService.warehouse.findOne({ _id: new ObjectId(product_id) })
 
       if (existingProduct) {
-        await databaseService.warehouse.updateOne({ _id: new ObjectId(product_id) }, { $inc: { amount: amount } })
+        await databaseService.warehouse.updateOne(
+          { _id: new ObjectId(product_id) },
+          { $push: { shipments: { ...detail, amount_selled: 0 } } }
+        )
       } else {
         const newWarehouseEntry = new WareHouse({
-          _id: new ObjectId(product_id),
-          amount
+          _id: new ObjectId(product_id)
         })
+        newWarehouseEntry.shipments?.push({ ...detail, amount_selled: 0 })
         await databaseService.warehouse.insertOne(newWarehouseEntry)
       }
     }
-   
+
     const date = new Date()
     await databaseService.revenue.insertOne({
       _id: inputBillId,
@@ -112,12 +117,13 @@ export const updateController = async (req: Request, res: Response) => {
         _id: new ObjectId(detail._id),
         input_bill_id: detail.input_bill_id,
         product_id: detail.product_id,
-        amount: detail.amount
+        amount: detail.amount,
+        expired_at: detail.expired_at,
+        created_at: detail.created_at
       })
   )
 
   for (const detail of inputBillDetails) {
-
     const input_bill_detail = await databaseService.inputBillDetails.findOne({ _id: detail._id })
     if (!input_bill_detail) {
       return res.status(400).json({

@@ -27,6 +27,7 @@ import AddNews from '../pages/News/AddNews';
 import EditNews from '../pages/News/EditNews';
 import AllNews from '../pages/News/AllNews';
 import Customers from '../pages/Customer/Customers';
+import ProductsWarehouse from '../pages/Warehouse/ProductsWarehouse';
 const StaffRouter = () => {
     return (
         <Routes>
@@ -56,6 +57,7 @@ const StaffRouter = () => {
             <Route path="/add-inputbill" element={(<AddBill />)} />
             <Route path="/input-bills" element={<InputBills />} />
             <Route path="/bill-detail" element={<BillDetail />} />
+            <Route path="/products-warehouse" element={<ProductsWarehouse/>} />
             {/* voucher */}
             <Route path="/all-voucher" element={<Vouchers />} />
             <Route path="/add-voucher" element={<AddVoucher />} />

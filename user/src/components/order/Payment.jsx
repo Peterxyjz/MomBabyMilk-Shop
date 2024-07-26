@@ -58,7 +58,7 @@ const Payment = () => {
       voucher_code: voucher_code,
       voucher_fee: discount,
     };
-
+    console.log(order_infor);
     await fetchCreateOrder(order_infor)
       .then((res) => {
         const membership = res.data.point;
@@ -105,7 +105,6 @@ const Payment = () => {
           clearCart();
           toast.success("Đặt Hàng Thành Công");
           if(user){
-            console.log("tru ne");
             if (membership !== undefined) {
               user.member_ship = membership;
               localStorage.setItem("user", JSON.stringify(user));
@@ -120,7 +119,7 @@ const Payment = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.response.data.errors.message)
       });
   };
 
