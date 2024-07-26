@@ -21,32 +21,75 @@ class WareHouseSerices {
     const filter = { _id: new ObjectId(id) }
     return await databaseService.warehouse.findOne(filter)
   }
-  async decreaseAmount(item: any) {
-    const productAmount = (await databaseService.warehouse.findOne({
-      _id: new ObjectId(item.product_id)
-    })) as WareHouse
-    const stock = Number(productAmount.amount) - item.amount
-    if (stock < 0) {
-      throw new ErrorWithStatus({
-        message: 'Sản phẩm không đủ',
-        status: HTTP_STATUS.UNPROCESSABLE_ENTITY
-      })
+  async decreaseAmount(id: string, amount: number) {
+    const [amount_available, warehouse] = await Promise.all([this.getAmoutAvailableById(id), this.getById(id)])
+    console.log(amount_available, id, amount)
+
+    if (amount_available < amount || warehouse === null || warehouse.shipments === undefined) {
+      throw new ErrorWithStatus({ message: 'Số lượng sản phẩm trong kho không đủ', status: HTTP_STATUS.BAD_REQUEST })
     }
-    return await databaseService.warehouse.updateOne(
-      { _id: new ObjectId(item.product_id) },
-      { $set: { amount: stock } }
-    )
+    const list_id = []
+    const currentDate = new Date()
+    for (const item of warehouse.shipments) {
+      if (
+        amount > 0 &&
+        item.amount_selled !== undefined &&
+        item.expired_at > currentDate &&
+        item.amount_selled + amount > item.amount
+      ) {
+        list_id.push({ id: item.input_bill_id, amount: item.amount - item.amount_selled })
+        amount = amount + item.amount_selled - item.amount
+        item.amount_selled = item.amount
+      } else if (
+        amount > 0 &&
+        item.amount_selled !== undefined &&
+        item.expired_at > currentDate &&
+        item.amount_selled + amount <= item.amount
+      ) {
+        list_id.push({ id: item.input_bill_id, amount: amount })
+        item.amount_selled += amount
+        amount = 0
+
+        break
+      }
+    }
+    console.log(warehouse)
+
+    await databaseService.warehouse.updateOne({ _id: new ObjectId(id) }, { $set: { shipments: warehouse.shipments } })
+    return list_id
+  }
+  async increaseAmount(id: string, input_bill_id: any[], amount: number) {
+    for (const item of input_bill_id) {
+      const filter = { _id: new ObjectId(id), shipments: { $elemMatch: { input_bill_id: item.id } } }
+      const update = { $inc: { 'shipments.$.amount_selled': -item.amount } }
+      await databaseService.warehouse.updateOne(filter, update)
+    }
+    return
   }
 
-  async increaseAmount(item: any) {
-    const productAmount = (await databaseService.warehouse.findOne({
-      _id: new ObjectId(item.product_id)
-    })) as WareHouse
-    const stock = Number(productAmount.amount) + item.amount
-    return await databaseService.warehouse.updateOne(
-      { _id: new ObjectId(item.product_id) },
-      { $set: { amount: stock } }
-    )
+  async getAmoutAvailableById(id: string) {
+    const warehouse = await this.getById(id)
+    if (!warehouse) {
+      return 0
+    }
+    if (warehouse.shipments === undefined) {
+      return 0
+    }
+    const currentDate = new Date()
+    let totalAvailable = 0
+    for (const item of warehouse.shipments) {
+      if (item.expired_at && item.expired_at > currentDate) {
+        totalAvailable += (item.amount || 0) - (item.amount_selled || 0)
+      }
+    }
+    return totalAvailable
+  }
+
+  async increaseAmountById(id: string, input_bill_id: string, amount: number) {
+    const filter = { _id: new ObjectId(id), shipments: { $elemMatch: { input_bill_id: input_bill_id } } }
+    const update = { $inc: { amount: amount } }
+    // return await databaseService.warehouse.updateOne(filter, update)
+    return await databaseService.warehouse.findOne(filter)
   }
 }
 const wareHouseService = new WareHouseSerices()

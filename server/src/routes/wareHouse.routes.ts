@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getAllController } from '~/controllers/wareHouse.controllers'
+import { getAllController, getAmountByIdController } from '~/controllers/wareHouse.controllers'
 import { accessTokenValidator } from '~/middlewares/users.middlewares'
 import { wrapAsync } from '~/utils/handlers'
 
@@ -32,4 +32,6 @@ const wareHouseRouter = Router()
  *                     example: 'Main Warehouse'
  */
 wareHouseRouter.get('/all-warehouse', wrapAsync(getAllController)) //readAll
+wareHouseRouter.get('/amount/:id', wrapAsync(getAmountByIdController))
+
 export default wareHouseRouter
