@@ -23,7 +23,7 @@ class OrderServinces {
         product_id: item._id,
         input_bill_id: list,
         amount: item.quantity,
-        price: item.price
+        price: ((100 - item.discount) / 100) * item.price
       })
 
       databaseService.orderDetails.insertOne(order_detail)
