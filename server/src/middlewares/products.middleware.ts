@@ -17,16 +17,8 @@ export const productValidator = validate(
           errorMessage: 'Mã hãng phải là chữ'
         },
 
-        isLength: {
-          options: {
-            min: 3
-          },
-          errorMessage: 'Ten san pham phai lon hon 3 ky tu'
-        },
         custom: {
           options: async (value, { req }) => {
-      
-
             const brand = await databaseService.brands.findOne({
               _id: new ObjectId(value)
             })
@@ -50,12 +42,7 @@ export const productValidator = validate(
         },
         trim: true,
 
-        isLength: {
-          options: {
-            min: 3
-          },
-          errorMessage: 'Ten san pham phai lon hon 3 ky tu'
-        },
+        
         custom: {
           options: async (value, { req }) => {
             const category = await databaseService.categories.findOne({
@@ -79,20 +66,13 @@ export const productValidator = validate(
           errorMessage: 'Tên sản phẩm phải là chữ'
         },
         trim: true,
-        isLength: {
-          options: {
-            min: 3
-          },
-          errorMessage: 'Ten san pham phai lon hon 3 ky tu'
-        },
+       
         custom: {
           options: async (value, { req }) => {
             const product = await databaseService.products.findOne({
               product_name: value
             })
             if (product) {
-     
-
               throw new ErrorWithStatus({
                 message: PRODUCTS_MESSAGES.PRODUCT_HAS_BEEN_EXISTED,
                 status: HTTP_STATUS.UNPROCESSABLE_ENTITY
@@ -130,9 +110,9 @@ export const productValidator = validate(
 
         isLength: {
           options: {
-            min: 3
+            min: 1
           },
-          errorMessage: 'Mô tả ít nhất 3 ký tự'
+          errorMessage: 'Mô tả ít nhất 1 ký tự'
         }
       },
       age: {
@@ -144,12 +124,7 @@ export const productValidator = validate(
         },
         trim: true,
 
-        isLength: {
-          options: {
-            min: 3
-          },
-          errorMessage: 'Dộ tuổi ít nhất 3 ký tự'
-        }
+        
       },
       discount: {
         notEmpty: false,
