@@ -74,8 +74,8 @@ const ProductsWarehouse = () => {
     const columns = [
       {
         title: "Mã Nhập Hàng",
-        dataIndex: "_id",
-        key: "_id",
+        dataIndex: "input_bill_id",
+        key: "input_bill_id",
       },
       {
         title: "Số Lượng",
@@ -163,11 +163,6 @@ const ProductsWarehouse = () => {
             onExpand: handleExpand,
           }}
           rowKey="_id"
-          rowClassName={(record) =>
-            record.shipments.some((shipment) => isExpired(shipment.expired_at))
-              ? "bg-red-100"
-              : ""
-          }
         />
       </Card>
     </div>

@@ -37,13 +37,7 @@ export const uploadNewsValidator =
           isString: {
             errorMessage: 'Tênphải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Tên ít nhất 3 ký tự'
-          }
+          trim: true
         },
 
         description: {
@@ -53,13 +47,7 @@ export const uploadNewsValidator =
           isString: {
             errorMessage: 'Mô tả phải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Mô tả ít nhất 3 ký tự'
-          }
+          trim: true
         }
       },
       ['body']
@@ -98,13 +86,7 @@ export const updateNewsValidator =
           isString: {
             errorMessage: 'Tênphải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Tên ít nhất 3 ký tự'
-          }
+          trim: true
         },
 
         description: {
@@ -115,13 +97,7 @@ export const updateNewsValidator =
           isString: {
             errorMessage: 'Mô tả phải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Mô tả ít nhất 3 ký tự'
-          }
+          trim: true
         }
       },
       ['body']
