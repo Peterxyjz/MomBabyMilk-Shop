@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Navigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { toast, Toaster } from "react-hot-toast";
+import locale from "antd/es/date-picker/locale/vi_VN";
 
 const AddBill = () => {
   const [loading, setLoading] = useState(true);
@@ -189,8 +190,43 @@ const AddBill = () => {
     });
   };
 
+  const validateBillProducts = () => {
+    for (const product of billProducts) {
+      if (!product.production_date || !product.expiration_date) {
+        toast.error('Ngày sản xuất và hạn sử dụng không được để trống', {
+          position: 'top-right',
+        });
+        return false;
+      }
+
+      const productionDate = moment(product.production_date);
+      const expirationDate = moment(product.expiration_date);
+      const currentDate = moment();
+
+      if (expirationDate.isBefore(productionDate.add(1, 'months'))) {
+        toast.error('Hạn sử dụng phải lớn hơn ngày sản xuất ít nhất 1 tháng', {
+          position: 'top-right',
+        });
+        return false;
+      }
+
+      if (expirationDate.isBefore(currentDate.add(1, 'months'))) {
+        toast.error('Hạn sử dụng phải lớn hơn ngày hiện tại ít nhất 1 tháng', {
+          position: 'top-right',
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!validateBillProducts()) {
+      return;
+    }
+
     const inputBill = {
       input_date: moment().toISOString(),
       inputBillDetailList: billProducts.map(product => ({
@@ -274,17 +310,23 @@ const AddBill = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span>Ngày Sản Xuất:</span>
                           <DatePicker
+                            locale={locale}
                             value={record.production_date ? moment(record.production_date) : null}
                             onChange={(date) => handleDateChange(date, record, 'production_date')}
                             format="DD/MM/YYYY"
+                            size="large"
+                            placeholder="Nhập NSX"
                           />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
                           <span>Hạn Sử Dụng:</span>
                           <DatePicker
+                            locale={locale}
                             value={record.expiration_date ? moment(record.expiration_date) : null}
                             onChange={(date) => handleDateChange(date, record, 'expiration_date')}
                             format="DD/MM/YYYY"
+                            size="large"
+                            placeholder="Nhập HSD"
                           />
                         </div>
                       </div>

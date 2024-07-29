@@ -371,7 +371,7 @@ const OrderDetail = () => {
                   />
                   <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div className="flex flex-col">
-                      <div className="flex items-center justify-between">
+                      <div className="flex-col items-center">
                         <Link
                           to={"/product"}
                           state={{ product: item.product }}
@@ -382,8 +382,8 @@ const OrderDetail = () => {
                         </Link>
                         <input
                           type="text"
-                          className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
-                          value={`x${item.amount}`}
+                          className="block shrink-0 border-0 bg-transparent text-sm font-medium text-gray-900 focus:outline-none focus:ring-0"
+                          value={`x${item.amount} sản phẩm`}
                           readOnly
                         />
                       </div>

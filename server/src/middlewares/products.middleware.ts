@@ -42,7 +42,6 @@ export const productValidator = validate(
         },
         trim: true,
 
-        
         custom: {
           options: async (value, { req }) => {
             const category = await databaseService.categories.findOne({
@@ -66,7 +65,7 @@ export const productValidator = validate(
           errorMessage: 'Tên sản phẩm phải là chữ'
         },
         trim: true,
-       
+
         custom: {
           options: async (value, { req }) => {
             const product = await databaseService.products.findOne({
@@ -106,14 +105,7 @@ export const productValidator = validate(
         isString: {
           errorMessage: 'Mô tả phải là chữ'
         },
-        trim: true,
-
-        isLength: {
-          options: {
-            min: 1
-          },
-          errorMessage: 'Mô tả ít nhất 1 ký tự'
-        }
+        trim: true
       },
       age: {
         notEmpty: {
@@ -122,9 +114,7 @@ export const productValidator = validate(
         isString: {
           errorMessage: 'Dộ tuổi phải là chữ'
         },
-        trim: true,
-
-        
+        trim: true
       },
       discount: {
         notEmpty: false,
@@ -318,12 +308,6 @@ export const updateProductValidator =
           isString: {
             errorMessage: 'Mã hãng phải là chữ'
           },
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Tên sản phẩm phải lớn hơn 3 ký tự'
-          },
           custom: {
             options: async (value, { req }) => {
               const brand = await databaseService.brands.findOne({
@@ -346,12 +330,6 @@ export const updateProductValidator =
             errorMessage: 'Mã loại phải là chữ'
           },
           trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Tên sản phẩm phải lớn hơn 3 ký tự'
-          },
           custom: {
             options: async (value, { req }) => {
               const category = await databaseService.categories.findOne({
@@ -372,13 +350,7 @@ export const updateProductValidator =
           isString: {
             errorMessage: 'Tên sản phẩm phải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Tên sản phẩm phải lớn hơn 3 ký tự'
-          }
+          trim: true
         },
         price: {
           optional: true,
@@ -406,13 +378,7 @@ export const updateProductValidator =
           isString: {
             errorMessage: 'Mô tả phải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Mô tả ít nhất 3 ký tự'
-          }
+          trim: true
         },
         age: {
           optional: true,
@@ -422,13 +388,7 @@ export const updateProductValidator =
           isString: {
             errorMessage: 'Độ tuổi phải là chữ'
           },
-          trim: true,
-          isLength: {
-            options: {
-              min: 3
-            },
-            errorMessage: 'Độ tuổi ít nhất 3 ký tự'
-          }
+          trim: true
         },
         discount: {
           optional: true,
