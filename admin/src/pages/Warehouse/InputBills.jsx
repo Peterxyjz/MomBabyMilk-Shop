@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Input, Table } from "antd";
 import axios from "axios";
 import { Card } from "primereact/card";
 import React, { useEffect, useState } from "react";
@@ -14,11 +14,16 @@ const InputBills = () => {
   const [pageSize, setPageSize] = useState(7);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
 
   const handleTableChange = (pagination) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
+
+  const { Search } = Input;
+
 
   //ham nay lay bill
   useEffect(() => {
@@ -163,8 +168,16 @@ const InputBills = () => {
   ];
 
   if (loading) {
-    return <Loading/>
+    return <Loading />
   }
+
+  const onSearch = (value) => {
+    setSearchText(value);
+  };
+
+  const filteredBills = bills.filter(bill =>
+      bill.inputBill._id.includes(searchText)
+  );
 
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "80vh" }}>
@@ -172,26 +185,37 @@ const InputBills = () => {
         title="Tất cả đơn nhập hàng"
         style={{ width: "90%", marginTop: "50px", height: "75vh" }}
       >
+
         <div>
           <div className="flex justify-between items-center mb-4">
-            {isAuthenticatedStaff && (
-              <Button
-              type="primary"
-              size="large"
-              style={{ backgroundColor: "#46B5C1", height: "100%" }}
-              onClick={() => navigate("/add-inputbill")}
-            >
-              Tạo đơn nhập hàng
-            </Button>
-            )}
+              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start'}}>
+                <Search
+                  placeholder="Nhập mã đơn nhập hàng"
+                  allowClear
+                  enterButton={<Button style={{ backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
+                  size="large"
+                  onSearch={onSearch}
+                  style={{ width: '40%' }}
+                />
+              </div>
+              {isAuthenticatedStaff && (
+                <Button
+                  type="primary"
+                  size="large"
+                  style={{ backgroundColor: "#46B5C1", height: "100%", marginLeft: '10px' }}
+                  onClick={() => navigate("/add-inputbill")}
+                >
+                  Tạo đơn nhập hàng
+                </Button>
+              )}
           </div>
           <Table
-            dataSource={bills}
+            dataSource={filteredBills}
             rowKey={(item) => item.inputBill._id}
             pagination={{
               current: currentPage,
               pageSize: pageSize,
-              total: bills.length,
+              total: filteredBills.length,
               showSizeChanger: false,
             }}
             onChange={handleTableChange}
