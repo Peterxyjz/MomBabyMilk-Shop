@@ -432,7 +432,7 @@ ordersRouter.get('/get-order/:id', wrapAsync(getOrderByIdController))
  *             properties:
  *               order_id:
  *                 type: string
- *                 example: "649f3f3f3f4e9d2b3c7b0e6f"           
+ *                 example: "649f3f3f3f4e9d2b3c7b0e6f"
  *     responses:
  *       '200':
  *         description: Successful operation, order deleted

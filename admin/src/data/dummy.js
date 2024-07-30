@@ -719,6 +719,7 @@ export const adminlinks = [
         // path: '',
         subLinks: [
           { name: 'allBill', path: 'input-bills', label: 'Tất cả đơn nhập hàng' },
+          { name: 'ProductInWarehouse', path: 'products-warehouse', label: 'Sản phẩm trong kho' },
         ],
       },
     ]

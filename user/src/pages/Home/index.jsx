@@ -17,35 +17,45 @@ const Home = () => {
         <img src={Loader} alt="Loading..." />
       </div>
     );
-  
-    const getCategoryProducts = (categoryName) => {
-      return products.filter((product) => product.category_name === categoryName);
-    };
-  
-    const newProducts = products.slice(-(products.length - 1)).reverse();
-    const bestSellers = products.sort((a, b) => b.sales - a.sales);
-    const categoryProductsMomToBe = getCategoryProducts("Sữa cho mẹ bầu");
-    const categoryProductsInfantMilk = getCategoryProducts("Sữa bột");
-  
-    return (
-      <div className="container mx-auto min-h-screen">
-        <Hero />
-        <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
-        <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} />
-        <SecondHero />
-        <ProductCard
-          products={categoryProductsMomToBe}
-          headline={"Sữa dành cho mẹ bầu"}
-        />
-        <ProductCard
-          products={categoryProductsInfantMilk}
-          headline={"Sữa dành cho trẻ sơ sinh"}
-        />
-        <HeroAtLast />
-        {/* <CategoryGrid /> */}
-        <NewsSection />
-      </div>
-    );
+
+  const getCategoryProducts = (categoryName) => {
+    return products.filter((product) => product.category_name === categoryName);
+  };
+
+  const newProducts = products.slice(-(products.length - 1)).reverse();
+  const bestSellers = products.sort((a, b) => b.sales - a.sales);
+  const categoryProductsMomToBe = getCategoryProducts("Sữa cho mẹ bầu");
+  const categoryProductsInfantMilk = getCategoryProducts("Sữa bột");
+  const categoryProductsYogurt = getCategoryProducts("Sữa chua");
+  const categoryProductsNut = getCategoryProducts("Sữa hạt");
+
+  return (
+    <div className="container mx-auto min-h-screen">
+      <Hero />
+      <ProductCard products={newProducts} headline={"Sản phẩm mới"} />
+      <ProductCard products={bestSellers} headline={"Sản phẩm bán chạy"} />
+      <SecondHero />
+      <ProductCard
+        products={categoryProductsMomToBe}
+        headline={"Sữa dành cho mẹ bầu"}
+      />
+      <ProductCard
+        products={categoryProductsInfantMilk}
+        headline={"Sữa dành cho trẻ sơ sinh"}
+      />
+      <HeroAtLast />
+      {/* <CategoryGrid /> */}
+      <ProductCard
+        products={categoryProductsYogurt}
+        headline={"Sữa chua"}
+      />
+      <ProductCard
+        products={categoryProductsNut}
+        headline={"Sữa hạt"}
+      />
+      <NewsSection />
+    </div>
+  );
 };
 
 export default Home;

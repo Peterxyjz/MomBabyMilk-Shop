@@ -1,4 +1,4 @@
-import { Card, Table } from "antd";
+import { Button, Card, Input, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { fetchProductInWarehouse } from "../../data/api";
 import Loading from "../../components/Loading";
@@ -7,11 +7,16 @@ const ProductsWarehouse = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
 
   const handleExpand = (expanded, record) => {
     const keys = expanded ? [record._id] : [];
     setExpandedRowKeys(keys);
   };
+
+  const { Search } = Input;
+
 
   useEffect(() => {
     const getData = async () => {
@@ -30,6 +35,14 @@ const ProductsWarehouse = () => {
   if (loading) {
     return <Loading />;
   }
+
+  const onSearch = (value) => {
+    setSearchText(value);
+};
+
+const filteredProducts = products.filter(p =>
+    p.product_name.toLowerCase().includes(searchText.toLowerCase())
+);
 
   const columns = [
     {
@@ -74,8 +87,8 @@ const ProductsWarehouse = () => {
     const columns = [
       {
         title: "Mã Nhập Hàng",
-        dataIndex: "_id",
-        key: "_id",
+        dataIndex: "input_bill_id",
+        key: "input_bill_id",
       },
       {
         title: "Số Lượng",
@@ -132,6 +145,7 @@ const ProductsWarehouse = () => {
     return <div>{renderShipments(record.shipments)}</div>;
   };
 
+
   return (
     <div
       style={{ display: "flex", justifyContent: "center", minHeight: "100vh" }}
@@ -152,9 +166,19 @@ const ProductsWarehouse = () => {
           margin: "30px auto",
         }}
       >
+        <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '20px' }}>
+          <Search
+            placeholder="Nhập tên sản phẩm"
+            allowClear
+            enterButton={<Button style={{ backgroundColor: '#55B6C3', color: 'white' }}>Tìm kiếm</Button>}
+            size="large"
+            onSearch={onSearch}
+            style={{ width: '40%' }}
+          />
+        </div>
         <Table
           columns={columns}
-          dataSource={products}
+          dataSource={filteredProducts}
           expandable={{
             expandedRowRender,
             rowExpandable: (record) =>
@@ -163,11 +187,6 @@ const ProductsWarehouse = () => {
             onExpand: handleExpand,
           }}
           rowKey="_id"
-          rowClassName={(record) =>
-            record.shipments.some((shipment) => isExpired(shipment.expired_at))
-              ? "bg-red-100"
-              : ""
-          }
         />
       </Card>
     </div>

@@ -290,8 +290,6 @@ const EditNews = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.target;
-
     const news = {
       news_name,
       product_id: selectedProductId,
@@ -299,21 +297,19 @@ const EditNews = () => {
       description,
       img_url: imgUrlOld,
     };
-    console.log(news);
     await fetchUpdateNews(news, token, id)
       .then(async (res) => {
-        console.log("xong update");
-        if(isChanged)
-        await uploadImage(news, id).then(() => {
-          navigate("/all-blog");
-          notification.success({
-            message: "Thêm bài viết thành công!",
-            placement: "top",
-          });
+        if (isChanged) await uploadImage(news, id);
+        notification.success({
+          message: "Cập nhật bài viết thành công!",
+          placement: "top",
         });
       })
       .catch((error) => {
         console.error("Error updating news:", error);
+      })
+      .finally(() => {
+        navigate("/all-blog");
       });
   };
 
