@@ -9,6 +9,7 @@ import BillDetail from '../pages/Warehouse/BillDetail';
 import AwaitOrderDetail from '../pages/Order/AwaitOrderDetail';
 import OrderDetail from '../pages/Order/OrderDetail';
 import ApprovedOrder from '../pages/Order/Orders';
+import ProductsWarehouse from '../pages/Warehouse/ProductsWarehouse';
 
 
 const AdminRouter = () => {
@@ -25,6 +26,7 @@ const AdminRouter = () => {
             <Route path="/order-detail" element={(<OrderDetail />)} />
             <Route path="/input-bills" element={<InputBills/>} />
             <Route path="/bill-detail" element={<BillDetail />} />
+            <Route path="/products-warehouse" element={<ProductsWarehouse/>} />
 
         </Routes>
     )
