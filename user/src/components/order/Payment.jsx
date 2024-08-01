@@ -21,7 +21,6 @@ const Payment = () => {
   const [showQR, setShowQR] = useState(false);
   const [QR, setQR] = useState(``);
   const [countdown, setCountdown] = useState(null);
-  const [content, setContent] = useState("");
   const ship = location.state?.ship;
   const discount = location.state?.discount;
   const voucher_code = location.state?.voucherCode;
@@ -63,10 +62,9 @@ const Payment = () => {
     await fetchCreateOrder(order_infor)
       .then((res) => {
         const membership = res.data.point;
-        setContent(res.data.order.insertedId);
+        const content = res.data.order.insertedId;
         if (paymentMethod === "Online") {
           const price = totalPrice + ship - discount;
-          let content = res.data.order.insertedId;
           setShowQR(true);
           setQR(
             `https://img.vietqr.io/image/970422-0834564869-compact2.png?amount=${price}&addInfo=${content}&accountName=LE QUANG HUY`
@@ -467,9 +465,6 @@ const Payment = () => {
                       </p>
                     )}
                     <img src={QR} alt="QR Code" className="mx-auto" />
-                    <p className="text-lg text-center font-semibold text-gray-900 mb-4">
-                      Nội dung chuyển khoản: <span className="text-blue-500">{content}</span>
-                    </p>
                   </div>
                 )}
               </div>

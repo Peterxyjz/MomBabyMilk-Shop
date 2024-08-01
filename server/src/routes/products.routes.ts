@@ -16,7 +16,7 @@ des: cung cấp thông tin sản phẩm, accesstoken
 path: /upload
 method: POST
 Header:  {Authorization: Bearer <access_token>}
-body: {product, }
+body: {product }
 */
 /**
  * @swagger
