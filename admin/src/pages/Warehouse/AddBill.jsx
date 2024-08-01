@@ -232,8 +232,8 @@ const AddBill = () => {
       inputBillDetailList: billProducts.map(product => ({
         product_id: product._id,
         amount: product.amount,
-        created_at: new Date(product.production_date).setDate(new Date(product.production_date).getDate() + 1),
-        expired_at: new Date(product.expiration_date).setDate(new Date(product.expiration_date).getDate() + 1)
+        created_at: new Date(product.production_date).setDate(new Date(product.production_date).getDate()),
+        expired_at: new Date(product.expiration_date).setDate(new Date(product.expiration_date).getDate())
       })),
       total: calculateTotal()
     };
