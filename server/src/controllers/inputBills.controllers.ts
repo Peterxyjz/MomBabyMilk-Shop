@@ -36,9 +36,12 @@ export const uploadController = async (req: Request, res: Response) => {
       const existingProduct = await databaseService.warehouse.findOne({ _id: new ObjectId(product_id) })
 
       if (existingProduct) {
+        existingProduct.shipments?.push({ ...detail, amount_selled: 0 })
+        existingProduct.shipments?.sort((a, b) => new Date(a.expired_at).getTime() - new Date(b.expired_at).getTime())
+
         await databaseService.warehouse.updateOne(
           { _id: new ObjectId(product_id) },
-          { $push: { shipments: { ...detail, amount_selled: 0 } } }
+          { $set: { shipments: existingProduct.shipments } }
         )
       } else {
         const newWarehouseEntry = new WareHouse({
