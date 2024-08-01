@@ -22,7 +22,7 @@ export const uploadController = async (req: Request, res: Response) => {
     })
   }
   const role_name = await usersService.checkRole(user)
-  if (role_name === 'Member') {
+  if (role_name !== 'Staff') {
     return res.status(400).json({
       message: 'Bạn không có quyền thêm sản phẩm'
     })

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchDeleteVoucher, fetchGetVoucher } from "../../data/api";
 import { Button, Datepicker, Select, TextInput } from "flowbite-react";
 import { fetchGetVoucherType, fetchUpdateVoucher } from "../../data/api";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Loading from "../../components/Loading";
 import { Card, Modal, notification, Table } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -103,17 +103,13 @@ const Vouchers = () => {
       discount: Number(selectedVoucher.discount),
       amount: Number(selectedVoucher.amount),
     };
-    console.log(updatedVoucher);
     await fetchUpdateVoucher(updatedVoucher, token, selectedVoucher._id)
       .then((res) => {
-        console.log(res.data);
-        toast.success("Cập nhật thành công", {
-          position: "top-right",
-        });
+        sessionStorage.setItem("update", "true");
         setShowModal(false);
+        window.location.reload();
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Cập nhật thất bại", {
           position: "top-right",
         });
@@ -123,9 +119,7 @@ const Vouchers = () => {
   const handleDelete = async (voucherId) => {
     await fetchDeleteVoucher(voucherId, token)
       .then((res) => {
-        toast.success("Xóa voucher thành công", {
-          position: "top-right",
-        });
+        sessionStorage.setItem("delete", "true");
         window.location.reload();
       })
       .catch((err) => {
@@ -136,10 +130,28 @@ const Vouchers = () => {
       });
   };
 
+
   if (loading) {
     return <Loading />;
   }
 
+  if (sessionStorage.getItem("update") === "true") {
+    notification.success({
+      message: "Thành công",
+      description: "Mã giảm giá cập nhật thành công!",
+      placement: "top",
+    });
+    sessionStorage.removeItem("update");
+  }
+
+  if (sessionStorage.getItem("delete") === "true") {
+    notification.success({
+      message: "Thành công",
+      description: "Xóa mã giảm giá thành công!",
+      placement: "top",
+    });
+    sessionStorage.removeItem("delete");
+  }
   const columns = [
     {
       title: "Mã Voucher",
